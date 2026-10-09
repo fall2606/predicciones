@@ -21,12 +21,12 @@ DISPERSION_CORNERS = 16
 TZ = ZoneInfo("America/Chicago")
 
 st.set_page_config(page_title="LaLiga · predicciones", page_icon="⚽", layout="wide")
-st.title("🇪🇸 LaLiga · mejores selecciones de Kalshi")
+st.title("🇪🇸 LaLiga · mercados y probabilidades de Kalshi")
 st.caption(
-    "Solo partidos de hoy y los próximos dos días. Elige un encuentro para ver hasta cinco selecciones "
-    "individuales, ordenadas por probabilidad y basadas en mercados y líneas de Kalshi."
+    "Partidos próximos de LaLiga. Revisa todos los tipos y líneas que Kalshi ofrece en la liga, "
+    "con probabilidad estimada por selección YES y NO."
 )
-st.link_button("Ver mercados actuales de LaLiga en Kalshi", "https://kalshi.com/combos/soccer/la-liga")
+st.link_button("Abrir Kalshi", "https://kalshi.com/")
 
 
 def pedir_fd(path, clave, **params):
@@ -225,21 +225,34 @@ def _linea_mercado(mercado):
         return None
 
 
+def _direccion_mercado(mercado):
+    texto = _texto_mercado(mercado)
+    if any(palabra in texto for palabra in ("under", "less than", "fewer than", "menos de", "menos que", "below")):
+        return "under"
+    return "over"
+
+
 def clave_plantilla_kalshi(evento, mercado):
     """Tipo y línea observados en un contrato real de LaLiga, sin depender de equipos."""
     serie = evento.get("series_ticker", "")
     series_con_linea = {
         "KXLALIGASPREAD", "KXLALIGATOTAL", "KXLALIGACORNERS",
-        "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL",
+        "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL", "KXLALIGA1HSPREAD",
+        "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL",
     }
     series_sin_linea = {
         "KXLALIGAGAME", "KXLALIGABTTS", "KXLALIGAFTTS", "KXLALIGAFIRSTGOAL",
+        "KXLALIGA1H", "KXLALIGA1HBTTS", "KXLALIGA2H",
     }
     if serie in series_sin_linea:
-        return serie, None
+        return serie, None, None
     linea = _linea_mercado(mercado)
     if serie in series_con_linea and linea is not None:
-        return serie, linea
+        direccion = _direccion_mercado(mercado) if serie in {
+            "KXLALIGATOTAL", "KXLALIGACORNERS", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL",
+            "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL",
+        } else None
+        return serie, linea, direccion
     return None
 
 
@@ -248,49 +261,61 @@ def clave_contrato_kalshi(evento, mercado, local, visita):
     plantilla = clave_plantilla_kalshi(evento, mercado)
     if plantilla is None:
         return None
-    serie, linea = plantilla
+    serie, linea, direccion = plantilla
     texto = _texto_mercado(mercado)
-    if serie == "KXLALIGAGAME":
-        lado = limpiar(mercado.get("yes_sub_title", ""))
+    if serie in {"KXLALIGAGAME", "KXLALIGA1H", "KXLALIGA2H"}:
+        lado = limpiar(mercado.get("yes_sub_title") or mercado.get("title", ""))
         if "tie" in lado or "draw" in lado or lado == "empate":
-            return serie, "empate", None
+            return serie, "empate", None, None
         equipo = buscar_equipo_en_texto(lado, local, visita)
-        return (serie, "local" if equipo == local else "visita", None) if equipo else None
-    if serie == "KXLALIGASPREAD":
+        return (serie, "local" if equipo == local else "visita", None, None) if equipo else None
+    if serie in {"KXLALIGASPREAD", "KXLALIGA1HSPREAD"}:
         equipo = buscar_equipo_en_texto(texto, local, visita)
-        return (serie, "local" if equipo == local else "visita", linea) if equipo else None
-    if serie in {"KXLALIGATOTAL", "KXLALIGACORNERS"}:
-        return serie, "over", linea
+        return (serie, "local" if equipo == local else "visita", linea, direccion) if equipo else None
+    if serie in {"KXLALIGATOTAL", "KXLALIGACORNERS", "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL"}:
+        return serie, "over", linea, direccion
     if serie in {"KXLALIGATCORNERS", "KXLALIGATEAMTOTAL"}:
         equipo = buscar_equipo_en_texto(texto, local, visita)
-        return (serie, "local" if equipo == local else "visita", linea) if equipo else None
-    if serie == "KXLALIGABTTS":
-        return serie, "ambos", None
+        return (serie, "local" if equipo == local else "visita", linea, direccion) if equipo else None
+    if serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
+        return serie, "ambos", None, None
     if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
         if "no goal" in texto or "sin gol" in texto:
-            return serie, "sin_goles", None
+            return serie, "sin_goles", None, None
         equipo = buscar_equipo_en_texto(texto, local, visita)
-        return (serie, "local" if equipo == local else "visita", None) if equipo else None
+        return (serie, "local" if equipo == local else "visita", None, None) if equipo else None
     return None
 
 
 def modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci, cj):
-    serie, lado, linea = clave
+    serie, lado, linea, direccion = clave
     dominio, condicion = "goles", None
-    if serie == "KXLALIGAGAME":
+    periodo = 0.45 if serie.startswith("KXLALIGA1H") else 0.55 if serie.startswith("KXLALIGA2H") else None
+    matriz_goles = p_goles
+    if periodo is not None:
+        goles = np.arange(p_goles.shape[0])
+        lambda_local = float(np.sum(p_goles * i))
+        lambda_visita = float(np.sum(p_goles * j))
+        matriz_goles = np.outer(
+            poisson.pmf(goles, lambda_local * periodo),
+            poisson.pmf(goles, lambda_visita * periodo),
+        )
+        matriz_goles /= matriz_goles.sum()
+        i, j = np.meshgrid(goles, goles, indexing="ij")
+    if serie in {"KXLALIGAGAME", "KXLALIGA1H", "KXLALIGA2H"}:
         condicion = i == j if lado == "empate" else i > j if lado == "local" else j > i
-    elif serie == "KXLALIGASPREAD" and linea is not None:
+    elif serie in {"KXLALIGASPREAD", "KXLALIGA1HSPREAD"} and linea is not None:
         margen = i - j if lado == "local" else j - i
         condicion = margen > linea
-    elif serie == "KXLALIGATOTAL" and linea is not None:
-        condicion = i + j > linea
+    elif serie in {"KXLALIGATOTAL", "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL"} and linea is not None:
+        condicion = i + j < linea if direccion == "under" else i + j > linea
     elif serie == "KXLALIGACORNERS" and p_corners is not None and ci is not None and cj is not None and linea is not None:
-        dominio, condicion = "corners", ci + cj >= linea
+        dominio, condicion = "corners", ci + cj < linea if direccion == "under" else ci + cj >= linea
     elif serie == "KXLALIGATCORNERS" and p_corners is not None and ci is not None and cj is not None and linea is not None:
-        dominio, condicion = "corners", (ci if lado == "local" else cj) >= linea
+        dominio, condicion = "corners", (ci if lado == "local" else cj) < linea if direccion == "under" else (ci if lado == "local" else cj) >= linea
     elif serie == "KXLALIGATEAMTOTAL" and linea is not None:
-        condicion = (i if lado == "local" else j) > linea
-    elif serie == "KXLALIGABTTS":
+        condicion = (i if lado == "local" else j) < linea if direccion == "under" else (i if lado == "local" else j) > linea
+    elif serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
         condicion = (i > 0) & (j > 0)
     elif serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
         total = i + j
@@ -302,7 +327,7 @@ def modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci,
             condicion = np.divide(j, total, out=np.zeros_like(p_goles), where=total > 0)
     if condicion is None:
         return None
-    matriz = p_corners if dominio == "corners" else p_goles
+    matriz = p_corners if dominio == "corners" else matriz_goles
     if matriz is None:
         return None
     probabilidad = float(np.sum(matriz * np.asarray(condicion, dtype=float)))
@@ -310,25 +335,52 @@ def modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci,
 
 
 def etiqueta_seleccion_kalshi(clave, local, visita):
-    serie, lado, linea = clave
+    serie, lado, linea, direccion = clave
     equipo = local if lado == "local" else visita
-    if serie == "KXLALIGAGAME":
-        return "Empate" if lado == "empate" else f"Gana {equipo}"
-    if serie == "KXLALIGASPREAD":
-        return f"{equipo} gana por más de {linea:g} goles"
-    if serie == "KXLALIGATOTAL":
-        return f"Más de {linea:g} goles totales"
+    periodo = " (1.ª parte)" if serie.startswith("KXLALIGA1H") else " (2.ª parte)" if serie.startswith("KXLALIGA2H") else ""
+    if serie in {"KXLALIGAGAME", "KXLALIGA1H", "KXLALIGA2H"}:
+        return ("Empate" if lado == "empate" else f"Gana {equipo}") + periodo
+    if serie in {"KXLALIGASPREAD", "KXLALIGA1HSPREAD"}:
+        return f"{equipo} gana por más de {linea:g} goles{periodo}"
+    if serie in {"KXLALIGATOTAL", "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL"}:
+        return (f"Menos de {linea:g} goles totales{periodo}" if direccion == "under"
+                else f"Más de {linea:g} goles totales{periodo}")
     if serie == "KXLALIGACORNERS":
-        return f"{linea:g}+ corners totales"
+        return f"Menos de {linea:g} corners totales" if direccion == "under" else f"{linea:g}+ corners totales"
     if serie == "KXLALIGATCORNERS":
-        return f"{linea:g}+ corners de {equipo}"
+        return f"Menos de {linea:g} corners de {equipo}" if direccion == "under" else f"{linea:g}+ corners de {equipo}"
     if serie == "KXLALIGATEAMTOTAL":
-        return f"Más de {linea:g} goles de {equipo}"
-    if serie == "KXLALIGABTTS":
-        return "Ambos equipos marcan"
+        return f"Menos de {linea:g} goles de {equipo}" if direccion == "under" else f"Más de {linea:g} goles de {equipo}"
+    if serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
+        return "Ambos equipos marcan" + periodo
     if lado == "sin_goles":
         return "No se marca ningún gol"
     return f"Primer gol de {equipo}"
+
+
+def etiqueta_no_kalshi(clave, local, visita):
+    serie, lado, linea, direccion = clave
+    periodo = " (1.ª parte)" if serie.startswith("KXLALIGA1H") else " (2.ª parte)" if serie.startswith("KXLALIGA2H") else ""
+    if serie in {"KXLALIGAGAME", "KXLALIGA1H", "KXLALIGA2H"}:
+        otro = visita if lado == "local" else local
+        return f"No gana {local if lado == 'local' else visita} (empate o gana {otro})" if lado != "empate" else "No hay empate (gana local o visita)"
+    if serie in {"KXLALIGATOTAL", "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL"}:
+        opuesta = "Más de" if direccion == "under" else "Menos de"
+        return f"NO: {opuesta} {linea:g} goles totales{periodo}"
+    if serie == "KXLALIGACORNERS":
+        opuesta = f"{linea:g}+" if direccion == "under" else f"Menos de {linea:g}"
+        return f"NO: {opuesta} corners totales"
+    if serie == "KXLALIGATCORNERS":
+        opuesta = f"{linea:g}+" if direccion == "under" else f"Menos de {linea:g}"
+        return f"NO: {opuesta} corners de {local if lado == 'local' else visita}"
+    if serie == "KXLALIGATEAMTOTAL":
+        opuesta = "Más de" if direccion == "under" else "Menos de"
+        return f"NO: {opuesta} {linea:g} goles de {local if lado == 'local' else visita}{periodo}"
+    if serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
+        return "Al menos un equipo no marca" + periodo
+    if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
+        return "El primer gol no es de " + ("nadie" if lado == "sin_goles" else local if lado == "local" else visita)
+    return f"NO: {etiqueta_seleccion_kalshi(clave, local, visita)}"
 
 
 def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, j,
@@ -358,56 +410,65 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                     })
 
     claves = set()
-    for serie, linea in plantillas:
-        if serie == "KXLALIGAGAME":
-            claves.update({(serie, "local", None), (serie, "empate", None), (serie, "visita", None)})
-        elif serie in {"KXLALIGASPREAD", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL"}:
-            claves.update({(serie, "local", linea), (serie, "visita", linea)})
+    for serie, linea, direccion in plantillas:
+        if serie in {"KXLALIGAGAME", "KXLALIGA1H", "KXLALIGA2H"}:
+            claves.update({(serie, "local", None, None), (serie, "empate", None, None), (serie, "visita", None, None)})
+        elif serie in {"KXLALIGASPREAD", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL", "KXLALIGA1HSPREAD"}:
+            claves.update({(serie, "local", linea, direccion), (serie, "visita", linea, direccion)})
         elif serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
-            claves.update({(serie, "local", None), (serie, "visita", None), (serie, "sin_goles", None)})
-        elif serie == "KXLALIGABTTS":
-            claves.add((serie, "ambos", None))
+            claves.update({(serie, "local", None, None), (serie, "visita", None, None), (serie, "sin_goles", None, None)})
+        elif serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
+            claves.add((serie, "ambos", None, None))
         else:
-            claves.add((serie, "over", linea))
+            claves.add((serie, "over", linea, direccion))
 
     predicciones = []
     for clave in claves:
         estimacion = modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci, cj)
-        if estimacion is None or estimacion[2] < 0.65:
+        if estimacion is None:
             continue
-        dominio, condicion, probabilidad = estimacion
+        dominio, condicion_yes, probabilidad_yes = estimacion
         mercado = ofertas_actuales.get(clave)
-        precio = cotizacion_valida(mercado.get("yes_ask_dollars")) if mercado else None
-        if mercado and precio is not None:
-            estado = "Disponible ahora"
-        elif mercado:
-            estado = "Kalshi lo lista, sin oferta YES"
-        else:
-            estado = "Kalshi aún no lo abrió para este partido"
+        for lado_apuesta in ("YES", "NO"):
+            probabilidad = probabilidad_yes if lado_apuesta == "YES" else 1 - probabilidad_yes
+            condicion = condicion_yes if lado_apuesta == "YES" else 1 - np.asarray(condicion_yes, dtype=float)
+            precio_campo = "yes_ask_dollars" if lado_apuesta == "YES" else "no_ask_dollars"
+            precio = cotizacion_valida(mercado.get(precio_campo)) if mercado else None
+            estado = (
+                "Disponible ahora" if mercado and precio is not None else
+                f"Kalshi lista el contrato, sin oferta {lado_apuesta}" if mercado else
+                "Tipo/línea ofrecido en LaLiga; falta abrirlo para este partido"
+            )
 
-        resultado_texto = "Pendiente"
-        if resultado is not None and dominio == "goles":
-            if clave[0] in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"} and all(g > 0 for g in resultado):
-                resultado_texto = "Sin dato de primer anotador"
-            else:
-                resultado_texto = "✅ Se cumplió" if bool(condicion[resultado[0], resultado[1]]) else "❌ No se cumplió"
-        elif corners_final is not None and dominio == "corners":
-            resultado_texto = "✅ Se cumplió" if bool(condicion[int(corners_final[0]), int(corners_final[1])]) else "❌ No se cumplió"
+            resultado_texto = "Pendiente"
+            if resultado is not None and dominio == "goles":
+                if clave[0] in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"} and all(g > 0 for g in resultado):
+                    resultado_texto = "Sin dato de primer anotador"
+                else:
+                    acierto_yes = bool(condicion_yes[resultado[0], resultado[1]])
+                    acierto = acierto_yes if lado_apuesta == "YES" else not acierto_yes
+                    resultado_texto = "✅ Se cumplió" if acierto else "❌ No se cumplió"
+            elif corners_final is not None and dominio == "corners":
+                acierto_yes = bool(condicion_yes[int(corners_final[0]), int(corners_final[1])])
+                acierto = acierto_yes if lado_apuesta == "YES" else not acierto_yes
+                resultado_texto = "✅ Se cumplió" if acierto else "❌ No se cumplió"
 
-        predicciones.append({
-            "Predicción YES": etiqueta_seleccion_kalshi(clave, local, visita),
-            "Probabilidad estimada": f"{probabilidad:.1%}",
-            "Precio YES Kalshi": f"{precio:.0%}" if precio is not None else "—",
-            "Disponibilidad": estado,
-            "Ticker Kalshi": mercado.get("ticker", "") if mercado else "—",
-            "Resultado": resultado_texto,
-            "_p": probabilidad,
-        })
+            predicciones.append({
+                "Apuesta": etiqueta_seleccion_kalshi(clave, local, visita) if lado_apuesta == "YES" else etiqueta_no_kalshi(clave, local, visita),
+                "Lado Kalshi": lado_apuesta,
+                "Probabilidad del modelo": f"{probabilidad:.1%}",
+                "Precio de compra": f"{precio:.0%}" if precio is not None else "—",
+                "Disponibilidad": estado,
+                "Ticker": mercado.get("ticker", "") if mercado else "—",
+                "Resultado": resultado_texto,
+                "_p": probabilidad,
+            })
 
     predicciones.sort(key=lambda x: x["_p"], reverse=True)
-    top = [{k: v for k, v in fila.items() if k != "_p"} for fila in predicciones[:5]]
+    todas = [{k: v for k, v in fila.items() if k != "_p"} for fila in predicciones]
+    top = todas[:10]
     mercados_actuales.sort(key=lambda x: x["Mercado Kalshi"])
-    return top, mercados_actuales, len(plantillas)
+    return top, todas, mercados_actuales, len(plantillas)
 
 
 @st.cache_data(ttl=21600, show_spinner=False)
@@ -514,7 +575,7 @@ for partido in partidos:
     fecha_utc = datetime.fromisoformat(fecha_txt.replace("Z", "+00:00"))
     fecha_local = fecha_utc.astimezone(TZ).date()
     estado = partido.get("status")
-    if inicio <= fecha_local <= fin and estado in {"SCHEDULED", "TIMED", "IN_PLAY", "PAUSED", "FINISHED"}:
+    if inicio <= fecha_local <= fin and estado in {"SCHEDULED", "TIMED"}:
         seleccionables.append(partido)
 
 if not seleccionables:
@@ -527,10 +588,7 @@ for m in seleccionables:
     local = m["homeTeam"].get("shortName") or m["homeTeam"]["name"]
     visita = m["awayTeam"].get("shortName") or m["awayTeam"]["name"]
     fecha = datetime.fromisoformat(m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
-    estado = " · FINAL" if m["status"] == "FINISHED" else " · EN JUEGO" if m["status"] in {"IN_PLAY", "PAUSED"} else ""
-    marcador = m.get("score", {}).get("fullTime", {})
-    final = f" · {marcador['home']}-{marcador['away']}" if m["status"] == "FINISHED" else ""
-    etiqueta = f"{fecha:%a %d/%m %H:%M} · {local} vs {visita}{estado}{final}"
+    etiqueta = f"{fecha:%a %d/%m %H:%M} · {local} vs {visita}"
     opciones[etiqueta] = m
 
 st.caption(f"Ventana: hoy {inicio:%d/%m} y próximos dos días hasta {fin:%d/%m} · hora local de Chicago")
@@ -550,6 +608,7 @@ p_goles /= p_goles.sum()
 
 p_corners = ci = cj = None
 corners_final = None
+media_corners_local = media_corners_visita = None
 if corners is not None:
     lk = clave_equipo(local, corners["nombres"])
     vk = clave_equipo(visita, corners["nombres"])
@@ -562,7 +621,9 @@ if corners is not None:
         contra_l = (sum(va["away_against"]) + K * corners["prom_home"]) / (n_v + K)
         media_v = (sum(va["away_for"]) + K * corners["prom_away"]) / (n_v + K)
         contra_v = (sum(lh["home_against"]) + K * corners["prom_away"]) / (n_l + K)
-        p_corners, (ci, cj) = matriz_corner(((media_l + contra_l) / 2, (media_v + contra_v) / 2))
+        media_corners_local = (media_l + contra_l) / 2
+        media_corners_visita = (media_v + contra_v) / 2
+        p_corners, (ci, cj) = matriz_corner((media_corners_local, media_corners_visita))
         corners_final = corners["resultados"].get((limpiar(local), limpiar(visita)))
 
 resultado = None
@@ -574,25 +635,53 @@ if partido["status"] == "FINISHED":
 try:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = cargar_eventos_kalshi_laliga()
     fecha_partido = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ).date()
-    predicciones_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
+    top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
         eventos_kalshi, local, visita, fecha_partido, p_goles, i, j, p_corners, ci, cj, resultado, corners_final
     )
 except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = [], [], 0
-    predicciones_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], 0
+    top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], 0
     st.error(f"No pude consultar los mercados abiertos de Kalshi: {exc}")
 
 st.subheader(f"{local} vs {visita}")
-st.markdown("### Las 5 selecciones individuales más probables")
+st.markdown("### Las 10 apuestas individuales más probables")
 st.caption(
-    "Ordenadas por probabilidad estimada del modelo. Solo se consideran tipos y líneas que Kalshi ofrece en LaLiga; "
-    "no se combinan. Se muestran selecciones con al menos 65% de probabilidad y pueden salir menos de cinco si no hay suficientes."
+    "Incluye YES y NO de cada contrato observado entre los mercados de LaLiga de Kalshi, con sus precios cuando ya está abierto para este partido. "
+    "El NO es el complemento exacto del YES (por ejemplo, NO a ‘gana el local’ = empate o victoria visitante). No se combinan."
 )
-if predicciones_kalshi:
-    st.dataframe(pd.DataFrame(predicciones_kalshi), use_container_width=True, hide_index=True)
+if top_kalshi:
+    st.dataframe(pd.DataFrame(top_kalshi), use_container_width=True, hide_index=True)
 else:
-    st.info("No hay selecciones con al menos 65% de probabilidad entre las líneas de Kalshi encontradas. No se rellenan con mercados inventados ni de baja probabilidad.")
+    st.info("No encontré tipos y líneas activos de Kalshi en LaLiga con estimación suficiente para este partido.")
 st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
+
+with st.expander("Cómo calcula el algoritmo estas probabilidades"):
+    st.markdown(
+        "**Goles:** estima los goles esperados de cada equipo con promedios de LaLiga y fuerzas de ataque/defensa "
+        "local y visitante suavizadas con el promedio de liga (K=6). Luego calcula una distribución Poisson para cada equipo "
+        "y forma la matriz de marcadores. La probabilidad de cada YES es la suma de las celdas que cumplen esa condición; "
+        "la del NO es 1 menos la del YES."
+    )
+    st.write(f"λ estimada: {local} {gl:.2f} goles · {visita} {gv:.2f} goles")
+    st.markdown(
+        "**Corners:** estima corners por equipo con registros locales/visitantes de football-data.co.uk, "
+        "suavizados hacia la media de liga (K=6), y una distribución binomial negativa (dispersión=16). "
+        "Las probabilidades de corners se calculan sumando los resultados de esa matriz; el NO también es el complemento del YES."
+    )
+    if media_corners_local is not None and media_corners_visita is not None:
+        st.write(f"Corners esperados: {local} {media_corners_local:.2f} · {visita} {media_corners_visita:.2f}")
+    else:
+        st.info("No hay datos suficientes de corners para calcular esas probabilidades.")
+    st.markdown(
+        "**Primer y segundo tiempo:** como la fuente no ofrece estadísticas específicas del descanso, "
+        "el modelo reparte provisionalmente los goles esperados en 45% para la primera parte y 55% para la segunda. "
+        "Estas probabilidades son más aproximadas que las de partido completo."
+    )
+    st.caption("Son probabilidades estimadas por un modelo estadístico; todavía no se calibran mediante un backtest de aciertos.")
+
+if todas_kalshi:
+    with st.expander(f"Ver todas las apuestas y líneas detectadas ({len(todas_kalshi)})"):
+        st.dataframe(pd.DataFrame(todas_kalshi), use_container_width=True, hide_index=True)
 
 with st.expander("Ver contratos abiertos ahora para este partido"):
     if mercados_kalshi:
@@ -606,10 +695,10 @@ if series_kalshi_con_error:
     st.warning(f"Kalshi no respondió para {len(series_kalshi_con_error)} de {total_series_kalshi} series de LaLiga; el listado puede estar incompleto.")
 
 st.caption(
-    "‘Disponible ahora’ significa que existe una oferta YES para ese partido. ‘Kalshi aún no lo abrió para este partido’ "
-    "significa que el tipo y la línea aparecen en otros contratos de LaLiga, pero no en este encuentro. Esa disponibilidad futura no se puede garantizar."
+    "Las filas ‘Tipo/línea ofrecido en LaLiga; falta abrirlo para este partido’ usan una línea real detectada en otros partidos de la liga. "
+    "Sirven como posibilidades del modelo; Kalshi podría no abrir ese contrato para este encuentro."
 )
 st.warning(
-    "Las probabilidades son estimaciones, no garantías. Si vas a apostar ahora, utiliza solo selecciones marcadas ‘Disponible ahora’ "
-    "y revisa el contrato y sus reglas en Kalshi."
+    "Las probabilidades son estimaciones y no garantías. Para apostar en Kalshi, verifica que el contrato exacto esté disponible "
+    "para este partido y revisa las reglas del mercado."
 )
