@@ -1,3 +1,38 @@
+name: Registrar predicciones
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: registrar-predicciones
+  cancel-in-progress: false
+
+jobs:
+  registrar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: python -m pip install requests pandas numpy scipy
+
+      - name: Registrar predicciones
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: python registrar.py
+
       - name: Guardar historial
         shell: bash
         run: |
