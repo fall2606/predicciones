@@ -156,19 +156,22 @@ def matriz_corner(media):
 def calcular_mercados(p, i, j, local, visita, resultado=None, p_corners=None, ci=None, cj=None, corners_final=None):
     filas = []
 
-    def agregar(nombre, grupo, evento, condicion, probabilidad=None):
+    def agregar(nombre, grupo, evento, condicion, probabilidad=None, tipo_resultado=None):
         matriz = p_corners if evento == "corners" else p
-        prob = float(probabilidad if probabilidad is not None else matriz[condicion].sum())
+        if probabilidad is None:
+            prob = float(np.sum(matriz * np.asarray(condicion, dtype=float)))
+        else:
+            prob = float(probabilidad)
         acierto = None
         if resultado is not None:
             goles_l, goles_v = resultado
-            if evento == "goles":
-                acierto = bool(condicion[goles_l, goles_v])
-            elif evento == "primer gol":
+            if tipo_resultado == "primer gol":
                 acierto = None
+            elif evento == "goles":
+                acierto = bool(condicion[goles_l, goles_v])
             elif evento == "corners" and corners_final is not None and condicion is not None:
                 acierto = bool(condicion[int(corners_final[0]), int(corners_final[1])])
-        filas.append({"mercado": nombre, "grupo": grupo, "evento": evento,
+        filas.append({"mercado": nombre, "grupo": grupo, "evento": evento, "tipo_resultado": tipo_resultado,
                       "condicion": condicion, "p": prob, "acierto": acierto})
 
     agregar(f"Gana {local}", "Resultado", "goles", i > j)
@@ -187,15 +190,17 @@ def calcular_mercados(p, i, j, local, visita, resultado=None, p_corners=None, ci
         for linea in (0.5, 1.5, 2.5, 3.5):
             agregar(f"{equipo} más de {linea} goles", f"Total equipo {equipo}", "goles", cond > linea)
 
-    # Primer gol estimado por tasas de anotación independientes.
-    mu_l = float((p * i).sum())
-    mu_v = float((p * j).sum())
-    prob_sin_gol = float(p[0, 0])
-    primero_l = (mu_l / max(mu_l + mu_v, 1e-9)) * (1 - prob_sin_gol)
-    primero_v = (mu_v / max(mu_l + mu_v, 1e-9)) * (1 - prob_sin_gol)
-    agregar(f"Primer gol: {local}", "Primer gol", "primer gol", None, primero_l)
-    agregar(f"Primer gol: {visita}", "Primer gol", "primer gol", None, primero_v)
-    agregar("Sin goles", "Primer gol", "primer gol", None, prob_sin_gol)
+    # Probabilidad condicional del primer anotador dado el marcador final modelado.
+    # Esto permite calcular combinadas coherentes con ganador, BTTS y total de goles.
+    total_goles = i + j
+    primero_local = np.divide(i, total_goles, out=np.zeros_like(p, dtype=float), where=total_goles > 0)
+    primero_visita = np.divide(j, total_goles, out=np.zeros_like(p, dtype=float), where=total_goles > 0)
+    sin_goles = total_goles == 0
+    agregar(f"Primer gol: {local}", "Primer gol", "goles", primero_local,
+            float(np.sum(p * primero_local)), "primer gol")
+    agregar(f"Primer gol: {visita}", "Primer gol", "goles", primero_visita,
+            float(np.sum(p * primero_visita)), "primer gol")
+    agregar("Sin goles", "Primer gol", "goles", sin_goles, tipo_resultado="primer gol")
 
     if p_corners is not None and ci is not None and cj is not None:
         for equipo, cond in ((local, ci), (visita, cj)):
@@ -217,7 +222,7 @@ def calcular_mercados(p, i, j, local, visita, resultado=None, p_corners=None, ci
     if resultado is not None:
         goles_l, goles_v = resultado
         for fila in filas:
-            if fila["evento"] == "primer gol":
+            if fila["tipo_resultado"] == "primer gol":
                 if goles_l == 0 and goles_v == 0:
                     fila["acierto"] = fila["mercado"] == "Sin goles"
                 elif goles_l > 0 and goles_v == 0:
@@ -235,41 +240,53 @@ def probabilidad_combo(legs, p_goles, p_corners):
         eventos.setdefault(leg["evento"], []).append(leg)
     prob = 1.0
     for evento, sub in eventos.items():
-        if evento == "primer gol" or any(x["condicion"] is None for x in sub):
-            prob *= float(np.prod([x["p"] for x in sub]))
-            continue
         matriz = p_goles if evento == "goles" else p_corners
         if matriz is None:
             return 0.0
-        conjunta = np.logical_and.reduce([x["condicion"] for x in sub])
-        prob *= float(matriz[conjunta].sum())
+        conjunta = np.prod(np.stack([np.asarray(x["condicion"], dtype=float) for x in sub]), axis=0)
+        prob *= float(np.sum(matriz * conjunta))
     return prob
 
 
 def resumir_combinadas(mercados, p_goles, p_corners):
-    candidatos = [m for m in mercados if 0.55 <= m["p"] <= 0.92]
-    opciones = []
-    for legs in combinations(candidatos, 2):
-        if legs[0]["grupo"] == legs[1]["grupo"]:
-            continue
-        pc = probabilidad_combo(legs, p_goles, p_corners)
-        if pc >= 0.25:
-            resultado = None
-            if all(x["acierto"] is not None for x in legs):
-                resultado = all(x["acierto"] for x in legs)
+    candidatos = [m for m in mercados if m["p"] >= 0.65]
+    # El filtro se aplica a la probabilidad conjunta, no a la multiplicación
+    # de probabilidades marginales. Exigimos al menos 50% para cualquier tamaño.
+    umbral_conjunta = 0.50
+    resumen = []
+    for tamano in (2, 3, 4):
+        opciones = []
+        for legs in combinations(candidatos, tamano):
+            grupos = [x["grupo"] for x in legs]
+            if len(set(grupos)) != len(grupos):
+                continue
+            pc = probabilidad_combo(legs, p_goles, p_corners)
+            if pc < umbral_conjunta:
+                continue
+
+            # Descarta selecciones prácticamente duplicadas (por ejemplo,
+            # ganador y hándicap muy bajo que describen casi el mismo evento).
+            redundante = False
+            for a, b in combinations(legs, 2):
+                if a["evento"] != b["evento"]:
+                    continue
+                prob_a = probabilidad_combo([a], p_goles, p_corners)
+                prob_b = probabilidad_combo([b], p_goles, p_corners)
+                conjunta_ab = probabilidad_combo([a, b], p_goles, p_corners)
+                if min(prob_a, prob_b) > 0 and conjunta_ab / min(prob_a, prob_b) >= 0.98:
+                    redundante = True
+                    break
+            if redundante:
+                continue
+            aciertos = [x["acierto"] for x in legs]
+            resultado = all(aciertos) if all(x is not None for x in aciertos) else None
             opciones.append((pc, legs, resultado))
-    opciones.sort(key=lambda x: x[0], reverse=True)
-    resumen, vistos = [], set()
-    for pc, legs, resultado in opciones:
-        llave = tuple(sorted(x["mercado"] for x in legs))
-        if llave in vistos:
-            continue
-        vistos.add(llave)
-        res = "Pendiente" if resultado is None else "✅ acertada" if resultado else "❌ fallada"
-        resumen.append({"Combinada del partido": " + ".join(x["mercado"] for x in legs),
-                        "Prob. estimada": f"{pc:.1%}", "Resultado": res})
-        if len(resumen) == 5:
-            break
+        opciones.sort(key=lambda x: x[0], reverse=True)
+        for pc, legs, resultado in opciones[:3]:
+            estado = "Pendiente" if resultado is None else "✅ acertada" if resultado else "❌ fallada"
+            resumen.append({"Tamaño": f"{tamano} selecciones",
+                            "Combinada del partido": " + ".join(x["mercado"] for x in legs),
+                            "Prob. conjunta": f"{pc:.1%}", "Resultado": estado})
     return resumen
 
 
@@ -368,12 +385,13 @@ todos = calcular_mercados(p_goles, i, j, local, visita, resultado,
                           p_corners, ci, cj, corners_final)
 combinadas = resumir_combinadas(todos, p_goles, p_corners)
 st.subheader(f"{local} vs {visita}")
-st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
 if combinadas:
-    st.markdown("### Resumen de combinadas para este partido")
+    st.markdown("### Resumen de combinadas con alta probabilidad")
+    st.caption("Se exploran combinaciones de 2 a 4 mercados; cada selección debe superar 65% y la combinada 50% de probabilidad conjunta. Se muestran las mejores tres por tamaño. Goles y corners se modelan por separado.")
     st.dataframe(pd.DataFrame(combinadas), use_container_width=True, hide_index=True)
 else:
-    st.info("No hay combinadas que superen los umbrales del modelo para este partido.")
+    st.info("El modelo no encuentra combinadas coherentes con al menos 50% de probabilidad conjunta para este partido. No se muestran apuestas forzadas.")
+st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
 
 selecciones = sorted([m for m in todos if m["p"] >= 0.55], key=lambda m: m["p"], reverse=True)[:8]
 st.markdown("### Selecciones individuales destacadas")
