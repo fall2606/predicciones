@@ -404,6 +404,60 @@ def etiqueta_no_kalshi(clave, local, visita):
     return f"NO: {etiqueta_seleccion_kalshi(clave, local, visita)}"
 
 
+def categoria_resumen_sencillo(clave):
+    serie = clave[0]
+    return {
+        "KXLALIGAGAME": "Resultado",
+        "KXLALIGATOTAL": "Goles totales",
+        "KXLALIGACORNERS": "Corners totales",
+        "KXLALIGATCORNERS": "Corners por equipo",
+        "KXLALIGATEAMTOTAL": "Goles por equipo",
+        "KXLALIGABTTS": "Ambos marcan",
+    }.get(serie)
+
+
+def etiqueta_resumen_sencillo(clave, lado_apuesta, local, visita):
+    """Affirmative, plain-language phrasing for the match overview."""
+    serie, lado, linea, direccion = clave
+    yes = lado_apuesta == "YES"
+    if serie == "KXLALIGAGAME":
+        if yes:
+            return f"Gana {local}" if lado == "local" else f"Gana {visita}" if lado == "visita" else "Empate"
+        if lado == "local":
+            return f"Visita o empate (X2)"
+        if lado == "visita":
+            return f"Local o empate (1X)"
+        return f"Gana {local} o {visita}"
+
+    if serie in {"KXLALIGATOTAL", "KXLALIGACORNERS", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL"}:
+        yes_is_over = direccion != "under"
+        es_over = yes == yes_is_over
+        if serie == "KXLALIGATOTAL":
+            if es_over:
+                return f"Más de {linea:g} goles totales"
+            maximo = max(0, ceil(linea) - 1)
+            return f"0–{maximo} goles totales"
+        if serie == "KXLALIGACORNERS":
+            if es_over:
+                return f"{ceil(linea)}+ corners totales"
+            maximo = max(0, ceil(linea) - 1)
+            return f"0–{maximo} corners totales"
+        equipo = local if lado == "local" else visita
+        if serie == "KXLALIGATCORNERS":
+            if es_over:
+                return f"{ceil(linea)}+ corners de {equipo}"
+            maximo = max(0, ceil(linea) - 1)
+            return f"0–{maximo} corners de {equipo}"
+        if es_over:
+            return f"Más de {linea:g} goles de {equipo}"
+        maximo = max(0, ceil(linea) - 1)
+        return f"{maximo} o menos goles de {equipo}"
+
+    if serie == "KXLALIGABTTS":
+        return "Ambos equipos marcan" if yes else "Uno o ambos equipos se quedan sin marcar"
+    return etiqueta_seleccion_kalshi(clave, local, visita) if yes else etiqueta_no_kalshi(clave, local, visita)
+
+
 def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, j,
                                     p_corners, ci, cj, resultado=None, corners_final=None):
     plantillas, ofertas_actuales, mercados_actuales = set(), {}, []
@@ -520,6 +574,8 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
 
             predicciones.append({
                 "Apuesta": etiqueta_seleccion_kalshi(clave, local, visita) if lado_apuesta == "YES" else etiqueta_no_kalshi(clave, local, visita),
+                "Apuesta sencilla": etiqueta_resumen_sencillo(clave, lado_apuesta, local, visita),
+                "Categoría resumen": categoria_resumen_sencillo(clave),
                 "Lado Kalshi": lado_apuesta,
                 "Probabilidad del modelo": f"{probabilidad:.1%}",
                 "Precio de compra": f"{precio:.0%}" if precio is not None else "—",
@@ -531,6 +587,27 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
             })
 
     predicciones.sort(key=lambda x: x["_p"], reverse=True)
+    candidatos_resumen = {}
+    for fila in predicciones:
+        categoria = fila["Categoría resumen"]
+        if categoria == "Resultado" and fila["Lado Kalshi"] == "NO" and "empate" in fila["Apuesta"].lower():
+            # Prefer useful double-chance summaries (1X/X2) over the less readable no-draw outcome.
+            continue
+        if categoria:
+            candidatos_resumen.setdefault(categoria, []).append(fila)
+    resumen_por_categoria = {}
+    for categoria, filas in candidatos_resumen.items():
+        # Prefer useful mid-range probabilities to ultra-short lines with negligible payout.
+        rango_util = [fila for fila in filas if 0.55 <= fila["_p"] <= 0.80]
+        mejor = max(rango_util or filas, key=lambda fila: fila["_p"])
+        resumen_por_categoria[categoria] = {
+            "Tipo": categoria,
+            "Jugada sencilla": mejor["Apuesta sencilla"],
+            "Probabilidad modelo": mejor["Probabilidad del modelo"],
+            "Precio ahora": mejor["Precio de compra"],
+            "Disponibilidad": mejor["Disponibilidad"],
+        }
+    resumen_simple = list(resumen_por_categoria.values())
     todas = [{k: v for k, v in fila.items() if k != "_p"} for fila in predicciones]
     top = todas[:10]
     oportunidades_margen.sort(key=lambda x: (x["_roi"], x["_ev"]), reverse=True)
@@ -546,7 +623,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
     candidatos_yes = [{k: v for k, v in x.items() if not k.startswith("_")} for x in candidatos_yes]
     candidatos_no = [{k: v for k, v in x.items() if not k.startswith("_")} for x in candidatos_no]
     mercados_actuales.sort(key=lambda x: x["Mercado Kalshi"])
-    return margen_yes, margen_no, candidatos_yes, candidatos_no, top, todas, mercados_actuales, len(plantillas)
+    return resumen_simple, margen_yes, margen_no, candidatos_yes, candidatos_no, top, todas, mercados_actuales, len(plantillas)
 
 
 @st.cache_data(ttl=21600, show_spinner=False)
@@ -713,15 +790,28 @@ if partido["status"] == "FINISHED":
 try:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = cargar_eventos_kalshi_laliga()
     fecha_partido = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ).date()
-    margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
+    resumen_sencillo_kalshi, margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
         eventos_kalshi, local, visita, fecha_partido, p_goles, i, j, p_corners, ci, cj, resultado, corners_final
     )
 except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = [], [], 0
-    margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], [], [], [], [], 0
+    resumen_sencillo_kalshi, margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], [], [], [], [], [], 0
     st.error(f"No pude consultar los mercados abiertos de Kalshi: {exc}")
 
 st.subheader(f"{local} vs {visita}")
+st.markdown("### Resumen sencillo del partido")
+st.caption("Una jugada sencilla por tipo, escrita en positivo. Se priorizan líneas con probabilidad moderada para evitar llenar el resumen con opciones casi seguras que suelen pagar poco. Son selecciones individuales, no una combinada.")
+if resumen_sencillo_kalshi:
+    columnas_resumen = st.columns(3)
+    for indice_resumen, jugada in enumerate(resumen_sencillo_kalshi):
+        with columnas_resumen[indice_resumen % 3]:
+            st.markdown(f"**{jugada['Tipo']}**")
+            st.markdown(f"### {jugada['Jugada sencilla']}")
+            st.write(f"Probabilidad modelo: **{jugada['Probabilidad modelo']}**")
+            st.caption(f"Kalshi: {jugada['Precio ahora']} · {jugada['Disponibilidad']}")
+else:
+    st.info("No encontré mercados modelables de Kalshi para resumir este partido.")
+
 st.markdown("### Apuestas con margen neto estimado")
 st.caption(
     "Solo contratos con precio disponible para este partido, probabilidad estimada ≥50%, ganancia esperada neta ≥$0.05 por contrato "
