@@ -1,5 +1,6 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from itertools import combinations
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -137,10 +138,10 @@ def recomendar_combos(probabilidades, filas, max_combos=5):
     return salida
 
 
-hoy = date.today()
+hoy = datetime.now(ZoneInfo("America/Chicago")).date()
 temporada = hoy.year
-inicio = hoy - timedelta(days=7)
-fin = hoy + timedelta(days=7)
+inicio = hoy
+fin = hoy + timedelta(days=2)
 
 try:
     stats = cargar_stats(temporada)
@@ -153,28 +154,36 @@ except (ValueError, KeyError, TypeError) as exc:
     st.stop()
 
 if not partidos:
-    st.info("No hay partidos de MLB en el calendario de estos días.")
+    st.info("No hay partidos hoy ni en los próximos dos días.")
     st.stop()
 
 promedio = float(np.mean([x["rpg"] for x in stats.values()]))
 eje = np.arange(0, 21)
 matriz_local, matriz_visita = np.meshgrid(eje, eje, indexing="ij")
 st.caption(
-    f"Temporada {temporada} · promedio de liga {promedio:.2f} carreras/equipo · "
-    "actualización cada 15 minutos. Las combinadas son aproximaciones del modelo, no cuotas de Kalshi."
+    f"Partidos del {inicio:%d/%m} al {fin:%d/%m} · temporada {temporada} · "
+    f"promedio de liga {promedio:.2f} carreras/equipo · datos actualizados cada 15 minutos."
 )
 
-filtro = st.selectbox("Partidos", ["Todos", "Próximos", "Finalizados"])
-if filtro == "Próximos":
-    partidos = [p for p in partidos if p.get("status", {}).get("abstractGameState") == "Preview"]
-elif filtro == "Finalizados":
-    partidos = [p for p in partidos if p.get("status", {}).get("abstractGameState") == "Final"]
+partidos = sorted(partidos, key=lambda p: p.get("gameDate", ""))
+opciones = {}
+for juego in partidos:
+    local = juego.get("teams", {}).get("home", {}).get("team", {}).get("name", "Local")
+    visita = juego.get("teams", {}).get("away", {}).get("team", {}).get("name", "Visita")
+    hora = juego.get("gameDate", "")[:16].replace("T", " ")
+    estado = juego.get("status", {}).get("abstractGameState", "")
+    marcador = " · FINAL" if estado == "Final" else " · EN JUEGO" if estado == "Live" else ""
+    clave = f"{hora} · {visita} @ {local}{marcador}"
+    opciones[clave] = juego
 
-if not partidos:
-    st.info("No hay partidos en esta categoría dentro del rango seleccionado.")
-    st.stop()
-
-for juego in sorted(partidos, key=lambda p: p.get("gameDate", "")):
+indice_inicial = next(
+    (i for i, partido in enumerate(partidos)
+     if partido.get("status", {}).get("abstractGameState") != "Final"),
+    0,
+)
+seleccion = st.selectbox("Elige un partido (solo se muestran sus predicciones)", list(opciones), index=indice_inicial)
+juego = opciones[seleccion]
+for juego in [juego]:
     home = juego.get("teams", {}).get("home", {}).get("team", {})
     away = juego.get("teams", {}).get("away", {}).get("team", {})
     if not home.get("id") or not away.get("id"):
