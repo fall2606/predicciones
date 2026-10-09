@@ -395,6 +395,20 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 plantillas.add(plantilla)
             if evento_corresponde(evento, local, visita, fecha):
                 clave = clave_contrato_kalshi(evento, mercado, local, visita)
+                estimacion_actual = (
+                    modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci, cj)
+                    if clave else None
+                )
+                prob_yes_actual = estimacion_actual[2] if estimacion_actual else None
+                precio_yes_actual = cotizacion_valida(mercado.get("yes_ask_dollars"))
+                precio_no_actual = cotizacion_valida(mercado.get("no_ask_dollars"))
+                mercados_actuales.append({
+                    "Mercado Kalshi": mercado.get("yes_sub_title") or mercado.get("title") or mercado.get("ticker"),
+                    "Prob. YES modelo": f"{prob_yes_actual:.1%}" if prob_yes_actual is not None else "Sin modelo para este tipo",
+                    "Precio YES": f"{precio_yes_actual:.0%}" if precio_yes_actual is not None else "Sin oferta",
+                    "Precio NO": f"{precio_no_actual:.0%}" if precio_no_actual is not None else "Sin oferta",
+                    "Ticker": mercado.get("ticker", ""),
+                })
                 if clave:
                     oferta_previa = ofertas_actuales.get(clave)
                     if oferta_previa is None or (
@@ -402,12 +416,6 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                         and cotizacion_valida(oferta_previa.get("yes_ask_dollars")) is None
                     ):
                         ofertas_actuales[clave] = mercado
-                    mercados_actuales.append({
-                        "Mercado Kalshi": mercado.get("yes_sub_title") or mercado.get("title") or mercado.get("ticker"),
-                        "Precio YES": f"{cotizacion_valida(mercado.get('yes_ask_dollars')):.0%}"
-                            if cotizacion_valida(mercado.get("yes_ask_dollars")) is not None else "Sin oferta de venta",
-                        "Ticker": mercado.get("ticker", ""),
-                    })
 
     claves = set()
     for serie, linea, direccion in plantillas:
