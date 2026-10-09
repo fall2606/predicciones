@@ -217,6 +217,21 @@ def tarifa_estimada_kalshi(precio):
     return ceil(7 * precio * (1 - precio)) / 100
 
 
+def precio_maximo_para_margen(probabilidad, ganancia_minima=0.05, roi_minimo=0.10):
+    """Highest cent price meeting both net expected profit and ROI targets."""
+    if probabilidad < 0.50:
+        return None
+    validos = []
+    for centavos in range(1, 100):
+        precio = centavos / 100
+        costo = precio + tarifa_estimada_kalshi(precio)
+        ev = probabilidad - costo
+        roi = ev / costo if costo else 0
+        if ev >= ganancia_minima and roi >= roi_minimo:
+            validos.append(precio)
+    return max(validos) if validos else None
+
+
 def _texto_mercado(mercado):
     return limpiar(" ".join(str(mercado.get(k, "")) for k in ("yes_sub_title", "title", "subtitle")))
 
@@ -436,7 +451,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
         else:
             claves.add((serie, "over", linea, direccion))
 
-    predicciones, oportunidades_margen = [], []
+    predicciones, oportunidades_margen, candidatos_cotizados = [], [], []
     for clave in claves:
         estimacion = modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci, cj)
         if estimacion is None:
@@ -448,14 +463,29 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
             condicion = condicion_yes if lado_apuesta == "YES" else 1 - np.asarray(condicion_yes, dtype=float)
             precio_campo = "yes_ask_dollars" if lado_apuesta == "YES" else "no_ask_dollars"
             precio = cotizacion_valida(mercado.get(precio_campo)) if mercado else None
+            precio_objetivo = precio_maximo_para_margen(probabilidad)
             if precio is not None:
                 tarifa = tarifa_estimada_kalshi(precio)
                 costo_total = precio + tarifa
                 ganancia_si_acierta = 1 - costo_total
                 ganancia_esperada = probabilidad - costo_total
                 roi_esperado = ganancia_esperada / costo_total if costo_total > 0 else -1
+                supera_filtros = probabilidad >= 0.50 and ganancia_esperada >= 0.05 and roi_esperado >= 0.10
+                candidatos_cotizados.append({
+                    "Apuesta": etiqueta_seleccion_kalshi(clave, local, visita) if lado_apuesta == "YES" else etiqueta_no_kalshi(clave, local, visita),
+                    "Lado": lado_apuesta,
+                    "Prob. modelo": f"{probabilidad:.1%}",
+                    "Precio actual": f"${precio:.2f}",
+                    "EV neto por contrato": f"${ganancia_esperada:+.2f}",
+                    "ROI neto": f"{roi_esperado:+.1%}",
+                    "Precio máx. para margen objetivo": f"${precio_objetivo:.2f}" if precio_objetivo else "No alcanza el mínimo",
+                    "Evaluación": "Cumple" if supera_filtros else "No tiene margen suficiente al precio actual",
+                    "Ticker": mercado.get("ticker", ""),
+                    "_ev": ganancia_esperada,
+                    "_roi": roi_esperado,
+                })
                 # Minimum filters prevent presenting tiny theoretical edges as useful bets.
-                if probabilidad >= 0.50 and ganancia_esperada >= 0.05 and roi_esperado >= 0.10:
+                if supera_filtros:
                     oportunidades_margen.append({
                         "Apuesta": etiqueta_seleccion_kalshi(clave, local, visita) if lado_apuesta == "YES" else etiqueta_no_kalshi(clave, local, visita),
                         "Lado": lado_apuesta,
@@ -493,6 +523,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 "Lado Kalshi": lado_apuesta,
                 "Probabilidad del modelo": f"{probabilidad:.1%}",
                 "Precio de compra": f"{precio:.0%}" if precio is not None else "—",
+                "Precio máx. para margen objetivo": f"${precio_objetivo:.2f}" if precio_objetivo else "—",
                 "Disponibilidad": estado,
                 "Ticker": mercado.get("ticker", "") if mercado else "—",
                 "Resultado": resultado_texto,
@@ -509,8 +540,13 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
     ]
     margen_yes = [x for x in oportunidades_margen if x["Lado"] == "YES"][:5]
     margen_no = [x for x in oportunidades_margen if x["Lado"] == "NO"][:5]
+    candidatos_cotizados.sort(key=lambda x: (x["_ev"], x["_roi"]), reverse=True)
+    candidatos_yes = [x for x in candidatos_cotizados if x["Lado"] == "YES"][:5]
+    candidatos_no = [x for x in candidatos_cotizados if x["Lado"] == "NO"][:5]
+    candidatos_yes = [{k: v for k, v in x.items() if not k.startswith("_")} for x in candidatos_yes]
+    candidatos_no = [{k: v for k, v in x.items() if not k.startswith("_")} for x in candidatos_no]
     mercados_actuales.sort(key=lambda x: x["Mercado Kalshi"])
-    return margen_yes, margen_no, top, todas, mercados_actuales, len(plantillas)
+    return margen_yes, margen_no, candidatos_yes, candidatos_no, top, todas, mercados_actuales, len(plantillas)
 
 
 @st.cache_data(ttl=21600, show_spinner=False)
@@ -677,12 +713,12 @@ if partido["status"] == "FINISHED":
 try:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = cargar_eventos_kalshi_laliga()
     fecha_partido = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ).date()
-    margen_yes_kalshi, margen_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
+    margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
         eventos_kalshi, local, visita, fecha_partido, p_goles, i, j, p_corners, ci, cj, resultado, corners_final
     )
 except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = [], [], 0
-    margen_yes_kalshi, margen_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], [], [], 0
+    margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], [], [], [], [], 0
     st.error(f"No pude consultar los mercados abiertos de Kalshi: {exc}")
 
 st.subheader(f"{local} vs {visita}")
@@ -703,7 +739,21 @@ with tab_no_kalshi:
     else:
         st.info("No hay una apuesta NO disponible ahora que supere el margen mínimo del modelo.")
 if not margen_yes_kalshi and not margen_no_kalshi:
-    st.info("No encontré apuestas con margen suficiente en los precios actuales. Las posibilidades sin precio están en el catálogo; no se puede calcular rentabilidad sin cotización.")
+    st.info("Ninguna cotización actual pasa el margen mínimo. Abajo puedes ver los mejores precios actuales y el máximo al que cada selección sí cumpliría el objetivo.")
+
+with st.expander("Ver los mejores candidatos al precio actual y el precio máximo recomendado"):
+    st.caption("Estas filas son diagnósticas: si dicen ‘No tiene margen suficiente’, no cumplen el objetivo al precio mostrado. El precio máximo indica dónde podrían alcanzar la ganancia y el ROI mínimos.")
+    yes_cand_tab, no_cand_tab = st.tabs(["Candidatos YES", "Candidatos NO"])
+    with yes_cand_tab:
+        if candidatos_yes_kalshi:
+            st.dataframe(pd.DataFrame(candidatos_yes_kalshi), use_container_width=True, hide_index=True)
+        else:
+            st.info("No hay cotizaciones YES que pueda comparar para este partido.")
+    with no_cand_tab:
+        if candidatos_no_kalshi:
+            st.dataframe(pd.DataFrame(candidatos_no_kalshi), use_container_width=True, hide_index=True)
+        else:
+            st.info("No hay cotizaciones NO que pueda comparar para este partido.")
 
 with st.expander("Ver las 10 opciones más probables aunque no tengan margen"):
     if top_kalshi:
@@ -737,7 +787,8 @@ with st.expander("Cómo calcula el algoritmo estas probabilidades"):
     st.markdown(
         "**Margen:** calcula la probabilidad del modelo menos el precio de compra y una tarifa estándar estimada. "
         "Solo recomienda oportunidades con probabilidad ≥50%, ganancia esperada ≥$0.05 y retorno neto esperado ≥10%. "
-        "Las tarifas reales pueden variar por mercado y tipo de orden."
+        "También muestra el precio máximo al que cada selección alcanzaría esos objetivos; si el precio actual es mayor, "
+        "la marca como sin margen suficiente. Las tarifas reales pueden variar por mercado y tipo de orden."
     )
     st.caption("Son probabilidades estimadas por un modelo estadístico; todavía no se calibran mediante un backtest de aciertos.")
 
