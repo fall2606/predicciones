@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from difflib import get_close_matches
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from math import ceil
+from math import ceil, floor
 import re
 from unicodedata import normalize
 from zoneinfo import ZoneInfo
@@ -16,7 +16,7 @@ from scipy.stats import nbinom, poisson
 API_FD = "https://api.football-data.org/v4"
 API_KALSHI = "https://external-api.kalshi.com/trade-api/v2"
 K = 6
-N_GOLES = 11
+HALF_LIFE_DAYS = 120
 N_CORNERS = 40
 DISPERSION_CORNERS = 16
 TZ = ZoneInfo("America/Chicago")
@@ -57,29 +57,45 @@ def cargar_partidos_y_estadisticas(clave, temporada, temporada_anterior):
     if not historial:
         raise ValueError("La API no devolvió partidos terminados para calcular el modelo.")
 
+    now = datetime.now(TZ)
     home_rows, away_rows = [], []
+    forma = {}
     for m in historial:
         h = m["homeTeam"].get("shortName") or m["homeTeam"]["name"]
         a = m["awayTeam"].get("shortName") or m["awayTeam"]["name"]
         gh = int(m["score"]["fullTime"]["home"])
         ga = int(m["score"]["fullTime"]["away"])
-        home_rows.append((h, gh, ga))
-        away_rows.append((a, ga, gh))
+        fecha_txt = m.get("utcDate")
+        if fecha_txt:
+            fecha = datetime.fromisoformat(fecha_txt.replace("Z", "+00:00"))
+            dias = max(0, (now - fecha.astimezone(TZ)).days)
+        else:
+            dias = 365
+        # La mitad del peso desaparece cada cuatro meses para reflejar la forma reciente.
+        peso = 0.5 ** (dias / HALF_LIFE_DAYS)
+        home_rows.append((h, gh, ga, peso))
+        away_rows.append((a, ga, gh, peso))
+        forma.setdefault(h, []).append((fecha if fecha_txt else now, gh, ga))
+        forma.setdefault(a, []).append((fecha if fecha_txt else now, ga, gh))
 
-    home_df = pd.DataFrame(home_rows, columns=["equipo", "gf", "gc"])
-    away_df = pd.DataFrame(away_rows, columns=["equipo", "gf", "gc"])
-    prom_home = float(home_df["gf"].mean())
-    prom_away = float(away_df["gf"].mean())
+    home_df = pd.DataFrame(home_rows, columns=["equipo", "gf", "gc", "peso"])
+    away_df = pd.DataFrame(away_rows, columns=["equipo", "gf", "gc", "peso"])
+    prom_home = float(np.average(home_df["gf"], weights=home_df["peso"]))
+    prom_away = float(np.average(away_df["gf"], weights=away_df["peso"]))
     if prom_home <= 0 or prom_away <= 0:
         raise ValueError("Faltan goles suficientes en el historial de LaLiga.")
 
-    home_stats = home_df.groupby("equipo").agg(gf=("gf", "sum"), gc=("gc", "sum"), n=("gf", "count"))
-    away_stats = away_df.groupby("equipo").agg(gf=("gf", "sum"), gc=("gc", "sum"), n=("gf", "count"))
+    home_df["gf_w"] = home_df.gf * home_df.peso
+    home_df["gc_w"] = home_df.gc * home_df.peso
+    away_df["gf_w"] = away_df.gf * away_df.peso
+    away_df["gc_w"] = away_df.gc * away_df.peso
+    home_stats = home_df.groupby("equipo").agg(gf=("gf_w", "sum"), gc=("gc_w", "sum"), n=("peso", "sum"))
+    away_stats = away_df.groupby("equipo").agg(gf=("gf_w", "sum"), gc=("gc_w", "sum"), n=("peso", "sum"))
     home_attack = ((home_stats.gf + K * prom_home) / (home_stats.n + K)) / prom_home
     home_defence = ((home_stats.gc + K * prom_away) / (home_stats.n + K)) / prom_away
     away_attack = ((away_stats.gf + K * prom_away) / (away_stats.n + K)) / prom_away
     away_defence = ((away_stats.gc + K * prom_home) / (away_stats.n + K)) / prom_home
-    return actual, prom_home, prom_away, home_attack.to_dict(), home_defence.to_dict(), away_attack.to_dict(), away_defence.to_dict()
+    return actual, prom_home, prom_away, home_attack.to_dict(), home_defence.to_dict(), away_attack.to_dict(), away_defence.to_dict(), now.date(), forma
 
 
 def limpiar(nombre):
@@ -443,7 +459,10 @@ def etiqueta_resumen_sencillo(clave, lado_apuesta, local, visita):
         equipo = local if lado == "local" else visita
         contrario = visita if lado == "local" else local
         periodo = " (1.ª parte)" if serie == "KXLALIGA1HSPREAD" else ""
-        return f"{equipo} gana por {ceil(linea) }+ goles{periodo}" if yes else f"{contrario} +{linea:g} hándicap{periodo}"
+        minimo = floor(linea) + 1
+        unidad = "gol" if linea == 1 else "goles"
+        return (f"{equipo} gana por {minimo}+ goles{periodo}" if yes
+                else f"{contrario} no pierde por más de {linea:g} {unidad}{periodo}")
 
     if serie in {"KXLALIGATOTAL", "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL", "KXLALIGACORNERS", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL"}:
         yes_is_over = direccion != "under"
@@ -510,6 +529,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                     "Prob. YES modelo": f"{prob_yes_actual:.1%}" if prob_yes_actual is not None else "Sin modelo para este tipo",
                     "Precio YES": f"{precio_yes_actual:.0%}" if precio_yes_actual is not None else "Sin oferta",
                     "Precio NO": f"{precio_no_actual:.0%}" if precio_no_actual is not None else "Sin oferta",
+                    "Reglas del contrato": mercado.get("rules_primary") or mercado.get("rules_secondary") or "Consultar en Kalshi",
                     "Ticker": mercado.get("ticker", ""),
                 })
                 if clave:
@@ -666,9 +686,14 @@ def cargar_corners(temporadas):
             columnas = {c.lower(): c for c in df.columns}
             requeridas = [columnas.get(x) for x in ("hometeam", "awayteam", "hc", "ac")]
             if all(requeridas):
-                df = df[requeridas].copy()
-                df.columns = ["HomeTeam", "AwayTeam", "HC", "AC"]
-                df = df.dropna()
+                fecha_col = columnas.get("date")
+                if fecha_col:
+                    df["MatchDate"] = pd.to_datetime(df[fecha_col], dayfirst=True, errors="coerce")
+                else:
+                    df["MatchDate"] = pd.NaT
+                df = df[requeridas + ["MatchDate"]].copy()
+                df.columns = ["HomeTeam", "AwayTeam", "HC", "AC", "MatchDate"]
+                df = df.dropna(subset=["HomeTeam", "AwayTeam", "HC", "AC"])
                 if not df.empty:
                     df["temporada"] = temporada
                     partes.append(df)
@@ -678,15 +703,18 @@ def cargar_corners(temporadas):
         return None
 
     partidos = pd.concat(partes, ignore_index=True)
+    ahora = pd.Timestamp.now(tz="UTC").tz_localize(None)
+    dias = (ahora - partidos["MatchDate"]).dt.days.fillna(365).clip(lower=0)
+    partidos["peso"] = 0.5 ** (dias / HALF_LIFE_DAYS)
     equipos = {}
     for r in partidos.itertuples(index=False):
         h, a = limpiar(r.HomeTeam), limpiar(r.AwayTeam)
         equipos.setdefault(h, {"home_for": [], "home_against": [], "away_for": [], "away_against": []})
         equipos.setdefault(a, {"home_for": [], "home_against": [], "away_for": [], "away_against": []})
-        equipos[h]["home_for"].append(float(r.HC))
-        equipos[h]["home_against"].append(float(r.AC))
-        equipos[a]["away_for"].append(float(r.AC))
-        equipos[a]["away_against"].append(float(r.HC))
+        equipos[h]["home_for"].append((float(r.HC), float(r.peso)))
+        equipos[h]["home_against"].append((float(r.AC), float(r.peso)))
+        equipos[a]["away_for"].append((float(r.AC), float(r.peso)))
+        equipos[a]["away_against"].append((float(r.HC), float(r.peso)))
     actuales = partidos[partidos["temporada"] == temporadas[-1]]
     resultados = {
         (limpiar(r.HomeTeam), limpiar(r.AwayTeam)): (float(r.HC), float(r.AC))
@@ -695,11 +723,17 @@ def cargar_corners(temporadas):
     }
     return {
         "equipos": equipos,
-        "prom_home": float(partidos.HC.mean()),
-        "prom_away": float(partidos.AC.mean()),
+        "prom_home": float(np.average(partidos.HC, weights=partidos.peso)),
+        "prom_away": float(np.average(partidos.AC, weights=partidos.peso)),
         "nombres": list(equipos),
         "resultados": resultados,
     }
+
+
+def media_corners_ponderada(registros, promedio_liga):
+    peso_total = sum(peso for _, peso in registros)
+    valor_total = sum(valor * peso for valor, peso in registros)
+    return (valor_total + K * promedio_liga) / (peso_total + K)
 
 
 def clave_equipo(nombre, nombres):
@@ -710,15 +744,61 @@ def clave_equipo(nombre, nombres):
     return match[0] if match else None
 
 
-def estimar_goles(local, visita, modelo):
-    _, ph, pa, ha, hd, aa, ad = modelo
+def estimar_goles(local, visita, modelo, fecha_partido=None):
+    _, ph, pa, ha, hd, aa, ad, _, formas = modelo
     lh = ph * ha.get(local, 1.0) * ad.get(visita, 1.0)
     av = pa * aa.get(visita, 1.0) * hd.get(local, 1.0)
-    return max(0.15, lh), max(0.15, av)
+    if fecha_partido is None:
+        fecha_corte = datetime.now(TZ)
+    elif isinstance(fecha_partido, datetime):
+        fecha_corte = fecha_partido.astimezone(TZ)
+    else:
+        fecha_corte = datetime.combine(fecha_partido, datetime.min.time(), tzinfo=TZ)
+
+    def factores_forma(equipo):
+        recientes = sorted(
+            (r for r in formas.get(equipo, []) if r[0].astimezone(TZ) < fecha_corte),
+            key=lambda r: r[0], reverse=True,
+        )[:8]
+        if len(recientes) < 3:
+            return 1.0, 1.0
+        gf = float(np.mean([r[1] for r in recientes]))
+        gc = float(np.mean([r[2] for r in recientes]))
+        # Multiplicador suave: forma reciente ajusta el pronóstico, sin dominar toda la temporada.
+        ataque = max(0.55, min(1.65, gf / max(0.1, (ph + pa) / 2)))
+        defensa_permisiva = max(0.55, min(1.65, gc / max(0.1, (ph + pa) / 2)))
+        return ataque, defensa_permisiva
+
+    ataque_local, concede_local = factores_forma(local)
+    ataque_visita, concede_visita = factores_forma(visita)
+    ajuste_local = max(0.80, min(1.20, (ataque_local * concede_visita) ** 0.25))
+    ajuste_visita = max(0.80, min(1.20, (ataque_visita * concede_local) ** 0.25))
+    return max(0.15, lh * ajuste_local), max(0.15, av * ajuste_visita), ajuste_local, ajuste_visita
+
+
+def resumen_forma(equipo, modelo, fecha_partido):
+    formas = modelo[8]
+    recientes = sorted(
+        (r for r in formas.get(equipo, []) if r[0].astimezone(TZ) < fecha_partido),
+        key=lambda r: r[0], reverse=True,
+    )[:8]
+    if not recientes:
+        return "Sin resultados recientes disponibles"
+    ganados = sum(gf > gc for _, gf, gc in recientes)
+    empatados = sum(gf == gc for _, gf, gc in recientes)
+    perdidos = len(recientes) - ganados - empatados
+    gf_total = sum(gf for _, gf, _ in recientes)
+    gc_total = sum(gc for _, _, gc in recientes)
+    return f"{ganados}G–{empatados}E–{perdidos}P · goles {gf_total}:{gc_total} · {len(recientes)} partidos"
 
 
 def matriz_corner(media):
-    valores = np.arange(N_CORNERS)
+    max_media = max(media)
+    cola = nbinom.ppf(
+        0.999999, DISPERSION_CORNERS,
+        DISPERSION_CORNERS / (DISPERSION_CORNERS + max_media),
+    )
+    valores = np.arange(max(N_CORNERS, int(cola) + 1))
     p = np.outer(
         nbinom.pmf(valores, DISPERSION_CORNERS, DISPERSION_CORNERS / (DISPERSION_CORNERS + media[0])),
         nbinom.pmf(valores, DISPERSION_CORNERS, DISPERSION_CORNERS / (DISPERSION_CORNERS + media[1])),
@@ -785,8 +865,10 @@ etiqueta = st.selectbox("Partido", list(opciones), index=indice)
 partido = opciones[etiqueta]
 local = partido["homeTeam"].get("shortName") or partido["homeTeam"]["name"]
 visita = partido["awayTeam"].get("shortName") or partido["awayTeam"]["name"]
-gl, gv = estimar_goles(local, visita, modelo)
-goles = np.arange(N_GOLES)
+fecha_objetivo = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
+gl, gv, ajuste_forma_local, ajuste_forma_visita = estimar_goles(local, visita, modelo, fecha_objetivo)
+cola_goles = int(poisson.ppf(0.999999, max(gl, gv))) + 1
+goles = np.arange(max(11, cola_goles))
 i, j = np.meshgrid(goles, goles, indexing="ij")
 p_goles = np.outer(poisson.pmf(goles, gl), poisson.pmf(goles, gv))
 p_goles /= p_goles.sum()
@@ -800,12 +882,10 @@ if corners is not None:
     if lk and vk:
         lh = corners["equipos"][lk]
         va = corners["equipos"][vk]
-        n_l = len(lh["home_for"])
-        n_v = len(va["away_for"])
-        media_l = (sum(lh["home_for"]) + K * corners["prom_home"]) / (n_l + K)
-        contra_l = (sum(va["away_against"]) + K * corners["prom_home"]) / (n_v + K)
-        media_v = (sum(va["away_for"]) + K * corners["prom_away"]) / (n_v + K)
-        contra_v = (sum(lh["home_against"]) + K * corners["prom_away"]) / (n_l + K)
+        media_l = media_corners_ponderada(lh["home_for"], corners["prom_home"])
+        contra_l = media_corners_ponderada(va["away_against"], corners["prom_home"])
+        media_v = media_corners_ponderada(va["away_for"], corners["prom_away"])
+        contra_v = media_corners_ponderada(lh["home_against"], corners["prom_away"])
         media_corners_local = (media_l + contra_l) / 2
         media_corners_visita = (media_v + contra_v) / 2
         p_corners, (ci, cj) = matriz_corner((media_corners_local, media_corners_visita))
@@ -829,6 +909,11 @@ except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     st.error(f"No pude consultar los mercados abiertos de Kalshi: {exc}")
 
 st.subheader(f"{local} vs {visita}")
+st.markdown(
+    f"**Forma reciente · últimos 8 partidos de liga antes del encuentro**  \n"
+    f"{local}: {resumen_forma(local, modelo, fecha_objetivo)}  ·  "
+    f"{visita}: {resumen_forma(visita, modelo, fecha_objetivo)}"
+)
 st.markdown("### Resumen sencillo del partido")
 st.caption("Hasta diez selecciones individuales de tipos y líneas de Kalshi que el modelo puede calcular, escritas en positivo y variadas por mercado. No se combinan. La disponibilidad exacta se indica en cada tarjeta; contratos sin modelo aparecen en el detalle inferior.")
 if resumen_sencillo_kalshi:
@@ -881,11 +966,16 @@ with st.expander("Ver las 10 opciones más probables aunque no tengan margen"):
     else:
         st.info("No encontré tipos y líneas activos de Kalshi en LaLiga con estimación suficiente para este partido.")
 st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
+st.caption(
+    f"Forma reciente (últimos 8 partidos, ajuste limitado): {local} ×{ajuste_forma_local:.2f} · "
+    f"{visita} ×{ajuste_forma_visita:.2f}. El histórico completo también pondera más los resultados recientes."
+)
 
 with st.expander("Cómo calcula el algoritmo estas probabilidades"):
     st.markdown(
-        "**Goles:** estima los goles esperados de cada equipo con promedios de LaLiga y fuerzas de ataque/defensa "
-        "local y visitante suavizadas con el promedio de liga (K=6). Luego calcula una distribución Poisson para cada equipo "
+        "**Goles y actualidad:** estima los goles esperados con fuerzas de ataque/defensa de LaLiga, ponderadas por antigüedad "
+        f"(la mitad del peso cada {HALF_LIFE_DAYS} días) y suavizadas con el promedio de liga (K=6). Además aplica un ajuste limitado "
+        "por los últimos ocho partidos de cada equipo, usando solo encuentros anteriores a la fecha seleccionada. Luego calcula una distribución Poisson para cada equipo "
         "y forma la matriz de marcadores. La probabilidad de cada YES es la suma de las celdas que cumplen esa condición; "
         "la del NO es 1 menos la del YES."
     )
@@ -910,7 +1000,7 @@ with st.expander("Cómo calcula el algoritmo estas probabilidades"):
         "También muestra el precio máximo al que cada selección alcanzaría esos objetivos; si el precio actual es mayor, "
         "la marca como sin margen suficiente. Las tarifas reales pueden variar por mercado y tipo de orden."
     )
-    st.caption("Son probabilidades estimadas por un modelo estadístico; todavía no se calibran mediante un backtest de aciertos.")
+    st.caption("Las probabilidades son estimaciones estadísticas, no garantías; aún falta calibrarlas con una evaluación histórica fuera de muestra.")
 
 if todas_kalshi:
     with st.expander(f"Ver todas las apuestas y líneas detectadas ({len(todas_kalshi)})"):
@@ -935,3 +1025,4 @@ st.warning(
     "Las probabilidades son estimaciones y no garantías. Para apostar en Kalshi, verifica que el contrato exacto esté disponible "
     "para este partido y revisa las reglas del mercado."
 )
+st.info("Los hándicaps del resumen describen el resultado binario YES/NO de Kalshi. No significan devolución por empate exacto con la línea; consulta las reglas del contrato y su ticker antes de operar.")
