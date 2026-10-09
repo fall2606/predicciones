@@ -408,11 +408,20 @@ def categoria_resumen_sencillo(clave):
     serie = clave[0]
     return {
         "KXLALIGAGAME": "Resultado",
+        "KXLALIGA1H": "Resultado 1.ª parte",
+        "KXLALIGA2H": "Resultado 2.ª parte",
+        "KXLALIGASPREAD": "Hándicap de goles",
+        "KXLALIGA1HSPREAD": "Hándicap 1.ª parte",
         "KXLALIGATOTAL": "Goles totales",
+        "KXLALIGA1HTOTAL": "Goles 1.ª parte",
+        "KXLALIGA2HTOTAL": "Goles 2.ª parte",
         "KXLALIGACORNERS": "Corners totales",
         "KXLALIGATCORNERS": "Corners por equipo",
         "KXLALIGATEAMTOTAL": "Goles por equipo",
         "KXLALIGABTTS": "Ambos marcan",
+        "KXLALIGA1HBTTS": "Ambos marcan 1.ª parte",
+        "KXLALIGAFTTS": "Primer gol",
+        "KXLALIGAFIRSTGOAL": "Primer gol",
     }.get(serie)
 
 
@@ -420,23 +429,34 @@ def etiqueta_resumen_sencillo(clave, lado_apuesta, local, visita):
     """Affirmative, plain-language phrasing for the match overview."""
     serie, lado, linea, direccion = clave
     yes = lado_apuesta == "YES"
-    if serie == "KXLALIGAGAME":
+    if serie in {"KXLALIGAGAME", "KXLALIGA1H", "KXLALIGA2H"}:
+        periodo = " (1.ª parte)" if serie == "KXLALIGA1H" else " (2.ª parte)" if serie == "KXLALIGA2H" else ""
         if yes:
-            return f"Gana {local}" if lado == "local" else f"Gana {visita}" if lado == "visita" else "Empate"
+            return (f"Gana {local}" if lado == "local" else f"Gana {visita}" if lado == "visita" else "Empate") + periodo
         if lado == "local":
-            return f"Visita o empate (X2)"
+            return f"Visita o empate (X2){periodo}"
         if lado == "visita":
-            return f"Local o empate (1X)"
-        return f"Gana {local} o {visita}"
+            return f"Local o empate (1X){periodo}"
+        return f"Gana {local} o {visita}{periodo}"
 
-    if serie in {"KXLALIGATOTAL", "KXLALIGACORNERS", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL"}:
+    if serie in {"KXLALIGASPREAD", "KXLALIGA1HSPREAD"}:
+        equipo = local if lado == "local" else visita
+        contrario = visita if lado == "local" else local
+        periodo = " (1.ª parte)" if serie == "KXLALIGA1HSPREAD" else ""
+        return f"{equipo} gana por {ceil(linea) }+ goles{periodo}" if yes else f"{contrario} +{linea:g} hándicap{periodo}"
+
+    if serie in {"KXLALIGATOTAL", "KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL", "KXLALIGACORNERS", "KXLALIGATCORNERS", "KXLALIGATEAMTOTAL"}:
         yes_is_over = direccion != "under"
         es_over = yes == yes_is_over
+        periodo = " (1.ª parte)" if serie == "KXLALIGA1HTOTAL" else " (2.ª parte)" if serie == "KXLALIGA2HTOTAL" else ""
         if serie == "KXLALIGATOTAL":
             if es_over:
                 return f"Más de {linea:g} goles totales"
             maximo = max(0, ceil(linea) - 1)
             return f"0–{maximo} goles totales"
+        if serie in {"KXLALIGA1HTOTAL", "KXLALIGA2HTOTAL"}:
+            return (f"Más de {linea:g} goles{periodo}" if es_over
+                    else f"0–{max(0, ceil(linea) - 1)} goles{periodo}")
         if serie == "KXLALIGACORNERS":
             if es_over:
                 return f"{ceil(linea)}+ corners totales"
@@ -453,8 +473,16 @@ def etiqueta_resumen_sencillo(clave, lado_apuesta, local, visita):
         maximo = max(0, ceil(linea) - 1)
         return f"{maximo} o menos goles de {equipo}"
 
-    if serie == "KXLALIGABTTS":
-        return "Ambos equipos marcan" if yes else "Uno o ambos equipos se quedan sin marcar"
+    if serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
+        periodo = " en la 1.ª parte" if serie == "KXLALIGA1HBTTS" else ""
+        return ("Ambos equipos marcan" if yes else "Uno o ambos equipos se quedan sin marcar") + periodo
+    if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
+        if yes:
+            return "No habrá goles" if lado == "sin_goles" else f"Primer gol de {local if lado == 'local' else visita}"
+        if lado == "sin_goles":
+            return "Habrá al menos un gol"
+        otro = visita if lado == "local" else local
+        return f"Primer gol de {otro} o sin goles"
     return etiqueta_seleccion_kalshi(clave, local, visita) if yes else etiqueta_no_kalshi(clave, local, visita)
 
 
@@ -590,8 +618,8 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
     candidatos_resumen = {}
     for fila in predicciones:
         categoria = fila["Categoría resumen"]
-        if categoria == "Resultado" and fila["Lado Kalshi"] == "NO" and "empate" in fila["Apuesta"].lower():
-            # Prefer useful double-chance summaries (1X/X2) over the less readable no-draw outcome.
+        if categoria in {"Resultado", "Resultado 1.ª parte", "Resultado 2.ª parte"} and fila["Lado Kalshi"] == "NO" and "empate" in fila["Apuesta"].lower():
+            # Prefer double-chance phrasing (1X/X2) over the less readable no-draw outcome.
             continue
         if categoria:
             candidatos_resumen.setdefault(categoria, []).append(fila)
@@ -606,8 +634,10 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
             "Probabilidad modelo": mejor["Probabilidad del modelo"],
             "Precio ahora": mejor["Precio de compra"],
             "Disponibilidad": mejor["Disponibilidad"],
+            "_p": mejor["_p"],
         }
-    resumen_simple = list(resumen_por_categoria.values())
+    resumen_simple = sorted(resumen_por_categoria.values(), key=lambda fila: fila["_p"], reverse=True)[:10]
+    resumen_simple = [{k: v for k, v in fila.items() if k != "_p"} for fila in resumen_simple]
     todas = [{k: v for k, v in fila.items() if k != "_p"} for fila in predicciones]
     top = todas[:10]
     oportunidades_margen.sort(key=lambda x: (x["_roi"], x["_ev"]), reverse=True)
@@ -800,7 +830,7 @@ except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
 
 st.subheader(f"{local} vs {visita}")
 st.markdown("### Resumen sencillo del partido")
-st.caption("Una jugada sencilla por tipo, escrita en positivo. Se priorizan líneas con probabilidad moderada para evitar llenar el resumen con opciones casi seguras que suelen pagar poco. Son selecciones individuales, no una combinada.")
+st.caption("Hasta diez selecciones individuales de tipos y líneas de Kalshi que el modelo puede calcular, escritas en positivo y variadas por mercado. No se combinan. La disponibilidad exacta se indica en cada tarjeta; contratos sin modelo aparecen en el detalle inferior.")
 if resumen_sencillo_kalshi:
     columnas_resumen = st.columns(3)
     for indice_resumen, jugada in enumerate(resumen_sencillo_kalshi):
