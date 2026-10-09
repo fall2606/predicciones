@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from difflib import get_close_matches
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import combinations
+import re
 from unicodedata import normalize
 from zoneinfo import ZoneInfo
 
@@ -12,6 +14,7 @@ from scipy.stats import nbinom, poisson
 
 
 API_FD = "https://api.football-data.org/v4"
+API_KALSHI = "https://external-api.kalshi.com/trade-api/v2"
 K = 6
 N_GOLES = 11
 N_CORNERS = 40
@@ -22,7 +25,7 @@ st.set_page_config(page_title="LaLiga · predicciones", page_icon="⚽", layout=
 st.title("🇪🇸 LaLiga · mercados y combinadas por partido")
 st.caption(
     "Solo partidos de hoy y los próximos dos días. Elige un encuentro para ver el resumen "
-    "de combinada y los mercados modelados."
+    "de combinada limitado a mercados abiertos y líneas reales de Kalshi."
 )
 st.link_button("Ver mercados actuales de LaLiga en Kalshi", "https://kalshi.com/combos/soccer/la-liga")
 
@@ -81,6 +84,270 @@ def cargar_partidos_y_estadisticas(clave, temporada, temporada_anterior):
 
 def limpiar(nombre):
     return " ".join(normalize("NFKD", str(nombre)).encode("ascii", "ignore").decode().lower().split())
+
+
+def _pedir_kalshi(path, **params):
+    response = requests.get(f"{API_KALSHI}/{path}", params=params, timeout=20)
+    response.raise_for_status()
+    return response.json()
+
+
+@st.cache_data(ttl=180, show_spinner=False)
+def cargar_eventos_kalshi_laliga():
+    """Trae eventos abiertos de todas las series cuyo ticker corresponde a LaLiga."""
+    respuesta = _pedir_kalshi("series", limit=200, category="Sports")
+    series = sorted({
+        s["ticker"] for s in respuesta.get("series", [])
+        if s.get("ticker", "").startswith("KXLALIGA")
+        and "soccer" in [str(tag).lower() for tag in (s.get("tags") or [])]
+    })
+    if not series:
+        raise ValueError("Kalshi no devolvió series de fútbol de LaLiga.")
+
+    def traer_serie(ticker):
+        eventos = []
+        cursor = None
+        for _ in range(5):
+            params = {"limit": 200, "series_ticker": ticker, "status": "open",
+                      "with_nested_markets": "true"}
+            if cursor:
+                params["cursor"] = cursor
+            pagina = _pedir_kalshi("events", **params)
+            eventos.extend(pagina.get("events", []))
+            cursor = pagina.get("cursor")
+            if not cursor:
+                break
+        return ticker, eventos
+
+    eventos, errores = [], []
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        tareas = {pool.submit(traer_serie, ticker): ticker for ticker in series}
+        for tarea in as_completed(tareas):
+            ticker = tareas[tarea]
+            try:
+                _, lote = tarea.result()
+                eventos.extend(lote)
+            except requests.RequestException:
+                errores.append(ticker)
+    return eventos, errores, len(series)
+
+
+def fecha_ticker_kalshi(evento):
+    match = re.search(r"-(\d{2})([A-Z]{3})(\d{2})", evento.get("event_ticker", "").upper())
+    if not match:
+        return None
+    meses = {"JAN": 1, "FEB": 2, "MAR": 3, "APR": 4, "MAY": 5, "JUN": 6,
+             "JUL": 7, "AUG": 8, "SEP": 9, "OCT": 10, "NOV": 11, "DEC": 12}
+    mes = meses.get(match.group(2))
+    if not mes:
+        return None
+    try:
+        return datetime(2000 + int(match.group(1)), mes, int(match.group(3))).date()
+    except ValueError:
+        return None
+
+
+def clave_equipo_comparable(nombre):
+    texto = limpiar(nombre)
+    tokens = set(texto.split())
+    # Nombres oficiales de football-data.org y Kalshi suelen llevar sufijos
+    # diferentes; estos apodos son inequívocos dentro de LaLiga.
+    if "espanyol" in tokens:
+        return {"espanyol"}
+    if "atletico" in tokens:
+        return {"atletico"}
+    if "athletic" in tokens or "bilbao" in tokens:
+        return {"athletic"}
+    if "vallecano" in tokens or "rayo" in tokens:
+        return {"rayo"}
+    if "betis" in tokens:
+        return {"betis"}
+    if "sociedad" in tokens:
+        return {"sociedad"}
+    if "alaves" in tokens:
+        return {"alaves"}
+    if "celta" in tokens:
+        return {"celta"}
+    if "madrid" in tokens and "real" in tokens:
+        return {"real", "madrid"}
+    ignorar = {"cf", "fc", "sc", "cd", "rcd", "ud", "de", "del", "la", "los", "las", "club"}
+    return tokens - ignorar
+
+
+def equipos_coinciden(nombre_a, nombre_b):
+    a, b = limpiar(nombre_a), limpiar(nombre_b)
+    if a == b:
+        return True
+    if min(len(a), len(b)) >= 8 and (a in b or b in a):
+        return True
+    ta, tb = clave_equipo_comparable(a), clave_equipo_comparable(b)
+    return bool(ta and tb and len(ta & tb) / len(ta | tb) >= 0.8)
+
+
+def buscar_equipo_en_texto(texto, local, visita):
+    coincide_local = equipos_coinciden(local, texto)
+    coincide_visita = equipos_coinciden(visita, texto)
+    if coincide_local == coincide_visita:
+        return None
+    return local if coincide_local else visita
+
+
+def evento_corresponde(evento, local, visita, fecha):
+    fecha_kalshi = fecha_ticker_kalshi(evento)
+    if fecha_kalshi != fecha:
+        return False
+    titulo = evento.get("title", "").split(":", 1)[0]
+    equipos = re.split(r"\s+vs\.?\s+", titulo, maxsplit=1, flags=re.IGNORECASE)
+    if len(equipos) != 2:
+        return False
+    return ((equipos_coinciden(equipos[0], local) and equipos_coinciden(equipos[1], visita))
+            or (equipos_coinciden(equipos[0], visita) and equipos_coinciden(equipos[1], local)))
+
+
+def cotizacion_valida(valor):
+    try:
+        numero = float(valor)
+    except (TypeError, ValueError):
+        return None
+    return numero if 0 < numero < 1 else None
+
+
+def estimar_contrato_kalshi(evento, mercado, local, visita, p_goles, i, j,
+                            p_corners, ci, cj):
+    """Devuelve P(YES) solo cuando el contrato se puede mapear al modelo actual."""
+    serie = evento.get("series_ticker", "")
+    texto = " ".join(str(mercado.get(k, "")) for k in ("yes_sub_title", "title", "subtitle"))
+    texto_limpio = limpiar(texto)
+    linea_match = re.search(r"(\d+(?:\.\d+)?)", texto_limpio)
+    try:
+        linea = float(mercado.get("floor_strike"))
+    except (TypeError, ValueError):
+        linea = float(linea_match.group(1)) if linea_match else None
+
+    condicion, dominio = None, "goles"
+    if serie == "KXLALIGAGAME":
+        lado = limpiar(mercado.get("yes_sub_title", ""))
+        equipo = buscar_equipo_en_texto(lado, local, visita)
+        if "tie" in lado or "draw" in lado or lado == "empate":
+            condicion = i == j
+        elif equipo == local:
+            condicion = i > j
+        elif equipo == visita:
+            condicion = j > i
+    elif serie == "KXLALIGASPREAD":
+        equipo = buscar_equipo_en_texto(texto_limpio, local, visita)
+        if equipo and linea is not None:
+            margen = i - j if equipo == local else j - i
+            condicion = margen > linea
+    elif serie == "KXLALIGATOTAL" and linea is not None:
+        condicion = (i + j > linea) if "over" in texto_limpio or "mas de" in texto_limpio else (i + j < linea)
+    elif serie == "KXLALIGACORNERS" and p_corners is not None and ci is not None and cj is not None and linea is not None:
+        condicion, dominio = ci + cj >= linea, "corners"
+    elif serie == "KXLALIGATCORNERS" and p_corners is not None and ci is not None and cj is not None and linea is not None:
+        equipo = buscar_equipo_en_texto(texto_limpio, local, visita)
+        if equipo:
+            condicion, dominio = (ci if equipo == local else cj) >= linea, "corners"
+    elif serie == "KXLALIGATEAMTOTAL" and linea is not None:
+        equipo = buscar_equipo_en_texto(texto_limpio, local, visita)
+        if equipo:
+            condicion = (i if equipo == local else j) > linea
+    elif serie in {"KXLALIGABTTS"}:
+        condicion = (i > 0) & (j > 0)
+    elif serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
+        total = i + j
+        equipo = buscar_equipo_en_texto(texto_limpio, local, visita)
+        if "no goal" in texto_limpio or "sin gol" in texto_limpio:
+            condicion = total == 0
+        elif equipo == local:
+            condicion = np.divide(i, total, out=np.zeros_like(p_goles), where=total > 0)
+        elif equipo == visita:
+            condicion = np.divide(j, total, out=np.zeros_like(p_goles), where=total > 0)
+    elif serie == "KXLALIGASCORE":
+        score = re.search(r"(\d+)\s*[-–]\s*(\d+)", texto_limpio)
+        if score:
+            a, b = int(score.group(1)), int(score.group(2))
+            if "draw" in texto_limpio or "tie" in texto_limpio or "empate" in texto_limpio:
+                condicion = (i == a) & (j == b)
+            else:
+                equipo = buscar_equipo_en_texto(texto_limpio, local, visita)
+                if equipo == local:
+                    condicion = (i == a) & (j == b)
+                elif equipo == visita:
+                    condicion = (i == b) & (j == a)
+
+    if condicion is None:
+        return None
+    matriz = p_corners if dominio == "corners" else p_goles
+    if matriz is None:
+        return None
+    return dominio, condicion, float(np.sum(matriz * np.asarray(condicion, dtype=float)))
+
+
+def preparar_ofertas_kalshi(eventos, local, visita, fecha, p_goles, i, j,
+                            p_corners, ci, cj, resultado=None, corners_final=None):
+    ofertas, candidatos = [], []
+    vistos = set()
+    for evento in eventos:
+        if not evento_corresponde(evento, local, visita, fecha):
+            continue
+        for mercado in evento.get("markets", []):
+            if mercado.get("status") not in {None, "active", "open"}:
+                continue
+            ticker = mercado.get("ticker", "")
+            if not ticker or ticker in vistos:
+                continue
+            vistos.add(ticker)
+            estimacion = estimar_contrato_kalshi(
+                evento, mercado, local, visita, p_goles, i, j, p_corners, ci, cj
+            )
+            prediccion_yes = estimacion[2] if estimacion else None
+            yes_ask = cotizacion_valida(mercado.get("yes_ask_dollars"))
+            no_ask = cotizacion_valida(mercado.get("no_ask_dollars"))
+            etiqueta = mercado.get("yes_sub_title") or mercado.get("title") or ticker
+            resultado_yes = None
+            if estimacion and resultado is not None:
+                dominio, condicion_yes, _ = estimacion
+                if dominio == "goles":
+                    serie = evento.get("series_ticker", "")
+                    if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"} and all(g > 0 for g in resultado):
+                        resultado_yes = None
+                    else:
+                        resultado_yes = bool(condicion_yes[resultado[0], resultado[1]])
+                elif dominio == "corners" and corners_final is not None:
+                    resultado_yes = bool(condicion_yes[int(corners_final[0]), int(corners_final[1])])
+            resultado_texto = (
+                "Sin modelo" if estimacion is None else
+                "Pendiente" if resultado_yes is None else
+                "✅ Ganó YES" if resultado_yes else "✅ Ganó NO"
+            )
+            ofertas.append({
+                "Mercado ofrecido por Kalshi": etiqueta,
+                "Evento": evento.get("title", ""),
+                "Precio YES": f"{yes_ask:.0%}" if yes_ask is not None else "Sin oferta",
+                "Precio NO": f"{no_ask:.0%}" if no_ask is not None else "Sin oferta",
+                "Prob. modelo YES": f"{prediccion_yes:.1%}" if prediccion_yes is not None else "Sin modelo",
+                "Ventaja modelo vs YES": f"{prediccion_yes - yes_ask:+.1%}"
+                    if prediccion_yes is not None and yes_ask is not None else "—",
+                "Resultado": resultado_texto,
+                "Ticker": ticker,
+            })
+            if estimacion:
+                dominio, condicion_yes, p_yes = estimacion
+                grupo = evento.get("series_ticker", "")
+                for lado, precio, p_lado, cond in (
+                    ("YES", yes_ask, p_yes, condicion_yes),
+                    ("NO", no_ask, 1 - p_yes, 1 - np.asarray(condicion_yes, dtype=float)),
+                ):
+                    if precio is None or p_lado < 0.65 or p_lado - precio < 0.05:
+                        continue
+                    candidatos.append({
+                        "mercado": f"{etiqueta} ({lado})", "grupo": grupo,
+                        "evento": dominio, "condicion": cond, "p": p_lado,
+                        "acierto": (resultado_yes if lado == "YES" else not resultado_yes)
+                                   if resultado_yes is not None else None,
+                        "precio": precio, "edge": p_lado - precio,
+                    })
+    return ofertas, candidatos
 
 
 @st.cache_data(ttl=21600, show_spinner=False)
@@ -279,7 +546,7 @@ def resumir_combinadas(mercados, p_goles, p_corners):
             if redundante:
                 continue
             aciertos = [x["acierto"] for x in legs]
-            resultado = all(aciertos) if all(x is not None for x in aciertos) else None
+            resultado = False if any(x is False for x in aciertos) else True if all(x is True for x in aciertos) else None
             opciones.append((pc, legs, resultado))
         opciones.sort(key=lambda x: x[0], reverse=True)
         for pc, legs, resultado in opciones[:3]:
@@ -313,7 +580,7 @@ except (ValueError, KeyError, TypeError) as exc:
 
 corners = cargar_corners(codigos_corners)
 if corners is None:
-    st.info("Los mercados de goles están disponibles. Football-data.co.uk todavía no publicó corners para LaLiga.")
+    st.info("Kalshi puede ofrecer mercados de corners; sin estadísticas históricas suficientes, se mostrarán sus contratos pero el modelo no les asignará probabilidad.")
 
 inicio, fin = hoy, hoy + timedelta(days=2)
 seleccionables = []
@@ -381,50 +648,46 @@ if partido["status"] == "FINISHED":
     if marcador.get("home") is not None and marcador.get("away") is not None:
         resultado = (int(marcador["home"]), int(marcador["away"]))
 
-todos = calcular_mercados(p_goles, i, j, local, visita, resultado,
-                          p_corners, ci, cj, corners_final)
-combinadas = resumir_combinadas(todos, p_goles, p_corners)
+try:
+    eventos_kalshi, series_kalshi_con_error, total_series_kalshi = cargar_eventos_kalshi_laliga()
+    fecha_partido = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ).date()
+    ofertas_kalshi, candidatos_kalshi = preparar_ofertas_kalshi(
+        eventos_kalshi, local, visita, fecha_partido, p_goles, i, j,
+        p_corners, ci, cj, resultado, corners_final
+    )
+except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
+    eventos_kalshi, series_kalshi_con_error, total_series_kalshi = [], [], 0
+    ofertas_kalshi, candidatos_kalshi = [], []
+    st.error(f"No pude consultar los mercados abiertos de Kalshi: {exc}")
+
+combinadas = resumir_combinadas(candidatos_kalshi, p_goles, p_corners)
 st.subheader(f"{local} vs {visita}")
 if combinadas:
-    st.markdown("### Resumen de combinadas con alta probabilidad")
-    st.caption("Se exploran combinaciones de 2 a 4 mercados; cada selección debe superar 65% y la combinada 50% de probabilidad conjunta. Se muestran las mejores tres por tamaño. Goles y corners se modelan por separado.")
+    st.markdown("### Resumen de combinadas con mercados reales de Kalshi")
+    st.caption("Cada selección corresponde a un contrato abierto para este partido, supera 65% de probabilidad del modelo y tiene al menos 5 puntos porcentuales de ventaja estimada frente al precio YES/NO de compra de Kalshi. La probabilidad conjunta mínima es 50%; se muestran hasta tres combinadas por tamaño.")
     st.dataframe(pd.DataFrame(combinadas), use_container_width=True, hide_index=True)
 else:
-    st.info("El modelo no encuentra combinadas coherentes con al menos 50% de probabilidad conjunta para este partido. No se muestran apuestas forzadas.")
+    st.info("No hay una combinada que cumpla los filtros usando contratos activos y líneas ofrecidas por Kalshi para este partido. No se inventan líneas ni se fuerzan sugerencias.")
 st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
 
-selecciones = sorted([m for m in todos if m["p"] >= 0.55], key=lambda m: m["p"], reverse=True)[:8]
-st.markdown("### Selecciones individuales destacadas")
-if selecciones:
-    st.dataframe(pd.DataFrame([
-        {"Mercado": m["mercado"], "Probabilidad": f"{m['p']:.1%}",
-         "Resultado": "✅ acertó" if m["acierto"] is True else "❌ falló" if m["acierto"] is False else "Pendiente"}
-        for m in selecciones
-    ]), use_container_width=True, hide_index=True)
+st.markdown("### Mercados realmente abiertos en Kalshi para este partido")
+if ofertas_kalshi:
+    df_ofertas = pd.DataFrame(ofertas_kalshi)
+    st.dataframe(df_ofertas, use_container_width=True, hide_index=True)
 else:
-    st.caption("No hay una selección individual por encima del 55%.")
+    if total_series_kalshi and not series_kalshi_con_error:
+        st.info("Kalshi no tiene contratos abiertos para este encuentro y fecha. Por eso no se muestra una combinada.")
+    else:
+        st.info("No pude confirmar los contratos abiertos para este encuentro. No mostraré líneas del modelo como si fueran mercados de Kalshi.")
 
-with st.expander("Ver todos los mercados modelados para este partido"):
-    orden = ["Resultado", "Spread", "Total goles", "Ambos marcan", "Primer gol",
-             "Corners totales", f"Corners {local}", f"Corners {visita}",
-             f"Total equipo {local}", f"Total equipo {visita}", "Marcador exacto"]
-    for grupo in orden:
-        sub = [m for m in todos if m["grupo"] == grupo]
-        if sub:
-            st.markdown(f"**{grupo}**")
-            st.dataframe(pd.DataFrame([
-                {"Mercado": m["mercado"], "Probabilidad": f"{m['p']:.1%}",
-                 "Resultado": "✅ acertó" if m["acierto"] is True else "❌ falló" if m["acierto"] is False else "Pendiente"}
-                for m in sorted(sub, key=lambda x: x["p"], reverse=True)
-            ]), use_container_width=True, hide_index=True)
+if series_kalshi_con_error:
+    st.warning(f"Kalshi no respondió para {len(series_kalshi_con_error)} de {total_series_kalshi} series de LaLiga; el listado puede estar incompleto.")
 
 st.caption(
-    "Incluye mercados de partido: resultado 1X2, spread, total de goles, ambos marcan, "
-    "marcador exacto, primer gol, goles por equipo y corners cuando hay datos. "
-    "Los mercados de temporada (campeón, goleador, descenso) no son combinadas de partido."
+    "El listado parte de los contratos activos que devuelve la API pública de Kalshi para el evento y fecha exactos. "
+    "Los mercados que aún no tienen un modelo compatible se muestran como 'Sin modelo' y se excluyen de las combinadas."
 )
 st.warning(
-    "Las probabilidades son estimaciones estadísticas, no cuotas ni recomendaciones de Kalshi. "
-    "El resumen de combinada aproxima la relación entre mercados; confirma siempre el mercado "
-    "y sus reglas en Kalshi antes de usarlo."
+    "La probabilidad y la ventaja son estimaciones del modelo, no garantías. Las combinadas que mezclan goles y corners "
+    "suponen independencia entre esos datos. Revisa el contrato y las reglas en Kalshi antes de decidir."
 )
