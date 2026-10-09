@@ -1,0 +1,29 @@
+name: Registrar predicciones
+
+on:
+  schedule:
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  registrar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pandas numpy scipy
+      - run: python registrar.py
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+      - name: Guardar historial
+        run: |
+          git config user.name "bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add predicciones.csv
+          git commit -m "Actualizar historial" || echo "Sin cambios"
+          git push
