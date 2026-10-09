@@ -17,8 +17,13 @@ d = df[df["partido"] == elegido].copy()
 
 d["Prob %"] = (d["p"] * 100).round(1)
 d["Cuota justa"] = (1 / d["p"].clip(lower=0.001)).round(2)
+d["Resultado"] = d["gano"].map({1.0: "✅ sí", 0.0: "❌ no"}).fillna("")
 
 def grupo(m):
+    if "corners" in m.lower():
+        if "totales" in m:
+            return "Corners totales"
+        return "Corners local" if "local" in m else "Corners visita"
     if m in ("Gana local", "Empate", "Gana visita"):
         return "Ganador"
     if "gana por más" in m:
@@ -35,15 +40,18 @@ def grupo(m):
 
 d["Grupo"] = d["mercado"].map(grupo)
 orden = ["Ganador", "Hándicap", "Total de goles", "Totales por equipo",
-         "Ambos equipos marcan", "Marcador exacto (los 8 más probables)",
+         "Ambos equipos marcan", "Corners local", "Corners visita",
+         "Corners totales", "Marcador exacto (los 8 más probables)",
          "Primer equipo en anotar"]
 
-st.caption("Prob % = precio justo en centavos. Si en Kalshi el precio de Yes es menor, el modelo ve valor (value).")
+st.caption("Prob % = probabilidad del modelo. Si en Kalshi el precio de Yes (en centavos) es menor, el modelo ve valor (value).")
 for gr in orden:
     sub = d[d["Grupo"] == gr]
     if gr.startswith("Marcador"):
         sub = sub.sort_values("p", ascending=False).head(8)
+    elif gr.startswith("Corners"):
+        sub = sub.sort_values("p", ascending=False)
     if len(sub):
         st.subheader(gr)
-        st.dataframe(sub[["mercado", "Prob %", "Cuota justa"]],
+        st.dataframe(sub[["mercado", "Prob %", "Cuota justa", "Resultado"]],
                      use_container_width=True, hide_index=True)
