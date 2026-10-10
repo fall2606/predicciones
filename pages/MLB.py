@@ -551,6 +551,35 @@ for juego in [juego]:
             else:
                 estado_abridores.append(f"{etiqueta_abridor}: sin abridor probable publicado")
         st.caption("Abridores · " + " | ".join(estado_abridores))
+        st.markdown("### 🎯 Resumen sencillo del partido · pitchers y bateadores")
+        st.caption(
+            "Selecciones rápidas como en LaLiga. Ponches se estiman con la tasa del abridor; "
+            "hits/HR usan estadísticas de temporada y cuatro oportunidades aproximadas. "
+            "Los bateadores son candidatos, no alineaciones confirmadas: verifica el lineup y la cuota disponible."
+        )
+        try:
+            props_sencillas = crear_apuestas_sencillas(
+                juego, datos_abridor_local, datos_abridor_visita, temporada
+            )
+        except (requests.RequestException, ValueError, KeyError, TypeError, ZeroDivisionError) as exc:
+            props_sencillas = []
+            st.caption(f"No se pudieron calcular algunas props individuales: {exc}")
+        if props_sencillas:
+            st.dataframe(pd.DataFrame([
+                {
+                    "Tipo": x["Tipo"],
+                    "Jugada sencilla": x["Jugada sencilla"],
+                    "Probabilidad modelo": f'{x["Probabilidad estimada"]:.1%}',
+                    "Dato base": x["Dato base"],
+                    "Nota": x["Nota"],
+                }
+                for x in props_sencillas[:8]
+            ]), use_container_width=True, hide_index=True)
+        else:
+            st.info(
+                "MLB no publicó estadísticas suficientes de abridores o bateadores para generar props individuales "
+                "en este partido. Los mercados de equipo siguen disponibles abajo."
+            )
         picks = mercados(matriz_prob, (matriz_local, matriz_visita), game)
         picks_ordenados = sorted(picks, key=lambda x: x["p"], reverse=True)
         recomendados = [
