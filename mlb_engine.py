@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent
 PRED_FILE = ROOT / "predicciones_mlb.csv"
 RESULT_FILE = ROOT / "resultados_mlb.csv"
 TZ = "America/Chicago"
-TIMEOUT = 25
+TIMEOUT = 15
 
 PRED_COLUMNS = [
     "prediction_id", "event_ticker", "ticker", "match_id", "fecha", "local", "visita",
@@ -29,21 +29,28 @@ RESULT_COLUMNS = ["prediction_id", "estado", "resultado_kalshi", "marcador", "re
 
 def get_json(url, params=None):
     last = None
-    for attempt in range(6):
+    for attempt in range(4):
         try:
             r = requests.get(url, params=params, timeout=TIMEOUT)
-            if r.status_code == 429 or r.status_code >= 500:
-                last = requests.HTTPError(f"HTTP {r.status_code} en {url}", response=r)
-                if attempt < 5:
-                    time.sleep(min(2 ** attempt, 30))
+            if r.status_code == 429:
+                last = requests.HTTPError(f"HTTP 429 (límite de peticiones) en {url}", response=r)
+                if attempt < 3:
+                    time.sleep(1 + attempt * 2)
                     continue
+                raise last
+            if r.status_code >= 500:
+                last = requests.HTTPError(f"HTTP {r.status_code} en {url}", response=r)
+                if attempt < 3:
+                    time.sleep(2 ** attempt)
+                    continue
+                raise last
             r.raise_for_status()
             return r.json()
         except requests.RequestException as exc:
             last = exc
-            if attempt == 5:
+            if attempt == 3:
                 break
-            time.sleep(min(2 ** attempt, 30))
+            time.sleep(1 + attempt * 2)
     raise last
 
 
