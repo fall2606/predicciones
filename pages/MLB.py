@@ -19,6 +19,25 @@ st.caption(
     "de carreras de la temporada para estimar moneyline, run line y totales."
 )
 
+with st.expander("¿Qué mercados suelen aparecer en combinadas de MLB?", expanded=True):
+    st.markdown(
+        "**Home run de un bateador** es un mercado de props muy popular: FanDuel informó "
+        "que fue su tipo de apuesta MLB con más volumen en 2025. Eso describe a esa casa, "
+        "no a todas las casas ni un ranking de combinadas. También se ofrecen mercados de "
+        "hits de bateadores, ponches de pitchers, ganador (moneyline), run line y carreras "
+        "totales."
+    )
+    st.caption(
+        "Esta página solo tiene datos para estimar ganador, run line y carreras. No inventa "
+        "selecciones de home run, hits o ponches: faltan alineaciones, pitchers confirmados "
+        "y líneas/cuotas. Las combinadas de abajo son cálculos del modelo, no las más "
+        "apostadas por el público."
+    )
+    st.markdown(
+        "Fuente: [FanDuel — Inside Baseball’s Hottest Betting Market]("
+        "https://www.fanduel.com/about/news/going-yard-inside-baseball-hottest-betting-market-at-fanduel)"
+    )
+
 
 def get_json(path, params):
     response = requests.get(f"{API}/{path}", params=params, timeout=TIMEOUT)
@@ -112,11 +131,25 @@ def mercados(prob, puntos, partido):
 
 
 def recomendar_combos(probabilidades, filas, max_combos=5):
-    # Producto de la distribución conjunta del marcador: conserva la dependencia entre carreras.
+    # Prioriza estructuras habituales de SGP y conserva la dependencia del marcador.
+    pares_habituales = {
+        frozenset(("Ganador", "Total")),
+        frozenset(("Ganador", "Run line")),
+        frozenset(("Ganador", "Total {equipo}")),
+        frozenset(("Run line", "Total")),
+        frozenset(("Run line", "Total {equipo}")),
+        frozenset(("Total", "Total {equipo}")),
+    }
+
+    def tipo(grupo):
+        return "Total {equipo}" if grupo.startswith("Total ") else grupo
+
     candidatos = [f for f in filas if f["p"] >= 0.55]
     combos = []
     for legs in combinations(candidatos, 2):
         if legs[0]["grupo"] == legs[1]["grupo"]:
+            continue
+        if frozenset(tipo(x["grupo"]) for x in legs) not in pares_habituales:
             continue
         conjunta = legs[0]["condicion"] & legs[1]["condicion"]
         p_combo = float(probabilidades[conjunta].sum())
@@ -220,7 +253,12 @@ for juego in [juego]:
             st.info("El modelo no encuentra selecciones por encima del 55% para este partido.")
         combo_rows = recomendar_combos(matriz_prob, picks)
         if combo_rows:
-            st.markdown("**Combinadas sugeridas (2 selecciones)**")
+            st.markdown("**Combinadas de mercados habituales (2 selecciones)**")
+            st.caption(
+                "Ordenadas por probabilidad conjunta estimada. Una probabilidad alta no "
+                "indica cuota rentable; comprueba que ambas selecciones y sus líneas estén "
+                "disponibles en tu casa."
+            )
             st.dataframe(pd.DataFrame(combo_rows), use_container_width=True, hide_index=True)
         else:
             st.caption("No hay combinadas con el umbral mínimo de probabilidad configurado.")
