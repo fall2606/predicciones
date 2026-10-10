@@ -163,6 +163,7 @@ def cargar_pitcher(pitcher_id, season):
                         "nombre": split.get("player", {}).get("fullName", "Pitcher probable"),
                         "era": float(stat["era"]),
                         "innings": float(stat.get("inningsPitched") or 0),
+                        "strikeouts": float(stat.get("strikeOuts") or 0),
                     }
                 except (TypeError, ValueError):
                     pass
@@ -170,6 +171,89 @@ def cargar_pitcher(pitcher_id, season):
 
 
 @st.cache_data(ttl=1800, show_spinner=False)
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def cargar_bateadores_equipo(team_id, season):
+    """Season batting stats for candidates; does not imply a confirmed lineup."""
+    data = get_json("stats", {
+        "stats": "season", "group": "hitting", "season": season,
+        "sportIds": 1, "teamId": int(team_id), "limit": 1000,
+    })
+    rows = []
+    for block in data.get("stats", []):
+        for split in block.get("splits", []):
+            player, stat = split.get("player", {}), split.get("stat", {})
+            try:
+                pa = float(stat.get("plateAppearances") or 0)
+                ab = float(stat.get("atBats") or 0)
+                hits = float(stat.get("hits") or 0)
+                hr = float(stat.get("homeRuns") or 0)
+                avg = float(stat.get("avg") or (hits / ab if ab else 0))
+                if player.get("id") and pa >= 30:
+                    rows.append({"nombre": player.get("fullName", "Bateador"), "pa": pa,
+                                 "ab": ab, "hits": hits, "hr": hr, "avg": avg})
+            except (TypeError, ValueError):
+                continue
+    unique = {row["nombre"]: row for row in rows}
+    return sorted(unique.values(), key=lambda x: (x["pa"], x["hr"]), reverse=True)
+
+
+def crear_apuestas_sencillas(juego, datos_abridor_local, datos_abridor_visita, temporada):
+    picks = []
+    for lado, equipo in (("Local", "home"), ("Visita", "away")):
+        raw = juego.get("teams", {}).get(equipo, {}).get("probablePitcher") or {}
+        pitcher = datos_abridor_local if lado == "Local" else datos_abridor_visita
+        if raw.get("id") and pitcher and pitcher.get("innings", 0) > 0:
+            k_por_9 = pitcher.get("strikeouts", 0) / max(pitcher["innings"], 1.0) * 9
+            k_media = min(7.5, max(1.5, k_por_9 * 5.0 / 9))
+            p_over = float(poisson.sf(4, k_media))
+            picks.append({
+                "Tipo": "Pitcher · ponches",
+                "Jugada sencilla": f'{pitcher["nombre"]} más de 4.5 ponches',
+                "Probabilidad estimada": p_over,
+                "Dato base": f'{pitcher.get("strikeouts", 0):.0f} K en {pitcher["innings"]:.1f} entradas',
+                "Nota": "Tasa de ponches con 5 entradas esperadas",
+            })
+            picks.append({
+                "Tipo": "Pitcher · ponches",
+                "Jugada sencilla": f'{pitcher["nombre"]} menos de 4.5 ponches',
+                "Probabilidad estimada": 1 - p_over,
+                "Dato base": f'{pitcher.get("strikeouts", 0):.0f} K en {pitcher["innings"]:.1f} entradas',
+                "Nota": "Complemento del over; depende de las entradas lanzadas",
+            })
+    for lado, equipo_key in (("Local", "home"), ("Visita", "away")):
+        team = juego.get("teams", {}).get(equipo_key, {}).get("team", {})
+        if not team.get("id"):
+            continue
+        try:
+            bateadores = cargar_bateadores_equipo(int(team["id"]), temporada)
+        except (requests.RequestException, ValueError, KeyError, TypeError):
+            bateadores = []
+        elegibles = [b for b in bateadores if b["pa"] >= 80 and b["ab"] > 0]
+        elegibles.sort(key=lambda b: (b["avg"], b["pa"]), reverse=True)
+        for b in elegibles[:2]:
+            p_hit = 1 - (1 - min(0.75, max(0.01, b["avg"]))) ** 4
+            picks.append({
+                "Tipo": "Bateador · hits",
+                "Jugada sencilla": f'{b["nombre"]} 1+ hit',
+                "Probabilidad estimada": min(0.95, max(0.05, p_hit)),
+                "Dato base": f'{b["hits"]:.0f} hits / {b["ab"]:.0f} turnos · AVG {b["avg"]:.3f}',
+                "Nota": f'Candidato de {lado.lower()}; confirmar alineación titular',
+            })
+        hr_candidates = [b for b in bateadores if b["pa"] >= 80]
+        hr_candidates.sort(key=lambda b: b["hr"] / max(b["pa"], 1), reverse=True)
+        for b in hr_candidates[:1]:
+            tasa = min(0.20, max(0.001, b["hr"] / max(b["pa"], 1)))
+            picks.append({
+                "Tipo": "Bateador · home run",
+                "Jugada sencilla": f'{b["nombre"]} conecta HR',
+                "Probabilidad estimada": min(0.65, max(0.01, 1 - (1 - tasa) ** 4)),
+                "Dato base": f'{b["hr"]:.0f} HR en {b["pa"]:.0f} apariciones al plato',
+                "Nota": f'Candidato de {lado.lower()}; confirmar alineación titular',
+            })
+    return sorted(picks, key=lambda x: x["Probabilidad estimada"], reverse=True)
+
+
 def cargar_era_liga(season):
     data = get_json(
         "teams/stats",
