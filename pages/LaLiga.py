@@ -161,7 +161,15 @@ if resumen_sencillo_kalshi:
             st.markdown(f"**{jugada['Tipo']}:** {jugada['Jugada sencilla']}")
             st.write(f"Probabilidad modelo: **{jugada['Probabilidad modelo']}**")
             if partido["status"] == "FINISHED":
-                st.write(f"**{jugada['Resultado']}**")
+                resultado_tarjeta = str(jugada.get("Resultado", "Pendiente de resultado"))
+                if "Se cumplió" in resultado_tarjeta:
+                    st.success("WIN · Se cumplió")
+                elif "No se cumplió" in resultado_tarjeta:
+                    st.error("LOSS · No se cumplió")
+                elif "Pendiente" in resultado_tarjeta:
+                    st.info("PENDIENTE · Esperando datos definitivos")
+                else:
+                    st.warning(resultado_tarjeta)
             st.caption(f"Kalshi: {jugada['Precio ahora']} · {jugada['Disponibilidad']} · Ticker: {jugada.get('Ticker', '—')}")
             if jugada.get("Calibración"):
                 st.caption(f"Calibración: {jugada['Calibración']}")
