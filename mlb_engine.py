@@ -5,6 +5,7 @@ import csv
 import math
 import os
 import re
+import time
 import unicodedata
 import requests
 import numpy as np
@@ -27,9 +28,23 @@ RESULT_COLUMNS = ["prediction_id", "estado", "resultado_kalshi", "marcador", "re
 
 
 def get_json(url, params=None):
-    r = requests.get(url, params=params, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.json()
+    last = None
+    for attempt in range(6):
+        try:
+            r = requests.get(url, params=params, timeout=TIMEOUT)
+            if r.status_code == 429 or r.status_code >= 500:
+                last = requests.HTTPError(f\"HTTP {r.status_code} en {url}\", response=r)
+                if attempt < 5:
+                    time.sleep(min(2 ** attempt, 30))
+                    continue
+            r.raise_for_status()
+            return r.json()
+        except requests.RequestException as exc:
+            last = exc
+            if attempt == 5:
+                break
+            time.sleep(min(2 ** attempt, 30))
+    raise last
 
 
 def kalshi(path, **params):
@@ -208,7 +223,8 @@ def series_mlb():
         ticker = str(s.get("ticker", "")).upper()
         name = normalizar(s.get("title") or s.get("name") or "")
         tags = " ".join(map(str, s.get("tags") or [])).lower()
-        if ticker.startswith(("KXMLB", "KXBASEBALL")) or ("mlb" in name and ("baseball" in tags or "sports" in tags)) or ("major league baseball" in name):
+        excluded = ("FODT", "FUTURE", "DIVISION", "PLAYOFF", "CHAMPION", "PENNANT", "MVP", "AWARD", "TEAMWINS", "WORLD SERIES")
+        if (ticker.startswith(("KXMLB", "KXBASEBALL")) or ("mlb" in name and ("baseball" in tags or "sports" in tags)) or ("major league baseball" in name)) and not any(x in ticker.upper() for x in excluded):
             selected.append(ticker)
     return sorted(set(selected))
 
