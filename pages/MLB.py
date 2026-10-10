@@ -580,16 +580,21 @@ for juego in [juego]:
                 if "estado" not in historial_partido.columns:
                     historial_partido["estado"] = "PENDIENTE"
                 historial_partido["estado"] = historial_partido["estado"].replace("", "PENDIENTE")
+                # Replace empty cells with a readable status instead of showing confusing nulls.
+                if "probabilidad_modelo" in historial_partido.columns:
+                    historial_partido["probabilidad_modelo"] = historial_partido["probabilidad_modelo"].replace("", "Sin modelo específico")
+                if "estado_modelo" in historial_partido.columns:
+                    historial_partido["estado_modelo"] = historial_partido["estado_modelo"].replace("", "No calculado")
                 cols = [x for x in [
-                    "categoria", "mercado", "lado", "probabilidad_modelo", "precio_captura",
-                    "edge", "estado", "marcador", "capturado_en"
+                    "categoria", "mercado", "lado", "probabilidad_modelo", "estado_modelo",
+                    "precio_captura", "edge", "estado", "marcador", "capturado_en"
                 ] if x in historial_partido.columns]
                 st.dataframe(
                     historial_partido[cols].sort_values("capturado_en", ascending=False)
                     if "capturado_en" in cols else historial_partido[cols],
                     use_container_width=True, hide_index=True
                 )
-                st.caption("Solo aparecen contratos capturados para este partido. WIN/LOSS proviene de la liquidación oficial de Kalshi.")
+                st.caption("Las capturas originales no se modifican. Si un contrato antiguo no tenía probabilidad y ahora puede modelarse, se añade una fila separada de recálculo v2. Las props que requieren estadísticas individuales siguen sin probabilidad hasta implementar un modelo específico. WIN/LOSS procede de la liquidación oficial de Kalshi.")
             else:
                 st.info("Todavía no hay contratos de Kalshi archivados para este partido. Las proyecciones estadísticas de arriba son independientes del archivo de contratos.")
 
