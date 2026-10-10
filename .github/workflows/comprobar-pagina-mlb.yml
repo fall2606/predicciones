@@ -1,0 +1,24 @@
+name: Comprobar sintaxis de página MLB
+
+on:
+  push:
+    paths:
+      - "pages/MLB.py"
+      - ".github/workflows/comprobar-pagina-mlb.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  comprobar-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Comprobar sintaxis
+        run: python -m py_compile pages/MLB.py
