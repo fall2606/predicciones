@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-from scipy.stats import nbinom
+from scipy.stats import nbinom, poisson
 
 
 API = "https://statsapi.mlb.com/api/v1"
