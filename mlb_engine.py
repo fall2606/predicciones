@@ -258,7 +258,7 @@ def encontrar_partido(event, games):
         def aparece(nombre):
             nombre = normalizar(nombre)
             ultima = nombre.split()[-1] if nombre else ""
-            return bool(nombre and nombre in title) or bool(len(ultima) >= 4 and re.search(r"\\b" + re.escape(ultima) + r"\\b", title))
+            return bool(nombre and nombre in title) or bool(len(ultima) >= 4 and re.search(r"\b" + re.escape(ultima) + r"\b", title))
         score = int(aparece(g["home"])) + int(aparece(g["away"]))
         if score == 2:
             try:
