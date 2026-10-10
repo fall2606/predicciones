@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "pages/MLB.py"
+      - "mlb_engine.py"
       - ".github/workflows/comprobar-pagina-mlb.yml"
   workflow_dispatch:
 
@@ -21,4 +22,4 @@ jobs:
         with:
           python-version: "3.12"
       - name: Comprobar sintaxis
-        run: python -m py_compile pages/MLB.py
+        run: python -m py_compile pages/MLB.py mlb_engine.py
