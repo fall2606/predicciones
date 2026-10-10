@@ -2,7 +2,7 @@ name: Historial inmutable de LaLiga
 
 on:
   schedule:
-    - cron: "0 */2 * * *"
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
 
 permissions:
