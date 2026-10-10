@@ -171,8 +171,6 @@ def cargar_pitcher(pitcher_id, season):
 
 
 @st.cache_data(ttl=1800, show_spinner=False)
-
-@st.cache_data(ttl=1800, show_spinner=False)
 def cargar_bateadores_equipo(team_id, season):
     """Season batting stats for candidates; does not imply a confirmed lineup."""
     data = get_json("stats", {
@@ -254,6 +252,7 @@ def crear_apuestas_sencillas(juego, datos_abridor_local, datos_abridor_visita, t
     return sorted(picks, key=lambda x: x["Probabilidad estimada"], reverse=True)
 
 
+@st.cache_data(ttl=1800, show_spinner=False)
 def cargar_era_liga(season):
     data = get_json(
         "teams/stats",
