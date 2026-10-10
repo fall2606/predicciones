@@ -587,56 +587,70 @@ for juego in [juego]:
 
         st.markdown("### Resumen sencillo · hasta 5 selecciones")
         st.caption("Se combinan mercados de partido y props individuales. Se muestran las mejores opciones entre 62% y 85%; si hay menos de cinco que cumplan el filtro, no se rellenan con opciones débiles.")
-        if sencillas:
+        if game["status"] != "Preview":
+            st.info("Partido iniciado o finalizado: las proyecciones nuevas quedan bloqueadas para no cambiar las predicciones tras el inicio. Consulta abajo las capturas originales y su resultado.")
+        elif sencillas:
             for x in sencillas:
                 with st.container(border=True):
                     st.markdown(f"**{x['jugada']}**")
                     st.caption(x["tipo"])
                     st.write(f"Probabilidad estimada: **{x['p']:.1%}**")
-                    if game["status"] == "Final" and x["acierto"] is not None:
-                        if x["acierto"]:
-                            st.success("WIN · Predicción acertada")
-                        else:
-                            st.error("LOSS · Predicción fallida")
-                    elif game["status"] == "Final":
-                        st.info("PENDIENTE · Falta la estadística oficial individual")
-                    else:
-                        st.caption("Resultado: pendiente hasta que termine el partido")
+                    st.caption("Resultado: pendiente hasta que termine el partido")
                     st.caption(f"{x['dato']} · {x['nota']}")
         else:
             st.info("No hay cinco selecciones sencillas que pasen el filtro del modelo para este partido. No se inventan probabilidades para completar la lista.")
 
-        # Tabla independiente con los 10 mercados/props más probables de todos los tipos modelados.
+        # Antes del inicio se muestran proyecciones actuales. Tras comenzar el juego,
+        # mostrar sólo capturas inmutables guardadas antes del primer lanzamiento.
         top_diez = []
-        jugadas_tabla = set()
-        for x in sorted(candidatas_todas, key=lambda y: y["p"], reverse=True):
-            clave_jugada = x["jugada"].strip().casefold()
-            if clave_jugada in jugadas_tabla:
-                continue
-            jugadas_tabla.add(clave_jugada)
-            resultado_prediccion = (
-                "PENDIENTE" if game["status"] != "Final" else
-                "WIN" if x.get("acierto") is True else
-                "LOSS" if x.get("acierto") is False else
-                "PENDIENTE · dato individual no disponible"
-            )
-            top_diez.append({
-                "Tipo de apuesta": x["tipo"],
-                "Mercado / selección": x["jugada"],
-                "Probabilidad estimada": f"{x['p']:.1%}",
-                "Resultado": resultado_prediccion,
-                "Dato base": x["dato"],
-                "Nota": x["nota"],
-            })
-            if len(top_diez) == 10:
-                break
+        if game["status"] == "Preview":
+            jugadas_tabla = set()
+            for x in sorted(candidatas_todas, key=lambda y: y["p"], reverse=True):
+                clave_jugada = x["jugada"].strip().casefold()
+                if clave_jugada in jugadas_tabla:
+                    continue
+                jugadas_tabla.add(clave_jugada)
+                top_diez.append({
+                    "Tipo de apuesta": x["tipo"],
+                    "Mercado / selección": x["jugada"],
+                    "Probabilidad estimada": f"{x['p']:.1%}",
+                    "Resultado": "PENDIENTE",
+                    "Dato base": x["dato"],
+                    "Nota": x["nota"],
+                })
+                if len(top_diez) == 10:
+                    break
+        else:
+            game_id_archivo = str(juego.get("gamePk", ""))
+            if not historial_mlb.empty and "match_id" in historial_mlb.columns:
+                archivadas = historial_mlb[historial_mlb["match_id"].astype(str) == game_id_archivo].copy()
+                if not archivadas.empty:
+                    archivadas["p_num"] = pd.to_numeric(archivadas.get("probabilidad_modelo", ""), errors="coerce")
+                    archivadas = archivadas.sort_values("capturado_en", ascending=False).drop_duplicates(
+                        ["mercado", "lado"], keep="last"
+                    )
+                    for _, fila_archivada in archivadas.iterrows():
+                        try:
+                            p_txt = f"{float(fila_archivada.get('probabilidad_modelo')):.1%}"
+                        except (TypeError, ValueError):
+                            p_txt = "Sin modelo específico"
+                        estado = str(fila_archivada.get("estado", "")).upper()
+                        top_diez.append({
+                            "Tipo de apuesta": fila_archivada.get("categoria", "MLB"),
+                            "Mercado / selección": f"{fila_archivada.get('mercado', '')} · {fila_archivada.get('lado', '')}",
+                            "Probabilidad estimada": p_txt,
+                            "Resultado": estado if estado in {"WIN", "LOSS"} else "PENDIENTE",
+                            "Dato base": fila_archivada.get("ticker", ""),
+                            "Nota": "Captura original inmutable; no se recalcula tras el inicio",
+                        })
+                        if len(top_diez) == 10:
+                            break
 
         st.markdown("### Las 10 opciones más probables · todos los mercados MLB")
-        st.caption("Tabla independiente que incluye todos los mercados que el modelo puede proyectar para este partido: ganador, run line, totales, totales por equipo, carreras exactas, márgenes, marcadores exactos y props de pitchers/bateadores cuando hay datos. La probabilidad más alta no significa automáticamente que tenga valor a la cuota disponible.")
+        st.caption("Antes del inicio muestra las proyecciones actuales. Desde que empieza el partido sólo se muestran capturas originales archivadas antes del primer lanzamiento; no se recalculan retrospectivamente. Las props individuales siguen pendientes si no existe un resultado oficial verificable.")
         if top_diez:
             tabla_top = pd.DataFrame(top_diez)
-            if game["status"] == "Final":
-                st.caption("Los mercados de partido se revisan con el marcador final oficial. Los props individuales permanecen pendientes si no se dispone de la estadística oficial del jugador.")
+            if game["status"] != "Preview":
                 wins = int((tabla_top["Resultado"] == "WIN").sum())
                 losses = int((tabla_top["Resultado"] == "LOSS").sum())
                 c1, c2, c3 = st.columns(3)
@@ -651,6 +665,8 @@ for juego in [juego]:
                 subset=["Resultado"],
             )
             st.dataframe(estilo_top, use_container_width=True, hide_index=True)
+        elif game["status"] != "Preview":
+            st.info("No hay capturas previas archivadas para este partido; no se inventan predicciones retrospectivas.")
         else:
             st.info("Todavía no hay mercados con una estimación disponible para este partido.")
 
