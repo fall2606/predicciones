@@ -526,48 +526,87 @@ for juego in [juego]:
         picks = mercados(matriz_prob, (matriz_local, matriz_visita), game)
         picks_ordenados = sorted(picks, key=lambda x: x["p"], reverse=True)
 
-        # Selecciones sencillas del partido: solo categorías modelables y sin mezclar otros juegos.
-        # Umbral conservador: mostrar solo probabilidades >=62%, y solo mercados principales.
-        # Una selección por categoría evita llenar la página con líneas parecidas.
-        candidatas = [
-            x for x in picks_ordenados
+        # Unificar mercados de partido y props para no limitar las sencillas a solo 2-3 categorías.
+        candidatas_todas = []
+        for x in picks:
+            candidatas_todas.append({
+                "tipo": x["grupo"],
+                "jugada": x["mercado"],
+                "p": float(x["p"]),
+                "dato": "Distribución estimada de carreras del partido",
+                "nota": "Proyección estadística; comprobar la línea real y el precio",
+                "acierto": x["acierto"],
+            })
+        for x in props_sencillas:
+            candidatas_todas.append({
+                "tipo": x["Tipo"],
+                "jugada": x["Jugada sencilla"],
+                "p": float(x["Probabilidad estimada"]),
+                "dato": x["Dato base"],
+                "nota": x["Nota"],
+                "acierto": None,
+            })
+
+        # Hasta cinco sencillas, priorizando probabilidad y evitando repetir el mismo mercado.
+        # No se rellenan artificialmente si no hay cinco opciones que superen el umbral.
+        candidatas_sencillas = [
+            x for x in candidatas_todas
             if 0.62 <= x["p"] <= 0.85
-            and x["grupo"] in {"Ganador", "Run line", "Total"}
         ]
-        por_categoria = {}
-        for x in candidatas:
-            if x["grupo"] not in por_categoria or x["p"] > por_categoria[x["grupo"]]["p"]:
-                por_categoria[x["grupo"]] = x
-        recomendados = sorted(por_categoria.values(), key=lambda x: x["p"], reverse=True)[:3]
-        if recomendados:
-            st.markdown("### Selecciones sencillas recomendadas para este partido")
-            for x in recomendados:
+        sencillas = []
+        grupos_usados = {}
+        jugadas_usadas = set()
+        for x in sorted(candidatas_sencillas, key=lambda y: y["p"], reverse=True):
+            clave_jugada = x["jugada"].strip().casefold()
+            if clave_jugada in jugadas_usadas:
+                continue
+            # Permite más mercados por partido, sin dejar que una sola categoría ocupe toda la lista.
+            if grupos_usados.get(x["tipo"], 0) >= 2:
+                continue
+            sencillas.append(x)
+            jugadas_usadas.add(clave_jugada)
+            grupos_usados[x["tipo"]] = grupos_usados.get(x["tipo"], 0) + 1
+            if len(sencillas) == 5:
+                break
+
+        st.markdown("### Resumen sencillo · hasta 5 selecciones")
+        st.caption("Se combinan mercados de partido y props individuales. Se muestran las mejores opciones entre 62% y 85%; si hay menos de cinco que cumplan el filtro, no se rellenan con opciones débiles.")
+        if sencillas:
+            for x in sencillas:
                 with st.container(border=True):
-                    st.markdown(f"**{x['mercado']}**")
+                    st.markdown(f"**{x['jugada']}**")
+                    st.caption(x["tipo"])
                     st.write(f"Probabilidad estimada: **{x['p']:.1%}**")
                     if x["acierto"] is not None:
                         st.write("Resultado del modelo: " + ("✅ acertó" if x["acierto"] else "❌ falló"))
-                    st.caption("Proyección estadística del partido; confirma la línea y la cuota antes de apostar.")
+                    st.caption(f"{x['dato']} · {x['nota']}")
         else:
-            st.info("Este partido no tiene una selección principal que supere el filtro conservador de probabilidad (62%). Mejor no forzar una apuesta.")
+            st.info("No hay cinco selecciones sencillas que pasen el filtro del modelo para este partido. No se inventan probabilidades para completar la lista.")
 
-        props_filtradas = [x for x in props_sencillas if 0.65 <= x["Probabilidad estimada"] <= 0.85]
-        # Una prop por tipo y como máximo tres: evitar picks marginales y duplicados.
-        props_por_tipo = {}
-        for x in sorted(props_filtradas, key=lambda y: y["Probabilidad estimada"], reverse=True):
-            props_por_tipo.setdefault(x["Tipo"], x)
-        props_recomendadas = list(props_por_tipo.values())[:3]
-        if props_recomendadas:
-            st.markdown("### Props individuales con mejor proyección")
-            st.caption("Solo props con probabilidad estimada entre 65% y 85%; los candidatos de bateo siguen sujetos a confirmar la alineación.")
-            for x in props_recomendadas:
-                with st.container(border=True):
-                    st.markdown(f"**{x['Jugada sencilla']}**")
-                    st.caption(x["Tipo"])
-                    st.write(f"Probabilidad estimada: **{x['Probabilidad estimada']:.1%}**")
-                    st.caption(f"{x['Dato base']} · {x['Nota']}")
+        # Tabla independiente con los 10 mercados/props más probables de todos los tipos modelados.
+        top_diez = []
+        jugadas_tabla = set()
+        for x in sorted(candidatas_todas, key=lambda y: y["p"], reverse=True):
+            clave_jugada = x["jugada"].strip().casefold()
+            if clave_jugada in jugadas_tabla:
+                continue
+            jugadas_tabla.add(clave_jugada)
+            top_diez.append({
+                "Tipo de apuesta": x["tipo"],
+                "Mercado / selección": x["jugada"],
+                "Probabilidad estimada": f"{x['p']:.1%}",
+                "Dato base": x["dato"],
+                "Nota": x["nota"],
+            })
+            if len(top_diez) == 10:
+                break
+
+        st.markdown("### Las 10 opciones más probables · todos los mercados MLB")
+        st.caption("Tabla independiente que incluye todos los mercados que el modelo puede proyectar para este partido: ganador, run line, totales, totales por equipo, carreras exactas, márgenes, marcadores exactos y props de pitchers/bateadores cuando hay datos. La probabilidad más alta no significa automáticamente que tenga valor a la cuota disponible.")
+        if top_diez:
+            st.dataframe(pd.DataFrame(top_diez), use_container_width=True, hide_index=True)
         else:
-            st.info("No hay props individuales que superen el filtro de probabilidad y datos. Se omiten las opciones más inciertas.")
+            st.info("Todavía no hay mercados con una estimación disponible para este partido.")
 
         # Mostrar únicamente el historial/los contratos que corresponden al partido elegido.
         game_id = str(juego.get("gamePk", ""))
