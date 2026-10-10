@@ -528,67 +528,74 @@ for juego in [juego]:
             else:
                 estado_abridores.append(f"{etiqueta_abridor}: sin abridor probable publicado")
         st.caption("Abridores · " + " | ".join(estado_abridores))
-        st.markdown("### 🎯 Resumen sencillo del partido · pitchers y bateadores")
-        st.caption(
-            "Selecciones rápidas como en LaLiga. Ponches se estiman con la tasa del abridor; "
-            "hits/HR usan estadísticas de temporada y cuatro oportunidades aproximadas. "
-            "Los bateadores son candidatos, no alineaciones confirmadas: verifica el lineup y la cuota disponible."
+
+        props_sencillas = crear_apuestas_sencillas(
+            juego, datos_abridor_local, datos_abridor_visita, temporada
         )
-        try:
-            props_sencillas = crear_apuestas_sencillas(
-                juego, datos_abridor_local, datos_abridor_visita, temporada
-            )
-        except (requests.RequestException, ValueError, KeyError, TypeError, ZeroDivisionError) as exc:
-            props_sencillas = []
-            st.caption(f"No se pudieron calcular algunas props individuales: {exc}")
-        if props_sencillas:
-            st.dataframe(pd.DataFrame([
-                {
-                    "Tipo": x["Tipo"],
-                    "Jugada sencilla": x["Jugada sencilla"],
-                    "Probabilidad modelo": f'{x["Probabilidad estimada"]:.1%}',
-                    "Dato base": x["Dato base"],
-                    "Nota": x["Nota"],
-                }
-                for x in props_sencillas[:8]
-            ]), use_container_width=True, hide_index=True)
-        else:
-            st.info(
-                "MLB no publicó estadísticas suficientes de abridores o bateadores para generar props individuales "
-                "en este partido. Los mercados de equipo siguen disponibles abajo."
-            )
         picks = mercados(matriz_prob, (matriz_local, matriz_visita), game)
         picks_ordenados = sorted(picks, key=lambda x: x["p"], reverse=True)
-        recomendados = [
+
+        # Selecciones sencillas del partido: solo categorías modelables y sin mezclar otros juegos.
+        candidatas = [
             x for x in picks_ordenados
             if 0.55 <= x["p"] <= 0.88
-            and not x["mercado"].endswith("más de 0.5 carreras")
-        ][:5]
+            and (
+                x["grupo"] in {"Ganador", "Run line", "Total"}
+                or (x["grupo"].startswith("Total ") and x["grupo"] != "Total exacto"
+                    and "Exacto" not in x["grupo"])
+            )
+        ]
+        por_categoria = {}
+        for x in candidatas:
+            por_categoria.setdefault(x["grupo"], x)
+        recomendados = sorted(por_categoria.values(), key=lambda x: x["p"], reverse=True)[:6]
         if recomendados:
-            tabla = pd.DataFrame([
-                {"Mercado": x["mercado"], "Prob. estimada": f"{x['p']:.1%}",
-                 "Resultado": "✅ acertó" if x["acierto"] is True else
-                 "❌ falló" if x["acierto"] is False else "Pendiente"}
-                for x in recomendados
-            ])
-            st.markdown("**Resumen: líneas razonables por probabilidad estimada**")
-            st.dataframe(tabla, use_container_width=True, hide_index=True)
+            st.markdown("### Selecciones sencillas recomendadas para este partido")
+            for x in recomendados:
+                with st.container(border=True):
+                    st.markdown(f"**{x['mercado']}**")
+                    st.write(f"Probabilidad estimada: **{x['p']:.1%}**")
+                    if x["acierto"] is not None:
+                        st.write("Resultado del modelo: " + ("✅ acertó" if x["acierto"] else "❌ falló"))
+                    st.caption("Proyección estadística del partido; confirma la línea y la cuota antes de apostar.")
         else:
-            st.info(
-                "No hay selecciones en el rango 55–88% después de excluir líneas casi "
-                "automáticas. Revisa todos los mercados si quieres ver el resto."
-            )
-        combo_rows = recomendar_combos(matriz_prob, picks)
-        if combo_rows:
-            st.markdown("**Combinadas de mercados habituales (2 selecciones)**")
-            st.caption(
-                "Ordenadas por probabilidad conjunta estimada. Una probabilidad alta no "
-                "indica cuota rentable; comprueba que ambas selecciones y sus líneas estén "
-                "disponibles en tu casa."
-            )
-            st.dataframe(pd.DataFrame(combo_rows), use_container_width=True, hide_index=True)
+            st.info("Para este partido no hay selecciones sencillas de equipo con probabilidad entre 55% y 88%.")
+
+        if props_sencillas:
+            st.markdown("### Pitchers y bateadores · props individuales")
+            for x in props_sencillas:
+                with st.container(border=True):
+                    st.markdown(f"**{x['Jugada sencilla']}**")
+                    st.caption(x["Tipo"])
+                    st.write(f"Probabilidad estimada: **{x['Probabilidad estimada']:.1%}**")
+                    st.caption(f"{x['Dato base']} · {x['Nota']}")
         else:
-            st.caption("No hay combinadas con el umbral mínimo de probabilidad configurado.")
+            st.info("No hay datos suficientes de abridores o bateadores para proyectar props individuales en este partido.")
+
+        # Mostrar únicamente el historial/los contratos que corresponden al partido elegido.
+        game_id = str(juego.get("gamePk", ""))
+        if not historial_mlb.empty and "match_id" in historial_mlb.columns:
+            historial_partido = historial_mlb[historial_mlb["match_id"].astype(str) == game_id].copy()
+        else:
+            historial_partido = pd.DataFrame()
+        with st.expander("Historial y contratos Kalshi de este partido", expanded=False):
+            if not historial_partido.empty:
+                if "estado" not in historial_partido.columns:
+                    historial_partido["estado"] = "PENDIENTE"
+                historial_partido["estado"] = historial_partido["estado"].replace("", "PENDIENTE")
+                cols = [x for x in [
+                    "categoria", "mercado", "lado", "probabilidad_modelo", "precio_captura",
+                    "edge", "estado", "marcador", "capturado_en"
+                ] if x in historial_partido.columns]
+                st.dataframe(
+                    historial_partido[cols].sort_values("capturado_en", ascending=False)
+                    if "capturado_en" in cols else historial_partido[cols],
+                    use_container_width=True, hide_index=True
+                )
+                st.caption("Solo aparecen contratos capturados para este partido. WIN/LOSS proviene de la liquidación oficial de Kalshi.")
+            else:
+                st.info("Todavía no hay contratos de Kalshi archivados para este partido. Las proyecciones estadísticas de arriba son independientes del archivo de contratos.")
+
         with st.expander("Ver todos los mercados calculados"):
             st.dataframe(pd.DataFrame([
                 {"Mercado": x["mercado"], "Probabilidad": f"{x['p']:.1%}",
