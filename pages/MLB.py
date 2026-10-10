@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from itertools import combinations
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import numpy as np
@@ -37,6 +38,47 @@ with st.expander("¿Qué mercados suelen aparecer en combinadas de MLB?", expand
         "Fuente: [FanDuel — Inside Baseball’s Hottest Betting Market]("
         "https://www.fanduel.com/about/news/going-yard-inside-baseball-hottest-betting-market-at-fanduel)"
     )
+
+
+st.caption(
+    "El historial MLB registra una sola captura inicial por contrato y lado. Tras la liquidación, "
+    "WIN/LOSS se obtiene del resultado oficial de Kalshi; las predicciones históricas no se recalculan."
+)
+
+# Historial persistente: las filas se agregan en GitHub Actions y nunca se reescriben.
+ROOT = Path(__file__).resolve().parent.parent
+PRED_MLB = ROOT / "predicciones_mlb.csv"
+RES_MLB = ROOT / "resultados_mlb.csv"
+with st.expander("📚 Historial fijo MLB · predicciones, WIN y LOSS", expanded=True):
+    try:
+        if PRED_MLB.exists():
+            hist = pd.read_csv(PRED_MLB, dtype=str).fillna("")
+            if RES_MLB.exists():
+                res = pd.read_csv(RES_MLB, dtype=str).fillna("")
+                if not res.empty:
+                    hist = hist.merge(res[["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"]],
+                                      on="prediction_id", how="left")
+            if "estado" not in hist:
+                hist["estado"] = ""
+            hist["estado"] = hist["estado"].replace("", "PENDIENTE")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Capturas inmutables", len(hist))
+            c2.metric("WIN", int((hist["estado"] == "WIN").sum()))
+            c3.metric("LOSS", int((hist["estado"] == "LOSS").sum()))
+            c4.metric("Pendientes", int((hist["estado"] == "PENDIENTE").sum()))
+            filtro = st.selectbox("Filtrar historial", ["Todos", "WIN", "LOSS", "PENDIENTE"], key="mlb_hist_filtro")
+            ver = hist if filtro == "Todos" else hist[hist["estado"] == filtro]
+            cols = [x for x in ["fecha", "visita", "local", "categoria", "mercado", "lado",
+                                "probabilidad_modelo", "precio_captura", "estado", "marcador",
+                                "ticker", "capturado_en"] if x in ver.columns]
+            st.dataframe(ver[cols].sort_values("capturado_en", ascending=False) if not ver.empty else ver[cols],
+                         use_container_width=True, hide_index=True)
+            st.download_button("Descargar historial MLB CSV", hist.to_csv(index=False).encode("utf-8"),
+                               file_name="historial_mlb.csv", mime="text/csv")
+        else:
+            st.info("El historial se creará en la primera ejecución automática del registrador MLB.")
+    except (OSError, ValueError, KeyError) as exc:
+        st.warning(f"El historial MLB aún no se pudo leer: {exc}")
 
 
 def get_json(path, params):
@@ -240,8 +282,29 @@ def mercados(prob, puntos, partido):
         agregar(f"Más de {linea} carreras", "Total", total > linea)
         agregar(f"Menos de {linea} carreras", "Total", total < linea)
     for nombre, expr in ((local, puntos[0]), (visita, puntos[1])):
-        for linea in (0.5, 1.5, 2.5, 3.5, 4.5, 5.5):
+        for linea in (0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5):
             agregar(f"{nombre} más de {linea} carreras", f"Total {nombre}", expr > linea)
+            agregar(f"{nombre} menos de {linea} carreras", f"Total {nombre}", expr < linea)
+        for exactas in range(0, 16):
+            agregar(f"{nombre}: exactamente {exactas} carreras", f"Exacto {nombre}", expr == exactas)
+
+    for exactas in range(0, 21):
+        agregar(f"Total exacto: {exactas} carreras", "Total exacto", total == exactas)
+    margen_local = puntos[0] - puntos[1]
+    margen_visita = puntos[1] - puntos[0]
+    for margen in (1, 2, 3, 4):
+        agregar(f"{local} gana por exactamente {margen}", "Margen", margen_local == margen)
+        agregar(f"{visita} gana por exactamente {margen}", "Margen", margen_visita == margen)
+    agregar(f"{local} gana por 5 o más", "Margen", margen_local >= 5)
+    agregar(f"{visita} gana por 5 o más", "Margen", margen_visita >= 5)
+
+    candidatos = []
+    for ih in range(prob.shape[0]):
+        for ia in range(prob.shape[1]):
+            candidatos.append((float(prob[ih, ia]), ih, ia))
+    for _, ih, ia in sorted(candidatos, reverse=True)[:15]:
+        agregar(f"Marcador exacto {local} {ih}-{ia} {visita}", "Marcador exacto",
+                (puntos[0] == ih) & (puntos[1] == ia))
     return filas
 
 
