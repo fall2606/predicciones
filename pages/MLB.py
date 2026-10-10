@@ -14,13 +14,13 @@ API = "https://statsapi.mlb.com/api/v1"
 TIMEOUT = 20
 
 st.set_page_config(page_title="Predicciones MLB", page_icon="⚾", layout="wide")
-st.title("⚾ MLB · predicciones y combinadas")
+st.title("⚾ MLB · predicciones por partido")
 st.caption(
-    "Forma de bateo reciente, carreras anotadas y permitidas, y pitchers abridores probables "
-    "cuando MLB los publica. Las probabilidades reflejan incertidumbre de béisbol."
+    "Resumen de selecciones sencillas por encuentro: ganador, run line, carreras por equipo y partido, "
+    "y props individuales de pitchers y bateadores cuando hay datos suficientes."
 )
 
-with st.expander("¿Qué mercados suelen aparecer en combinadas de MLB?", expanded=True):
+with st.expander("Mercados MLB que se pueden proyectar", expanded=False):
     st.markdown(
         "**Home run de un bateador** es un mercado de props muy popular: FanDuel informó "
         "que fue su tipo de apuesta MLB con más volumen en 2025. Eso describe a esa casa, "
@@ -29,11 +29,7 @@ with st.expander("¿Qué mercados suelen aparecer en combinadas de MLB?", expand
         "totales."
     )
     st.caption(
-        "El modelo estadístico estima ganador, run line y carreras del partido/equipo. El "
-        "registrador independiente captura los contratos MLB abiertos que publica Kalshi, "
-        "incluidos entradas y props individuales, y los liquida como WIN/LOSS con el resultado "
-        "oficial del contrato. Si una prop no tiene datos suficientes, su probabilidad queda "
-        "sin modelo en vez de inventarse."
+        "El modelo estima mercados de juego y equipo a partir de carreras esperadas. Los mercados de entradas y props individuales solo se muestran como pronóstico cuando hay datos suficientes; no se inventan probabilidades."
     )
     st.markdown(
         "Fuente: [FanDuel — Inside Baseball’s Hottest Betting Market]("
@@ -46,41 +42,23 @@ st.caption(
     "WIN/LOSS se obtiene del resultado oficial de Kalshi; las predicciones históricas no se recalculan."
 )
 
-# Historial persistente: las filas se agregan en GitHub Actions y nunca se reescriben.
+# Leer historial en segundo plano; la interfaz lo filtra por el partido seleccionado.
 ROOT = Path(__file__).resolve().parent.parent
 PRED_MLB = ROOT / "predicciones_mlb.csv"
 RES_MLB = ROOT / "resultados_mlb.csv"
-with st.expander("📚 Historial fijo MLB · predicciones, WIN y LOSS", expanded=True):
-    try:
-        if PRED_MLB.exists():
-            hist = pd.read_csv(PRED_MLB, dtype=str).fillna("")
-            if RES_MLB.exists():
-                res = pd.read_csv(RES_MLB, dtype=str).fillna("")
-                if not res.empty:
-                    hist = hist.merge(res[["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"]],
-                                      on="prediction_id", how="left")
-            if "estado" not in hist:
-                hist["estado"] = ""
-            hist["estado"] = hist["estado"].replace("", "PENDIENTE")
-            c1, c2, c3, c4 = st.columns(4)
-            c1.metric("Capturas inmutables", len(hist))
-            c2.metric("WIN", int((hist["estado"] == "WIN").sum()))
-            c3.metric("LOSS", int((hist["estado"] == "LOSS").sum()))
-            c4.metric("Pendientes", int((hist["estado"] == "PENDIENTE").sum()))
-            filtro = st.selectbox("Filtrar historial", ["Todos", "WIN", "LOSS", "PENDIENTE"], key="mlb_hist_filtro")
-            ver = hist if filtro == "Todos" else hist[hist["estado"] == filtro]
-            cols = [x for x in ["fecha", "visita", "local", "categoria", "mercado", "lado",
-                                "probabilidad_modelo", "precio_captura", "estado", "marcador",
-                                "ticker", "capturado_en"] if x in ver.columns]
-            st.dataframe(ver[cols].sort_values("capturado_en", ascending=False) if not ver.empty else ver[cols],
-                         use_container_width=True, hide_index=True)
-            st.download_button("Descargar historial MLB CSV", hist.to_csv(index=False).encode("utf-8"),
-                               file_name="historial_mlb.csv", mime="text/csv")
-        else:
-            st.info("El historial se creará en la primera ejecución automática del registrador MLB.")
-    except (OSError, ValueError, KeyError) as exc:
-        st.warning(f"El historial MLB aún no se pudo leer: {exc}")
 
+def leer_historial_mlb():
+    try:
+        pred = pd.read_csv(PRED_MLB, dtype=str).fillna("") if PRED_MLB.exists() else pd.DataFrame()
+        res = pd.read_csv(RES_MLB, dtype=str).fillna("") if RES_MLB.exists() else pd.DataFrame()
+        if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
+            cols_res = [x for x in ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"] if x in res]
+            pred = pred.merge(res[cols_res], on="prediction_id", how="left")
+        return pred
+    except (OSError, ValueError, KeyError, pd.errors.ParserError):
+        return pd.DataFrame()
+
+historial_mlb = leer_historial_mlb()
 
 def get_json(path, params):
     response = requests.get(f"{API}/{path}", params=params, timeout=TIMEOUT)
