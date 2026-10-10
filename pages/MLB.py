@@ -29,10 +29,11 @@ with st.expander("¿Qué mercados suelen aparecer en combinadas de MLB?", expand
         "totales."
     )
     st.caption(
-        "Esta página solo tiene datos para estimar ganador, run line y carreras. No inventa "
-        "selecciones de home run, hits o ponches: faltan alineaciones, pitchers confirmados "
-        "y líneas/cuotas. Las combinadas de abajo son cálculos del modelo, no las más "
-        "apostadas por el público."
+        "El modelo estadístico estima ganador, run line y carreras del partido/equipo. El "
+        "registrador independiente captura los contratos MLB abiertos que publica Kalshi, "
+        "incluidos entradas y props individuales, y los liquida como WIN/LOSS con el resultado "
+        "oficial del contrato. Si una prop no tiene datos suficientes, su probabilidad queda "
+        "sin modelo en vez de inventarse."
     )
     st.markdown(
         "Fuente: [FanDuel — Inside Baseball’s Hottest Betting Market]("
@@ -511,5 +512,6 @@ st.warning(
     f"medio de liga ({era_liga:.2f}) y el ERA del "
     "abridor probable cuando está publicado y usa una distribución con mayor variabilidad "
     "que Poisson. Aún no incorpora alineaciones confirmadas, lesiones, parque/clima, cuotas "
-    "ni props individuales; sus porcentajes son estimaciones, no garantías."
+    "ni un modelo estadístico específico para todas las props individuales; esas props se "
+    "registran y liquidan igualmente, pero la probabilidad queda vacía cuando faltan datos."
 )
