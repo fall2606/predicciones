@@ -137,14 +137,12 @@ def main():
         else:
             marcador = resultado_del_periodo(market_key, datos["resultado"])
             acierto_yes = evaluar_yes_goles(market_key, marcador)
+        # Si aún falta el evento oficial (p. ej. primer goleador), no liquidar
+        # como UNKNOWN: dejarlo pendiente para volver a intentarlo en la siguiente ejecución.
         if acierto_yes is None:
-            if serie in {"KXUCLFTTS", "KXUCLFIRSTGOAL"}:
-                estado = "UNKNOWN"
-            else:
-                continue
-        else:
-            acierto = acierto_yes if lado == "YES" else not acierto_yes
-            estado = "WIN" if acierto else "LOSS"
+            continue
+        acierto = acierto_yes if lado == "YES" else not acierto_yes
+        estado = "WIN" if acierto else "LOSS"
         marcador = datos["resultado"]["partido"]
         cierres.append({
             "prediction_id": prediction_id,
