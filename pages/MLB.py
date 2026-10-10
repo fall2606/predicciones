@@ -141,6 +141,9 @@ def cargar_pitcher(pitcher_id, season):
                         "era": float(stat["era"]),
                         "innings": float(stat.get("inningsPitched") or 0),
                         "strikeouts": float(stat.get("strikeOuts") or 0),
+                        "hits_allowed": float(stat.get("hits") or 0),
+                        "walks": float(stat.get("baseOnBalls") or 0),
+                        "earned_runs": float(stat.get("earnedRuns") or 0),
                     }
                 except (TypeError, ValueError):
                     pass
@@ -163,10 +166,15 @@ def cargar_bateadores_equipo(team_id, season):
                 ab = float(stat.get("atBats") or 0)
                 hits = float(stat.get("hits") or 0)
                 hr = float(stat.get("homeRuns") or 0)
+                total_bases = float(stat.get("totalBases") or 0)
+                rbi = float(stat.get("rbi") or 0)
+                stolen_bases = float(stat.get("stolenBases") or 0)
                 avg = float(stat.get("avg") or (hits / ab if ab else 0))
                 if player.get("id") and pa >= 30:
                     rows.append({"nombre": player.get("fullName", "Bateador"), "pa": pa,
-                                 "ab": ab, "hits": hits, "hr": hr, "avg": avg})
+                                 "ab": ab, "hits": hits, "hr": hr, "avg": avg,
+                                 "total_bases": total_bases, "rbi": rbi,
+                                 "stolen_bases": stolen_bases})
             except (TypeError, ValueError):
                 continue
     unique = {row["nombre"]: row for row in rows}
@@ -196,6 +204,22 @@ def crear_apuestas_sencillas(juego, datos_abridor_local, datos_abridor_visita, t
                 "Dato base": f'{pitcher.get("strikeouts", 0):.0f} K en {pitcher["innings"]:.1f} entradas',
                 "Nota": "Complemento del over; depende de las entradas lanzadas",
             })
+            if pitcher["innings"] >= 15:
+                for key, line, label, desc in (
+                    ("hits_allowed", 4.5, "hits permitidos", "Hits permitidos por 5 entradas esperadas"),
+                    ("earned_runs", 2.5, "carreras limpias", "Carreras limpias por 5 entradas esperadas"),
+                    ("walks", 1.5, "bases por bolas", "Bases por bolas por 5 entradas esperadas"),
+                ):
+                    media = max(0.05, pitcher.get(key, 0) / pitcher["innings"] * 5)
+                    p_over = float(poisson.sf(int(line), media))
+                    picks.append({
+                        "Tipo": "Pitcher · " + label,
+                        "Jugada sencilla": f'{pitcher["nombre"]} más de {line} {label}',
+                        "Probabilidad estimada": p_over,
+                        "Dato base": f'{pitcher.get(key, 0):.0f} en {pitcher["innings"]:.1f} entradas',
+                        "Nota": desc + "; proyección aproximada, no línea confirmada",
+                    })
+
     for lado, equipo_key in (("Local", "home"), ("Visita", "away")):
         team = juego.get("teams", {}).get(equipo_key, {}).get("team", {})
         if not team.get("id"):
@@ -225,6 +249,27 @@ def crear_apuestas_sencillas(juego, datos_abridor_local, datos_abridor_visita, t
                 "Probabilidad estimada": min(0.65, max(0.01, 1 - (1 - tasa) ** 4)),
                 "Dato base": f'{b["hr"]:.0f} HR en {b["pa"]:.0f} apariciones al plato',
                 "Nota": f'Candidato de {lado.lower()}; confirmar alineación titular',
+            })
+        for b in [x for x in bateadores if x["pa"] >= 120 and x["total_bases"] > 0][:3]:
+            media_tb = max(0.05, b["total_bases"] / b["pa"] * 4)
+            p_tb = float(poisson.sf(1, media_tb))
+            picks.append({
+                "Tipo": "Bateador · bases totales",
+                "Jugada sencilla": f'{b["nombre"]} más de 1.5 bases totales',
+                "Probabilidad estimada": min(0.90, max(0.05, p_tb)),
+                "Dato base": f'{b["total_bases"]:.0f} bases totales en {b["pa"]:.0f} apariciones',
+                "Nota": f'Candidato de {lado.lower()}; confirmar alineación titular',
+            })
+        rbi_candidates = [x for x in bateadores if x["pa"] >= 120 and x["rbi"] > 0]
+        rbi_candidates.sort(key=lambda x: x["rbi"] / x["pa"], reverse=True)
+        for b in rbi_candidates[:1]:
+            p_rbi = 1 - (1 - min(0.35, b["rbi"] / b["pa"])) ** 4
+            picks.append({
+                "Tipo": "Bateador · carreras impulsadas",
+                "Jugada sencilla": f'{b["nombre"]} 1+ carrera impulsada',
+                "Probabilidad estimada": min(0.85, max(0.05, p_rbi)),
+                "Dato base": f'{b["rbi"]:.0f} RBI en {b["pa"]:.0f} apariciones',
+                "Nota": f'Candidato de {lado.lower()}; depende de la posición en el lineup',
             })
     return sorted(picks, key=lambda x: x["Probabilidad estimada"], reverse=True)
 
