@@ -607,10 +607,17 @@ for juego in [juego]:
             if clave_jugada in jugadas_tabla:
                 continue
             jugadas_tabla.add(clave_jugada)
+            resultado_prediccion = (
+                "PENDIENTE" if game["status"] != "Final" else
+                "WIN" if x.get("acierto") is True else
+                "LOSS" if x.get("acierto") is False else
+                "PENDIENTE · dato individual no disponible"
+            )
             top_diez.append({
                 "Tipo de apuesta": x["tipo"],
                 "Mercado / selección": x["jugada"],
                 "Probabilidad estimada": f"{x['p']:.1%}",
+                "Resultado": resultado_prediccion,
                 "Dato base": x["dato"],
                 "Nota": x["nota"],
             })
@@ -620,7 +627,16 @@ for juego in [juego]:
         st.markdown("### Las 10 opciones más probables · todos los mercados MLB")
         st.caption("Tabla independiente que incluye todos los mercados que el modelo puede proyectar para este partido: ganador, run line, totales, totales por equipo, carreras exactas, márgenes, marcadores exactos y props de pitchers/bateadores cuando hay datos. La probabilidad más alta no significa automáticamente que tenga valor a la cuota disponible.")
         if top_diez:
-            st.dataframe(pd.DataFrame(top_diez), use_container_width=True, hide_index=True)
+            tabla_top = pd.DataFrame(top_diez)
+            if game["status"] == "Final":
+                st.caption("Los mercados de partido se revisan con el marcador final oficial. Los props individuales permanecen pendientes si no se dispone de la estadística oficial del jugador.")
+                wins = int((tabla_top["Resultado"] == "WIN").sum())
+                losses = int((tabla_top["Resultado"] == "LOSS").sum())
+                c1, c2, c3 = st.columns(3)
+                c1.metric("WIN", wins)
+                c2.metric("LOSS", losses)
+                c3.metric("Pendientes", len(tabla_top) - wins - losses)
+            st.dataframe(tabla_top, use_container_width=True, hide_index=True)
         else:
             st.info("Todavía no hay mercados con una estimación disponible para este partido.")
 
