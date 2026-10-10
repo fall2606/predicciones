@@ -387,9 +387,20 @@ def main():
                 ("YES", yes_price, p_yes),
                 ("NO", no_price, 1-p_yes if p_yes is not None else None),
             ):
-                pid = f"{ticker}|{side}"
+                base_pid = f"{ticker}|{side}"
+                pid = base_pid
                 if pid in existing_ids:
-                    continue
+                    # Keep the original capture immutable. If it had no model probability,
+                    # append one clearly identified recalculation row rather than rewriting history.
+                    recalculated_id = f"{base_pid}|MODEL2"
+                    has_blank_original = any(
+                        row.get("prediction_id") == base_pid and not row.get("probabilidad_modelo")
+                        for row in existing
+                    )
+                    if probability is None or not has_blank_original or recalculated_id in existing_ids:
+                        continue
+                    pid = recalculated_id
+                    model_state = f"{model_state}; recalculo_modelo_v2"
                 implied = price
                 edge = probability - price if probability is not None and price is not None else None
                 new_rows.append({
