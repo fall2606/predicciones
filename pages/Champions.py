@@ -53,10 +53,31 @@ if corners is None:
     st.info("Los mercados de corners que ofrezca Kalshi aparecerán en el detalle, pero esta fuente no tiene estadísticas históricas de corners de Champions para calcular probabilidades.")
 
 inicio, fin = hoy, hoy + timedelta(days=2)
+fin_ventana_inicial = fin
 inicio_resultados = hoy - timedelta(days=7)
 seleccionables = []
 partidos_disponibles = {str(m["id"]): m for m in modelo[9]}
 partidos_disponibles.update({str(m["id"]): m for m in partidos})
+proximos_disponibles = []
+for partido in partidos_disponibles.values():
+    fecha_txt = partido.get("utcDate")
+    if not fecha_txt or partido.get("status") not in {"SCHEDULED", "TIMED"}:
+        continue
+    fecha_local = datetime.fromisoformat(fecha_txt.replace("Z", "+00:00")).astimezone(TZ).date()
+    if fecha_local > fin_ventana_inicial:
+        proximos_disponibles.append((fecha_local, partido))
+
+proximos_en_ventana = [
+    (fecha, partido) for fecha, partido in proximos_disponibles
+    if inicio <= fecha <= fin_ventana_inicial
+]
+proxima_jornada_automatica = False
+if not proximos_en_ventana and proximos_disponibles:
+    siguiente_fecha = min(fecha for fecha, _ in proximos_disponibles if fecha > fin_ventana_inicial)
+    # Si no hay partido en las próximas 72 horas, enseña los encuentros del siguiente bloque de dos días.
+    fin = siguiente_fecha + timedelta(days=1)
+    proxima_jornada_automatica = True
+
 for partido in partidos_disponibles.values():
     fecha_txt = partido.get("utcDate")
     if not fecha_txt:
@@ -73,9 +94,8 @@ for partido in partidos_disponibles.values():
         seleccionables.append(partido)
 
 if not seleccionables:
-    st.info(f"No hay partidos próximos ni capturas finalizadas para comparar (hoy {inicio:%d/%m} a {fin:%d/%m}).")
+    st.info(f"No hay partidos en el calendario recibido ni capturas finalizadas para comparar. Ventana consultada: {inicio:%d/%m}–{fin:%d/%m} (Chicago).")
     st.stop()
-
 seleccionables.sort(key=lambda m: m.get("utcDate", ""))
 opciones = {}
 for m in seleccionables:
@@ -92,8 +112,13 @@ for m in seleccionables:
     etiqueta = f"{estado} · {fecha:%a %d/%m %H:%M} · {local} vs {visita}{marcador_txt}"
     opciones[etiqueta] = m
 
+if proxima_jornada_automatica:
+    st.info(
+        f"No había partidos hasta el {fin_ventana_inicial:%d/%m}; muestro la siguiente jornada disponible: "
+        f"{siguiente_fecha:%d/%m}–{fin:%d/%m}."
+    )
 st.caption(
-    f"Próximos: hoy {inicio:%d/%m} y dos días más · finalizados: últimos 7 días y todos los que tengan captura guardada · hora de Chicago"
+    f"Próximos: {inicio:%d/%m}–{fin:%d/%m} · finalizados: últimos 7 días y todos los que tengan captura guardada · hora de Chicago"
 )
 pendientes = [m for m in seleccionables if m["status"] in {"SCHEDULED", "TIMED"}]
 indice = 0
