@@ -593,8 +593,15 @@ for juego in [juego]:
                     st.markdown(f"**{x['jugada']}**")
                     st.caption(x["tipo"])
                     st.write(f"Probabilidad estimada: **{x['p']:.1%}**")
-                    if x["acierto"] is not None:
-                        st.write("Resultado del modelo: " + ("✅ acertó" if x["acierto"] else "❌ falló"))
+                    if game["status"] == "Final" and x["acierto"] is not None:
+                        if x["acierto"]:
+                            st.success("WIN · Predicción acertada")
+                        else:
+                            st.error("LOSS · Predicción fallida")
+                    elif game["status"] == "Final":
+                        st.info("PENDIENTE · Falta la estadística oficial individual")
+                    else:
+                        st.caption("Resultado: pendiente hasta que termine el partido")
                     st.caption(f"{x['dato']} · {x['nota']}")
         else:
             st.info("No hay cinco selecciones sencillas que pasen el filtro del modelo para este partido. No se inventan probabilidades para completar la lista.")
@@ -636,7 +643,14 @@ for juego in [juego]:
                 c1.metric("WIN", wins)
                 c2.metric("LOSS", losses)
                 c3.metric("Pendientes", len(tabla_top) - wins - losses)
-            st.dataframe(tabla_top, use_container_width=True, hide_index=True)
+            estilo_top = tabla_top.style.map(
+                lambda v: "background-color: #d4edda; color: #155724; font-weight: bold"
+                if v == "WIN" else
+                "background-color: #f8d7da; color: #721c24; font-weight: bold"
+                if v == "LOSS" else "",
+                subset=["Resultado"],
+            )
+            st.dataframe(estilo_top, use_container_width=True, hide_index=True)
         else:
             st.info("Todavía no hay mercados con una estimación disponible para este partido.")
 
@@ -660,11 +674,25 @@ for juego in [juego]:
                     "categoria", "mercado", "lado", "probabilidad_modelo", "estado_modelo",
                     "precio_captura", "edge", "estado", "marcador", "capturado_en"
                 ] if x in historial_partido.columns]
-                st.dataframe(
+                historial_mostrar = (
                     historial_partido[cols].sort_values("capturado_en", ascending=False)
-                    if "capturado_en" in cols else historial_partido[cols],
-                    use_container_width=True, hide_index=True
-                )
+                    if "capturado_en" in cols else historial_partido[cols]
+                ).copy()
+                if "estado" in historial_mostrar.columns:
+                    historial_mostrar = historial_mostrar.rename(columns={"estado": "Resultado"})
+                    historial_mostrar["Resultado"] = historial_mostrar["Resultado"].replace({
+                        "": "PENDIENTE", "WIN": "WIN", "LOSS": "LOSS"
+                    }).fillna("PENDIENTE")
+                    estilo = historial_mostrar.style.map(
+                        lambda v: "background-color: #d4edda; color: #155724; font-weight: bold"
+                        if v == "WIN" else
+                        "background-color: #f8d7da; color: #721c24; font-weight: bold"
+                        if v == "LOSS" else "",
+                        subset=["Resultado"],
+                    )
+                    st.dataframe(estilo, use_container_width=True, hide_index=True)
+                else:
+                    st.dataframe(historial_mostrar, use_container_width=True, hide_index=True)
                 st.caption("Las capturas originales no se modifican. Si un contrato antiguo no tenía probabilidad y ahora puede modelarse, se añade una fila separada de recálculo v2. Las props que requieren estadísticas individuales siguen sin probabilidad hasta implementar un modelo específico. WIN/LOSS procede de la liquidación oficial de Kalshi.")
             else:
                 st.info("Todavía no hay contratos de Kalshi archivados para este partido. Las proyecciones estadísticas de arriba son independientes del archivo de contratos.")
