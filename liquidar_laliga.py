@@ -20,6 +20,7 @@ from laliga_engine import (
     evaluar_yes_goles,
     resultado_del_periodo,
     resultado_corners,
+    limpiar,
 )
 
 API = "https://api.football-data.org/v4"
@@ -93,10 +94,29 @@ def primer_anotador(partido, marcador):
 
     goles.sort(key=orden)
     if goles:
-        equipo_id = goles[0]["team"].get("id")
-        if equipo_id == (partido.get("homeTeam") or {}).get("id"):
+        equipo = goles[0]["team"]
+        equipo_id = equipo.get("id")
+        local_info = partido.get("homeTeam") or {}
+        visita_info = partido.get("awayTeam") or {}
+        if equipo_id is not None and str(equipo_id) == str(local_info.get("id")):
             return "local"
-        if equipo_id == (partido.get("awayTeam") or {}).get("id"):
+        if equipo_id is not None and str(equipo_id) == str(visita_info.get("id")):
+            return "visita"
+
+        # Algunas respuestas no conservan los mismos tipos/IDs en el detalle de gol;
+        # usar el nombre oficial como segunda comprobación antes de dejarlo pendiente.
+        nombre_gol = limpiar(equipo.get("name") or equipo.get("shortName") or "")
+        nombres_local = {
+            limpiar(local_info.get("name") or ""),
+            limpiar(local_info.get("shortName") or ""),
+        } - {""}
+        nombres_visita = {
+            limpiar(visita_info.get("name") or ""),
+            limpiar(visita_info.get("shortName") or ""),
+        } - {""}
+        if nombre_gol and nombre_gol in nombres_local:
+            return "local"
+        if nombre_gol and nombre_gol in nombres_visita:
             return "visita"
         return None
     if sum(marcador["partido"]) == 0:
@@ -210,12 +230,8 @@ def main():
         marcador = marcador_periodos(partido) if partido else None
         if not partido or not marcador or sum(marcador["partido"]) == 0:
             continue
-        goles_con_equipo = [
-            g for g in (partido.get("goals") or [])
-            if isinstance(g, dict) and isinstance(g.get("team"), dict)
-            and g["team"].get("id") is not None
-        ]
-        if goles_con_equipo:
+        # Sólo omitir la consulta extra si ya pudimos identificar al primer anotador.
+        if primer_anotador(partido, marcador) is not None:
             continue
         try:
             response = requests.get(
