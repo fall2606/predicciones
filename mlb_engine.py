@@ -137,7 +137,8 @@ def partidos_proximos():
 def clasificar(serie, market):
     text = normalizar(" ".join(str(market.get(k, "")) for k in ("title", "yes_sub_title", "subtitle", "rules_primary")))
     s = normalizar(serie)
-    if any(x in s for x in ("player", "strikeout", "home_run", "hits", "total_bases", "rbi", "pitcher")) or re.search(r"\b(over|under)\b", text) and re.search(r"\b(hits|home runs|strikeouts|total bases|rbis|walks|outs recorded|earned runs|stolen bases)\b", text):
+    if (any(x in s for x in ("player", "strikeout", "home_run", "hits", "total_bases", "rbi", "pitcher", "kxmlbhr", "kxmlbtb", "kxmlbrbi", "kxmlbsb", "kxmlbouts", "kxmlber", "kxmlbwalk"))
+            or any(x in text for x in ("home run", "total bases", "strikeout", "hits", "rbis", "walks", "outs recorded", "earned runs", "stolen bases"))):
         return "Props de jugador"
     if any(x in text for x in ("first inning", "1st inning", "yrfi", "nrfi")) or "firstinning" in s:
         return "1.ª entrada / YRFI-NRFI"
