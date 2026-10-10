@@ -113,8 +113,11 @@ def main():
     # con estados desfasados. El historial validado (modelo[9]) contiene los partidos
     # finalizados con marcador; combinamos ambos por ID y damos prioridad a la respuesta
     # actual cuando esté disponible.
-    partidos_por_id = {str(m["id"]): m for m in modelo[9]}
-    partidos_por_id.update({str(m["id"]): m for m in modelo[0]})
+    # Partimos de la respuesta actual, pero el historial validado de partidos
+    # finalizados debe prevalecer: la API de temporada puede conservar un estado
+    # desfasado para un partido que ya tiene marcador final confirmado.
+    partidos_por_id = {str(m["id"]): m for m in modelo[0]}
+    partidos_por_id.update({str(m["id"]): m for m in modelo[9]})
     cierres = []
     for _, fila in predicciones.iterrows():
         prediction_id = str(fila["prediction_id"])
