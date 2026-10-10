@@ -370,6 +370,10 @@ def main():
         if not markets:
             continue
         game = encontrar_partido(event, games)
+        # No capturar ni recalcular contratos de partidos ya iniciados.
+        # La fase de liquidación de abajo seguirá revisando sus resultados oficiales.
+        if not game or game.get("status") != "Preview":
+            continue
         event_count += 1
         for m in markets:
             if m.get("status") not in (None, "active", "open"):
