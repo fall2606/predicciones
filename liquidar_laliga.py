@@ -193,6 +193,43 @@ def main():
         print(f"Aviso: corners no disponibles en esta ejecución: {exc}")
         corners = None
 
+    # La lista de partidos a veces no incluye el detalle de goles. Para liquidar
+    # el mercado de primer anotador, pedir el detalle oficial de cada partido final
+    # que tenga una predicción de ese tipo y cuyo marcador indique que hubo goles.
+    partidos_con_primer_gol = set()
+    for _, fila in pendientes.iterrows():
+        try:
+            clave_interna, _ = ast.literal_eval(str(fila.get("clave_interna", "")))
+            if clave_interna[0] in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
+                partidos_con_primer_gol.add(str(fila.get("match_id", "")))
+        except (ValueError, SyntaxError, TypeError, IndexError):
+            continue
+
+    for match_id in partidos_con_primer_gol:
+        partido = partidos.get(match_id)
+        marcador = marcador_periodos(partido) if partido else None
+        if not partido or not marcador or sum(marcador["partido"]) == 0:
+            continue
+        goles_con_equipo = [
+            g for g in (partido.get("goals") or [])
+            if isinstance(g, dict) and isinstance(g.get("team"), dict)
+            and g["team"].get("id") is not None
+        ]
+        if goles_con_equipo:
+            continue
+        try:
+            response = requests.get(
+                f"{API}/matches/{match_id}",
+                headers={"X-Auth-Token": clave},
+                timeout=25,
+            )
+            response.raise_for_status()
+            detalle = response.json()
+            if detalle.get("status") in {"FINISHED", "AWARDED"} and marcador_periodos(detalle):
+                partidos[match_id] = detalle
+        except requests.RequestException as exc:
+            print(f"Aviso: no pude obtener el detalle de goles del partido {match_id}: {exc}")
+
     nuevos = []
     partidos_vistos = set()
     for _, fila in pendientes.iterrows():
