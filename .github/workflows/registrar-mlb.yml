@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: guardar-historicos-mlb
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   registrar:
