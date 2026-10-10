@@ -597,9 +597,8 @@ for juego in [juego]:
 
 st.warning(
     f"El modelo mezcla producción de temporada y últimos 10 resultados, incorpora el ERA "
-    f"medio de liga ({era_liga:.2f}) y el ERA del "
-    "abridor probable cuando está publicado y usa una distribución con mayor variabilidad "
-    "que Poisson. Aún no incorpora alineaciones confirmadas, lesiones, parque/clima, cuotas "
-    "ni un modelo estadístico específico para todas las props individuales; esas props se "
-    "registran y liquidan igualmente, pero la probabilidad queda vacía cuando faltan datos."
+    f"medio de liga ({era_liga:.2f}) y el ERA del abridor probable cuando está publicado. "
+    "Las props individuales usan tasas de temporada y una aproximación Poisson; no sustituyen "
+    "una línea/cuota real y pueden variar con la alineación, el rival, el parque y el clima. "
+    "Confirma que el jugador vaya a participar y que la línea exista en el mercado."
 )
