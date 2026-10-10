@@ -1069,9 +1069,9 @@ def resumen_guardado(match_id, predicciones, resultados):
             "Jugada sencilla": fila["jugada"],
             "Probabilidad modelo": f"{p:.1%}",
             "Calibración": fila.get("calibracion", "Sin dato"),
-            "Resultado": {"WIN": "✅ Se cumplió", "LOSS": "❌ No se cumplió", "UNKNOWN": "Sin dato"}.get(
-                estados.get(fila["prediction_id"]), "Pendiente de resultado"
-            ),
+            "Resultado": {"WIN": "✅ Se cumplió", "LOSS": "❌ No se cumplió", "UNKNOWN": "Sin dato",
+                "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
+            }.get(estados.get(fila["prediction_id"]), "Pendiente de resultado"),
             "Precio ahora": fila.get("precio", "—"),
             "Disponibilidad": fila.get("disponibilidad", "—"),
             "Ticker": fila.get("ticker", "—"),
@@ -1089,7 +1089,12 @@ def historial_guardado(match_id, predicciones, resultados):
         return pd.DataFrame()
     estados = resultados.set_index("prediction_id")["estado"].to_dict() if not resultados.empty else {}
     filas["Resultado"] = filas["prediction_id"].map(estados).map(
-        {"WIN": "✅ Se cumplió", "LOSS": "❌ No se cumplió", "UNKNOWN": "Sin dato"}
+        {
+            "WIN": "✅ WIN · Se cumplió",
+            "LOSS": "❌ LOSS · No se cumplió",
+            "UNKNOWN": "Sin dato",
+            "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
+        }
     ).fillna("Pendiente de resultado")
     filas["Captura (Chicago)"] = pd.to_datetime(filas["capturado_en"], utc=True).dt.tz_convert(TZ).dt.strftime("%d/%m %H:%M")
     filas["Probabilidad base"] = pd.to_numeric(filas["probabilidad_base"], errors="coerce").map(lambda x: f"{x:.1%}")
