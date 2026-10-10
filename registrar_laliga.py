@@ -134,7 +134,51 @@ def main():
         except (ValueError, SyntaxError):
             continue
         serie = market_key[0]
-        if serie in {"KXLALIGACORNERS", "KXLALIGATCORNERS"}:
+        if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
+            # En los mercados de primer gol, el marcador final por sí solo no
+            # identifica al primer anotador. Usamos los goles del partido y la
+            # selección guardada (jugada), que es la que ve el usuario.
+            goles = partido.get("goals") or []
+            goles_validos = [
+                g for g in goles
+                if isinstance(g, dict) and isinstance(g.get("team"), dict)
+            ]
+            goles_validos.sort(key=lambda g: (
+                int((g.get("minute") or 0)),
+                int((g.get("injuryTime") or 0)),
+            ))
+            total_goles = sum(datos["resultado"]["partido"])
+            if goles_validos:
+                primer_equipo_id = goles_validos[0]["team"].get("id")
+                if primer_equipo_id == partido.get("homeTeam", {}).get("id"):
+                    primer_gol = "local"
+                elif primer_equipo_id == partido.get("awayTeam", {}).get("id"):
+                    primer_gol = "visita"
+                else:
+                    continue
+            elif total_goles == 0:
+                primer_gol = "sin_goles"
+            else:
+                # Hay goles, pero el proveedor no incluyó el detalle necesario.
+                continue
+
+            jugada = str(fila.get("jugada", "")).strip()
+            local = datos["local"]
+            visita = datos["visita"]
+            if jugada == f"Primer gol de {local}" or jugada == f"Primer gol de {local} o sin goles":
+                acierto = primer_gol in ({"local", "sin_goles"} if "o sin goles" in jugada else {"local"})
+            elif jugada == f"Primer gol de {visita}" or jugada == f"Primer gol de {visita} o sin goles":
+                acierto = primer_gol in ({"visita", "sin_goles"} if "o sin goles" in jugada else {"visita"})
+            elif jugada == "No habrá goles":
+                acierto = primer_gol == "sin_goles"
+            elif jugada == "Habrá al menos un gol":
+                acierto = primer_gol != "sin_goles"
+            else:
+                # Compatibilidad para filas antiguas con una etiqueta inesperada.
+                acierto_yes = primer_gol == market_key[1]
+                acierto = acierto_yes if lado == "YES" else not acierto_yes
+            estado = "WIN" if acierto else "LOSS"
+        elif serie in {"KXLALIGACORNERS", "KXLALIGATCORNERS"}:
             if datos["corners_final"] is None:
                 continue
             cuenta = (
@@ -145,15 +189,13 @@ def main():
             )
             linea, direccion = market_key[2], market_key[3]
             acierto_yes = cuenta < linea if direccion == "under" else cuenta >= linea
+            acierto = acierto_yes if lado == "YES" else not acierto_yes
+            estado = "WIN" if acierto else "LOSS"
         else:
             marcador = resultado_del_periodo(market_key, datos["resultado"])
             acierto_yes = evaluar_yes_goles(market_key, marcador)
-        if acierto_yes is None:
-            if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
-                estado = "UNKNOWN"
-            else:
+            if acierto_yes is None:
                 continue
-        else:
             acierto = acierto_yes if lado == "YES" else not acierto_yes
             estado = "WIN" if acierto else "LOSS"
         marcador = datos["resultado"]["partido"]
