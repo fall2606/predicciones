@@ -1,6 +1,12 @@
 name: Historial inmutable de LaLiga
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "registrar_laliga.py"
+      - "laliga_engine.py"
+      - ".github/workflows/registrar-laliga.yml"
   schedule:
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
