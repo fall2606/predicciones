@@ -21,25 +21,16 @@ st.caption(
 
 with st.expander("Mercados MLB que se pueden proyectar", expanded=False):
     st.markdown(
-        "**Home run de un bateador** es un mercado de props muy popular: FanDuel informó "
-        "que fue su tipo de apuesta MLB con más volumen en 2025. Eso describe a esa casa, "
-        "no a todas las casas ni un ranking de combinadas. También se ofrecen mercados de "
-        "hits de bateadores, ponches de pitchers, ganador (moneyline), run line y carreras "
-        "totales."
-    )
-    st.caption(
-        "El modelo estima mercados de juego y equipo a partir de carreras esperadas. Los mercados de entradas y props individuales solo se muestran como pronóstico cuando hay datos suficientes; no se inventan probabilidades."
-    )
-    st.markdown(
-        "Fuente: [FanDuel — Inside Baseball’s Hottest Betting Market]("
-        "https://www.fanduel.com/about/news/going-yard-inside-baseball-hottest-betting-market-at-fanduel)"
+        "- **Partido/equipos:** ganador, run line, total de carreras y total por equipo. "
+        "Marcador exacto y márgenes se dejan en el detalle porque son menos estables.\n"
+        "- **Pitchers:** ponches y, cuando hay muestra suficiente, hits permitidos, carreras limpias y bases por bolas.\n"
+        "- **Bateadores:** 1+ hit, bases totales, carreras impulsadas y home run.\n"
+        "- **Entradas y mercados especiales:** se muestran en el historial de Kalshi del partido si están disponibles, "
+        "pero no reciben una probabilidad propia sin datos por entrada suficientes."
     )
 
 
-st.caption(
-    "El historial MLB registra una sola captura inicial por contrato y lado. Tras la liquidación, "
-    "WIN/LOSS se obtiene del resultado oficial de Kalshi; las predicciones históricas no se recalculan."
-)
+st.caption("Las selecciones y su historial se muestran por partido. Las capturas originales se conservan y WIN/LOSS se añade tras la liquidación oficial.")
 
 # Leer historial en segundo plano; la interfaz lo filtra por el partido seleccionado.
 ROOT = Path(__file__).resolve().parent.parent
@@ -413,50 +404,6 @@ def mercados(prob, puntos, partido):
                 (puntos[0] == ih) & (puntos[1] == ia))
     return filas
 
-
-def recomendar_combos(probabilidades, filas, max_combos=5):
-    # Prioriza estructuras habituales de SGP y conserva la dependencia del marcador.
-    pares_habituales = {
-        frozenset(("Ganador", "Total")),
-        frozenset(("Ganador", "Run line")),
-        frozenset(("Ganador", "Total {equipo}")),
-        frozenset(("Run line", "Total")),
-        frozenset(("Run line", "Total {equipo}")),
-        frozenset(("Total", "Total {equipo}")),
-    }
-
-    def tipo(grupo):
-        return "Total {equipo}" if grupo.startswith("Total ") else grupo
-
-    candidatos = [
-        f for f in filas
-        if 0.55 <= f["p"] <= 0.90
-        and not f["mercado"].endswith("más de 0.5 carreras")
-    ]
-    combos = []
-    for legs in combinations(candidatos, 2):
-        if legs[0]["grupo"] == legs[1]["grupo"]:
-            continue
-        if frozenset(tipo(x["grupo"]) for x in legs) not in pares_habituales:
-            continue
-        conjunta = legs[0]["condicion"] & legs[1]["condicion"]
-        p_combo = float(probabilidades[conjunta].sum())
-        if 0.25 <= p_combo <= 0.78:
-            combos.append((p_combo, legs))
-    combos.sort(key=lambda x: x[0], reverse=True)
-    salida, vistos = [], set()
-    for p_combo, legs in combos:
-        llave = tuple(sorted(x["mercado"] for x in legs))
-        if llave in vistos:
-            continue
-        vistos.add(llave)
-        acertada = all(x["acierto"] is True for x in legs) if all(x["acierto"] is not None for x in legs) else None
-        salida.append({"Combinada": " + ".join(x["mercado"] for x in legs),
-                       "Prob. estimada": f"{p_combo:.1%}", "Resultado":
-                       "✅ acertada" if acertada else "❌ fallada" if acertada is False else "Pendiente"})
-        if len(salida) == max_combos:
-            break
-    return salida
 
 
 hoy = datetime.now(ZoneInfo("America/Chicago")).date()
