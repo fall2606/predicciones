@@ -15,8 +15,8 @@ TIMEOUT = 20
 st.set_page_config(page_title="Predicciones MLB", page_icon="⚾", layout="wide")
 st.title("⚾ MLB · predicciones por partido")
 st.caption(
-    "Resumen de selecciones sencillas por encuentro: ganador, run line, carreras por equipo y partido, "
-    "y props individuales de pitchers y bateadores cuando hay datos suficientes."
+    "Solo se muestran unas pocas selecciones por partido cuando la proyección es suficientemente favorable. "
+    "Las opciones con probabilidad baja o sin datos sólidos se omiten."
 )
 
 with st.expander("Mercados MLB que se pueden proyectar", expanded=False):
@@ -527,19 +527,18 @@ for juego in [juego]:
         picks_ordenados = sorted(picks, key=lambda x: x["p"], reverse=True)
 
         # Selecciones sencillas del partido: solo categorías modelables y sin mezclar otros juegos.
+        # Umbral conservador: mostrar solo probabilidades >=62%, y solo mercados principales.
+        # Una selección por categoría evita llenar la página con líneas parecidas.
         candidatas = [
             x for x in picks_ordenados
-            if 0.55 <= x["p"] <= 0.88
-            and (
-                x["grupo"] in {"Ganador", "Run line", "Total"}
-                or (x["grupo"].startswith("Total ") and x["grupo"] != "Total exacto"
-                    and "Exacto" not in x["grupo"])
-            )
+            if 0.62 <= x["p"] <= 0.85
+            and x["grupo"] in {"Ganador", "Run line", "Total"}
         ]
         por_categoria = {}
         for x in candidatas:
-            por_categoria.setdefault(x["grupo"], x)
-        recomendados = sorted(por_categoria.values(), key=lambda x: x["p"], reverse=True)[:6]
+            if x["grupo"] not in por_categoria or x["p"] > por_categoria[x["grupo"]]["p"]:
+                por_categoria[x["grupo"]] = x
+        recomendados = sorted(por_categoria.values(), key=lambda x: x["p"], reverse=True)[:3]
         if recomendados:
             st.markdown("### Selecciones sencillas recomendadas para este partido")
             for x in recomendados:
@@ -550,18 +549,25 @@ for juego in [juego]:
                         st.write("Resultado del modelo: " + ("✅ acertó" if x["acierto"] else "❌ falló"))
                     st.caption("Proyección estadística del partido; confirma la línea y la cuota antes de apostar.")
         else:
-            st.info("Para este partido no hay selecciones sencillas de equipo con probabilidad entre 55% y 88%.")
+            st.info("Este partido no tiene una selección principal que supere el filtro conservador de probabilidad (62%). Mejor no forzar una apuesta.")
 
-        if props_sencillas:
-            st.markdown("### Pitchers y bateadores · props individuales")
-            for x in props_sencillas:
+        props_filtradas = [x for x in props_sencillas if 0.65 <= x["Probabilidad estimada"] <= 0.85]
+        # Una prop por tipo y como máximo tres: evitar picks marginales y duplicados.
+        props_por_tipo = {}
+        for x in sorted(props_filtradas, key=lambda y: y["Probabilidad estimada"], reverse=True):
+            props_por_tipo.setdefault(x["Tipo"], x)
+        props_recomendadas = list(props_por_tipo.values())[:3]
+        if props_recomendadas:
+            st.markdown("### Props individuales con mejor proyección")
+            st.caption("Solo props con probabilidad estimada entre 65% y 85%; los candidatos de bateo siguen sujetos a confirmar la alineación.")
+            for x in props_recomendadas:
                 with st.container(border=True):
                     st.markdown(f"**{x['Jugada sencilla']}**")
                     st.caption(x["Tipo"])
                     st.write(f"Probabilidad estimada: **{x['Probabilidad estimada']:.1%}**")
                     st.caption(f"{x['Dato base']} · {x['Nota']}")
         else:
-            st.info("No hay datos suficientes de abridores o bateadores para proyectar props individuales en este partido.")
+            st.info("No hay props individuales que superen el filtro de probabilidad y datos. Se omiten las opciones más inciertas.")
 
         # Mostrar únicamente el historial/los contratos que corresponden al partido elegido.
         game_id = str(juego.get("gamePk", ""))
@@ -587,18 +593,12 @@ for juego in [juego]:
             else:
                 st.info("Todavía no hay contratos de Kalshi archivados para este partido. Las proyecciones estadísticas de arriba son independientes del archivo de contratos.")
 
-        with st.expander("Ver todos los mercados calculados"):
-            st.dataframe(pd.DataFrame([
-                {"Mercado": x["mercado"], "Probabilidad": f"{x['p']:.1%}",
-                 "Resultado": "✅ acertó" if x["acierto"] is True else
-                 "❌ falló" if x["acierto"] is False else "Pendiente"}
-                for x in picks_ordenados
-            ]), use_container_width=True, hide_index=True)
+        # No mostramos el catálogo completo de líneas: solo las selecciones que pasan el filtro.
 
 st.warning(
     f"El modelo mezcla producción de temporada y últimos 10 resultados, incorpora el ERA "
     f"medio de liga ({era_liga:.2f}) y el ERA del abridor probable cuando está publicado. "
-    "Las props individuales usan tasas de temporada y una aproximación Poisson; no sustituyen "
-    "una línea/cuota real y pueden variar con la alineación, el rival, el parque y el clima. "
-    "Confirma que el jugador vaya a participar y que la línea exista en el mercado."
+    "Las probabilidades son estimaciones estadísticas, no garantías ni confirmación de valor frente a la cuota. "
+    "Solo se enseñan selecciones que pasan filtros conservadores; aun así, antes de apostar hay que comprobar "
+    "que exista la línea real, su precio y la alineación confirmada."
 )
