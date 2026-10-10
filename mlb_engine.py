@@ -169,21 +169,48 @@ def clasificar(serie, market):
 
 
 def mercado_probabilidad(market, game):
-    """Estimate game-level contracts; leave unsupported player props explicitly unmodelled."""
+    """Model supported game, team, inning and exact-score contracts; never invent player-prop probabilities."""
     title = str(market.get("title") or market.get("yes_sub_title") or "")
     text = normalizar(" ".join((title, str(market.get("subtitle") or ""), str(market.get("yes_sub_title") or ""))))
-    series = normalizar(market.get("series_ticker", ""))
     mat, axis = game["matrix"], game["axis"]
     h, a = game["home"], game["away"]
-    home = normalizar(h) in text
-    away = normalizar(a) in text
-    runs = re.search(r"(?:over|under|more than|less than)\s*\$?([0-9]+(?:\.[0-9]+)?)", text)
-    # Tickers sometimes encode a numeric line while the market title does not.
+    home, away = normalizar(h) in text, normalizar(a) in text
     ticker = str(market.get("ticker", ""))
+    category = clasificar(market.get("series_ticker", ""), market)
+
+    # Prefer the readable contract line; tickers are only a fallback.
+    runs = re.search(r"(?:over|under|more than|less than)\\s*\\$?([0-9]+(?:\\.[0-9]+)?)", text)
     line_match = re.search(r"(?:TOTAL|OVER|UNDER|RUNS|SPREAD)[A-Z_-]*([0-9]+(?:P[0-9]+)?)", ticker, re.I)
     line = float(runs.group(1)) if runs else (float(line_match.group(1).replace("P", ".")) if line_match else None)
-    category = clasificar(market.get("series_ticker", ""), market)
     p_yes = None
+    model_state = "modelado"
+
+    # First 3/5/7 innings: scale expected runs to the requested fraction of a game.
+    if category == "Entradas parciales":
+        if any(token in text for token in ("first 3", "first three")) or any(token in ticker.lower() for token in ("first3", "1st3")):
+            fraction = 3 / 9
+        elif any(token in text for token in ("first 7", "first seven")) or any(token in ticker.lower() for token in ("first7", "1st7")):
+            fraction = 7 / 9
+        else:
+            fraction = 5 / 9
+        partial_axis = np.arange(0, 18)
+        dispersion = 0.12
+        n = 1 / dispersion
+        def pmf(mu):
+            return nbinom.pmf(partial_axis, n, n / (n + max(0.05, mu * fraction)))
+        mat = np.outer(pmf(game["mu_home"]), pmf(game["mu_away"]))
+        mat /= mat.sum()
+        axis = partial_axis
+        # Normalize category so the common market predicates below can handle it.
+        if any(word in text for word in ("moneyline", "winner", "to win", "win the first", "wins the first")):
+            category = "Ganador (moneyline)"
+        elif "spread" in text or "run line" in text:
+            category = "Run line / margen"
+        elif "team total" in text:
+            category = "Total por equipo"
+        else:
+            category = "Total de carreras"
+
     if category == "Ganador (moneyline)":
         if home:
             p_yes = float(mat[np.tril_indices_from(mat, -1)].sum())
@@ -209,9 +236,21 @@ def mercado_probabilidad(market, game):
             p_yes = float(mat[margin > line].sum())
     elif category == "1.ª entrada / YRFI-NRFI":
         p_any_run = 1 - math.exp(-(game["mu_home"] + game["mu_away"]) / 9)
-        p_yes = p_any_run if any(x in text for x in ("yrfi", "yes run", "at least one run", "a run scored")) else 1-p_any_run
-    if p_yes is not None:
-        return min(max(p_yes, 0.001), 0.999), "modelado"
+        p_yes = p_any_run if any(x in text for x in ("yrfi", "yes run", "at least one run", "a run scored")) else 1 - p_any_run
+    elif category == "Entradas extra":
+        # Extra innings are possible when the game is tied after nine; estimate from the score matrix.
+        p_yes = float(np.trace(mat))
+        if any(word in text for word in ("no extra innings", "no extra inning", "not go to extra")):
+            p_yes = 1 - p_yes
+    elif category == "Marcador exacto":
+        # Support explicit "X-Y" score contracts when team order can be inferred from the title.
+        score = re.search(r"\\b([0-9]{1,2})\\s*[-:]\\s*([0-9]{1,2})\\b", title)
+        if score:
+            x, y = int(score.group(1)), int(score.group(2))
+            if home and away:
+                p_yes = float(mat[x, y]) if x < mat.shape[0] and y < mat.shape[1] else 0.0
+    if p_yes is not None and math.isfinite(p_yes):
+        return min(max(float(p_yes), 0.001), 0.999), model_state
     return None, "sin_modelo_especifico"
 
 
