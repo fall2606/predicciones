@@ -367,7 +367,15 @@ def main():
     existing = leer_csv(PRED_FILE, PRED_COLUMNS)
     settled = leer_csv(RESULT_FILE, RESULT_COLUMNS)
     settled_ids = {x["prediction_id"] for x in settled}
-    final_results = mercados_liquidados(series)
+    pending_tickers = {
+        row["ticker"] for row in existing
+        if row.get("prediction_id") not in settled_ids and row.get("ticker")
+    }
+    needed_series = [
+        serie for serie in series
+        if any(ticker.startswith(serie) for ticker in pending_tickers)
+    ]
+    final_results = mercados_liquidados(needed_series) if needed_series else {}
     result_rows = []
     for row in existing:
         pid = row["prediction_id"]
