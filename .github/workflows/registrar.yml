@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: guardar-historicos
+  cancel-in-progress: false
+
 jobs:
   registrar:
     runs-on: ubuntu-latest

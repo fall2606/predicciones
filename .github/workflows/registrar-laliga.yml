@@ -1,0 +1,49 @@
+name: Historial inmutable de LaLiga
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: guardar-historicos
+  cancel-in-progress: false
+
+jobs:
+  registrar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install requests pandas numpy scipy streamlit
+
+      - name: Capturar pronósticos y añadir resultados
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: python registrar_laliga.py
+
+      - name: Guardar sólo filas nuevas
+        run: |
+          git config user.name "bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add predicciones_laliga.csv resultados_laliga.csv
+          if git diff --cached --quiet; then
+            echo "No hay capturas ni resultados nuevos"
+          else
+            git commit -m "Actualizar historial inmutable de LaLiga"
+            git pull --rebase origin main
+            git push origin main
+          fi
