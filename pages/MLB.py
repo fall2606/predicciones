@@ -526,22 +526,38 @@ for juego in [juego]:
         picks = mercados(matriz_prob, (matriz_local, matriz_visita), game)
         picks_ordenados = sorted(picks, key=lambda x: x["p"], reverse=True)
 
-        # Unificar mercados de partido y props para no limitar las sencillas a solo 2-3 categorías.
+        # Unificar mercados de partido y props; descartar NaN/inf antes de ordenar o formatear.
         candidatas_todas = []
+
+        def probabilidad_valida(valor):
+            try:
+                p = float(valor)
+            except (TypeError, ValueError, OverflowError):
+                return None
+            if not np.isfinite(p) or p < 0.0 or p > 1.0:
+                return None
+            return p
+
         for x in picks:
+            p_valida = probabilidad_valida(x.get("p"))
+            if p_valida is None:
+                continue
             candidatas_todas.append({
                 "tipo": x["grupo"],
                 "jugada": x["mercado"],
-                "p": float(x["p"]),
+                "p": p_valida,
                 "dato": "Distribución estimada de carreras del partido",
                 "nota": "Proyección estadística; comprobar la línea real y el precio",
                 "acierto": x["acierto"],
             })
         for x in props_sencillas:
+            p_valida = probabilidad_valida(x.get("Probabilidad estimada"))
+            if p_valida is None:
+                continue
             candidatas_todas.append({
                 "tipo": x["Tipo"],
                 "jugada": x["Jugada sencilla"],
-                "p": float(x["Probabilidad estimada"]),
+                "p": p_valida,
                 "dato": x["Dato base"],
                 "nota": x["Nota"],
                 "acierto": None,
