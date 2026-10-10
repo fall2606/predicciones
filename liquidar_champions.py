@@ -55,6 +55,13 @@ def main():
         datos = construir_prediccion_partido(partido, modelo, None)
         resultado = datos.get("resultado")
         if not resultado:
+            nuevos.append({
+                "prediction_id": str(fila["prediction_id"]),
+                "estado": "NO_EVALUABLE",
+                "marcador": "Marcador oficial no disponible en la API",
+                "resuelto_en": datetime.now(timezone.utc).isoformat(),
+            })
+            resueltos.add(str(fila["prediction_id"]))
             continue
         try:
             market_key, lado = ast.literal_eval(str(fila.get("clave_interna", "")))
@@ -62,30 +69,41 @@ def main():
             continue
 
         serie = market_key[0]
+        motivo_no_evaluable = ""
         if serie in {"KXUCLCORNERS", "KXUCLTCORNERS"}:
-            # No se liquidan córners sin fuente oficial conectada.
             if datos.get("corners_final") is None:
-                continue
-            if serie == "KXUCLCORNERS":
-                cuenta = sum(datos["corners_final"])
+                motivo_no_evaluable = "Falta fuente oficial de córners"
+                acierto_yes = None
             else:
-                cuenta = datos["corners_final"][0] if market_key[1] == "local" else datos["corners_final"][1]
-            linea, direccion = market_key[2], market_key[3]
-            acierto_yes = cuenta < linea if direccion == "under" else cuenta >= linea
+                if serie == "KXUCLCORNERS":
+                    cuenta = sum(datos["corners_final"])
+                else:
+                    cuenta = datos["corners_final"][0] if market_key[1] == "local" else datos["corners_final"][1]
+                linea, direccion = market_key[2], market_key[3]
+                acierto_yes = cuenta < linea if direccion == "under" else cuenta >= linea
         else:
             marcador_periodo = resultado_del_periodo(market_key, resultado)
             acierto_yes = evaluar_yes_goles(market_key, marcador_periodo)
-
-        # Si falta descanso o detalle del primer goleador, se vuelve a intentar
-        # en la próxima ejecución; no se marca UNKNOWN como si fuera un resultado final.
+            if acierto_yes is None:
+                motivo_no_evaluable = (
+                    "Falta marcador oficial del descanso"
+                    if marcador_periodo is None and serie.startswith("KXUCL1H")
+                    else "El marcador final no basta para determinar el primer goleador"
+                    if serie in {"KXUCLFTTS", "KXUCLFIRSTGOAL"}
+                    else "Faltan datos oficiales para resolver este mercado"
+                )
+        # Cerrar el partido: WIN/LOSS con evidencia suficiente, o estado explícito
+        # cuando la fuente oficial no aporta la estadística concreta. Nunca inventar.
         if acierto_yes is None:
-            continue
-        acierto = acierto_yes if lado == "YES" else not acierto_yes
+            estado = "NO_EVALUABLE"
+        else:
+            acierto = acierto_yes if lado == "YES" else not acierto_yes
+            estado = "WIN" if acierto else "LOSS"
         marcador = resultado["partido"]
         nuevos.append({
             "prediction_id": str(fila["prediction_id"]),
-            "estado": "WIN" if acierto else "LOSS",
-            "marcador": f"{marcador[0]}-{marcador[1]}",
+            "estado": estado,
+            "marcador": f"{marcador[0]}-{marcador[1]}" + (f" · {motivo_no_evaluable}" if motivo_no_evaluable else ""),
             "resuelto_en": datetime.now(timezone.utc).isoformat(),
         })
         resueltos.add(str(fila["prediction_id"]))
