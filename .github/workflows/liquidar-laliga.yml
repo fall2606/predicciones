@@ -1,0 +1,54 @@
+name: Liquidación automática de LaLiga
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "liquidar_laliga.py"
+      - ".github/workflows/liquidar-laliga.yml"
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: guardar-historicos
+  cancel-in-progress: false
+
+jobs:
+  liquidar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install requests pandas numpy scipy streamlit
+
+      - name: Comprobar resultados oficiales y liquidar pendientes
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: python liquidar_laliga.py
+
+      - name: Guardar resultados sin modificar pronósticos
+        run: |
+          git config user.name "bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add resultados_laliga.csv
+          if git diff --cached --quiet; then
+            echo "No hay resultados nuevos"
+          else
+            git commit -m "Liquidar pronósticos finalizados de LaLiga"
+            git pull --rebase origin main
+            git push origin main
+          fi
