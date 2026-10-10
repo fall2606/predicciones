@@ -33,7 +33,7 @@ def get_json(url, params=None):
         try:
             r = requests.get(url, params=params, timeout=TIMEOUT)
             if r.status_code == 429 or r.status_code >= 500:
-                last = requests.HTTPError(f\"HTTP {r.status_code} en {url}\", response=r)
+                last = requests.HTTPError(f"HTTP {r.status_code} en {url}", response=r)
                 if attempt < 5:
                     time.sleep(min(2 ** attempt, 30))
                     continue
@@ -229,17 +229,22 @@ def series_mlb():
     return sorted(set(selected))
 
 
-def eventos_mlb():
+def eventos_mlb(series=None):
     events = []
-    for ticker in series_mlb():
+    for ticker in (series if series is not None else series_mlb()):
         cursor = None
         for _ in range(20):
             params = {"limit": 200, "series_ticker": ticker, "status": "open", "with_nested_markets": "true"}
             if cursor:
                 params["cursor"] = cursor
-            page = kalshi("events", **params)
+            try:
+                page = kalshi("events", **params)
+            except requests.RequestException as exc:
+                print(f"No se pudo leer la serie MLB {ticker}: {exc}")
+                break
             events.extend(page.get("events", []))
             cursor = page.get("cursor")
+            time.sleep(0.6)
             if not cursor:
                 break
     return events
@@ -257,10 +262,38 @@ def encontrar_partido(event, games):
     return ranked[0] if ranked else None
 
 
+def mercados_liquidados(series):
+    """Consulta por serie para reducir llamadas y respetar los límites de Kalshi."""
+    finales = {}
+    for serie in series:
+        cursor = None
+        for _ in range(30):
+            params = {"limit": 200, "series_ticker": serie, "status": "settled"}
+            if cursor:
+                params["cursor"] = cursor
+            try:
+                page = kalshi("markets", **params)
+            except requests.RequestException as exc:
+                print(f"No se pudieron consultar liquidaciones de {serie}: {exc}")
+                break
+            for market in page.get("markets", []):
+                ticker = market.get("ticker")
+                result = str(market.get("result", "")).lower()
+                if ticker and result in {"yes", "no"}:
+                    finales[ticker] = result
+            cursor = page.get("cursor")
+            if not cursor:
+                break
+            time.sleep(0.35)
+        time.sleep(0.5)
+    return finales
+
+
 def main():
     now = datetime.now(timezone.utc)
     games, _ = partidos_proximos()
-    events = eventos_mlb()
+    series = series_mlb()
+    events = eventos_mlb(series)
     existing = leer_csv(PRED_FILE, PRED_COLUMNS)
     settled = leer_csv(RESULT_FILE, RESULT_COLUMNS)
     existing_ids = {x["prediction_id"] for x in existing}
@@ -324,20 +357,16 @@ def main():
     existing = leer_csv(PRED_FILE, PRED_COLUMNS)
     settled = leer_csv(RESULT_FILE, RESULT_COLUMNS)
     settled_ids = {x["prediction_id"] for x in settled}
+    final_results = mercados_liquidados(series)
     result_rows = []
     for row in existing:
         pid = row["prediction_id"]
         if pid in settled_ids or not row.get("ticker"):
             continue
-        try:
-            info = kalshi(f"markets/{row['ticker']}").get("market", {})
-        except requests.RequestException:
+        result = final_results.get(row["ticker"], "")
+        if result not in {"yes", "no"}:
             continue
-        status = str(info.get("status", "")).lower()
-        result = str(info.get("result", "")).lower()
-        if status not in {"settled", "finalized", "closed"} or result not in {"yes", "no"}:
-            continue
-        # Some closed contracts have no official result yet; do not guess their outcome.
+        # Only Kalshi's official final result can settle a contract; never guess.
         won = (result == "yes") == (row["lado"] == "YES")
         game = next((g for g in games if g["id"] == row.get("match_id")), None)
         scoreboard = ""
