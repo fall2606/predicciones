@@ -608,7 +608,10 @@ for juego in [juego]:
         def mostrar_bloque_mlb(codigo, titulo, columnas):
             st.markdown(f"### {titulo}")
             if archivadas_partido.empty or "categoria" not in archivadas_partido.columns:
-                st.info("No hay capturas de contratos modelables guardadas para este partido todavía.")
+                if codigo == "SENCILLAS":
+                    st.info("No hay contratos reales modelables archivados para este partido. El historial no contiene candidatas con ticker y probabilidad finita; por eso aún no hay filas sobre las que medir precio ≤ 88¢ o ventaja ≥ 5 pp. Revisa el emparejamiento del evento Kalshi y la cobertura del modelo.")
+                else:
+                    st.info(f"No hay capturas de contratos archivadas para {codigo} en este partido.")
                 return
             _mask_bloque = archivadas_partido["bloque"].astype(str).eq(codigo) if "bloque" in archivadas_partido.columns else pd.Series(False, index=archivadas_partido.index)
             if "categoria" in archivadas_partido.columns:
