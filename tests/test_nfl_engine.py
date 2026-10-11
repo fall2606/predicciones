@@ -44,7 +44,7 @@ class NFLModelTests(unittest.TestCase):
         kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
         event = {
             "event_ticker": "KXNFLGAME-26OCT13BUF MIA".replace(" ", ""),
-            "title": "BUF Bills at MIA Dolphins",
+            "title": "BUF Bills at MIA Dolphins: Game Winner",
             "start_time": kickoff,
             "markets": [{
                 "ticker": "KXNFLGAME-26OCT13BUFMIA-BUF",
