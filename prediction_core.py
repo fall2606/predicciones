@@ -57,18 +57,45 @@ def events_for_series(series_tickers: Iterable[str],statuses=("open",)):
                 if key and key not in seen: events.append(event); seen.add(key)
     return events
 def verify_public_catalog():
-    series=sports_series()
-    if not series: raise RuntimeError("Kalshi no devolvió series deportivas.")
-    events=iter_kalshi_pages("events",{"limit":50,"status":"open","with_nested_markets":"true"},"events",2)
-    for event in events:
-        for market in event.get("markets") or []:
-            if market.get("ticker"):
-                return {"series_count_sample":len(series),"event_ticker":event.get("event_ticker"),"event_title":event.get("title"),
-                    "market_ticker":market.get("ticker"),"market_title":market.get("title") or market.get("yes_sub_title"),
-                    "market_status":market.get("status"),"yes_bid_dollars":market.get("yes_bid_dollars"),
-                    "yes_ask_dollars":market.get("yes_ask_dollars"),"no_bid_dollars":market.get("no_bid_dollars"),
-                    "no_ask_dollars":market.get("no_ask_dollars")}
-    raise RuntimeError("La API respondió, pero no devolvió ningún ticker real.")
+    """Live smoke test against a real sports event and its complete nested market catalogue."""
+    all_series = sports_series()
+    if not all_series:
+        raise RuntimeError("Kalshi no devolvió series deportivas.")
+    selected = [x for x in all_series if str(x.get("ticker","")).startswith(("KXMLBGAME","KXMLBTOTAL","KXLALIGAGAME","KXUCLGAME"))]
+    if not selected:
+        raise RuntimeError("No hay series MLB/LaLiga/Champions en el catálogo deportivo de Kalshi.")
+    for series in selected[:60]:
+        events = events_for_series([series["ticker"]], statuses=("open",))
+        for event in events:
+            title = str(event.get("title") or "")
+            if not re.search(r"\b(vs\.?|versus| at )\b", title, re.I):
+                continue
+            markets = [m for m in (event.get("markets") or []) if m.get("ticker")]
+            if not markets:
+                continue
+            no_price = sum(
+                not any(m.get(k) not in (None, "") for k in
+                        ("yes_ask_dollars", "no_ask_dollars", "yes_bid_dollars", "no_bid_dollars"))
+                for m in markets
+            )
+            sample = markets[0]
+            return {
+                "series_catalog_count": len(all_series),
+                "sports_series_ticker": series.get("ticker"),
+                "event_ticker": event.get("event_ticker"),
+                "event_title": event.get("title"),
+                "catalog_market_count": len(markets),
+                "unpriced_market_count": no_price,
+                "market_ticker": sample.get("ticker"),
+                "market_title": sample.get("title") or sample.get("yes_sub_title"),
+                "market_status": sample.get("status"),
+                "yes_bid_dollars": sample.get("yes_bid_dollars"),
+                "yes_ask_dollars": sample.get("yes_ask_dollars"),
+                "no_bid_dollars": sample.get("no_bid_dollars"),
+                "no_ask_dollars": sample.get("no_ask_dollars"),
+            }
+    raise RuntimeError("La API respondió, pero no se encontró un evento deportivo abierto con tickers reales en el catálogo.")
+
 def read_rows(path):
     path=Path(path)
     if not path.exists() or not path.stat().st_size: return []
@@ -88,6 +115,7 @@ def append_immutable_predictions(path,columns,rows,*,probability_field,kickoff_f
         elif pid in ids: reason="prediction_id ya guardado; no se sobrescribe"
         elif not ticker or ticker in {"—","-","None","nan"}: reason="sin ticker real de Kalshi"
         elif p is None: reason=f"probabilidad inválida en {probability_field}"
+        elif "match_id" in row and not str(row.get("match_id","")).strip(): reason="sin partido asociado; no es una predicción de partido"
         elif kickoff is None: reason="hora de inicio ausente o inválida"
         elif captured>=kickoff or now>=kickoff: reason="partido iniciado antes de guardar"
         if reason: rejected.append((pid or "(sin id)",reason)); continue
@@ -135,7 +163,8 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     predictions_path=Path(predictions_path); results_path=Path(results_path)
     predictions=read_rows(predictions_path); results=read_rows(results_path)
     terminal={str(r.get(id_field,"")) for r in results if _trusted_terminal_result(r,result_columns,state_field)}
-    pending=[r for r in predictions if str(r.get(id_field,"")) not in terminal and str(r.get(ticker_field,"")).strip() not in {"","—","-","None","nan"}]
+    has_match_id=any("match_id" in r for r in predictions)
+    pending=[r for r in predictions if str(r.get(id_field,"")) not in terminal and str(r.get(ticker_field,"")).strip() not in {"","—","-","None","nan"} and valid_probability(r.get("probabilidad_calibrada",r.get("probabilidad_modelo"))) is not None and (not has_match_id or str(r.get("match_id","")).strip())]
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
     markets=_market_rows_for_series(series); new=[]; skipped=0
     for row in pending:

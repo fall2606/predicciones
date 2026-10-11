@@ -62,7 +62,7 @@ def main():
     nuevas = []
     captura = datetime.now(timezone.utc)
     sufijo_captura = captura.strftime("%Y%m%d%H")
-    limite = datetime.combine(ahora.date() + timedelta(days=2), datetime.max.time(), tzinfo=TZ)
+    limite = datetime.combine(ahora.date() + timedelta(days=14), datetime.max.time(), tzinfo=TZ)
     for partido in modelo[0]:
         if partido.get("status") not in {"SCHEDULED", "TIMED"}:
             continue
@@ -116,10 +116,28 @@ def main():
         for fila in resultado_actual:
             fila["Tipo"] = f"{fila['_bloque']} · {fila['Tipo']}"
         match_id = str(partido["id"])
+        existentes_partido = predicciones[predicciones["match_id"].astype(str) == match_id].copy() if not predicciones.empty and "match_id" in predicciones.columns else pd.DataFrame()
+        categorias_existentes = set(existentes_partido["categoria"].astype(str)) if not existentes_partido.empty and "categoria" in existentes_partido.columns else set()
+        cantidad_alta = int(existentes_partido["categoria"].astype(str).str.startswith("ALTA_PROBABILIDAD · ").sum()) if not existentes_partido.empty and "categoria" in existentes_partido.columns else 0
+        cantidad_valor = int(existentes_partido["categoria"].astype(str).str.startswith("A_TENER_EN_CUENTA · ").sum()) if not existentes_partido.empty and "categoria" in existentes_partido.columns else 0
         for fila in resultado_actual:
-            prediction_id = f"{match_id}|{fila.get('_bloque', 'SENCILLAS')}|{fila.get('Ticker', '')}|{fila.get('_lado', '')}|{sufijo_captura}"
-            if prediction_id in ids_existentes:
+            prediction_id = f"{match_id}|{fila.get('_bloque', 'SENCILLAS')}|{fila.get('Ticker', '')}|{fila.get('_lado', '')}"
+            # Legacy captures from earlier code included a timestamp suffix; recognize them
+            # as the same market/block so migration never creates duplicate snapshots.
+            ids_base_existentes = {"|".join(str(pid).split("|")[:4]) for pid in ids_existentes}
+            if prediction_id in ids_base_existentes:
                 continue
+            bloque = fila.get("_bloque", "SENCILLAS")
+            categoria_completa = fila["Tipo"]
+            if bloque == "SENCILLAS":
+                if categoria_completa in categorias_existentes:
+                    continue
+            elif bloque == "ALTA_PROBABILIDAD":
+                if cantidad_alta >= 5:
+                    continue
+            elif bloque == "A_TENER_EN_CUENTA":
+                if cantidad_valor >= 10:
+                    continue
             market_key, lado = ast.literal_eval(fila["Clave interna"])
             nuevas.append({
                 "prediction_id": prediction_id,
@@ -127,7 +145,7 @@ def main():
                 "fecha": inicio.astimezone(TZ).isoformat(),
                 "local": datos["local"],
                 "visita": datos["visita"],
-                "categoria": fila["Tipo"],
+                "categoria": categoria_completa,
                 "jugada": fila["Jugada sencilla"],
                 "probabilidad_base": f"{float(fila['Probabilidad base']):.6f}",
                 "probabilidad_calibrada": f"{float(fila['Probabilidad modelo'].rstrip('%')) / 100:.6f}",
@@ -139,6 +157,12 @@ def main():
                 "capturado_en": captura.isoformat(),
             })
             ids_existentes.add(prediction_id)
+            ids_existentes.add(prediction_id + "|" + sufijo_captura)
+            categorias_existentes.add(categoria_completa)
+            if bloque == "ALTA_PROBABILIDAD":
+                cantidad_alta += 1
+            elif bloque == "A_TENER_EN_CUENTA":
+                cantidad_valor += 1
 
     captura_resumen = append_immutable_predictions(PREDICCIONES_ARCHIVO, COLUMNAS_PRED, nuevas, probability_field="probabilidad_calibrada")
     print(f"Capturas nuevas propuestas: {len(nuevas)} | aceptadas: {captura_resumen['accepted']} | descartadas: {captura_resumen['rejected']}. El capturador no escribe resultados.")

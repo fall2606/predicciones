@@ -24,3 +24,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Verificar catálogo público real de Kalshi
         run: python scripts/verificar_api_kalshi.py
+      - name: Verificar liquidación con contratos reales ya cerrados (MLB, LaLiga y Champions)
+        run: python scripts/verificar_liquidacion_real.py
