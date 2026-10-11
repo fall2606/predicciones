@@ -178,7 +178,7 @@ def _tabla_con_resultado(df, columna="Resultado"):
         if texto == "LOSS":
             return "background-color: #f8d7da; color: #721c24; font-weight: bold"
         if "ANULADA" in texto or "VOID" in texto:
-            return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
+            return "background-color: #dcd9ff; color: #37306b; font-weight: bold"
         if "SIN LIQUIDAR" in texto:
             return "background-color: #f8d7da; color: #721c24; font-weight: bold"
         if "PENDIENTE" in texto or "NO_EVALUABLE" in texto:
@@ -825,7 +825,7 @@ for juego in [juego]:
                         elif estado in {"ANULADA", "VOID", "CANCELLED"}:
                             st.info("ANULADA")
                         else:
-                            st.warning("PENDIENTE")
+                            st.caption("PENDIENTE")
                         st.caption(f"Ticker: {pick.get('ticker', '—')}")
                 return
             bloque["Revisión"] = bloque.apply(_over_pendiente_de_calibracion, axis=1)
