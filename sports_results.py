@@ -125,7 +125,7 @@ def _football_data_match(row):
             "confidence": 1.0, "event_id": match_id, "status": status,
             "completed": False, "status_detail": "football-data.org: " + status,
             "local_score": None, "away_score": None, "league": competition,
-            "event_name": "",
+            "event_name": "", "source": "football-data.org",
         }
     return {
         "confidence": 1.0, "event_id": match_id,
@@ -133,7 +133,7 @@ def _football_data_match(row):
         "completed": status == "FINISHED",
         "status_detail": "Marcador reglamentario de football-data.org: " + status,
         "local_score": int(home), "away_score": int(away),
-        "league": competition, "event_name": "",
+        "league": competition, "event_name": "", "source": "football-data.org",
     }
 
 
@@ -183,7 +183,7 @@ def find_match(row):
                 "completed": bool(status.get("completed")),
                 "status_detail": str(status.get("detail") or status.get("description") or ""),
                 "local_score": local_score, "away_score": away_score,
-                "league": league, "event_name": str(event.get("name") or ""),
+                "league": league, "event_name": str(event.get("name") or ""), "source": "ESPN",
             })
     if not candidates:
         return None
@@ -261,7 +261,7 @@ def settle_from_score(row):
         state = "WIN" if won else "LOSS"
         return {
             "match": match, "state": state,
-            "reason": f"Marcador ESPN independiente: {home}-{away} (mercado {series}, selección {yes_no})",
+            "reason": f"Marcador independiente ({match.get('source', 'ESPN')}): {home}-{away} (mercado {series}, selección {yes_no})",
         }
     except (ValueError, TypeError, SyntaxError, IndexError):
         return None
