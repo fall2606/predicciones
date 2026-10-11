@@ -134,6 +134,8 @@ def _nflverse_games():
     if not required.issubset(df.columns):
         raise ValueError("El histórico nflverse no contiene las columnas mínimas para modelar la NFL.")
     df = df.dropna(subset=["home_team", "away_team", "home_score", "away_score"]).copy()
+    df["home_team"] = df["home_team"].map(_canonical_team_code)
+    df["away_team"] = df["away_team"].map(_canonical_team_code)
     df["gameday"] = pd.to_datetime(df["gameday"], errors="coerce", utc=True)
     df = df.dropna(subset=["gameday"])
     df = df[(df["home_score"] >= 0) & (df["away_score"] >= 0)]
@@ -438,18 +440,18 @@ def _match_id(kickoff, home, away):
 def generate_candidates(events, model, now=None, upcoming_games=None):
     now = parse_dt(now) if now else datetime.now(timezone.utc)
     rows, rejected, catalog = [], [], []
+    upcoming_games = upcoming_games if upcoming_games is not None else load_upcoming_games(now=now)
     for event in events:
         kickoff = _kickoff(event)
         teams = _event_teams(event)
         if not kickoff or len(teams) != 2 or kickoff <= now:
             continue
-        # ESPN/nflverse abbreviations are the canonical order only when event metadata states it.
-        # Kalshi event titles may list away first; market team semantics remain explicit.
-        title = normalizar(event.get("title") or event.get("sub_title") or "")
-        home = next((t for t in teams if any(normalizar(a) in title for a in TEAM_ALIASES[t])), None)
-        away = next((t for t in teams if t != home), None)
-        if not home or not away:
+        fixture = _match_catalog_event(event, teams, upcoming_games, kickoff)
+        if not fixture:
             continue
+        # ESPN provides the authoritative home/away orientation; ambiguous event matches are skipped.
+        home, away = fixture["home"], fixture["away"]
+        kickoff = parse_dt(fixture["date"])
         game = {"home": home, "away": away, "date": kickoff.isoformat(), "event_ticker": event.get("event_ticker", "")}
         prediction = predict_game(model, home, away)
         if not prediction:
