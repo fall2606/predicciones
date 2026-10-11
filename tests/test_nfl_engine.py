@@ -152,6 +152,9 @@ class NFLModelTests(unittest.TestCase):
         self.assertLessEqual(len(combos), 5)
         self.assertLessEqual(len(value), 10)
         self.assertGreaterEqual(len(combos), 4)
+        self.assertTrue(singles.isdisjoint(combos))
+        self.assertTrue(singles.isdisjoint(value))
+        self.assertTrue(combos.isdisjoint(value))
 
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
