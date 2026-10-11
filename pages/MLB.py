@@ -26,15 +26,21 @@ st.caption(
 with st.expander("Mercados MLB que se pueden proyectar", expanded=False):
     st.markdown(
         "- **Partido/equipos:** ganador, run line, total de carreras y total por equipo. "
-        "Marcador exacto y márgenes se dejan en el detalle porque son menos estables.\n"
-        "- **Pitchers:** ponches y, cuando hay muestra suficiente, hits permitidos, carreras limpias y bases por bolas.\n"
-        "- **Bateadores:** 1+ hit, bases totales, carreras impulsadas y home run.\n"
+        "Marcador exacto y márgenes se dejan en el detalle porque son menos estables.
+"
+        "- **Pitchers:** ponches y, cuando hay muestra suficiente, hits permitidos, carreras limpias y bases por bolas.
+"
+        "- **Bateadores:** 1+ hit, bases totales, carreras impulsadas y home run.
+"
         "- **Entradas y mercados especiales:** se muestran en el historial de Kalshi del partido si están disponibles, "
         "pero no reciben una probabilidad propia sin datos por entrada suficientes."
     )
 
 
-st.caption("Las selecciones y su historial se muestran por partido. Las capturas originales se conservan y WIN/LOSS se añade tras la liquidación oficial.")\nif st.button("Actualizar datos ahora", key="actualizar_datos_mlb"):\n    st.cache_data.clear()\n    st.rerun()
+st.caption("Las selecciones y su historial se muestran por partido. Las capturas originales se conservan y WIN/LOSS se añade tras la liquidación oficial.")
+if st.button("Actualizar datos ahora", key="actualizar_datos_mlb"):
+    st.cache_data.clear()
+    st.rerun()
 
 # Leer historial en segundo plano; la interfaz lo filtra por el partido seleccionado.
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,7 +64,8 @@ def leer_historial_mlb():
     except (OSError, ValueError, KeyError, pd.errors.ParserError):
         return pd.DataFrame()
 
-historial_mlb = leer_historial_mlb()\nmostrar_actualizacion_archivos([("Predicciones", PRED_MLB), ("Resultados", RES_MLB), ("Reconciliación", ROOT / "reconciliacion_pendientes.csv")])
+historial_mlb = leer_historial_mlb()
+mostrar_actualizacion_archivos([("Predicciones", PRED_MLB), ("Resultados", RES_MLB), ("Reconciliación", ROOT / "reconciliacion_pendientes.csv")])
 try:
     candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_probabilidades_actuales.csv", dtype=str).fillna("")
 except (OSError, ValueError, pd.errors.ParserError):
