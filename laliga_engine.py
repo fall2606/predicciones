@@ -1070,6 +1070,7 @@ def resumen_guardado(match_id, predicciones, resultados):
             "Resultado": {
                 "WIN": "✅ WIN · Se cumplió",
                 "LOSS": "❌ LOSS · No se cumplió",
+                "ANULADA": "ANULADA",
                 "UNKNOWN": "Sin dato",
                 "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
             }.get(estados.get(fila["prediction_id"]), "Pendiente de liquidación automática"),
