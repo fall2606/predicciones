@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import json
 import math
 import os
 import re
@@ -215,7 +216,7 @@ def predict_game(model, home, away):
     home_mean = max(0.0, (h["pf"] + a["pa"]) / 2 + 1.0)
     away_mean = max(0.0, (a["pf"] + h["pa"]) / 2 - 1.0)
     total_mean = home_mean + away_mean
-    margin_values, margin_probs = _normal_pmf(margin_mean, 13.5, -45, 45, key_numbers=range(-14, 15))
+    margin_values, margin_probs = _normal_pmf(margin_mean, 13.5, -45, 45, key_numbers=(-14, -10, -7, -6, -3, 0, 3, 6, 7, 10, 14))
     total_values, total_probs = _normal_pmf(total_mean, 13.0, 0, 100, key_numbers=(3, 7, 10, 14, 17, 20, 21, 24, 27, 28, 31, 34, 35, 38, 41, 42, 45, 48, 49, 52, 55))
     return {
         "margin_mean": margin_mean, "total_mean": total_mean,
@@ -380,11 +381,61 @@ def model_market(market, series_ticker, game, prediction):
     return None, "tipo de mercado no soportado por el modelo NFL"
 
 
+def _canonical_team_code(value):
+    code = str(value or "").upper().strip()
+    return {"LA": "LAR", "JAC": "JAX", "JAX": "JAX", "OAK": "LV", "WFT": "WAS", "WSH": "WAS"}.get(code, code)
+
+
+def load_upcoming_games(days=21, now=None):
+    """Load the public ESPN NFL schedule; team orientation comes from homeAway, not title order."""
+    start = (parse_dt(now) if now else datetime.now(timezone.utc)).date()
+    games = []
+    for offset in range(max(1, int(days))):
+        day = start + timedelta(days=offset)
+        payload = _get(ESPN_SCOREBOARD_URL, {"dates": day.strftime("%Y%m%d"), "limit": 100})
+        for event in payload.get("events") or []:
+            competitions = event.get("competitions") or []
+            if not competitions:
+                continue
+            comp = competitions[0]
+            teams = {}
+            for competitor in comp.get("competitors") or []:
+                side = str(competitor.get("homeAway") or "").lower()
+                code = _canonical_team_code((competitor.get("team") or {}).get("abbreviation"))
+                if side in {"home", "away"} and code in TEAM_ALIASES:
+                    teams[side] = code
+            kickoff = parse_dt(comp.get("date") or event.get("date"))
+            if kickoff and "home" in teams and "away" in teams:
+                games.append({
+                    "home": teams["home"], "away": teams["away"], "date": kickoff.isoformat(),
+                    "match_id": f"NFL:{kickoff.date().isoformat()}:{teams['away']}@{teams['home']}",
+                    "status": (event.get("status") or {}).get("type", {}).get("name", ""),
+                    "espn_id": str(event.get("id") or ""),
+                })
+    return games
+
+
+def _match_catalog_event(event, event_teams, upcoming_games, event_kickoff):
+    if len(event_teams) != 2:
+        return None
+    matches = []
+    for game in upcoming_games:
+        if set(event_teams) != {game["home"], game["away"]}:
+            continue
+        game_dt = parse_dt(game.get("date"))
+        if not game_dt or not event_kickoff or abs((game_dt - event_kickoff).total_seconds()) > 36 * 3600:
+            continue
+        matches.append(game)
+    if len(matches) != 1:
+        return None
+    return matches[0]
+
+
 def _match_id(kickoff, home, away):
     return f"NFL:{kickoff.date().isoformat()}:{away}@{home}"
 
 
-def generate_candidates(events, model, now=None):
+def generate_candidates(events, model, now=None, upcoming_games=None):
     now = parse_dt(now) if now else datetime.now(timezone.utc)
     rows, rejected, catalog = [], [], []
     for event in events:
@@ -475,7 +526,8 @@ def capture():
     games = _nflverse_games()
     model = build_team_model(games)
     series, events = load_kalshi_catalog()
-    rows, rejected, catalog = generate_candidates(events, model)
+    upcoming = load_upcoming_games()
+    rows, rejected, catalog = generate_candidates(events, model, upcoming_games=upcoming)
     # Archive full observed catalog and rejection reasons for auditability.
     _write_report(CATALOG_REPORT,
         ["event_ticker", "ticker", "series_ticker", "event_title", "market_title", "market_status",
