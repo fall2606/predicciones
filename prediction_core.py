@@ -387,7 +387,7 @@ def _candidate_edge(row, price):
 
 def _single_family(row):
     label = " ".join(str(row.get(k) or "") for k in (
-        "Categoría resumen", "categoria", "Apuesta sencilla", "Apuesta", "mercado", "Ticker", "ticker"
+        "Categoría resumen", "categoria", "Tipo", "Apuesta sencilla", "Apuesta", "mercado", "Ticker", "ticker"
     )).casefold()
     ticker = str(row.get("Ticker") or row.get("ticker") or "").upper()
     if any(x in label for x in ("corner", "córner")):
@@ -441,6 +441,7 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         if isinstance(nested, dict):
             combined = dict(nested)
             combined.update({k: v for k, v in row.items() if k != "_row"})
+            combined["_row"] = nested
             row = combined
         ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
         p = _probability(row)
@@ -463,7 +464,7 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         family = row["_single_family"]
         if family in families:
             continue
-        label = " ".join(str(row.get(k) or "") for k in ("Apuesta sencilla", "Apuesta", "mercado")).casefold()
+        label = " ".join(str(row.get(k) or "") for k in ("Apuesta sencilla", "Apuesta", "mercado"))
         # Keep the list diversified: no more than two selections tied to the same named team.
         teams = re.findall(r"(?<![\w])([A-Z][A-Za-zÀ-ÿ.'-]+(?:\s+[A-Z][A-Za-zÀ-ÿ.'-]+){0,2})", str(row.get("Apuesta sencilla") or row.get("Apuesta") or ""))
         if len(used_teams) >= 2 and teams and all(team.casefold() in used_teams for team in teams):
