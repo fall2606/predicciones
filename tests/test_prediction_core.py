@@ -36,6 +36,7 @@ class CoreTests(unittest.TestCase):
    self.assertEqual((s["win"],s["loss"],s["anuladas"]),(1,1,1))
    with r.open(encoding="utf-8") as f: rows={x["prediction_id"]:x for x in csv.DictReader(f)}
    self.assertEqual(rows["yes"]["estado"],"WIN"); self.assertEqual(rows["no"]["estado"],"LOSS"); self.assertEqual(rows["void"]["estado"],"ANULADA")
+   self.assertIn("anulado/cancelado", rows["void"]["marcador"])
    with patch.object(core,"_market_rows_for_series",return_value=fake): s=core.liquidate_kalshi_ledger(p,r,cols,side_field="lado")
    self.assertEqual(s["resultados_nuevos"],0)
  def test_rank_filters_duplicate_correlated_families(self):
