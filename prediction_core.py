@@ -162,9 +162,19 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     """Recover every old prediction; trust Kalshi's final YES/NO/void outcome."""
     predictions_path=Path(predictions_path); results_path=Path(results_path)
     predictions=read_rows(predictions_path); results=read_rows(results_path)
-    terminal={str(r.get(id_field,"")) for r in results if _trusted_terminal_result(r,result_columns,state_field)}
     has_match_id=any("match_id" in r for r in predictions)
-    pending=[r for r in predictions if str(r.get(id_field,"")) not in terminal and str(r.get(ticker_field,"")).strip() not in {"","—","-","None","nan"} and valid_probability(r.get("probabilidad_calibrada",r.get("probabilidad_modelo"))) is not None and (not has_match_id or str(r.get("match_id","")).strip())]
+    valid_prediction_ids={
+        str(row.get(id_field,"")) for row in predictions
+        if str(row.get(id_field,"")).strip()
+        and str(row.get(ticker_field,"")).strip() not in {"","—","-","None","nan"}
+        and valid_probability(row.get("probabilidad_calibrada",row.get("probabilidad_modelo"))) is not None
+        and (not has_match_id or str(row.get("match_id","")).strip())
+    }
+    terminal={str(r.get(id_field,"")) for r in results
+              if str(r.get(id_field,"")) in valid_prediction_ids
+              and _trusted_terminal_result(r,result_columns,state_field)}
+    pending=[r for r in predictions if str(r.get(id_field,"")) in valid_prediction_ids
+             and str(r.get(id_field,"")) not in terminal]
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
     markets=_market_rows_for_series(series); new=[]; skipped=0
     for row in pending:
@@ -196,6 +206,8 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
         if not _trusted_terminal_result(row,result_columns,state_field):
             continue
         pid=str(row.get(id_field,""))
+        if pid not in valid_prediction_ids:
+            continue
         previous=latest.get(pid)
         if previous is None or str(row.get("resuelto_en","")) >= str(previous.get("resuelto_en","")):
             latest[pid]=row

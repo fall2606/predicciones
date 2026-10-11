@@ -62,4 +62,20 @@ class CoreTests(unittest.TestCase):
    self.assertEqual(rows[0]["estado"],"LOSS")
    self.assertEqual(rows[0]["marcador"],"Resultado oficial Kalshi: NO")
 
+
+ def test_legacy_mlb_rows_without_match_or_probability_are_excluded(self):
+  with tempfile.TemporaryDirectory() as d:
+   p,r=Path(d)/"p.csv",Path(d)/"r.csv"
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","match_id","lado","fecha","capturado_en","probabilidad_modelo"]); w.writeheader()
+    w.writerow({"prediction_id":"legacy","ticker":"KXMLBCHAMP-OLD","match_id":"","lado":"YES","probabilidad_modelo":"","fecha":"","capturado_en":""})
+   with r.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","estado","resultado_kalshi","marcador","resuelto_en"]); w.writeheader()
+    w.writerow({"prediction_id":"legacy","estado":"WIN","resultado_kalshi":"YES","marcador":"YES","resuelto_en":"2026-10-01T00:00:00+00:00"})
+   with patch.object(core,"_market_rows_for_series",return_value={}) as fetch:
+    summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","resultado_kalshi","marcador","resuelto_en"],side_field="lado")
+   self.assertEqual(summary["pendientes_revisadas"],0)
+   fetch.assert_called_once_with(set())
+   with r.open(encoding="utf-8") as f: self.assertEqual(list(csv.DictReader(f)),[])
+
 if __name__=="__main__": unittest.main()
