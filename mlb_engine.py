@@ -13,6 +13,7 @@ import numpy as np
 from scipy.stats import nbinom
 from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates, rank_single_candidates, extract_line, single_candidate_rejection_reasons
 from mlb_math import score_probability_matrix
+from probability_calibration import calibrate_probability
 
 API_MLB = "https://statsapi.mlb.com/api/v1"
 API_KALSHI = KALSHI_API_BASE
@@ -568,6 +569,11 @@ def main():
             market["series_ticker"] = market.get("series_ticker") or event.get("series_ticker", "")
             category = clasificar(market["series_ticker"], market)
             p_yes, model_state = mercado_probabilidad(market, game)
+            if valid_probability(p_yes) is not None:
+                p_yes, calibration_note = calibrate_probability(
+                    p_yes, category, PRED_FILE, RESULT_FILE
+                )
+                model_state = (str(model_state or "") + " | " + calibration_note).strip(" |")
             if valid_probability(p_yes) is None:
                 unsupported_market_count += 1
                 rejected_candidates.append({
