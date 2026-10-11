@@ -87,34 +87,12 @@ ids_con_captura = (
 if corners is None:
     st.info("Los mercados de corners que ofrezca Kalshi aparecerán en el detalle, pero esta fuente no tiene estadísticas históricas de corners de Champions para calcular probabilidades.")
 
-inicio, fin = hoy, hoy + timedelta(days=2)
-fin_ventana_inicial = fin
-inicio_resultados = hoy - timedelta(days=7)
+inicio, fin = hoy - timedelta(days=2), hoy + timedelta(days=3)
 seleccionables = []
 partidos_disponibles = {str(m["id"]): m for m in modelo[9]}
 partidos_disponibles.update({str(m["id"]): m for m in partidos})
 
 mostrar_reconciliacion("Champions")
-
-proximos_disponibles = []
-for partido in partidos_disponibles.values():
-    fecha_txt = partido.get("utcDate")
-    if not fecha_txt or partido.get("status") not in {"SCHEDULED", "TIMED"}:
-        continue
-    fecha_local = datetime.fromisoformat(fecha_txt.replace("Z", "+00:00")).astimezone(TZ).date()
-    if fecha_local > fin_ventana_inicial:
-        proximos_disponibles.append((fecha_local, partido))
-
-proximos_en_ventana = [
-    (fecha, partido) for fecha, partido in proximos_disponibles
-    if inicio <= fecha <= fin_ventana_inicial
-]
-proxima_jornada_automatica = False
-if not proximos_en_ventana and proximos_disponibles:
-    siguiente_fecha = min(fecha for fecha, _ in proximos_disponibles if fecha > fin_ventana_inicial)
-    # Si no hay partido en las próximas 72 horas, enseña los encuentros del siguiente bloque de dos días.
-    fin = siguiente_fecha + timedelta(days=1)
-    proxima_jornada_automatica = True
 
 for partido in partidos_disponibles.values():
     fecha_txt = partido.get("utcDate")
@@ -125,8 +103,9 @@ for partido in partidos_disponibles.values():
     estado = partido.get("status")
     proximo = inicio <= fecha_local <= fin and estado in {"SCHEDULED", "TIMED"}
     finalizado_revisable = (
-        estado in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
-        and (inicio_resultados <= fecha_local <= hoy or str(partido.get("id")) in ids_con_captura)
+        inicio <= fecha_local <= hoy
+        and estado in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
+        and str(partido.get("id")) in ids_con_captura
     )
     if proximo or finalizado_revisable:
         seleccionables.append(partido)
@@ -155,13 +134,9 @@ for m in seleccionables:
     etiqueta = f"{estado} · {fecha:%a %d/%m %H:%M} · {local} vs {visita}{marcador_txt}"
     opciones[etiqueta] = m
 
-if proxima_jornada_automatica:
-    st.info(
-        f"No había partidos hasta el {fin_ventana_inicial:%d/%m}; muestro la siguiente jornada disponible: "
-        f"{siguiente_fecha:%d/%m}–{fin:%d/%m}."
-    )
 st.caption(
-    f"Próximos: {inicio:%d/%m}–{fin:%d/%m} · finalizados: últimos 7 días y todos los que tengan captura guardada · hora de Chicago"
+    f"Ventana visible: {inicio:%d/%m}–{fin:%d/%m} (2 días anteriores, hoy y 3 siguientes) · "
+    "los partidos pasados solo aparecen si tienen predicción guardada · hora de Chicago"
 )
 pendientes = [m for m in seleccionables if m["status"] in {"SCHEDULED", "TIMED"}]
 indice = 0
