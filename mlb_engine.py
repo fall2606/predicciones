@@ -403,10 +403,12 @@ def motivo_evento_sin_partido(event, games):
         "KXMLBALHAARON", "KXMLBNLHAARON", "KXMLBGG", "KXMLBDEBUT",
         "KXMLBCHAMPLEAGUE", "KXMLBHR", "KXMLBTB", "KXMLBRBI",
         "KXMLBSB", "KXMLBOUTS", "KXMLBER", "KXMLBERA", "KXMLBWALK",
-        "KXMLBPLAYER", "KXCOACHOUTMLBDATE",
+        "KXMLBPLAYER", "KXCOACHOUTMLBDATE", "KXMLBEOTY", "KXMLBFASTPITCH",
+        "KXMLBMATCHUP", "KXMLBOPENINGDAY", "KXMLBSS", "KXMLBSTAT",
+        "KXMLBSTATCOUNT", "KXMLBSEASONGAMES",
     )
     if series_raw.startswith(non_game_prefixes) or any(token in title for token in
-        ("cy young", "manager of the year", "rookie of the year", "comeback player", "hank aaron", "gold glove", "debut date", "next team", "champion")):
+        ("cy young", "manager of the year", "rookie of the year", "comeback player", "hank aaron", "gold glove", "silver slugger", "executive of the year", "fastest pitch", "debut date", "next team", "champion", "opening day", "perfect game", "grand slam game", "home run game", "games played in the")):
         return "mercado_no_partido/futuro_premio_o_prop"
     matched = sum(
         any(_team_matches_event(team, ticker, title) for team in (game["home"], game["away"]))
