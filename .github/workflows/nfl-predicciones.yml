@@ -40,24 +40,24 @@ jobs:
         run: python -m unittest discover -s tests -p "test_nfl_engine.py" -v
       - name: Confirmar versión NFL en ejecución
         run: |
-          echo "Validación NFL: modelo, ledger inmutable y liquidación oficial"
+          echo "Validación NFL: catálogo completo, modelo conservador, ledger inmutable y liquidación con fuente independiente"
       - name: Capturar mercados NFL abiertos
         id: capture
         timeout-minutes: 4
         continue-on-error: true
-        run: python nfl_engine.py
+        run: python nfl_engine.py capture
       - name: Liquidar resultados oficiales Kalshi NFL
         id: settle
         if: always()
         timeout-minutes: 4
         continue-on-error: true
-        run: python liquidar_nfl.py
+        run: python nfl_engine.py settle
       - name: Guardar ledger NFL sin modificar otros históricos
         if: always()
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          for archivo in predicciones_nfl.csv resultados_nfl.csv nfl_probabilidades_actuales.csv nfl_predicciones_excluidas.csv; do
+          for archivo in predicciones_nfl.csv resultados_nfl.csv nfl_probabilidades_actuales.csv nfl_predicciones_excluidas.csv nfl_catalogo_actual.csv nfl_candidatos_descartados.csv nfl_cobertura_por_partido.csv predicciones_nfl_filas_malas.csv resultados_nfl_filas_malas.csv; do
             if [ -f "$archivo" ]; then git add "$archivo"; fi
           done
           if git diff --cached --quiet; then

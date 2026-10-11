@@ -1,258 +1,203 @@
-import unittest
-from unittest.mock import patch
-from datetime import datetime, timedelta, timezone
+import math
+from datetime import datetime, timezone
 
-import nfl_engine
+import numpy as np
+import pandas as pd
 
-
-class NFLModelTests(unittest.TestCase):
-    def setUp(self):
-        self.stats = {
-            "buffalo bills": {"scored": 28.0, "allowed": 18.0, "games": 5},
-            "miami dolphins": {"scored": 21.0, "allowed": 25.0, "games": 5},
-        }
+import nfl_engine as nfl
 
 
-    def test_team_stats_queries_current_nfl_season_instead_of_invalid_date_range(self):
-        payload = {"events": [{
-            "competitions": [{
-                "status": {"type": {"completed": True}},
-                "competitors": [
-                    {"homeAway": "home", "score": "27", "team": {"displayName": "Buffalo Bills"}},
-                    {"homeAway": "away", "score": "20", "team": {"displayName": "Miami Dolphins"}},
-                ],
-            }]
-        }]}
-        with patch.object(nfl_engine, "_json", return_value=payload) as mocked:
-            stats = nfl_engine._team_stats()
-        self.assertIn("buffalo bills", stats)
-        self.assertEqual(stats["buffalo bills"]["scored"], 27.0)
-        self.assertEqual(mocked.call_args.args[0], nfl_engine.ESPN)
-        self.assertIn("seasontype", mocked.call_args.args[1])
+def sample_games():
+    return pd.DataFrame([
+        {"season": 2024, "week": 1, "gameday": "2024-09-08T17:00:00Z", "home_team": "KC", "away_team": "BAL", "home_score": 27, "away_score": 20},
+        {"season": 2024, "week": 2, "gameday": "2024-09-15T17:00:00Z", "home_team": "BAL", "away_team": "LV", "home_score": 23, "away_score": 16},
+        {"season": 2024, "week": 3, "gameday": "2024-09-22T17:00:00Z", "home_team": "KC", "away_team": "LV", "home_score": 28, "away_score": 14},
+    ])
 
 
-    def test_merge_game_events_combines_market_series_for_same_fixture(self):
-        kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
-        events = [
-            {"event_ticker": "KXNFL1HSPREAD-EVENT", "title": "BUF Bills vs MIA Dolphins: 1st Half Spread",
-             "start_time": kickoff, "markets": [{"ticker": "KXNFL1HSPREAD-M1", "title": "first half"}]},
-            {"event_ticker": "KXNFLGAME-EVENT", "title": "BUF Bills vs MIA Dolphins: Game Winner",
-             "start_time": kickoff, "markets": [{"ticker": "KXNFLGAME-M2", "title": "winner"}]},
-        ]
-        merged = nfl_engine.merge_game_events(events)
-        self.assertEqual(len(merged), 1)
-        self.assertEqual(merged[0]["title"], "BUF Bills vs MIA Dolphins")
-        self.assertEqual({m["ticker"] for m in merged[0]["markets"]},
-                         {"KXNFL1HSPREAD-M1", "KXNFLGAME-M2"})
+def test_model_probabilities_are_finite_and_bounded():
+    model = nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z")
+    pred = nfl.predict_game(model, "KC", "BAL")
+    assert pred is not None
+    for key in ("home_win", "away_win"):
+        assert math.isfinite(pred[key])
+        assert 0 <= pred[key] <= 1
+    assert abs(pred["home_win"] + pred["away_win"] - 1) < 1e-9
+    assert np.isfinite(pred["margin_probs"]).all()
+    assert abs(float(pred["margin_probs"].sum()) - 1) < 1e-9
+    assert np.isfinite(pred["total_probs"]).all()
+    assert abs(float(pred["total_probs"].sum()) - 1) < 1e-9
 
 
-    def test_event_start_falls_back_to_kalshi_market_close_time(self):
-        event = {"markets": [{"close_time": "2026-10-13T20:05:00Z", "expected_expiration_time": "2026-10-12T00:15:00Z"}]}
-        self.assertEqual(nfl_engine._event_start(event), "2026-10-12T00:15:00Z")
+def test_market_semantics_are_conservative():
+    game = {"home": "KC", "away": "BAL"}
+    pred = nfl.predict_game(nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z"), "KC", "BAL")
+    winner = {"ticker": "KXNFLGAME-EXAMPLE-KC", "title": "Will Kansas City Chiefs win?", "yes_sub_title": "Kansas City Chiefs"}
+    p, reason = nfl.model_market(winner, "KXNFLGAME", game, pred)
+    assert p is not None and 0 <= p <= 1
+    unknown = {"ticker": "KXNFLPLAYER-EXAMPLE", "title": "Will Patrick Mahomes pass for 300+ yards?"}
+    p, reason = nfl.model_market(unknown, "KXNFLPLAYERPASSYDS", game, pred)
+    assert p is None
+    assert "prop de jugador" in reason
 
 
-    def test_build_candidates_uses_espn_kickoff_not_kalshi_expiration(self):
-        kickoff = datetime.now(timezone.utc) + timedelta(days=2)
-        nfl_engine.SCHEDULES[tuple(sorted(("buffalo bills", "miami dolphins")))] = kickoff.isoformat()
-        event = {
-            "event_ticker": "KXNFLGAME-EVENT",
-            "title": "BUF Bills vs MIA Dolphins: Game Winner",
-            "markets": [{
-                "ticker": "KXNFLGAME-MONEYLINE",
-                "title": "BUF Bills to win",
-                "yes_sub_title": "BUF Bills to win",
-                "status": "open",
-                "close_time": (kickoff + timedelta(days=2)).isoformat(),
-                "expected_expiration_time": (kickoff + timedelta(hours=3)).isoformat(),
-                "yes_ask_dollars": "0.55",
-                "no_ask_dollars": "0.47",
-            }],
-        }
-        candidates = nfl_engine.build_candidates([event], self.stats)
-        self.assertTrue(candidates)
-        self.assertEqual(candidates[0]["fecha"], kickoff.isoformat())
-
-    def test_reconcile_exclusions_quarantines_old_period_contracts(self):
-        import csv
-        import tempfile
-        from pathlib import Path
-        with tempfile.TemporaryDirectory() as folder:
-            pred_path = Path(folder) / "pred.csv"
-            excluded_path = Path(folder) / "excluded.csv"
-            kickoff = datetime.now(timezone.utc) - timedelta(hours=1)
-            row = {
-                "prediction_id": "old-period|market|YES",
-                "event_ticker": "KXNFL1HSPREAD-EVENT",
-                "ticker": "KXNFL2QSPREAD-MARKET",
-                "local": "BUF Bills", "visita": "MIA Dolphins",
-                "capturado_en": (kickoff - timedelta(minutes=10)).isoformat(),
-            }
-            with pred_path.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=list(row))
-                writer.writeheader()
-                writer.writerow(row)
-            with patch.object(nfl_engine, "PRED_FILE", pred_path), patch.object(nfl_engine, "EXCLUDED_FILE", excluded_path):
-                excluded = nfl_engine.reconcile_exclusions(self.stats)
-            self.assertIn(row["prediction_id"], excluded)
-            self.assertTrue(excluded_path.exists())
+def test_nfl_integer_margin_key_numbers_do_not_break_normalization():
+    values, probs = nfl._normal_pmf(2.7, 13.5, -45, 45, key_numbers=(-14, -10, -7, -6, -3, 3, 6, 7, 10, 14))
+    assert len(values) == len(probs)
+    assert np.all(probs >= 0)
+    assert np.isfinite(probs).all()
+    assert abs(float(probs.sum()) - 1.0) < 1e-9
 
 
-    def test_kickoff_lookup_uses_date_encoded_in_kalshi_ticker(self):
-        stats = {
-            "denver broncos": {"scored": 24, "allowed": 19, "games": 5},
-            "los angeles chargers": {"scored": 22, "allowed": 20, "games": 5},
-        }
-        nfl_engine.SCHEDULES[tuple(sorted(("denver broncos", "los angeles chargers")))] = [
-            "2026-01-04T21:25:00Z", "2026-10-11T20:05:00Z",
-        ]
-        kickoff = nfl_engine._scheduled_kickoff(
-            "DEN Broncos", "LA Chargers", stats, "KXNFLGAME-26OCT11DENLAC"
-        )
-        self.assertEqual(kickoff.isoformat(), "2026-10-11T20:05:00+00:00")
-
-
-    def test_reconcile_exclusions_quarantines_misdated_pregame_capture(self):
-        import csv
-        import tempfile
-        from pathlib import Path
-        with tempfile.TemporaryDirectory() as folder:
-            pred_path = Path(folder) / "pred.csv"
-            excluded_path = Path(folder) / "excluded.csv"
-            kickoff = datetime.now(timezone.utc) + timedelta(hours=4)
-            nfl_engine.SCHEDULES[tuple(sorted(("buffalo bills", "miami dolphins")))] = [kickoff.isoformat()]
-            row = {
-                "prediction_id": "misdated|market|YES",
-                "event_ticker": "KXNFLGAME-26OCT12BUFMIA",
-                "ticker": "KXNFLGAME-26OCT12BUFMIA-BUF",
-                "local": "BUF Bills", "visita": "MIA Dolphins",
-                "capturado_en": (kickoff - timedelta(hours=1)).isoformat(),
-                "fecha": (kickoff + timedelta(days=2)).isoformat(),
-            }
-            with pred_path.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=list(row))
-                writer.writeheader()
-                writer.writerow(row)
-            with patch.object(nfl_engine, "PRED_FILE", pred_path), patch.object(nfl_engine, "EXCLUDED_FILE", excluded_path):
-                excluded = nfl_engine.reconcile_exclusions(self.stats)
-            self.assertIn(row["prediction_id"], excluded)
-
-
-    def test_nfl_rankings_are_per_game_and_limit_each_block(self):
-        rows = []
-        categories = ["Ganador del partido", "Hándicap de puntos", "Total de puntos", "Total de puntos del equipo"]
-        for i in range(12):
-            category = categories[i % len(categories)]
-            rows.append({
-                "prediction_id": f"game|ticker{i}|YES", "ticker": f"KXNFL{i}-MARKET",
-                "categoria": category + " · YES", "probabilidad_calibrada": 0.70 + i * 0.01,
-                "precio_captura": 0.50, "edge": 0.20 + i * 0.01,
-            })
-        singles, combos, value = nfl_engine._rank_nfl_game(rows)
-        self.assertLessEqual(len(singles), 5)
-        self.assertLessEqual(len(combos), 5)
-        self.assertLessEqual(len(value), 10)
-        self.assertGreaterEqual(len(combos), 4)
-        self.assertTrue(singles.isdisjoint(combos))
-        self.assertTrue(singles.isdisjoint(value))
-        self.assertTrue(combos.isdisjoint(value))
-
-    def test_projected_score_uses_nfl_team_scoring_and_defense(self):
-        projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
-        self.assertIsNotNone(projected)
-        self.assertGreater(projected[0], projected[1])
-
-    def test_insufficient_team_history_does_not_invent_a_forecast(self):
-        sparse = {"buffalo bills": {"scored": 28, "allowed": 18, "games": 1},
-                  "miami dolphins": {"scored": 21, "allowed": 25, "games": 4}}
-        self.assertIsNone(nfl_engine.projected_score("Buffalo Bills", "Miami Dolphins", sparse))
-
-    def test_candidates_preserve_real_ticker_and_yes_no_sides(self):
-        kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
-        event = {
-            "event_ticker": "KXNFLGAME-26OCT13BUF MIA".replace(" ", ""),
-            "title": "BUF Bills at MIA Dolphins: Game Winner",
-            "start_time": kickoff,
-            "markets": [{
-                "ticker": "KXNFLGAME-26OCT13BUFMIA-BUF",
-                "title": "BUF Bills to win",
-                "yes_sub_title": "BUF Bills to win",
-                "status": "open",
-                "yes_ask_dollars": "0.55",
-                "no_ask_dollars": "0.47",
-            }],
-        }
-        candidates = nfl_engine.build_candidates([event], self.stats)
-        self.assertEqual({row["lado"] for row in candidates}, {"YES", "NO"})
-        self.assertTrue(all(row["ticker"] == event["markets"][0]["ticker"] for row in candidates))
-        self.assertTrue(all(0 <= row["probabilidad_modelo"] <= 1 for row in candidates))
-        self.assertTrue(all(row["precio_captura"] is not None for row in candidates))
+def test_all_probability_values_in_saved_candidates_are_valid():
+    model = nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z")
+    pred = nfl.predict_game(model, "KC", "BAL")
+    for key in ("home_win", "away_win"):
+        assert nfl.valid_probability(pred[key]) is not None
 
 
 
-    def test_build_candidates_rejects_period_contract_even_if_grouped_under_game_event(self):
-        kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
-        event = {
-            "event_ticker": "KXNFLGAME-26OCT13BUFMIA",
-            "title": "BUF Bills vs MIA Dolphins: Game Winner",
-            "start_time": kickoff,
-            "markets": [{
-                "ticker": "KXNFL2QSPREAD-26OCT13BUFMIA-BUF",
-                "title": "BUF Bills wins by over 3.5 points in 2nd quarter",
-                "yes_sub_title": "BUF Bills wins by over 3.5 points",
-                "status": "open",
-                "yes_ask_dollars": "0.55",
-                "no_ask_dollars": "0.47",
-            }],
-        }
-        candidates = nfl_engine.build_candidates([event], self.stats)
-        self.assertEqual(candidates, [])
-
-    def test_period_market_is_skipped_when_only_full_game_model_exists(self):
-        p, category = nfl_engine._market_probability(
-            {"ticker": "KXNFL1HSPREAD-TEST", "title": "BUF Bills vs MIA Dolphins: 1st Half Spread",
-             "yes_sub_title": "BUF Bills -1.5"},
-            "Buffalo Bills", "Miami Dolphins", 27.0, 21.0,
-        )
-        self.assertIsNone(p)
-        self.assertEqual(category, "")
+def test_kalshi_event_date_uses_et_date_and_espn_fixture_for_exact_kickoff():
+    event = {
+        "event_ticker": "KXNFLGAME-26OCT11CINMIA",
+        "title": "CIN Bengals vs MIA Dolphins",
+        "sub_title": "CIN vs MIA (Oct 11)",
+    }
+    assert nfl._kickoff(event) is None
+    assert str(nfl._event_date(event)) == "2026-10-11"
+    fixtures = [{
+        "home": "MIA", "away": "CIN", "date": "2026-10-11T17:00:00Z",
+        "match_id": "NFL:2026-10-11:CIN@MIA",
+    }]
+    matched = nfl._match_catalog_event(event, nfl._event_teams(event), fixtures, None)
+    assert matched is fixtures[0]
 
 
-    def test_spread_ladder_is_not_misclassified_as_moneyline(self):
-        p, category = nfl_engine._market_probability(
-            {"ticker": "KXNFLSPREAD-TEST", "title": "DEN Broncos wins by over 10.5 points",
-             "yes_sub_title": "DEN Broncos wins by over 10.5 points"},
-            "DEN Broncos", "LA Chargers", 22.9, 17.6,
-        )
-        self.assertLess(p, 0.5)
-        self.assertEqual(category, "Hándicap de puntos")
 
-    def test_second_quarter_spread_is_skipped(self):
-        p, category = nfl_engine._market_probability(
-            {"ticker": "KXNFL2QSPREAD-TEST", "title": "DEN Broncos wins by over 10.5 points",
-             "yes_sub_title": "DEN Broncos wins by over 10.5 points"},
-            "DEN Broncos", "LA Chargers", 22.9, 17.6,
-        )
-        self.assertIsNone(p)
-        self.assertEqual(category, "")
+def test_kalshi_total_threshold_semantics_are_exact():
+    inclusive = {"ticker": "KXNFLTOTAL-EXAMPLE", "yes_sub_title": "Over 25+ points"}
+    exclusive = {"ticker": "KXNFLTOTAL-EXAMPLE", "yes_sub_title": "Over 25.5 points"}
+    assert nfl._line_from_market(inclusive) == 25
+    assert nfl._yes_outcome(inclusive, "total") == "over_ge"
+    assert nfl._line_from_market(exclusive) == 25.5
+    assert nfl._yes_outcome(exclusive, "total") == "over_gt"
 
 
-    def test_team_total_uses_the_selected_team_projection(self):
-        p, category = nfl_engine._market_probability(
-            {"ticker": "KXNFLTEAMTOTAL-TEST", "title": "BUF Bills Over 24.5 Team Total",
-             "yes_sub_title": "BUF Bills Over 24.5"},
-            "BUF Bills", "MIA Dolphins", 28.0, 17.0,
-        )
-        self.assertGreater(p, 0.5)
-        self.assertEqual(category, "Total de puntos del equipo")
+def test_generate_candidates_assigns_independent_blocks_and_keeps_side():
+    model = nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z")
+    event = {
+        "event_ticker": "KXNFLGAME-26OCT18CINMIA",
+        "series_ticker": "KXNFLGAME",
+        "title": "CIN Bengals vs MIA Dolphins",
+        "sub_title": "CIN vs MIA (Oct 18)",
+        "markets": [
+            {"ticker": "KXNFLGAME-26OCT18CINMIA-MIA", "series_ticker": "KXNFLGAME",
+             "title": "Miami wins", "yes_ask_dollars": "0.30", "no_ask_dollars": "0.30"},
+            {"ticker": "KXNFLGAME-26OCT18CINMIA-CIN", "series_ticker": "KXNFLGAME",
+             "title": "Cincinnati wins", "yes_ask_dollars": "0.30", "no_ask_dollars": "0.30"},
+            {"ticker": "KXNFLTOTAL-26OCT18CINMIA-OVER30.5", "series_ticker": "KXNFLTOTAL",
+             "title": "Over 30.5 points", "yes_ask_dollars": "0.30", "no_ask_dollars": "0.30"},
+        ],
+    }
+    fixtures = [{
+        "home": "MIA", "away": "CIN", "date": "2026-10-18T17:00:00Z",
+        "match_id": "NFL:2026-10-18:CIN@MIA",
+    }]
+    rows, rejected, catalog, coverage = nfl.generate_candidates(
+        [event], model, now="2026-10-10T12:00:00Z", upcoming_games=fixtures
+    )
+    assert catalog
+    assert coverage and coverage[0]["match_id"] == "NFL:2026-10-18:CIN@MIA"
+    assert rows and {row["lado"] for row in rows}.issubset({"YES", "NO"})
+    assert {row["bloque"] for row in rows} == {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}
+    total_yes = [row for row in rows if row["ticker"] == "KXNFLTOTAL-26OCT18CINMIA-OVER30.5" and row["lado"] == "YES"]
+    assert {row["bloque"] for row in total_yes} == {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}
+    assert len({row["prediction_id"] for row in total_yes}) == 3
+    ids = [row["prediction_id"] for row in rows]
+    assert len(ids) == len(set(ids))
+    assert all(row["descripcion"].startswith(("SÍ:", "NO:")) for row in rows)
 
-    def test_total_points_market_uses_line_and_nfl_score_projection(self):
-        p, category = nfl_engine._market_probability(
-            {"ticker": "KXNFLTOTAL-TEST", "title": "Over 44.5 total points"},
-            "Buffalo Bills", "Miami Dolphins", 27.0, 21.0,
-        )
-        self.assertGreater(p, 0.5)
-        self.assertEqual(category, "Total de puntos")
+
+def test_atomic_save_preserves_yes_no_side_and_freezes_duplicates(tmp_path):
+    future = "2030-10-20T17:00:00+00:00"
+    captured = "2026-10-10T12:00:00+00:00"
+    common = {
+        "schema_version": "1", "event_ticker": "KXNFLGAME-30OCT20CINMIA",
+        "ticker": "KXNFLGAME-30OCT20CINMIA-MIA", "match_id": "NFL:2030-10-20:CIN@MIA",
+        "fecha": future, "hora_inicio": future, "local": "MIA", "visita": "CIN",
+        "categoria": "winner", "mercado": "Miami wins", "line": "", "equipo_yes": "MIA",
+        "tipo_salida": "winner", "descripcion": "SÍ: los Miami Dolphins ganan el partido",
+        "bloque": "SENCILLAS", "probabilidad_original": "0.6", "probabilidad_calibrada": "",
+        "version_calibracion": "calibración insuficiente", "probabilidad_modelo": "0.6",
+        "precio_captura": "0.3", "probabilidad_implicita": "0.3", "edge": "0.3",
+        "revision": "REVISAR", "estado_modelo": "test", "reglas": "test",
+        "capturado_en": captured, "disponibilidad": "Disponible en Kalshi",
+    }
+    yes = {**common, "prediction_id": "pred-yes", "lado": "YES", "seleccion": "YES"}
+    no = {**common, "prediction_id": "pred-no", "lado": "NO", "seleccion": "NO",
+          "descripcion": "NO: los Miami Dolphins no ganan el partido"}
+    path = tmp_path / "predicciones_nfl.csv"
+    first = nfl.save_capture([yes, no], path=path)
+    second = nfl.save_capture([yes, no], path=path)
+    assert first["accepted"] == 2
+    assert second["accepted"] == 0
+    saved = pd.read_csv(path, dtype=str).fillna("")
+    assert set(saved["lado"]) == {"YES", "NO"}
+    assert len(saved) == 2
 
 
-if __name__ == "__main__":
-    unittest.main()
+
+def test_espn_fallback_settles_finished_winner_by_teams_and_date(monkeypatch):
+    nfl.ESPN_SCOREBOARD_CACHE.clear()
+    event = {
+        "id": "espn-game-1",
+        "date": "2026-10-11T17:00:00Z",
+        "status": {"type": {"name": "STATUS_FINAL", "completed": True}},
+        "competitions": [{
+            "date": "2026-10-11T17:00:00Z",
+            "competitors": [
+                {"homeAway": "home", "team": {"abbreviation": "MIA"}, "score": "24"},
+                {"homeAway": "away", "team": {"abbreviation": "CIN"}, "score": "17"},
+            ],
+        }],
+    }
+    def fake_get(url, params=None):
+        return {"events": [event] if params and params.get("dates") == "20261011" else []}
+    monkeypatch.setattr(nfl, "_get", fake_get)
+    row = {
+        "hora_inicio": "2026-10-11T17:00:00Z", "fecha": "2026-10-11T17:00:00Z",
+        "local": "MIA", "visita": "CIN", "categoria": "winner", "equipo_yes": "MIA",
+        "tipo_salida": "winner", "lado": "YES", "ticker": "KXNFLGAME-26OCT11CINMIA-MIA",
+    }
+    settled = nfl.settle_from_espn(row)
+    assert settled and settled["state"] == "WIN"
+    row["lado"] = "NO"
+    settled_no = nfl.settle_from_espn(row)
+    assert settled_no and settled_no["state"] == "LOSS"
+    assert "24" in settled["score"] and "17" in settled["score"]
+
+
+
+def test_calibration_requires_minimum_sample_and_preserves_probability_bounds():
+    p, version, status = nfl.calibrate_probability(0.73, "winner", None, "winner", calibration={})
+    assert p is None and version is None and status == "calibración insuficiente"
+    calibration = {"markets": {"winner": {
+        "n_train": 150, "intercept": 0.1, "slope": 0.9, "version": "platt_winner_n150",
+    }}}
+    calibrated, version, status = nfl.calibrate_probability(0.73, "winner", None, "winner", calibration=calibration)
+    assert 0 <= calibrated <= 1
+    assert version == "platt_winner_n150"
+    assert status == "aplicada"
+
+
+def test_discover_nfl_series_keeps_protected_player_props():
+    original = nfl.iter_kalshi_pages
+    try:
+        nfl.iter_kalshi_pages = lambda *args, **kwargs: [{
+            "ticker": "KXNFLTDPROT",
+            "title": "NFL protected player touchdowns",
+        }]
+        found = nfl.discover_nfl_series()
+        assert any(row.get("ticker") == "KXNFLTDPROT" for row in found)
+    finally:
+        nfl.iter_kalshi_pages = original
