@@ -112,34 +112,40 @@ def _market_probability(market, home, away, home_score, away_score):
     full_text = " ".join(x for x in (title, str(market.get("title") or "")) if x)
     ticker = str(market.get("ticker") or "").upper()
     text = (full_text + " " + ticker).lower()
-    # This model uses full-game score projections; period/quarter contracts need their own model.
+    # Only full-game markets are modeled; period and quarter contracts need separate score distributions.
     if any(term in text for term in ("1st half", "first half", "2nd half", "second half",
                                      "1st quarter", "2nd quarter", "3rd quarter", "4th quarter",
                                      "1h spread", "2h spread", "quarter spread")):
         return None, ""
-    if re.search(r"KXNFL(?:1H|2H|Q1|Q2|Q3|Q4)", ticker):
+    if re.search(r"KXNFL(?:1H|2H|1Q|2Q|3Q|4Q|Q1|Q2|Q3|Q4)", ticker):
         return None, ""
     margin = home_score - away_score
     total = home_score + away_score
-    # Winner/team markets: only match explicit team name, avoid interpreting arbitrary player props.
-    if any(x in text for x in ("winner", "win", "moneyline", "to beat", "victory", "game")):
+    line_match = re.search(r"(?<![a-z])([+-]?\d+(?:\.\d+)?)", full_text)
+    line = float(line_match.group(1)) if line_match else None
+
+    is_total = "TOTAL" in ticker or "total" in text
+    if is_total and line is not None:
+        over = _normal_cdf(total, line, 10.5)
+        if "under" in title.lower() or "below" in title.lower():
+            over = 1 - over
+        return over, "Total de puntos"
+
+    is_spread = any(term in text for term in ("spread", "handicap", "wins by", "win by"))
+    if is_spread and line is not None:
+        team = _team_in_market(title, home, away)
+        if team:
+            # "wins by over X" uses a positive winning margin threshold; signed spreads
+            # use the opposite sign of the quoted handicap.
+            threshold = line if ("wins by over" in text or "win by over" in text or "wins by more than" in text) else -line
+            projected_margin = margin if team == home else -margin
+            return _normal_cdf(projected_margin, threshold, 13.5), "Hándicap de puntos"
+
+    if any(term in text for term in ("winner", "moneyline", "to beat", "victory", "game winner")) or re.search(r"\bwin(?:s)?\b", title.lower()):
         team = _team_in_market(title, home, away)
         if team:
             p_home = _normal_cdf(margin, 0, 13.5)
-            return p_home if team == home else 1-p_home, "Ganador del partido"
-    line_match = re.search(r"(?<![a-z])([+-]?\d+(?:\.\d+)?)", full_text)
-    if line_match:
-        line = float(line_match.group(1))
-        if "total" in text or "over" in text or "under" in text:
-            over = _normal_cdf(total, line, 10.5)
-            if "under" in text or "below" in text:
-                over = 1-over
-            return over, "Total de puntos"
-        if "spread" in text or "handicap" in text or "point" in text:
-            team = home if _norm(home) in _norm(title) else away if _norm(away) in _norm(title) else None
-            if team:
-                p = _normal_cdf(margin if team == home else -margin, -line, 13.5)
-                return p, "Hándicap de puntos"
+            return p_home if team == home else 1 - p_home, "Ganador del partido"
     return None, ""
 
 def _price(market, side):
