@@ -1,4 +1,5 @@
 """Live smoke test showing every open Kalshi event/market found for one real NFL matchup."""
+import csv
 import json
 import sys
 from collections import Counter
@@ -65,13 +66,22 @@ for event in grouped:
         })
 catalog.sort(key=lambda item: (item["series_ticker"], item["ticker"]))
 counts = Counter(item["market_type"] for item in catalog)
+catalog_csv = Path(__file__).resolve().parents[1] / "nfl_catalogo_verificacion.csv"
+csv_fields = ["fecha_partido_et", "equipos", "event_ticker", "event_title", "series_ticker", "ticker",
+              "market_title", "market_type", "line", "yes_ask_dollars", "no_ask_dollars", "status",
+              "rules_primary", "rules_secondary"]
+with catalog_csv.open("w", newline="", encoding="utf-8") as handle:
+    writer = csv.DictWriter(handle, fieldnames=csv_fields, extrasaction="ignore")
+    writer.writeheader()
+    for item in catalog:
+        writer.writerow({"fecha_partido_et": key[0], "equipos": " @ ".join(key[1]), **item})
 print(json.dumps({
     "series_nfl_discovered": len(series),
     "open_events_nfl_scanned": len(events),
     "sample_match_date_et": key[0],
     "sample_teams": list(key[1]),
     "sample_event_count_across_series": len(grouped),
-    "sample_market_count": len(catalog),
+    "sample_market_count": len(catalog),\n    "catalog_csv": str(catalog_csv),
     "market_families_found": dict(counts),
     "complete_match_catalog": catalog,
 }, ensure_ascii=False, indent=2))
