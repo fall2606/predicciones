@@ -149,16 +149,25 @@ def load_kalshi_catalog(status="open", max_pages=2):
             return [], "{}: {}".format(item.get("ticker"), exc)
 
     events = []
-    # Bound capture time: query the discovered series concurrently. Individual API
-    # calls still use the shared client's retries/timeouts and the complete per-game
-    # market families are retained; this prevents serial waits on hundreds of series.
-    with ThreadPoolExecutor(max_workers=min(8, len(series))) as pool:
+    errors = []
+    # Low bounded concurrency avoids Kalshi 429s. A partial catalog is not safe:
+    # if any discovered NFL series cannot be read after shared-client retries, fail
+    # the capture instead of generating bets from an incomplete set of markets.
+    with ThreadPoolExecutor(max_workers=min(2, len(series))) as pool:
         futures = [pool.submit(fetch_series, item) for item in series]
         for future in as_completed(futures):
             rows, warning = future.result()
             events.extend(rows)
             if warning:
-                print("AVISO catálogo NFL {}".format(warning))
+                errors.append(warning)
+                print("ERROR catálogo NFL {}".format(warning))
+    if errors:
+        raise RuntimeError(
+            "Catálogo NFL incompleto: no se pudo verificar {} de {} series; "
+            "no se generan predicciones en esta ejecución. Muestras: {}".format(
+                len(errors), len(series), "; ".join(errors[:8])
+            )
+        )
     # Keep event and nested market data exactly as returned by Kalshi.
     seen = set()
     catalog = []
