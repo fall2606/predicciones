@@ -1,37 +1,77 @@
-"""Live smoke test for the complete discoverable NFL Kalshi catalog."""
+"""Live smoke test showing every open Kalshi event/market found for one real NFL matchup."""
 import json
 import sys
+from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import nfl_engine as nfl
 
+ET = ZoneInfo("America/New_York")
 series, events = nfl.load_kalshi_catalog(status="open", max_pages=2)
-markets = [
-    {"series_ticker": str(event.get("series_ticker") or ""),
-     "event_ticker": str(event.get("event_ticker") or ""),
-     "event_title": str(event.get("title") or ""),
-     "ticker": str(market.get("ticker") or ""),
-     "title": str(market.get("title") or market.get("yes_sub_title") or market.get("subtitle") or ""),
-     "yes_ask_dollars": market.get("yes_ask_dollars"),
-     "no_ask_dollars": market.get("no_ask_dollars"),
-     "rules_primary": market.get("rules_primary") or "",
-     "rules_secondary": market.get("rules_secondary") or ""}
-    for event in events for market in (event.get("markets") or []) if market.get("ticker")
-]
 if not series:
     raise SystemExit("FAIL: Kalshi no devolvió series NFL.")
-if not events or not markets:
-    raise SystemExit("FAIL: no se encontró ningún evento/contrato abierto de NFL en Kalshi.")
-sample_event = next(event for event in events if event.get("markets"))
-sample_markets = [m for m in markets if m["event_ticker"] == sample_event.get("event_ticker")]
+if not events:
+    raise SystemExit("FAIL: Kalshi no devolvió eventos NFL abiertos.")
+
+groups = {}
+for event in events:
+    teams = nfl._event_teams(event)
+    day = nfl._event_date(event)
+    if len(teams) != 2 or day is None:
+        continue
+    key = (day.isoformat(), tuple(sorted(teams)))
+    groups.setdefault(key, []).append(event)
+
+today_et = datetime.now(timezone.utc).astimezone(ET).date()
+eligible = []
+for key, grouped in groups.items():
+    all_markets = [(event, market) for event in grouped for market in (event.get("markets") or []) if market.get("ticker")]
+    families = {
+        nfl._market_type(market, str(market.get("series_ticker") or event.get("series_ticker") or ""))
+        for event, market in all_markets
+    }
+    has_winner = "winner" in families
+    is_upcoming = datetime.fromisoformat(key[0]).date() >= today_et
+    eligible.append((is_upcoming, has_winner, len(all_markets), key, grouped, families))
+if not eligible:
+    raise SystemExit("FAIL: no se pudo agrupar un partido NFL por fecha ET y ambos equipos.")
+eligible.sort(key=lambda item: (item[0] and item[1], item[2]), reverse=True)
+upcoming_with_winner = [item for item in eligible if item[0] and item[1]]
+sample = (upcoming_with_winner or eligible)[0]
+_, _, _, key, grouped, families = sample
+catalog = []
+for event in grouped:
+    for market in event.get("markets") or []:
+        ticker = str(market.get("ticker") or "")
+        if not ticker:
+            continue
+        st = str(market.get("series_ticker") or event.get("series_ticker") or "")
+        catalog.append({
+            "event_ticker": str(event.get("event_ticker") or ""),
+            "event_title": str(event.get("title") or event.get("sub_title") or ""),
+            "series_ticker": st,
+            "ticker": ticker,
+            "market_title": str(market.get("yes_sub_title") or market.get("title") or market.get("subtitle") or ""),
+            "market_type": nfl._market_type(market, st),
+            "line": nfl._line_from_market(market),
+            "yes_ask_dollars": market.get("yes_ask_dollars"),
+            "no_ask_dollars": market.get("no_ask_dollars"),
+            "status": market.get("status"),
+            "rules_primary": market.get("rules_primary") or "",
+            "rules_secondary": market.get("rules_secondary") or "",
+        })
+catalog.sort(key=lambda item: (item["series_ticker"], item["ticker"]))
+counts = Counter(item["market_type"] for item in catalog)
 print(json.dumps({
-    "series_nfl": len(series),
-    "eventos_nfl": len(events),
-    "mercados_nfl": len(markets),
-    "ejemplo_real": {
-        "event_ticker": sample_event.get("event_ticker"),
-        "event_title": sample_event.get("title"),
-        "markets": sample_markets[:15],
-    },
+    "series_nfl_discovered": len(series),
+    "open_events_nfl_scanned": len(events),
+    "sample_match_date_et": key[0],
+    "sample_teams": list(key[1]),
+    "sample_event_count_across_series": len(grouped),
+    "sample_market_count": len(catalog),
+    "market_families_found": dict(counts),
+    "complete_match_catalog": catalog,
 }, ensure_ascii=False, indent=2))
