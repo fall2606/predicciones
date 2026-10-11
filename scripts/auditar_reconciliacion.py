@@ -386,7 +386,9 @@ def main():
     # it has written the evidence, so the UI never falls back to a stale/missing report.
     if errors:
         raise SystemExit(2)
-    # Unresolved markets are reported in the CSV/UI; a successfully generated report is a successful audit job.
+    if total_pending:
+        raise SystemExit(3)
+    # A red workflow means there are unresolved predictions on finished games; the CSV is already written.
 
 
 if __name__ == "__main__":
