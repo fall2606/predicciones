@@ -3,11 +3,14 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import nfl_engine as nfl
 import prediction_core
