@@ -54,3 +54,5 @@ jobs:
           PY
       - name: Pruebas de regresión NFL
         run: python -m pytest -q tests/test_nfl_engine.py
+      - name: Catálogo real de Kalshi NFL
+        run: python nfl_engine.py catalog-smoke
