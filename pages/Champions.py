@@ -158,6 +158,26 @@ if pendientes:
 etiqueta = st.selectbox("Partido", list(opciones), index=indice)
 partido = opciones[etiqueta]
 estado_partido = str(partido.get("status", "")).upper()
+# El calendario de la app y el informe de liquidación pueden actualizarse en instantes
+# distintos. Si la reconciliación oficial ya marcó este partido como final, no mostrarlo
+# como próximo ni dejar las tablas en PENDIENTE por un estado antiguo del calendario.
+try:
+    _ruta_reconciliacion = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reconciliacion_pendientes.csv")
+    if os.path.exists(_ruta_reconciliacion):
+        _reconciliacion_partidos = pd.read_csv(_ruta_reconciliacion, dtype=str).fillna("")
+        _filas_partido = _reconciliacion_partidos[
+            _reconciliacion_partidos["deporte"].eq("Champions")
+            & _reconciliacion_partidos["match_id"].astype(str).eq(str(partido.get("id", "")))
+        ]
+        _estados_informe = set(_filas_partido["estado_partido"].astype(str).str.upper())
+        if _estados_informe & {"FINISHED", "AWARDED", "FINAL", "COMPLETED"}:
+            estado_partido = "FINISHED"
+            partido["status"] = "FINISHED"
+        elif _estados_informe & {"CANCELLED", "CANCELED"}:
+            estado_partido = "CANCELLED"
+            partido["status"] = "CANCELLED"
+except (OSError, ValueError, KeyError, TypeError, pd.errors.ParserError):
+    pass
 partido_final = estado_partido in {"FINISHED", "AWARDED"}
 partido_cerrado = partido_final or estado_partido in {"CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
 local = partido["homeTeam"].get("shortName") or partido["homeTeam"]["name"]
