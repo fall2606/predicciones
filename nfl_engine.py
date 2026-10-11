@@ -84,6 +84,22 @@ def projected_score(home, away, stats):
 def _normal_cdf(x, mu, sigma=13.5):
     return 0.5 * (1 + math.erf((x-mu)/(sigma*math.sqrt(2))))
 
+def _team_in_market(title, home, away):
+    text = _norm(title).split()
+    home_tokens = _norm(home).split()
+    away_tokens = _norm(away).split()
+    home_hit = bool(home_tokens and home_tokens[-1] in text)
+    away_hit = bool(away_tokens and away_tokens[-1] in text)
+    if home_hit and not away_hit:
+        return home
+    if away_hit and not home_hit:
+        return away
+    if _norm(home) in _norm(title) and _norm(away) not in _norm(title):
+        return home
+    if _norm(away) in _norm(title) and _norm(home) not in _norm(title):
+        return away
+    return None
+
 def _market_probability(market, home, away, home_score, away_score):
     title = str(market.get("yes_sub_title") or market.get("title") or "")
     ticker = str(market.get("ticker") or "").upper()
@@ -92,7 +108,7 @@ def _market_probability(market, home, away, home_score, away_score):
     total = home_score + away_score
     # Winner/team markets: only match explicit team name, avoid interpreting arbitrary player props.
     if any(x in text for x in ("winner", "win", "moneyline", "to beat", "victory", "game")):
-        team = home if _norm(home) in _norm(title) else away if _norm(away) in _norm(title) else None
+        team = _team_in_market(title, home, away)
         if team:
             p_home = _normal_cdf(margin, 0, 13.5)
             return p_home if team == home else 1-p_home, "Ganador del partido"
