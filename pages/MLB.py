@@ -109,8 +109,10 @@ def _tabla_con_resultado(df, columna="Resultado"):
             return "background-color: #f8d7da; color: #721c24; font-weight: bold"
         if "ANULADA" in texto or "VOID" in texto:
             return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
+        if "SIN LIQUIDAR" in texto:
+            return "background-color: #f8d7da; color: #721c24; font-weight: bold"
         if "PENDIENTE" in texto or "NO_EVALUABLE" in texto:
-            return "background-color: #fff3cd; color: #856404; font-weight: bold"
+            return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
         return ""
     return df.style.map(_color, subset=[columna])
 
@@ -664,7 +666,10 @@ for juego in [juego]:
                 else:
                     st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados.")
                 return
-            bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", "PENDIENTE").fillna("PENDIENTE")
+            game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
+            unresolved_label = "ANULADA" if game_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
+            bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", unresolved_label).fillna(unresolved_label)
+            bloque.loc[bloque["Resultado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
             if codigo == "SENCILLAS":
                 # Filtra también capturas antiguas para que no reaparezcan picks triviales.
                 sencillas = rank_single_candidates(bloque.to_dict("records"), limit=10)
@@ -725,7 +730,7 @@ for juego in [juego]:
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
                         if pick.get("Revisión") == "REVISAR":
                             st.warning("REVISAR · ventaja superior a 20 puntos; comprobar precio y modelo.")
-                        estado = str(pick.get("Resultado", pick.get("estado", "PENDIENTE")) or "PENDIENTE").upper()
+                        estado = str(pick.get("Resultado", pick.get("estado", unresolved_label)) or unresolved_label).upper()
                         if estado == "WIN":
                             st.success("WIN")
                         elif estado == "LOSS":
@@ -762,9 +767,11 @@ for juego in [juego]:
             historial_partido = pd.DataFrame()
         with st.expander("Historial y contratos Kalshi de este partido", expanded=False):
             if not historial_partido.empty:
+                game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
+                unresolved_label = "ANULADA" if game_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
                 if "estado" not in historial_partido.columns:
-                    historial_partido["estado"] = "PENDIENTE"
-                historial_partido["estado"] = historial_partido["estado"].replace("", "PENDIENTE")
+                    historial_partido["estado"] = unresolved_label
+                historial_partido["estado"] = historial_partido["estado"].replace("", unresolved_label).fillna(unresolved_label)
                 # Replace empty cells with a readable status instead of showing confusing nulls.
                 if "probabilidad_modelo" in historial_partido.columns:
                     historial_partido["probabilidad_modelo"] = historial_partido["probabilidad_modelo"].replace("", "Sin modelo específico")
