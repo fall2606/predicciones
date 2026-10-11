@@ -110,6 +110,32 @@ class NFLModelTests(unittest.TestCase):
         )
         self.assertEqual(kickoff.isoformat(), "2026-10-11T20:05:00+00:00")
 
+
+    def test_reconcile_exclusions_quarantines_misdated_pregame_capture(self):
+        import csv
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as folder:
+            pred_path = Path(folder) / "pred.csv"
+            excluded_path = Path(folder) / "excluded.csv"
+            kickoff = datetime.now(timezone.utc) + timedelta(hours=4)
+            nfl_engine.SCHEDULES[tuple(sorted(("buffalo bills", "miami dolphins")))] = [kickoff.isoformat()]
+            row = {
+                "prediction_id": "misdated|market|YES",
+                "event_ticker": "KXNFLGAME-26OCT12BUFMIA",
+                "ticker": "KXNFLGAME-26OCT12BUFMIA-BUF",
+                "local": "BUF Bills", "visita": "MIA Dolphins",
+                "capturado_en": (kickoff - timedelta(hours=1)).isoformat(),
+                "fecha": (kickoff + timedelta(days=2)).isoformat(),
+            }
+            with pred_path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=list(row))
+                writer.writeheader()
+                writer.writerow(row)
+            with patch.object(nfl_engine, "PRED_FILE", pred_path), patch.object(nfl_engine, "EXCLUDED_FILE", excluded_path):
+                excluded = nfl_engine.reconcile_exclusions(self.stats)
+            self.assertIn(row["prediction_id"], excluded)
+
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
         self.assertIsNotNone(projected)
