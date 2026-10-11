@@ -297,7 +297,7 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
 def _probability(row):
     p=valid_probability(row.get("_p"))
     if p is not None: return p
-    raw=str(row.get("Probabilidad del modelo",row.get("Probabilidad modelo",row.get("Prob. modelo",""))))
+    raw=str(row.get("Probabilidad del modelo",row.get("Probabilidad modelo",row.get("Prob. modelo",row.get("probabilidad_modelo","")))))
     m=re.search(r"[-+]?\d+(?:[.,]\d+)?",raw)
     if not m: return None
     n=float(m.group(0).replace(",","."))
@@ -362,7 +362,7 @@ def _candidate_price(row):
         if raw in (None, "", "—", "-"):
             continue
         try:
-            value = float(re.search(r"[-+]?\\d+(?:[.,]\\d+)?", str(raw)).group(0).replace(",", "."))
+            value = float(re.search(r"[-+]?\d+(?:[.,]\d+)?", str(raw)).group(0).replace(",", "."))
             if "%" in str(raw) or value > 1:
                 value /= 100
             if math.isfinite(value) and 0 < value < 1:
@@ -415,7 +415,7 @@ def _is_trivial_single(row):
         "Apuesta sencilla", "Apuesta", "mercado", "line", "seleccion"
     )).casefold()
     category = " ".join(str(row.get(k) or "") for k in ("categoria", "Categoría resumen")).casefold()
-    if re.search(r"(?:más de|mas de|over|at least|at least)\\s*0[.,]5", label):
+    if re.search(r"(?:más de|mas de|over|at least|at least)\s*0[.,]5", label):
         return any(word in label + " " + category for word in (
             "gol", "goal", "carrera", "run", "corner", "córner", "total"
         ))
@@ -465,7 +465,7 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
             continue
         label = " ".join(str(row.get(k) or "") for k in ("Apuesta sencilla", "Apuesta", "mercado")).casefold()
         # Keep the list diversified: no more than two selections tied to the same named team.
-        teams = re.findall(r"(?<![\\w])([A-Z][A-Za-zÀ-ÿ.'-]+(?:\\s+[A-Z][A-Za-zÀ-ÿ.'-]+){0,2})", str(row.get("Apuesta sencilla") or row.get("Apuesta") or ""))
+        teams = re.findall(r"(?<![\w])([A-Z][A-Za-zÀ-ÿ.'-]+(?:\s+[A-Z][A-Za-zÀ-ÿ.'-]+){0,2})", str(row.get("Apuesta sencilla") or row.get("Apuesta") or ""))
         if len(used_teams) >= 2 and teams and all(team.casefold() in used_teams for team in teams):
             continue
         selected.append(row)
