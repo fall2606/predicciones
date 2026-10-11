@@ -372,9 +372,10 @@ def _rank_nfl_game(rows):
             by_ticker[ticker] = row
     eligible = list(by_ticker.values())
 
-    def choose(predicate, limit, sort_key, per_category):
+    def choose(predicate, limit, sort_key, per_category, exclude_ids=()):
         picked, counts = [], {}
-        for row in sorted((x for x in eligible if predicate(x)), key=sort_key, reverse=True):
+        excluded = set(exclude_ids)
+        for row in sorted((x for x in eligible if predicate(x) and x["prediction_id"] not in excluded), key=sort_key, reverse=True):
             category = str(row.get("categoria") or "").split(" · ", 1)[0]
             if counts.get(category, 0) >= per_category:
                 continue
@@ -390,11 +391,11 @@ def _rank_nfl_game(rows):
     )
     combos = choose(
         lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.65 and float(r["edge"]) >= 0.02,
-        5, lambda r: (float(r["probabilidad_calibrada"]), float(r["edge"])), 2,
+        5, lambda r: (float(r["probabilidad_calibrada"]), float(r["edge"])), 2, singles,
     )
     value = choose(
         lambda r: float(r["edge"]) >= 0.02,
-        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 3,
+        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 3, singles | combos,
     )
     return singles, combos, value
 
