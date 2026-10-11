@@ -36,13 +36,15 @@ for key, grouped in groups.items():
     }
     has_winner = "winner" in families
     is_upcoming = datetime.fromisoformat(key[0]).date() >= today_et
-    eligible.append((is_upcoming, has_winner, len(all_markets), key, grouped, families))
+    has_player_prop = "unsupported_player_prop" in families
+    eligible.append((is_upcoming, has_winner, has_player_prop, len(all_markets), key, grouped, families))
 if not eligible:
     raise SystemExit("FAIL: no se pudo agrupar un partido NFL por fecha ET y ambos equipos.")
-eligible.sort(key=lambda item: (item[0] and item[1], item[2]), reverse=True)
+# Prefer an upcoming matchup that has player props as well as a game-winner market.
+eligible.sort(key=lambda item: (item[0] and item[1] and item[2], item[0] and item[1], item[2], item[3]), reverse=True)
 upcoming_with_winner = [item for item in eligible if item[0] and item[1]]
 sample = (upcoming_with_winner or eligible)[0]
-_, _, _, key, grouped, families = sample
+_, _, _, _, key, grouped, families = sample
 catalog = []
 for event in grouped:
     for market in event.get("markets") or []:
