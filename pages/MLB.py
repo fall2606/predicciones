@@ -91,6 +91,14 @@ try:
         st.caption("Última liquidación MLB: " + (latest.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest) else "sin liquidaciones registradas"))
         if not unresolved.empty:
             st.error(f"ALERTA MLB: {len(unresolved)} predicciones de partidos finalizados siguen sin resultado oficial.")
+            try:
+                _pend_path = ROOT / "reconciliacion_pendientes.csv"
+                _pendientes_ui = pd.read_csv(_pend_path, dtype=str).fillna("")
+                _pendientes_ui = _pendientes_ui[_pendientes_ui.get("deporte", pd.Series(dtype=str)).eq("MLB")]
+                for _, _fila_pendiente in _pendientes_ui.head(5).iterrows():
+                    st.warning(f"Sin liquidar · {_fila_pendiente.get('prediction_id', '')} · motivo: {_fila_pendiente.get('motivo', 'sin diagnóstico')}")
+            except (OSError, ValueError, KeyError, pd.errors.ParserError):
+                st.warning("Motivo detallado aún no disponible; el workflow debe generar reconciliacion_pendientes.csv.")
         else:
             st.success("Liquidación MLB: no hay predicciones pendientes de partidos finalizados detectadas en los últimos 14 días.")
 except (requests.RequestException, ValueError, TypeError, KeyError) as exc:
