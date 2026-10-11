@@ -73,6 +73,21 @@ class ScoreSettlementTests(unittest.TestCase):
         result = sports_results.settle_from_score(row("KXLALIGA1HTOTAL", "over", 0.5, "YES"))
         self.assertIsNone(result)
 
+    @patch("sports_results.find_match", return_value=match(0, 0, half_home=0, half_away=0))
+    def test_first_team_to_score_no_when_match_finishes_scoreless(self, _):
+        result = sports_results.settle_from_score(row("KXLALIGAFTTS", "local", None, "NO"))
+        self.assertEqual(result["state"], "WIN")
+
+    @patch("sports_results._espn_summary", return_value={
+        "scoringPlays": [{"team": {"displayName": "Celta"}}]
+    })
+    @patch("sports_results.find_match", return_value=match(1, 0, event_id="evt2", league="esp.1"))
+    def test_first_team_to_score_uses_ordered_espn_scoring_plays(self, _find, _summary):
+        captured = row("KXLALIGAFTTS", "visita", None, "YES")
+        captured.update({"local": "Elche", "visita": "Celta"})
+        result = sports_results.settle_from_score(captured)
+        self.assertEqual(result["state"], "WIN")
+
     @patch("sports_results.find_match", return_value=match(2, 1))
     def test_unsupported_corners_fall_back_when_summary_unavailable(self, _):
         result = sports_results.settle_from_score(row("KXLALIGACORNERS", "over", 8.5, "YES"))
