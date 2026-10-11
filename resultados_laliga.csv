@@ -16,3 +16,7 @@ prediction_id,estado,marcador,resuelto_en
 564702|Goles totales|2026101018,LOSS,Resultado oficial Kalshi: NO,2026-10-11T02:55:09.195300+00:00
 564702|Ambos marcan 1.ª parte|2026101018,WIN,Resultado oficial Kalshi: NO,2026-10-11T02:55:09.195325+00:00
 564702|Resultado|2026101018,WIN,Resultado oficial Kalshi: YES,2026-10-11T02:55:09.195349+00:00
+564700|Corners totales|2026101012,ANULADA,No existe ticker real de Kalshi; tipo/línea teórica sin contrato abierto,2026-10-11T06:55:00+00:00
+564700|Corners por equipo|2026101012,ANULADA,No existe ticker real de Kalshi; tipo/línea teórica sin contrato abierto,2026-10-11T06:55:00+00:00
+564702|Corners por equipo|2026101012,ANULADA,No existe ticker real de Kalshi; tipo/línea teórica sin contrato abierto,2026-10-11T06:55:00+00:00
+564702|Corners por equipo|2026101018,ANULADA,No existe ticker real de Kalshi; tipo/línea teórica sin contrato abierto,2026-10-11T06:55:00+00:00
