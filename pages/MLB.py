@@ -8,6 +8,7 @@ import requests
 import streamlit as st
 from scipy.stats import nbinom, poisson
 from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
+from prediction_core import rank_single_candidates
 
 
 API = "https://statsapi.mlb.com/api/v1"
@@ -616,12 +617,73 @@ for juego in [juego]:
                 st.info("Este bloque no tiene selecciones que superen sus filtros; no se rellenan con mercados inventados.")
                 return
             bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", "PENDIENTE").fillna("PENDIENTE")
+            if codigo == "SENCILLAS":
+                # Filtra también capturas antiguas para que no reaparezcan picks triviales.
+                sencillas = rank_single_candidates(bloque.to_dict("records"), limit=10)
+                if not sencillas:
+                    st.info("No hay sencillas que cumplan precio ≤ 88¢, ventaja mínima de 5 puntos y mercados no triviales.")
+                    return
+                for pick in sencillas:
+                    with st.container(border=True):
+                        categoria = str(pick.get("categoria", "Mercado MLB"))
+                        categoria = re.sub(r"^SENCILLAS\\s*·\\s*", "", categoria).strip() or "Mercado MLB"
+                        mercado = str(pick.get("mercado") or pick.get("seleccion") or "Contrato Kalshi")
+                        lado = str(pick.get("lado") or pick.get("seleccion") or "YES").upper()
+                        frase = mercado
+                        if categoria == "Total de carreras":
+                            mas = re.search(r"(?:\\+|or more|or higher|at least)\\s*$", mercado, re.I)
+                            linea_mas = re.search(r"([0-9]+(?:\\.[0-9]+)?)\\s*(?:\\+|or more|or higher|at least)", mercado, re.I)
+                            if linea_mas:
+                                frase = f"{linea_mas.group(1)} o más carreras en el partido"
+                            else:
+                                total_linea = re.search(r"(over|under|more than|less than)\\s*([0-9]+(?:\\.[0-9]+)?)", mercado, re.I)
+                                if total_linea:
+                                    verbo = "más de" if total_linea.group(1).lower() in {"over", "more than"} else "menos de"
+                                    frase = f"{verbo} {total_linea.group(2)} carreras en el partido"
+                        if categoria == "Entradas parciales":
+                            categoria = "Primeras 5 entradas (F5)" if re.search(r"first\\s*(?:5|five)", mercado, re.I) else "Entradas parciales"
+                        prefijo = "SÍ" if lado == "YES" else "NO"
+                        st.markdown(f"**{prefijo}: {frase}**")
+                        st.caption(f"Categoría: {categoria}")
+                        try:
+                            prob = float(pick.get("probabilidad_modelo", 0))
+                            if prob > 1:
+                                prob /= 100
+                            prob_txt = f"{prob:.1%}"
+                        except (TypeError, ValueError):
+                            prob_txt = "—"
+                        try:
+                            precio = float(pick.get("precio_captura", ""))
+                            if precio > 1:
+                                precio /= 100
+                            precio_txt = f"{round(precio * 100)}¢"
+                        except (TypeError, ValueError):
+                            precio_txt = "—"
+                        try:
+                            edge = float(pick.get("edge", pick.get("Ventaja (edge)", "")))
+                            if abs(edge) > 1:
+                                edge /= 100
+                            edge_txt = f"{edge * 100:+.1f} puntos"
+                        except (TypeError, ValueError):
+                            edge_txt = "—"
+                        st.write(f"Probabilidad del modelo: **{prob_txt}**")
+                        st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
+                        estado = str(pick.get("Resultado", pick.get("estado", "PENDIENTE")) or "PENDIENTE").upper()
+                        if estado == "WIN":
+                            st.success("WIN")
+                        elif estado == "LOSS":
+                            st.error("LOSS")
+                        elif estado in {"ANULADA", "VOID", "CANCELLED"}:
+                            st.info("ANULADA")
+                        else:
+                            st.warning("PENDIENTE")
+                        st.caption(f"Ticker: {pick.get('ticker', '—')}")
+                return
             for col in columnas:
                 if col not in bloque.columns:
                     bloque[col] = ""
             vista = bloque[columnas].copy()
             if "Resultado" in vista.columns:
-                vista = vista.rename(columns={"Resultado": "Resultado"})
                 st.dataframe(_tabla_con_resultado(vista), use_container_width=True, hide_index=True)
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
