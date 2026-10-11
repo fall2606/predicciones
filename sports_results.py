@@ -183,6 +183,25 @@ def _espn_summary(event_id, league):
     return payload
 
 
+def _summary_first_scoring_team(summary):
+    """Return the first scoring team's name only when ESPN exposes an ordered scorer list."""
+    payload = summary or {}
+    plays = payload.get("scoringPlays")
+    if plays is None:
+        plays = (payload.get("plays") or {}).get("items")
+    if not isinstance(plays, list) or not plays:
+        return None
+    # The summary's scoringPlays list is already in match order.
+    for play in plays:
+        if not isinstance(play, dict):
+            continue
+        team = play.get("team") or (play.get("competitor") or {}).get("team") or {}
+        name = team.get("displayName") or team.get("name") or team.get("shortDisplayName") or ""
+        if name:
+            return str(name)
+    return None
+
+
 def _summary_team_corners(summary, local_name, away_name):
     """Return (local, away) corners only when both teams and stats match uniquely."""
     box = (summary or {}).get("boxscore") or {}
@@ -338,6 +357,26 @@ def settle_from_score(row):
         proposition = None
         if series.endswith("GAME") and outcome in {"local", "visita", "empate"}:
             proposition = home > away if outcome == "local" else away > home if outcome == "visita" else home == away
+        elif series.endswith("FTTS") and outcome in {"local", "visita", "home", "away"}:
+            # A team-to-score-first contract is false when the final score is 0-0.
+            # Otherwise require ESPN's ordered scoring-play list; never infer the scorer from score alone.
+            if total == 0:
+                proposition = False
+            else:
+                espn_match = find_match(row)
+                if not espn_match or not espn_match.get("event_id"):
+                    return None
+                summary = _espn_summary(espn_match["event_id"], espn_match.get("league"))
+                first_team = _summary_first_scoring_team(summary)
+                if not first_team:
+                    return None
+                if _similar(first_team, str(row.get("local") or "")) >= 0.78:
+                    first_side = "local"
+                elif _similar(first_team, str(row.get("visita") or "")) >= 0.78:
+                    first_side = "visita"
+                else:
+                    return None
+                proposition = first_side == ("local" if outcome in {"local", "home"} else "visita")
         elif series.endswith("SPREAD") and line is not None:
             # Settle only explicit Spanish descriptions whose exact handicap semantics
             # are preserved in the captured row; otherwise defer to Kalshi.
