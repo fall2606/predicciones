@@ -839,6 +839,11 @@ for juego in [juego]:
             if "mercado" in vista.columns and "ticker" in bloque.columns:
                 etiquetas = bloque.apply(etiqueta_mercado_primera_entrada, axis=1)
                 vista["mercado"] = etiquetas.values
+            if "categoria" in vista.columns and "ticker" in vista.columns:
+                _primera = vista["ticker"].astype(str).str.upper().str.contains("BINNINGWIN")
+                vista.loc[_primera, "categoria"] = vista.loc[_primera, "categoria"].astype(str).map(
+                    lambda x: (x.split(" · ", 1)[0] + " · " if " · " in x else "") + "Ganador de la 1.ª entrada"
+                )
             if "Resultado" in vista.columns:
                 st.dataframe(_tabla_con_resultado(vista), use_container_width=True, hide_index=True)
             else:
