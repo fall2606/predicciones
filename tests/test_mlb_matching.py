@@ -34,7 +34,7 @@ class MLBMarketMatchingTests(unittest.TestCase):
             "title": "Los Angeles D wins",
         }
         probability, reason = mlb_engine.mercado_probabilidad(market, game)
-        self.assertIsNone(reason)
+        self.assertEqual(reason, "modelado")
         self.assertTrue(np.isfinite(probability))
         self.assertGreaterEqual(probability, 0)
         self.assertLessEqual(probability, 1)
