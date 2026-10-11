@@ -78,6 +78,43 @@ inicio_resultados = hoy - timedelta(days=7)
 seleccionables = []
 partidos_disponibles = {str(m["id"]): m for m in modelo[9]}
 partidos_disponibles.update({str(m["id"]): m for m in partidos})
+
+# Reconciliación visible: última liquidación y predicciones de partidos terminados sin resultado.
+try:
+    terminal_states = {"WIN", "LOSS", "ANULADA"}
+    if not resultados_guardados.empty and "estado" in resultados_guardados.columns:
+        terminal_result_ids = set(
+            resultados_guardados.loc[
+                resultados_guardados["estado"].astype(str).str.upper().isin(terminal_states),
+                "prediction_id"
+            ].astype(str)
+        )
+        latest_settlement = (
+            pd.to_datetime(resultados_guardados["resuelto_en"], errors="coerce", utc=True).max()
+            if "resuelto_en" in resultados_guardados.columns else pd.NaT
+        )
+    else:
+        terminal_result_ids = set()
+        latest_settlement = pd.NaT
+    final_match_ids = {
+        str(m.get("id")) for m in partidos_disponibles.values()
+        if str(m.get("status", "")).upper() in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED"}
+    }
+    if not predicciones_guardadas.empty and {"prediction_id", "match_id"}.issubset(predicciones_guardadas.columns):
+        started_without_result = predicciones_guardadas[
+            predicciones_guardadas["match_id"].astype(str).isin(final_match_ids)
+            & ~predicciones_guardadas["prediction_id"].astype(str).isin(terminal_result_ids)
+        ]
+    else:
+        started_without_result = pd.DataFrame()
+    st.caption("Última liquidación: " + (latest_settlement.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest_settlement) else "sin liquidaciones registradas"))
+    if len(started_without_result):
+        st.error(f"ALERTA: {len(started_without_result)} predicciones de partidos terminados siguen sin resultado registrado.")
+    else:
+        st.success("Liquidación: no se detectan predicciones pendientes en partidos terminados incluidos en el calendario cargado.")
+except (ValueError, TypeError, KeyError) as exc:
+    st.warning(f"No se pudo completar la reconciliación visible: {exc}")
+
 proximos_disponibles = []
 for partido in partidos_disponibles.values():
     fecha_txt = partido.get("utcDate")
