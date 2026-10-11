@@ -318,8 +318,6 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
         p=_probability(row)
         if not ticker or ticker in {"—","-","None","nan"} or p is None: continue
         price=_candidate_price(row)
-        # A very short-priced contract adds little to a combo even when model confidence is high.
-        if price is None or price > float(os.getenv("COMBO_PRECIO_MAX", "0.90")): continue
         item=dict(row); item["_prob"]=p; item["_price"]=price
         item["_family"]=_family(ticker,row.get("Apuesta") or row.get("Jugada sencilla") or "")
         try:
@@ -329,6 +327,8 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
         item["_edge"]=edge; candidates.append(item)
     high=[]; families=set()
     for x in sorted(candidates,key=lambda r:r["_prob"],reverse=True):
+        # Avoid near-certain prices in combo suggestions, without changing the value block.
+        if x["_price"] is None or x["_price"] > float(os.getenv("COMBO_PRECIO_MAX", "0.90")): continue
         if x["_prob"]<min_probability or x["_family"] in families: continue
         high.append(x); families.add(x["_family"])
         if len(high)>=high_limit: break
