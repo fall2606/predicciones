@@ -136,6 +136,23 @@ class NFLModelTests(unittest.TestCase):
                 excluded = nfl_engine.reconcile_exclusions(self.stats)
             self.assertIn(row["prediction_id"], excluded)
 
+
+    def test_nfl_rankings_are_per_game_and_limit_each_block(self):
+        rows = []
+        categories = ["Ganador del partido", "Hándicap de puntos", "Total de puntos", "Total de puntos del equipo"]
+        for i in range(8):
+            category = categories[i % len(categories)]
+            rows.append({
+                "prediction_id": f"game|ticker{i}|YES", "ticker": f"KXNFL{i}-MARKET",
+                "categoria": category + " · YES", "probabilidad_calibrada": 0.70 + i * 0.01,
+                "precio_captura": 0.50, "edge": 0.20 + i * 0.01,
+            })
+        singles, combos, value = nfl_engine._rank_nfl_game(rows)
+        self.assertLessEqual(len(singles), 5)
+        self.assertLessEqual(len(combos), 5)
+        self.assertLessEqual(len(value), 10)
+        self.assertGreaterEqual(len(combos), 4)
+
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
         self.assertIsNotNone(projected)
