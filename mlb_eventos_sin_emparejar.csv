@@ -1,0 +1,181 @@
+event_ticker,series_ticker,title,start_time,motivo
+KXCOACHOUTMLBDATE-27NYY,KXCOACHOUTMLBDATE,Aaron Boone: Out by Date,,evento_no_identificado/otro
+KXMLB-26,KXMLB,Pro Baseball Champion,,mercado_no_partido/prop
+KXMLBAL-26,KXMLBAL,American League Champion,,mercado_no_partido/prop
+KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner?,,mercado_no_partido/prop
+KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner?,,evento_no_identificado/otro
+KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner?,,mercado_no_partido/prop
+KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner?,,evento_no_identificado/otro
+KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner?,,evento_no_identificado/otro
+KXMLBALROTY-26,KXMLBALROTY,AL Rookie of the Year Winner?,,evento_no_identificado/otro
+KXMLBBGAME-26OCT110230VAMFL,KXMLBBGAME,Team Vamos vs. Team Flash,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110300GEEKEVOS,KXMLBBGAME,Geek Fam ID vs. EVOS,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110500ACEIG,KXMLBBGAME,AC Esports vs. Invictus Gaming,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110500TWPHAR,KXMLBBGAME,Twisted Minds PH vs. Aurora Gaming,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110600HEBUR,KXMLBBGAME,Hydra Esports vs. Buriram United Esports,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110600ONICRRQ,KXMLBBGAME,ONIC vs. RRQ Hoshi,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110730TLPHFAL,KXMLBBGAME,Team Liquid PH vs. Team Falcons PH,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110800TSAUR,KXMLBBGAME,Team Spirit vs. Aurevia Team,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110800VTEBT,KXMLBBGAME,Valee Thai Esports vs. Bacon Time,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110815RRQTREY,KXMLBBGAME,RRQ Tora vs. Team Rey,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT110900BTRDEWA,KXMLBBGAME,Bigetron by Vitality vs. Dewa United Esports,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT111000SLXKOG,KXMLBBGAME,SOLYX vs. King of Gamers Club,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBBGAME-26OCT111030RAKYNDX,KXMLBBGAME,Rakuzan vs. Team Yandex,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBCHAMPLEAGUE-26,KXMLBCHAMPLEAGUE,Pro Baseball Championship: Winning league,,mercado_no_partido/prop
+KXMLBDEBUT-AMILLER,KXMLBDEBUT,Aidan Miller: Debut Date,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBDEBUT-LDEVRIES,KXMLBDEBUT,Leo De Vries: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-TWHITE,KXMLBDEBUT,Thomas White: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-FARIAS,KXMLBDEBUT,Franklin Arias: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-JMADE,KXMLBDEBUT,Jesús Made: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-SWALCOTT,KXMLBDEBUT,Sebastian Walcott: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-ZHOPE,KXMLBDEBUT,Zyhir Hope: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-EQUINTERO,KXMLBDEBUT,Eduardo Quintero: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-EWILLITS,KXMLBDEBUT,Eli Willits: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-LPENA,KXMLBDEBUT,Luis Peña: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-SHERNANDEZ,KXMLBDEBUT,Seth Hernandez: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-EHOLLIDAY,KXMLBDEBUT,Ethan Holliday: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-JFLORA,KXMLBDEBUT,Jackson Flora: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-RCHOLOWSKY,KXMLBDEBUT,Roch Cholowsky: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-VLACKEY,KXMLBDEBUT,Vahn Lackey: Debut Date,,evento_no_identificado/otro
+KXMLBDEBUT-GEMERSON,KXMLBDEBUT,Grady Emerson: Debut Date,,evento_no_identificado/otro
+KXMLBEOTY-26,KXMLBEOTY,Executive of the Year Winner?,,evento_no_identificado/otro
+KXMLBERA-26OCT112000LADMIL,KXMLBERA,Los Angeles D vs Milwaukee: Earned Runs,,mercado_no_partido/prop
+KXMLBEXTRAS-26OCT112000LADMIL,KXMLBEXTRAS,Los Angeles D vs Milwaukee: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT122000CLETB,KXMLBEXTRAS,Cleveland vs Tampa Bay: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT122000LADMIL,KXMLBEXTRAS,Los Angeles D vs Milwaukee: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT132000CLETB,KXMLBEXTRAS,Cleveland vs Tampa Bay: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT142000MILLAD,KXMLBEXTRAS,Milwaukee vs Los Angeles D: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT151800TBCLE,KXMLBEXTRAS,Tampa Bay vs Cleveland: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT152000MILLAD,KXMLBEXTRAS,Milwaukee vs Los Angeles D: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBEXTRAS-26OCT161800TBCLE,KXMLBEXTRAS,Tampa Bay vs Cleveland: Extra Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF3-26OCT112000LADMIL,KXMLBF3,Los Angeles D vs Milwaukee: First 3 Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF3-26OCT122000CLETB,KXMLBF3,Cleveland vs Tampa Bay: First 3 Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF5-26OCT112000LADMIL,KXMLBF5,Los Angeles D vs Milwaukee: First 5 Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF5-26OCT122000CLETB,KXMLBF5,Cleveland vs Tampa Bay: First 5 Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF5SPREAD-26OCT112000LADMIL,KXMLBF5SPREAD,Los Angeles D vs Milwaukee: First 5 Spread,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF5SPREAD-26OCT122000CLETB,KXMLBF5SPREAD,Cleveland vs Tampa Bay: First 5 Spread,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL,Los Angeles D vs Milwaukee: First 5 Innings Total,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF5TOTAL-26OCT122000CLETB,KXMLBF5TOTAL,Cleveland vs Tampa Bay: First 5 Innings Total,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF7-26OCT112000LADMIL,KXMLBF7,Los Angeles D vs Milwaukee: First 7 Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBF7-26OCT122000CLETB,KXMLBF7,Cleveland vs Tampa Bay: First 7 Innings,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBFASTPITCH-26JMISIOROWSKI32,KXMLBFASTPITCH,Jacob Misiorowski: Fastest Pitch this Season,,evento_no_identificado/otro
+KXMLBGAME-26OCT112000LADMIL,KXMLBGAME,Game 1: Los Angeles D vs Milwaukee,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT122000CLETB,KXMLBGAME,Game 1: Cleveland vs Tampa Bay,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT122000LADMIL,KXMLBGAME,Game 2: Los Angeles D vs Milwaukee,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT132000CLETB,KXMLBGAME,Game 2: Cleveland vs Tampa Bay,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT142000MILLAD,KXMLBGAME,Game 3: Milwaukee vs Los Angeles D,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT151800TBCLE,KXMLBGAME,Game 3: Tampa Bay vs Cleveland,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT152000MILLAD,KXMLBGAME,Game 4: Milwaukee vs Los Angeles D,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGAME-26OCT161800TBCLE,KXMLBGAME,Game 4: Tampa Bay vs Cleveland,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBGG-26AL1B,KXMLBGG,Gold Glove: AL First Baseman,,evento_no_identificado/otro
+KXMLBGG-26AL2B,KXMLBGG,Gold Glove: AL Second Baseman,,evento_no_identificado/otro
+KXMLBGG-26AL3B,KXMLBGG,Gold Glove: AL Third Baseman,,evento_no_identificado/otro
+KXMLBGG-26ALC,KXMLBGG,Gold Glove: AL Catcher,,evento_no_identificado/otro
+KXMLBGG-26ALCF,KXMLBGG,Gold Glove: AL Center Field,,evento_no_identificado/otro
+KXMLBGG-26ALLF,KXMLBGG,Gold Glove: AL Left Field,,evento_no_identificado/otro
+KXMLBGG-26ALP,KXMLBGG,Gold Glove: AL Pitcher,,mercado_no_partido/prop
+KXMLBGG-26ALRF,KXMLBGG,Gold Glove: AL Right Field,,evento_no_identificado/otro
+KXMLBGG-26ALSS,KXMLBGG,Gold Glove: AL Shortstop,,evento_no_identificado/otro
+KXMLBGG-26ALTEAM,KXMLBGG,Gold Glove: AL Team,,evento_no_identificado/otro
+KXMLBGG-26NL1B,KXMLBGG,Gold Glove: NL First Baseman,,evento_no_identificado/otro
+KXMLBGG-26NL2B,KXMLBGG,Gold Glove: NL Second Baseman,,evento_no_identificado/otro
+KXMLBGG-26NL3B,KXMLBGG,Gold Glove: NL Third Baseman,,evento_no_identificado/otro
+KXMLBGG-26NLC,KXMLBGG,Gold Glove: NL Catcher,,evento_no_identificado/otro
+KXMLBGG-26NLCF,KXMLBGG,Gold Glove: NL Center Field,,evento_no_identificado/otro
+KXMLBGG-26NLLF,KXMLBGG,Gold Glove: NL Left Field,,evento_no_identificado/otro
+KXMLBGG-26NLP,KXMLBGG,Gold Glove: NL Pitcher,,mercado_no_partido/prop
+KXMLBGG-26NLRF,KXMLBGG,Gold Glove: NL Right Field,,evento_no_identificado/otro
+KXMLBGG-26NLSS,KXMLBGG,Gold Glove: NL Shortstop,,evento_no_identificado/otro
+KXMLBGG-26NLTEAM,KXMLBGG,Gold Glove: NL Team,,evento_no_identificado/otro
+KXMLBHA-26OCT112000LADMIL,KXMLBHA,Los Angeles D vs Milwaukee: Hits Allowed,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBHIT-26OCT112000LADMIL,KXMLBHIT,Los Angeles D vs Milwaukee: Hits,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBHIT-26OCT122000CLETB,KXMLBHIT,Cleveland vs Tampa Bay: Hits,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBHR-26OCT112000LADMIL,KXMLBHR,Los Angeles D vs Milwaukee: Home Runs,,mercado_no_partido/prop
+KXMLBHR-26OCT122000CLETB,KXMLBHR,Cleveland vs Tampa Bay: Home Runs,,mercado_no_partido/prop
+KXMLBHRR-26OCT112000LADMIL,KXMLBHRR,Los Angeles D vs Milwaukee: Hits + Runs + RBIs,,mercado_no_partido/prop
+KXMLBHRR-26OCT122000CLETB,KXMLBHRR,Cleveland vs Tampa Bay: Hits + Runs + RBIs,,mercado_no_partido/prop
+KXMLBINNINGWIN-26OCT112000LADMIL-1,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 1st Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-2,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 2nd Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-3,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 3rd Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-4,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 4th Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-5,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 5th Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-6,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 6th Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-7,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 7th Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-8,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 8th Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBINNINGWIN-26OCT112000LADMIL-9,KXMLBINNINGWIN,Los Angeles D vs Milwaukee: 9th Inning Winner,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBKS-26OCT112000LADMIL,KXMLBKS,Los Angeles D vs Milwaukee: Strikeouts,,mercado_no_partido/prop
+KXMLBMATCHUP-26ALCS,KXMLBMATCHUP,Pro Baseball ALCS Matchup,,evento_no_identificado/otro
+KXMLBNEXTTEAM-27FLINDOR12,KXMLBNEXTTEAM,Francisco Lindor's Next Team,,evento_no_identificado/otro
+KXMLBNEXTTEAM-27RACUNA,KXMLBNEXTTEAM,Ronald Acuna Jr. Next Team,,evento_no_identificado/otro
+KXMLBNEXTTEAM-27TSKUBAL,KXMLBNEXTTEAM,Tarik Skubal Next Team,,evento_no_identificado/otro
+KXMLBNL-26,KXMLBNL,National League Champion,,mercado_no_partido/prop
+KXMLBNLCPOTY-26,KXMLBNLCPOTY,NL Comeback Player of the Year Winner?,,mercado_no_partido/prop
+KXMLBNLCY-26,KXMLBNLCY,NL Cy Young Winner?,,evento_no_identificado/otro
+KXMLBNLHAARON-26,KXMLBNLHAARON,NL Hank Aaron Award Winner?,,mercado_no_partido/prop
+KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner?,,evento_no_identificado/otro
+KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner?,,evento_no_identificado/otro
+KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner?,,evento_no_identificado/otro
+KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,evento_no_identificado/otro
+KXMLBOUTS-26OCT112000LADMIL,KXMLBOUTS,Los Angeles D vs Milwaukee: Outs Recorded,,mercado_no_partido/prop
+KXMLBRBI-26OCT112000LADMIL,KXMLBRBI,Los Angeles D vs Milwaukee: RBIs,,mercado_no_partido/prop
+KXMLBRBI-26OCT122000CLETB,KXMLBRBI,Cleveland vs Tampa Bay: RBIs,,mercado_no_partido/prop
+KXMLBRFI-26OCT112000LADMIL,KXMLBRFI,Los Angeles D vs Milwaukee: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT121700LADMIL,KXMLBRFI,Los Angeles D vs Milwaukee: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT122000CLETB,KXMLBRFI,Cleveland vs Tampa Bay: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT132000CLETB,KXMLBRFI,Cleveland vs Tampa Bay: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT142000MILLAD,KXMLBRFI,Milwaukee vs Los Angeles D: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT151800TBCLE,KXMLBRFI,Tampa Bay vs Cleveland: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT152100MILLAD,KXMLBRFI,Milwaukee vs Los Angeles D: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBRFI-26OCT161800TBCLE,KXMLBRFI,Tampa Bay vs Cleveland: First Inning Run,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBSB-26OCT112000LADMIL,KXMLBSB,Los Angeles D vs Milwaukee: Stolen Bases,,mercado_no_partido/prop
+KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBSEEDWIN-26,KXMLBSEEDWIN,Seed of Pro Baseball Champion,,mercado_no_partido/prop
+KXMLBSPREAD-26OCT112000LADMIL,KXMLBSPREAD,Los Angeles D vs Milwaukee: Spread,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBSPREAD-26OCT122000CLETB,KXMLBSPREAD,Cleveland vs Tampa Bay: Spread,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBSS-26AL1B,KXMLBSS,Silver Slugger: AL First Baseman,,evento_no_identificado/otro
+KXMLBSS-26AL2B,KXMLBSS,Silver Slugger: AL Second Baseman,,evento_no_identificado/otro
+KXMLBSS-26AL3B,KXMLBSS,Silver Slugger: AL Third Baseman,,evento_no_identificado/otro
+KXMLBSS-26ALC,KXMLBSS,Silver Slugger: AL Catcher,,evento_no_identificado/otro
+KXMLBSS-26ALDH,KXMLBSS,Silver Slugger: AL Designated Hitter,,evento_no_identificado/otro
+KXMLBSS-26ALOF,KXMLBSS,Silver Slugger: AL Outfield,,evento_no_identificado/otro
+KXMLBSS-26ALSS,KXMLBSS,Silver Slugger: AL Shortstop,,evento_no_identificado/otro
+KXMLBSS-26ALTEAM,KXMLBSS,Silver Slugger: AL Team,,evento_no_identificado/otro
+KXMLBSS-26NL1B,KXMLBSS,Silver Slugger: NL First Baseman,,evento_no_identificado/otro
+KXMLBSS-26NL2B,KXMLBSS,Silver Slugger: NL Second Baseman,,evento_no_identificado/otro
+KXMLBSS-26NL3B,KXMLBSS,Silver Slugger: NL Third Baseman,,evento_no_identificado/otro
+KXMLBSS-26NLC,KXMLBSS,Silver Slugger: NL Catcher,,evento_no_identificado/otro
+KXMLBSS-26NLOF,KXMLBSS,Silver Slugger: NL Outfield,,evento_no_identificado/otro
+KXMLBSS-26NLSS,KXMLBSS,Silver Slugger: NL Shortstop,,evento_no_identificado/otro
+KXMLBSS-26NLTEAM,KXMLBSS,Silver Slugger: NL Team,,evento_no_identificado/otro
+KXMLBSTAT-26GS2,KXMLBSTAT,Pro Baseball: 2+ Grand Slam Game,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBSTAT-26HR4,KXMLBSTAT,Pro Baseball: 4+ Home Run Game,,mercado_no_partido/prop
+KXMLBSTAT-26HR500,KXMLBSTAT,Pro Baseball: 500+ Foot Home Run,,mercado_no_partido/prop
+KXMLBSTAT-26K20,KXMLBSTAT,Pro Baseball: 20+ Strikeout Game,,mercado_no_partido/prop
+KXMLBSTAT-26NOHIT,KXMLBSTAT,Pro Baseball: Individual Pitcher No Hitter,,mercado_no_partido/prop
+KXMLBSTAT-26P106,KXMLBSTAT,Pro Baseball: 106+ MPH Pitch,,evento_no_identificado/otro
+KXMLBSTAT-26P107,KXMLBSTAT,Pro Baseball: 107+ MPH Pitch,,evento_no_identificado/otro
+KXMLBSTAT-26PG,KXMLBSTAT,Pro Baseball: Perfect Game,,aparenta_mercado_de_partido_pero_no_hay_alias_suficiente
+KXMLBSTATCOUNT-263HR,KXMLBSTATCOUNT,Pro Baseball: 3+ Home Run Games,,mercado_no_partido/prop
+KXMLBSTATCOUNT-26CYCLE,KXMLBSTATCOUNT,Pro Baseball: Cycles,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBSTATCOUNT-26IMMACULATE,KXMLBSTATCOUNT,Pro Baseball: Immaculate Innings,,evento_no_identificado/otro
+KXMLBSTATCOUNT-26ITPHR,KXMLBSTATCOUNT,Pro Baseball: Inside-The-Park Home Runs,,mercado_no_partido/prop
+KXMLBTB-26OCT112000LADMIL,KXMLBTB,Los Angeles D vs Milwaukee: Total Bases,,mercado_no_partido/prop
+KXMLBTB-26OCT122000CLETB,KXMLBTB,Cleveland vs Tampa Bay: Total Bases,,mercado_no_partido/prop
+KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBTEAMTOTAL-26OCT112000LADMIL,KXMLBTEAMTOTAL,Los Angeles D vs Milwaukee: Team Total,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBTEAMTOTAL-26OCT122000CLETB,KXMLBTEAMTOTAL,Cleveland vs Tampa Bay: Team Total,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL,Los Angeles D vs Milwaukee: Total Runs,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBTOTAL-26OCT122000CLETB,KXMLBTOTAL,Cleveland vs Tampa Bay: Total Runs,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBWA-26OCT112000LADMIL,KXMLBWA,Los Angeles D vs Milwaukee: Walks Allowed,,equipo_identificado_sin_emparejamiento_unico_o_fecha
+KXMLBWALKOFFS-26,KXMLBWALKOFFS,Total Walk-Offs in Pro Baseball Playoffs,,mercado_no_partido/prop
+KXNEXTTEAMMLB-27ACHAPMAN,KXNEXTTEAMMLB,Aroldis Chapman's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27CWALKER,KXNEXTTEAMMLB,Christian Walker's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27FTATIS,KXNEXTTEAMMLB,Fernando Tatis Jr.'s Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27JDURAN,KXNEXTTEAMMLB,Jarren Duran's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27JRYAN,KXNEXTTEAMMLB,Joe Ryan's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27LSEVERINO,KXNEXTTEAMMLB,Luis Severino's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27MTROUT,KXNEXTTEAMMLB,Mike Trout's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27RDEVERS,KXNEXTTEAMMLB,Rafael Devers's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27SALCANTARA,KXNEXTTEAMMLB,Sandy Alcantara's Next Team,,evento_no_identificado/otro
+KXNEXTTEAMMLB-27YDIAZ,KXNEXTTEAMMLB,Yandy Diaz's Next Team,,evento_no_identificado/otro
+KXTEAMSINWS-26,KXTEAMSINWS,Pro Baseball Championship Series Matchup,,mercado_no_partido/prop
