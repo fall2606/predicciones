@@ -1,8 +1,7 @@
-"""Fast independent football score checks using ESPN's public scoreboard endpoint.
+"""Independent football settlement using football-data.org and ESPN score/boxscore data.
 
-The endpoint is public but undocumented; keep request volume low and never settle a
-market from it unless its semantics can be derived safely from the captured prediction.
-Special markets (corners, cards, player props, first goal, half-time) fall back to Kalshi.
+Only resolve a market when the fixture, period, line and captured side can be matched
+unambiguously. Unsupported stats and ambiguous contracts deliberately defer to Kalshi.
 """
 from __future__ import annotations
 
@@ -159,6 +158,65 @@ def _football_data_match(row):
     return candidates[0]
 
 
+
+
+_SUMMARY_CACHE = {}
+
+def _espn_summary(event_id, league):
+    """Fetch ESPN's detailed box score/plays for a confidently matched event."""
+    if not event_id or not league:
+        return None
+    key = (str(league), str(event_id))
+    cached = _SUMMARY_CACHE.get(key)
+    if cached and time.monotonic() - cached[0] < 180:
+        return cached[1]
+    try:
+        response = _SESSION.get(
+            f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/summary",
+            params={"event": str(event_id)}, timeout=_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json() or {}
+    except (requests.RequestException, ValueError, TypeError):
+        return None
+    _SUMMARY_CACHE[key] = (time.monotonic(), payload)
+    return payload
+
+
+def _summary_team_corners(summary, local_name, away_name):
+    """Return (local, away) corners only when both teams and stats match uniquely."""
+    box = (summary or {}).get("boxscore") or {}
+    teams = box.get("teams") or []
+    found = {}
+    for item in teams:
+        team = item.get("team") or {}
+        name = team.get("displayName") or team.get("name") or team.get("shortDisplayName") or ""
+        confidence_local = _similar(local_name, name)
+        confidence_away = _similar(away_name, name)
+        side = "local" if confidence_local >= confidence_away else "away"
+        confidence = max(confidence_local, confidence_away)
+        if confidence < 0.78:
+            continue
+        if side in found and found[side][0] >= confidence:
+            return None
+        value = None
+        for stat in item.get("statistics") or []:
+            label = str(stat.get("label") or stat.get("name") or stat.get("abbreviation") or "").lower()
+            if "corner" not in label:
+                continue
+            raw = stat.get("displayValue", stat.get("value"))
+            try:
+                value = int(float(str(raw).replace(",", "")))
+            except (TypeError, ValueError):
+                continue
+            break
+        if value is not None:
+            found[side] = (confidence, value)
+    if set(found) != {"local", "away"}:
+        return None
+    return found["local"][1], found["away"][1]
+
+
 def find_match(row):
     """Return a confidently matched scoreboard event, or None rather than guessing."""
     ticker = str(row.get("ticker") or "").upper()
@@ -280,6 +338,28 @@ def settle_from_score(row):
         proposition = None
         if series.endswith("GAME") and outcome in {"local", "visita", "empate"}:
             proposition = home > away if outcome == "local" else away > home if outcome == "visita" else home == away
+        elif series.endswith("SPREAD") and line is not None:
+            # Settle only explicit Spanish descriptions whose exact handicap semantics
+            # are preserved in the captured row; otherwise defer to Kalshi.
+            description = str(row.get("jugada") or row.get("mercado") or "").lower()
+            spread_home, spread_away = home, away
+            if "1.ª parte" in description or "1a parte" in description or "primera parte" in description:
+                if half_home is None or half_away is None:
+                    return None
+                spread_home, spread_away = half_home, half_away
+                period_label = "1.ª parte"
+            match_desc = re.search(r"(.+?)\\s+no pierde por más de\\s+([0-9]+(?:[.,][0-9]+)?)\\s+gol", description)
+            if not match_desc:
+                return None
+            team_name = match_desc.group(1).strip()
+            if _similar(team_name, str(row.get("local") or "")) >= 0.78:
+                margin = spread_home - spread_away
+            elif _similar(team_name, str(row.get("visita") or "")) >= 0.78:
+                margin = spread_away - spread_home
+            else:
+                return None
+            threshold = float(match_desc.group(2).replace(",", "."))
+            proposition = margin >= -threshold
         elif series.endswith("1HBTTS") and outcome in {"ambos", "btts"}:
             if half_home is None or half_away is None:
                 return None
@@ -314,6 +394,28 @@ def settle_from_score(row):
             period_label = "2.ª parte"
             if total == threshold:
                 return None
+        elif series.endswith("TCORNERS") or series.endswith("CORNERS"):
+            # Corners are not inferable from the score. Require ESPN's detailed
+            # match boxscore and an unambiguous two-team match.
+            espn_match = find_match(row)
+            if not espn_match or not espn_match.get("completed") or not espn_match.get("event_id"):
+                return None
+            summary = _espn_summary(espn_match["event_id"], espn_match.get("league"))
+            corners = _summary_team_corners(summary, str(row.get("local") or ""), str(row.get("visita") or ""))
+            if corners is None or line is None:
+                return None
+            local_corners, away_corners = corners
+            if series.endswith("TCORNERS") and outcome in {"local", "visita", "home", "away"}:
+                count = local_corners if outcome in {"local", "home"} else away_corners
+                proposition = count >= float(line)
+                shown_home, shown_away = local_corners, away_corners
+            elif series.endswith("CORNERS") and outcome in {"over", "under"}:
+                count = local_corners + away_corners
+                proposition = count >= float(line) if outcome == "over" else count < float(line)
+                shown_home, shown_away = local_corners, away_corners
+            else:
+                return None
+            period_label = "córners"
         elif series.endswith("TOTAL") and "1H" not in series and "2H" not in series and outcome in {"over", "under"} and line is not None:
             threshold = float(line)
             proposition = total > threshold if outcome == "over" else total < threshold
