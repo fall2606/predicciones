@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 import requests
+from sports_results import settle_from_score
 
 KALSHI_API_BASE = os.getenv("KALSHI_API_BASE", "https://api.elections.kalshi.com/trade-api/v2").rstrip("/")
 TERMINAL_STATES = {"WIN", "LOSS", "ANULADA"}
@@ -216,13 +217,15 @@ def _trusted_terminal_result(row,result_columns,state_field="estado"):
     state=str(row.get(state_field,"")).upper()
     if state not in TERMINAL_STATES:
         return False
+    marker=str(row.get("marcador",""))
+    if marker.startswith("Marcador ESPN independiente:"):
+        return "resultado_kalshi" not in result_columns
     if "resultado_kalshi" in result_columns:
         return str(row.get("resultado_kalshi","")).upper() in {"YES","NO","VOID"}
-    marker=str(row.get("marcador",""))
     return marker.startswith("Resultado oficial Kalshi:") or marker.startswith("Contrato anulado/cancelado por")
 
 def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_field="lado",ticker_field="ticker",id_field="prediction_id",state_field="estado",cancelled_match_ids=()):
-    """Recover every old prediction; trust Kalshi's final YES/NO/void outcome."""
+    """Recover old predictions; use independent full-time scores where safe, Kalshi otherwise."""
     predictions_path=Path(predictions_path); results_path=Path(results_path)
     predictions=read_rows(predictions_path); results=read_rows(results_path)
     has_match_id=any("match_id" in r for r in predictions)
@@ -255,23 +258,33 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
             new.append(out)
             terminal.add(pid)
             continue
-        ticker_value=str(row.get(ticker_field,"")).strip()
-        if ticker_value.upper() in {"","—","-","NONE","NAN"}:
-            # Historical predictions without a Kalshi contract stay archived and are
-            # reported separately; there is no contract that can be settled.
-            continue
         kickoff=parse_datetime(row.get("fecha"))
         # Future fixtures do not need a settlement lookup yet. Past fixtures are
         # always retried, regardless of age, so missed schedules are recovered.
         if kickoff is None or kickoff > now:
             continue
+        # A score-based result may resolve a captured prediction without an executable ticker.
         pending.append(row)
-    series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
+    series={str(r[ticker_field]).split("-",1)[0] for r in pending
+            if str(r.get(ticker_field,"")).strip().upper() not in {"","—","-","NONE","NAN"}}
     # For small backlogs, query exact tickers directly; scanning every settled market in a series is needlessly slow.
     markets=_market_rows_for_series(series) if len(pending) > 50 else {}
     exact_market_cache={}
     for row in pending:
-        pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip(); market=markets.get(ticker)
+        pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip()
+        # Prefer an independent scoreboard for markets whose outcome follows safely
+        # from the full-time score. Corners, halves, first goal, cards and props fall back to Kalshi.
+        external = settle_from_score(row)
+        if external and external.get("state") in {"WIN", "LOSS"}:
+            out={id_field:pid,state_field:external["state"],"marcador":external["reason"],
+                 "resuelto_en":utc_now().isoformat()}
+            new.append(out)
+            terminal.add(pid)
+            continue
+        if ticker.upper() in {"","—","-","NONE","NAN"}:
+            skipped += 1
+            continue
+        market=markets.get(ticker)
         if market is None:
             # Always retry exact tickers, including old backlogs. Cache each ticker
             # so predictions in separate blocks do not cause duplicate API calls.
@@ -316,7 +329,7 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     summary={"predicciones_leidas":len(predictions),"pendientes_revisadas":len(pending),"resultados_nuevos":len(new),
         "win":sum(r["estado"]=="WIN" for r in new),"loss":sum(r["estado"]=="LOSS" for r in new),
         "anuladas":sum(r["estado"]=="ANULADA" for r in new),"sin_resolver_aun":skipped}
-    print("LIQUIDACIÓN KALSHI:",summary); return summary
+    print("LIQUIDACIÓN HÍBRIDA (marcador independiente + Kalshi):",summary); return summary
 def read_csv_rows_resilient(path):
     """Repair mixed-schema CSV history; quarantine unrecoverable raw rows before rewriting."""
     path = Path(path)
