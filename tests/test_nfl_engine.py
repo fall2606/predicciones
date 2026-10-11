@@ -91,6 +91,25 @@ class NFLModelTests(unittest.TestCase):
         self.assertIsNone(p)
         self.assertEqual(category, "")
 
+
+    def test_spread_ladder_is_not_misclassified_as_moneyline(self):
+        p, category = nfl_engine._market_probability(
+            {"ticker": "KXNFLSPREAD-TEST", "title": "DEN Broncos wins by over 10.5 points",
+             "yes_sub_title": "DEN Broncos wins by over 10.5 points"},
+            "DEN Broncos", "LA Chargers", 22.9, 17.6,
+        )
+        self.assertLess(p, 0.5)
+        self.assertEqual(category, "Hándicap de puntos")
+
+    def test_second_quarter_spread_is_skipped(self):
+        p, category = nfl_engine._market_probability(
+            {"ticker": "KXNFL2QSPREAD-TEST", "title": "DEN Broncos wins by over 10.5 points",
+             "yes_sub_title": "DEN Broncos wins by over 10.5 points"},
+            "DEN Broncos", "LA Chargers", 22.9, 17.6,
+        )
+        self.assertIsNone(p)
+        self.assertEqual(category, "")
+
     def test_total_points_market_uses_line_and_nfl_score_projection(self):
         p, category = nfl_engine._market_probability(
             {"ticker": "KXNFLTOTAL-TEST", "title": "Over 44.5 total points"},
