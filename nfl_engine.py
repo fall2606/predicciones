@@ -852,13 +852,15 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
     return saved_rows, rejected, catalog, coverage
 
 def save_capture(rows, path=PRED_FILE):
-    """Shared immutable writer wrapped in an atomic file replacement."""
-    import shutil
+    """Shared immutable writer, migrated/tolerant read, and atomic replacement."""
     path = Path(path)
     tmp = path.with_name(path.name + ".capture.tmp")
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
-        shutil.copyfile(path, tmp)
+        # Quarantine malformed rows from the real ledger, normalize known legacy
+        # columns, and only then invoke the shared immutable append writer.
+        existing_rows = read_csv_tolerant(path, PRED_COLUMNS)
+        _write_report(tmp, PRED_COLUMNS, existing_rows)
     elif tmp.exists():
         tmp.unlink()
     result = append_immutable_predictions(
