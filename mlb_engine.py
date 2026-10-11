@@ -500,3 +500,22 @@ def main():
         PRED_FILE, PRED_COLUMNS, new_rows, probability_field="probabilidad_modelo"
     )
     print("Eventos MLB emparejados: {} | eventos sin partido StatsAPI coincidente: {} | contratos sin modelo específico/datos finitos: {} | contratos modelables: {} | capturas aceptadas: {} | descartadas: {}. Los resultados solo los escribe liquidar_mlb.py.".format(event_count, unmatched_event_count, unsupported_market_count, modelable_market_count, capture_summary["accepted"], capture_summary["rejected"]))
+
+
+def _price(market, *keys):
+    for key in keys:
+        value = market.get(key)
+        try:
+            if value not in (None, ""):
+                price = float(value)
+                if price > 1:
+                    price /= 100
+                if 0 < price < 1 and math.isfinite(price):
+                    return price
+        except (ValueError, TypeError, OverflowError):
+            continue
+    return None
+
+
+if __name__ == "__main__":
+    main()
