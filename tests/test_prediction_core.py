@@ -174,7 +174,12 @@ class CoreTests(unittest.TestCase):
  def test_csv_reader_quarantines_bad_row_and_keeps_good_history(self):
   with tempfile.TemporaryDirectory() as tmp:
    path=Path(tmp)/"resultados.csv"
-   path.write_text("prediction_id,estado,marcador,resuelto_en\nold,WIN,Marcador,2026-10-10T10:00:00Z\nbad,LOSS,Marcador,extra,2026-10-10T11:00:00Z\nnew,LOSS,Marcador,2026-10-10T12:00:00Z\n",encoding="utf-8")
+   path.write_text("\n".join([
+    "prediction_id,estado,marcador,resuelto_en",
+    "old,WIN,Marcador,2026-10-10T10:00:00Z",
+    "bad,LOSS,Marcador,extra,2026-10-10T11:00:00Z",
+    "new,LOSS,Marcador,2026-10-10T12:00:00Z",
+   ]) + "\n",encoding="utf-8")
    rows=core.read_csv_rows_resilient(path)
    self.assertEqual([row["prediction_id"] for row in rows],["old","new"])
    self.assertNotIn("bad,LOSS,Marcador,extra",path.read_text(encoding="utf-8"))
