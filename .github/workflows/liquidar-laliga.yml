@@ -1,6 +1,10 @@
 name: Liquidación automática de LaLiga
 
 on:
+  # Kalshi solo permite liquidar cuando publica el resultado final del mercado.
+  # Reintentar cada 10 minutos evita depender de ejecuciones manuales.
+  schedule:
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 permissions:
