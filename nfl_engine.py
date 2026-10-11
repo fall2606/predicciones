@@ -203,6 +203,11 @@ def merge_game_events(events):
             event["title"] = fixture
             event["markets"] = []
             grouped[key] = event
+        current_event_ticker = str(grouped[key].get("event_ticker") or "").upper()
+        source_event_ticker = str(source.get("event_ticker") or "").upper()
+        period_pattern = r"KXNFL(?:1H|2H|1Q|2Q|3Q|4Q|Q1|Q2|Q3|Q4)"
+        if re.search(period_pattern, current_event_ticker) and source_event_ticker and not re.search(period_pattern, source_event_ticker):
+            grouped[key]["event_ticker"] = source.get("event_ticker")
         known = {str(m.get("ticker") or "") for m in grouped[key]["markets"]}
         for market in source.get("markets") or []:
             ticker = str(market.get("ticker") or "")
@@ -228,14 +233,21 @@ def reconcile_exclusions(stats):
         pid = str(row.get("prediction_id") or "").strip()
         if not pid or pid in excluded:
             continue
+        event_ticker = str(row.get("event_ticker") or "").upper()
+        market_ticker = str(row.get("ticker") or "").upper()
+        period_pattern = r"KXNFL(?:1H|2H|1Q|2Q|3Q|4Q|Q1|Q2|Q3|Q4)"
+        period_contract = bool(re.search(period_pattern, event_ticker) or re.search(period_pattern, market_ticker))
         kickoff = _scheduled_kickoff(row.get("local"), row.get("visita"), stats)
         captured = _parse_datetime(row.get("capturado_en"))
-        if kickoff is None or captured is None or captured < kickoff:
+        late_capture = kickoff is not None and captured is not None and captured >= kickoff
+        if not period_contract and not late_capture:
             continue
+        reason = ("Contrato de periodo/cuarto no cubierto por el modelo NFL" if period_contract else
+                  "Captura registrada a la hora del inicio real o después; excluida de calibración prepartido")
         new_rows.append({
             "prediction_id": pid,
-            "motivo": "Captura registrada a la hora del inicio real o después; excluida de resultados y calibración prepartido",
-            "kickoff_real": kickoff.isoformat(),
+            "motivo": reason,
+            "kickoff_real": kickoff.isoformat() if kickoff else "",
             "detectado_en": datetime.now(timezone.utc).isoformat(),
         })
         excluded.add(pid)
