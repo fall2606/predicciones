@@ -107,7 +107,7 @@ for partido in partidos_disponibles.values():
     estado = partido.get("status")
     proximo = inicio <= fecha_local <= fin and estado in {"SCHEDULED", "TIMED"}
     finalizado_revisable = (
-        estado == "FINISHED"
+        estado in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
         and (inicio_resultados <= fecha_local <= hoy or str(partido.get("id")) in ids_con_captura)
     )
     if proximo or finalizado_revisable:
@@ -122,7 +122,12 @@ for m in seleccionables:
     local = m["homeTeam"].get("shortName") or m["homeTeam"]["name"]
     visita = m["awayTeam"].get("shortName") or m["awayTeam"]["name"]
     fecha = datetime.fromisoformat(m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
-    estado = "✅ FINAL" if m["status"] == "FINISHED" else "⏳ PRÓXIMO"
+    estado_partido = str(m.get("status", "")).upper()
+    estado = (
+        "✅ FINAL" if estado_partido in {"FINISHED", "AWARDED"}
+        else "⚠️ " + estado_partido if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
+        else "⏳ PRÓXIMO"
+    )
     marcador = marcador_reglamentario(m)
     marcador_txt = (
         f" · {marcador['home']}-{marcador['away']}"
@@ -146,6 +151,9 @@ if pendientes:
     indice = next(i for i, m in enumerate(seleccionables) if m is pendientes[0])
 etiqueta = st.selectbox("Partido", list(opciones), index=indice)
 partido = opciones[etiqueta]
+estado_partido = str(partido.get("status", "")).upper()
+partido_final = estado_partido in {"FINISHED", "AWARDED"}
+partido_cerrado = partido_final or estado_partido in {"CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
 local = partido["homeTeam"].get("shortName") or partido["homeTeam"]["name"]
 visita = partido["awayTeam"].get("shortName") or partido["awayTeam"]["name"]
 fecha_objetivo = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
@@ -162,8 +170,8 @@ corners_final, resultado = datos_partido["corners_final"], datos_partido["result
 try:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = cargar_eventos_kalshi_champions()
     fecha_partido = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00")).astimezone(TZ).date()
-    resultado_en_vivo = resultado if partido["status"] != "FINISHED" else None
-    corners_en_vivo = corners_final if partido["status"] != "FINISHED" else None
+    resultado_en_vivo = resultado if not partido_cerrado else None
+    corners_en_vivo = corners_final if not partido_cerrado else None
     resumen_sencillo_kalshi, margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = preparar_top_predicciones_kalshi(
         eventos_kalshi, local, visita, fecha_partido, p_goles, i, j, p_corners, ci, cj,
         resultado_en_vivo, corners_en_vivo, datos_partido["proporcion_primera"],
@@ -177,11 +185,11 @@ except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
 resumen_archivado = resumen_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
 if resumen_archivado:
     resumen_sencillo_kalshi = resumen_archivado
-elif partido["status"] == "FINISHED":
+elif partido_cerrado:
     resumen_sencillo_kalshi = []
 
 st.subheader(f"{local} vs {visita}")
-if partido["status"] == "FINISHED" and resultado is not None:
+if partido_final and resultado is not None:
     st.success(
         f"Partido finalizado: {local} {resultado['partido'][0]}–{resultado['partido'][1]} {visita}. "
         "El resultado de cada pronóstico archivado aparece en su tarjeta."
@@ -367,7 +375,7 @@ with st.expander("Cómo calcula el algoritmo estas probabilidades"):
         "la probabilidad futura se calibra con una corrección suavizada; la probabilidad base de cada captura queda intacta."
     )
 
-if partido["status"] != "FINISHED":
+if not partido_final:
     if todas_kalshi:
         with st.expander(f"Ver todas las apuestas y líneas detectadas ({len(todas_kalshi)})"):
             st.dataframe(pd.DataFrame(todas_kalshi), use_container_width=True, hide_index=True)
