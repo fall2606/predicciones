@@ -26,7 +26,7 @@ def postponed_match_ids(competition):
         response.raise_for_status()
         matches = response.json().get("matches", [])
         return {str(m["id"]) for m in matches
-                if m.get("id") is not None and str(m.get("status", "")).upper() in {"POSTPONED", "CANCELLED", "CANCELED", "SUSPENDED"}}
+                if m.get("id") is not None and str(m.get("status", "")).upper() in {"CANCELLED", "CANCELED"}}
     except (requests.RequestException, ValueError, TypeError) as exc:
         print(f"AVISO: no se pudo consultar el estado oficial de {competition}: {exc}")
         return set()
