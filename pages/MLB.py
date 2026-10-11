@@ -62,7 +62,7 @@ historial_mlb = leer_historial_mlb()
 # Estado operativo de liquidación: solo alerta sobre partidos que StatsAPI marca como finalizados.
 try:
     hoy_utc = datetime.now(ZoneInfo("UTC")).date()
-    desde_utc = hoy_utc - timedelta(days=14)
+    desde_utc = hoy_utc - timedelta(days=180)
     schedule_resp = requests.get(
         f"{API}/schedule",
         params={"sportId": 1, "startDate": desde_utc.isoformat(),
