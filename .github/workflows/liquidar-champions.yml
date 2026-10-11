@@ -1,6 +1,9 @@
 name: Liquidación automática de Champions League
 
 on:
+  # Reintenta periódicamente hasta que Kalshi publique la resolución oficial.
+  schedule:
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -44,7 +47,7 @@ jobs:
           MATCH_LOOKUP_GRACE_HOURS: ${{ vars.MATCH_LOOKUP_GRACE_HOURS || '6' }}
         run: python scripts/auditar_reconciliacion.py
 
-      - name: Guardar resultados sin modificar predicciones
+      - name: Guardar resultados sin modificar pronósticos
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
