@@ -91,6 +91,9 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHIT-26OCT112000LADMIL,KXMLBHIT-26OCT112000LADMIL-LADWSMITH16-1,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHIT-26OCT112000LADMIL,KXMLBHIT-26OCT112000LADMIL-LADWSMITH16-2,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHIT-26OCT112000LADMIL,KXMLBHIT-26OCT112000LADMIL-LADWSMITH16-3,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHIT-26OCT112000LADMIL,KXMLBHIT-26OCT112000LADMIL-MILAVAUGHN28-1,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHIT-26OCT112000LADMIL,KXMLBHIT-26OCT112000LADMIL-MILAVAUGHN28-2,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHIT-26OCT112000LADMIL,KXMLBHIT-26OCT112000LADMIL-MILAVAUGHN28-3,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT122000CLETB,KXMLBHIT-26OCT122000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT122000CLETB,KXMLBHIT-26OCT122000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT122000CLETB,KXMLBHIT-26OCT122000CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
@@ -141,6 +144,8 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHR-26OCT112000LADMIL,KXMLBHR-26OCT112000LADMIL-LADTHERNANDEZ37-2,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHR-26OCT112000LADMIL,KXMLBHR-26OCT112000LADMIL-LADWSMITH16-1,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHR-26OCT112000LADMIL,KXMLBHR-26OCT112000LADMIL-LADWSMITH16-2,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHR-26OCT112000LADMIL,KXMLBHR-26OCT112000LADMIL-MILAVAUGHN28-1,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHR-26OCT112000LADMIL,KXMLBHR-26OCT112000LADMIL-MILAVAUGHN28-2,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT122000CLETB,KXMLBHR-26OCT122000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT122000CLETB,KXMLBHR-26OCT122000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT122000CLETB,KXMLBHR-26OCT122000CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
@@ -231,6 +236,10 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-LADWSMITH16-3,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-LADWSMITH16-4,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-LADWSMITH16-5,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-MILAVAUGHN28-1,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-MILAVAUGHN28-2,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-MILAVAUGHN28-3,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBHRR-26OCT112000LADMIL,KXMLBHRR-26OCT112000LADMIL-MILAVAUGHN28-4,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT122000CLETB,KXMLBHRR-26OCT122000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT122000CLETB,KXMLBHRR-26OCT122000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT122000CLETB,KXMLBHRR-26OCT122000CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
@@ -372,6 +381,8 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBRBI-26OCT112000LADMIL,KXMLBRBI-26OCT112000LADMIL-LADTHERNANDEZ37-2,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBRBI-26OCT112000LADMIL,KXMLBRBI-26OCT112000LADMIL-LADWSMITH16-1,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBRBI-26OCT112000LADMIL,KXMLBRBI-26OCT112000LADMIL-LADWSMITH16-2,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBRBI-26OCT112000LADMIL,KXMLBRBI-26OCT112000LADMIL-MILAVAUGHN28-1,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBRBI-26OCT112000LADMIL,KXMLBRBI-26OCT112000LADMIL-MILAVAUGHN28-2,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT122000CLETB,KXMLBRBI-26OCT122000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT122000CLETB,KXMLBRBI-26OCT122000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT122000CLETB,KXMLBRBI-26OCT122000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
@@ -401,6 +412,7 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBSB-26OCT112000LADMIL,KXMLBSB-26OCT112000LADMIL-LADMMUNCY13-1,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBSB-26OCT112000LADMIL,KXMLBSB-26OCT112000LADMIL-LADTHERNANDEZ37-1,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBSB-26OCT112000LADMIL,KXMLBSB-26OCT112000LADMIL-LADWSMITH16-1,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBSB-26OCT112000LADMIL,KXMLBSB-26OCT112000LADMIL-MILAVAUGHN28-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBSB-26OCT122000CLETB,KXMLBSB-26OCT122000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBSB-26OCT122000CLETB,KXMLBSB-26OCT122000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBSB-26OCT122000CLETB,KXMLBSB-26OCT122000CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
@@ -477,6 +489,9 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTB-26OCT112000LADMIL,KXMLBTB-26OCT112000LADMIL-LADWSMITH16-3,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTB-26OCT112000LADMIL,KXMLBTB-26OCT112000LADMIL-LADWSMITH16-4,,Props de jugador,,,,sin_modelo_especifico
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTB-26OCT112000LADMIL,KXMLBTB-26OCT112000LADMIL-LADWSMITH16-5,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTB-26OCT112000LADMIL,KXMLBTB-26OCT112000LADMIL-MILAVAUGHN28-2,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTB-26OCT112000LADMIL,KXMLBTB-26OCT112000LADMIL-MILAVAUGHN28-3,,Props de jugador,,,,sin_modelo_especifico
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTB-26OCT112000LADMIL,KXMLBTB-26OCT112000LADMIL-MILAVAUGHN28-4,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT122000CLETB,KXMLBTB-26OCT122000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT122000CLETB,KXMLBTB-26OCT122000CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT122000CLETB,KXMLBTB-26OCT122000CLETB-CLEBROCCHIO4-4,,Props de jugador,,,,sin_modelo_especifico
@@ -549,8 +564,8 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5SPREAD-26OCT112000LADMIL,KXMLBF5SPREAD-26OCT112000LADMIL-LAD2,NO,Entradas parciales,0.04506616,0.770000,-0.724934,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5SPREAD-26OCT112000LADMIL,KXMLBF5SPREAD-26OCT112000LADMIL-LAD3,NO,Entradas parciales,0.12424422,0.880000,-0.755756,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-1,NO,Entradas parciales,0.00880291,0.110000,-0.101197,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-2,NO,Entradas parciales,0.04506616,0.290000,-0.244934,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-3,YES,Entradas parciales,0.87575578,0.560000,0.315756,excluida por diversificación de familia/equipo o límite del bloque
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-2,NO,Entradas parciales,0.04506616,0.280000,-0.234934,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-3,YES,Entradas parciales,0.87575578,0.550000,0.325756,excluida por diversificación de familia/equipo o límite del bloque
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-3,NO,Entradas parciales,0.12424422,0.460000,-0.335756,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-4,NO,Entradas parciales,0.24602695,0.620000,-0.373973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBF5TOTAL-26OCT112000LADMIL,KXMLBF5TOTAL-26OCT112000LADMIL-5,YES,Entradas parciales,0.60595539,0.270000,0.335955,probabilidad inferior al umbral de alta probabilidad; excluida por diversificación de familia/equipo o límite del bloque
@@ -583,17 +598,17 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-6,NO,Total de carreras,0.12698303,0.450000,-0.323017,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-7,YES,Total de carreras,0.79617999,0.470000,0.326180,excluida por diversificación de familia/equipo o límite del bloque
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-7,NO,Total de carreras,0.20382001,0.540000,-0.336180,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-8,NO,Total de carreras,0.29624762,0.670000,-0.373752,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-8,NO,Total de carreras,0.29624762,0.680000,-0.383752,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-9,YES,Total de carreras,0.60217292,0.270000,0.332173,probabilidad inferior al umbral de alta probabilidad; excluida por diversificación de familia/equipo o límite del bloque
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-9,NO,Total de carreras,0.39782708,0.740000,-0.342173,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-10,NO,Total de carreras,0.50125695,0.820000,-0.318743,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-11,YES,Total de carreras,0.40011446,0.150000,0.250114,probabilidad inferior al umbral de alta probabilidad; excluida por diversificación de familia/equipo o límite del bloque
 849809,Milwaukee Brewers,Los Angeles Dodgers,KXMLBTOTAL-26OCT112000LADMIL,KXMLBTOTAL-26OCT112000LADMIL-11,NO,Total de carreras,0.59988554,0.860000,-0.260114,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT122000CLETB,KXMLBF3-26OCT122000CLETB-CLE,NO,Entradas parciales,0.53297377,0.720000,-0.187026,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT122000CLETB,KXMLBF3-26OCT122000CLETB-TB,NO,Entradas parciales,0.46702623,0.590000,-0.122974,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT122000CLETB,KXMLBF5-26OCT122000CLETB-CLE,NO,Entradas parciales,0.54140977,0.700000,-0.158590,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT122000CLETB,KXMLBF5-26OCT122000CLETB-TB,YES,Entradas parciales,0.54140977,0.510000,0.031410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT122000CLETB,KXMLBF5-26OCT122000CLETB-TB,NO,Entradas parciales,0.45859023,0.510000,-0.051410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT122000CLETB,KXMLBF3-26OCT122000CLETB-TB,NO,Entradas parciales,0.46702623,0.600000,-0.132974,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT122000CLETB,KXMLBF5-26OCT122000CLETB-CLE,NO,Entradas parciales,0.54140977,0.690000,-0.148590,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT122000CLETB,KXMLBF5-26OCT122000CLETB-TB,YES,Entradas parciales,0.54140977,0.500000,0.041410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT122000CLETB,KXMLBF5-26OCT122000CLETB-TB,NO,Entradas parciales,0.45859023,0.520000,-0.061410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT122000CLETB,KXMLBF5SPREAD-26OCT122000CLETB-TB3,YES,Entradas parciales,0.83197293,0.240000,0.591973,excluida por diversificación de familia/equipo o límite del bloque
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT122000CLETB,KXMLBF5SPREAD-26OCT122000CLETB-TB3,NO,Entradas parciales,0.16802707,0.790000,-0.621973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT122000CLETB,KXMLBF5SPREAD-26OCT122000CLETB-TB2,NO,Entradas parciales,0.06488169,0.670000,-0.605118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
@@ -640,7 +655,7 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT122000CLETB,KXMLBTOTAL-26OCT122000CLETB-12,YES,Total de carreras,0.22005664,0.140000,0.080057,probabilidad inferior al umbral de alta probabilidad; excluida por diversificación de familia/equipo o límite del bloque
 849820,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT122000CLETB,KXMLBTOTAL-26OCT122000CLETB-12,NO,Total de carreras,0.77994336,0.880000,-0.100057,ventaja insuficiente
 849812,Milwaukee Brewers,Los Angeles Dodgers,KXMLBGAME-26OCT122000LADMIL,KXMLBGAME-26OCT122000LADMIL-LAD,YES,Ganador (moneyline),0.46174941,0.560000,-0.098251,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849812,Milwaukee Brewers,Los Angeles Dodgers,KXMLBGAME-26OCT122000LADMIL,KXMLBGAME-26OCT122000LADMIL-MIL,NO,Ganador (moneyline),0.46174941,0.560000,-0.098251,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849812,Milwaukee Brewers,Los Angeles Dodgers,KXMLBGAME-26OCT122000LADMIL,KXMLBGAME-26OCT122000LADMIL-MIL,NO,Ganador (moneyline),0.46174941,0.570000,-0.108251,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849812,Milwaukee Brewers,Los Angeles Dodgers,KXMLBINNINGWIN-26OCT121700LADMIL-1,KXMLBINNINGWIN-26OCT121700LADMIL-1-LAD,NO,Ganador de la 1.ª entrada,0.73629317,,,sin precio Kalshi; sin precio disponible para el bloque de valor
 849812,Milwaukee Brewers,Los Angeles Dodgers,KXMLBINNINGWIN-26OCT121700LADMIL-1,KXMLBINNINGWIN-26OCT121700LADMIL-1-MIL,YES,Ganador de la 1.ª entrada,0.29081176,0.950000,-0.659188,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
 849812,Milwaukee Brewers,Los Angeles Dodgers,KXMLBINNINGWIN-26OCT121700LADMIL-1,KXMLBINNINGWIN-26OCT121700LADMIL-1-MIL,NO,Ganador de la 1.ª entrada,0.70918824,,,sin precio Kalshi; sin precio disponible para el bloque de valor
