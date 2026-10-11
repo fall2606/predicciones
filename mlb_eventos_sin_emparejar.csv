@@ -101,7 +101,7 @@ KXMLBSTATCOUNT-263HR,KXMLBSTATCOUNT,Pro Baseball: 3+ Home Run Games,,mercado_no_
 KXMLBSTATCOUNT-26CYCLE,KXMLBSTATCOUNT,Pro Baseball: Cycles,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSTATCOUNT-26IMMACULATE,KXMLBSTATCOUNT,Pro Baseball: Immaculate Innings,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSTATCOUNT-26ITPHR,KXMLBSTATCOUNT,Pro Baseball: Inside-The-Park Home Runs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,equipos_identificados_pero_fecha_o_hora_ambigua
+KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,mercado_no_partido/futuro_premio_o_prop
 KXMLBWALKOFFS-26,KXMLBWALKOFFS,Total Walk-Offs in Pro Baseball Playoffs,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27ACHAPMAN,KXNEXTTEAMMLB,Aroldis Chapman's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27CWALKER,KXNEXTTEAMMLB,Christian Walker's Next Team,,mercado_no_partido/futuro_premio_o_prop
