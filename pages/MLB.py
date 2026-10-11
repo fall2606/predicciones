@@ -902,6 +902,28 @@ for juego in [juego]:
                         except (TypeError, ValueError):
                             edge_txt = "—"
                         st.write(f"Probabilidad del modelo: **{prob_txt}**")
+                        ticker_contexto = str(pick.get("event_ticker") or pick.get("ticker") or "").upper()
+                        parcial_contexto = re.search(r"KXMLBF(3|5|7)", ticker_contexto)
+                        if parcial_contexto:
+                            n_entradas = int(parcial_contexto.group(1))
+                            contexto = (f"El mercado se decide al terminar las primeras {n_entradas} entradas; "
+                                        f"no es el ganador final. Proyección del partido completo: "
+                                        f"{game['away']} {mu_a:.1f} – {game['home']} {mu_h:.1f} carreras.")
+                        elif "TOTAL" in ticker_contexto or "RUNS" in ticker_contexto:
+                            contexto = (f"Proyección del partido: {game['away']} {mu_a:.1f} – {game['home']} {mu_h:.1f} "
+                                        f"carreras ({mu_a + mu_h:.1f} combinadas); la línea del contrato debe compararse con esa media.")
+                        elif "GAME" in ticker_contexto:
+                            contexto = (f"Proyección del marcador: {game['away']} {mu_a:.1f} – {game['home']} {mu_h:.1f} carreras. "
+                                        "La ventaja es una estimación del modelo, no una garantía.")
+                        else:
+                            contexto = (f"Contexto disponible del modelo: proyección {game['away']} {mu_a:.1f} – "
+                                        f"{game['home']} {mu_h:.1f} carreras. No hay datos específicos suficientes "
+                                        "en esta tarjeta para afirmar una ventaja individual adicional.")
+                        if forma_v and forma_l:
+                            contexto += (f" Forma reciente: {game['away']} anota/permite {forma_v['anotadas']:.1f}/"
+                                         f"{forma_v['permitidas']:.1f} por juego; {game['home']} "
+                                         f"{forma_l['anotadas']:.1f}/{forma_l['permitidas']:.1f}.")
+                        st.caption("Fundamento disponible: " + contexto)
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
                         _ticker_card = str(pick.get("ticker") or pick.get("Ticker") or "")
                         _lado_card = str(pick.get("lado") or pick.get("Lado Kalshi") or "")
