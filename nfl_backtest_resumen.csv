@@ -1,0 +1,1 @@
+mercado,n_train,n_test,brier_sin_calibrar,log_loss_sin_calibrar,brier_calibrado,log_loss_calibrado,brier_baseline_50,log_loss_baseline_50,tasa_real,probabilidad_media,sesgo,calibracion,precio_kalshi_comparable,nota
