@@ -21,27 +21,28 @@ def motivo_pendiente(row, kind):
     ticker = str(row.get("ticker", "")).strip()
     if not ticker:
         return "predicción sin ticker real"
-    if kind == "mlb":
-        try:
-            response = requests.get(
-                f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}",
-                timeout=6,
-            )
-            if response.status_code == 404:
-                return "ticker no encontrado en Kalshi"
-            response.raise_for_status()
-            market = (response.json() or {}).get("market") or {}
-            result = str(market.get("result") or "").lower().strip()
-            status = str(market.get("status") or "").lower().strip()
-            if result not in {"yes", "no", "void", "canceled", "cancelled"} and status not in {"void", "canceled", "cancelled"}:
-                return f"mercado Kalshi sin resolución terminal (status={status or 'vacío'}, result={result or 'vacío'})"
-            return f"Kalshi informa estado no reconocido (status={status or 'vacío'}, result={result or 'vacío'})"
-        except requests.RequestException as exc:
-            return f"no se pudo consultar Kalshi: {type(exc).__name__}"
-        except (ValueError, TypeError, KeyError):
-            return "respuesta de Kalshi con formato no reconocido"
-    return "partido finalizado, pero no hay resultado terminal WIN/LOSS/ANULADA enlazado por prediction_id"
-
+    try:
+        response = requests.get(
+            f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}",
+            timeout=6,
+        )
+        if response.status_code == 404:
+            return "ticker no encontrado en Kalshi"
+        response.raise_for_status()
+        market = (response.json() or {}).get("market") or {}
+        result = str(market.get("result") or "").lower().strip()
+        status = str(market.get("status") or "").lower().strip()
+        if result in {"yes", "no"}:
+            return f"Kalshi ya resolvió {result.upper()} pero falta resultado asociado por prediction_id"
+        if result in {"void", "canceled", "cancelled"} or status in {"void", "canceled", "cancelled"}:
+            return f"Kalshi anuló el contrato (status={status or 'vacío'}, result={result or 'vacío'}); falta registrar ANULADA"
+        if status in {"open", "active", "unopened", "initialized"}:
+            return f"mercado Kalshi aún sin resolución terminal (status={status}, result={result or 'vacío'})"
+        return f"estado Kalshi no reconocido (status={status or 'vacío'}, result={result or 'vacío'})"
+    except requests.RequestException as exc:
+        return f"no se pudo consultar Kalshi: {type(exc).__name__}"
+    except (ValueError, TypeError, KeyError):
+        return "respuesta de Kalshi con formato no reconocido"
 
 def rows(path):
     if not path.exists():
