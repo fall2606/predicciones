@@ -136,6 +136,28 @@ def ensure_csv_schema(path, columns):
         rows = list(reader)
     merged = columns + [name for name in old_columns if name not in columns]
     if old_columns != merged:
+        for row in rows:
+            if "mercado" in merged and not str(row.get("mercado", "")).strip():
+                row["mercado"] = row.get("jugada") or ""
+            if "line" in merged and not str(row.get("line", "")).strip():
+                row["line"] = extract_line(row.get("mercado") or row.get("jugada") or "")
+            if "seleccion" in merged and not str(row.get("seleccion", "")).strip():
+                side = str(row.get("lado", "")).upper().strip()
+                if side not in {"YES", "NO"}:
+                    match = re.search(r"(YES|NO)[\"']?\s*\)?$", str(row.get("clave_interna", "")), re.I)
+                    side = match.group(1).upper() if match else ""
+                row["seleccion"] = side
+            if "bloque" in merged and not str(row.get("bloque", "")).strip():
+                category = str(row.get("categoria", ""))
+                row["bloque"] = next((name for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA") if category.startswith(name + " · ")), "")
+            if "edge" in merged and not str(row.get("edge", "")).strip():
+                p = valid_probability(row.get("probabilidad_calibrada", row.get("probabilidad_modelo")))
+                try:
+                    price = float(str(row.get("precio", row.get("precio_captura", ""))).replace("$", ""))
+                except (TypeError, ValueError):
+                    price = None
+                if p is not None and price is not None and 0 <= price <= 1:
+                    row["edge"] = f"{p - price:.6f}"
         tmp = path.with_name(path.name + ".tmp")
         with tmp.open("w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=merged, extrasaction="ignore")
@@ -146,7 +168,7 @@ def ensure_csv_schema(path, columns):
 
 
 def append_immutable_predictions(path,columns,rows,*,probability_field,kickoff_field="fecha",capture_field="capturado_en",ticker_field="ticker",id_field="prediction_id"):
-    path=Path(path); existing=read_rows(path); ids={str(r.get(id_field,"")) for r in existing}; now=utc_now()
+    path=Path(path); path.parent.mkdir(parents=True,exist_ok=True); columns=ensure_csv_schema(path,columns); existing=read_rows(path); ids={str(r.get(id_field,"")) for r in existing}; now=utc_now()
     accepted=[]; rejected=[]
     for source in rows:
         row=dict(source); pid=str(row.get(id_field,"")).strip(); ticker=str(row.get(ticker_field,"")).strip()
@@ -160,7 +182,7 @@ def append_immutable_predictions(path,columns,rows,*,probability_field,kickoff_f
         elif kickoff is None: reason="hora de inicio ausente o inválida"
         elif captured>=kickoff or now>=kickoff: reason="partido iniciado antes de guardar"
         if reason: rejected.append((pid or "(sin id)",reason)); continue
-        row[probability_field]=f"{p:.8f}"; accepted.append(row); ids.add(pid)
+        row[probability_field]=f"{p:.8f}"; row[capture_field]=captured.isoformat(); accepted.append(row); ids.add(pid)
     _write_header_if_missing(path,columns)
     if accepted:
         with path.open("a",newline="",encoding="utf-8") as f: csv.DictWriter(f,fieldnames=columns,extrasaction="ignore").writerows(accepted)

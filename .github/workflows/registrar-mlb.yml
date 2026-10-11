@@ -25,6 +25,8 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencias
         run: python -m pip install requests pandas numpy scipy
+      - name: Reparar esquema mixto del historial
+        run: python scripts/reparar_csv_predicciones.py
       - name: Capturar predicciones y liquidar contratos
         run: python registrar_mlb.py
       - name: Guardar únicamente filas nuevas

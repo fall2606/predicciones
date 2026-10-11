@@ -20,6 +20,8 @@ class CoreTests(unittest.TestCase):
    self.assertEqual(core.append_immutable_predictions(p,cols,rows,probability_field="p"),{"accepted":1,"rejected":3})
    with p.open(encoding="utf-8") as f: saved=list(csv.DictReader(f))
    self.assertEqual(saved[0]["prediction_id"],"ok"); self.assertEqual(saved[0]["p"],"0.72000000")
+   self.assertTrue(saved[0]["capturado_en"])
+   self.assertEqual(saved[0]["fecha"], future)
    self.assertEqual(core.append_immutable_predictions(p,cols,[rows[0]],probability_field="p")["accepted"],0)
  def test_recovery_old_yes_no_void_and_idempotence(self):
   with tempfile.TemporaryDirectory() as d:
@@ -97,5 +99,44 @@ class CoreTests(unittest.TestCase):
    self.assertEqual(rows[0]["prediction_id"],"original")
    self.assertEqual(rows[0]["p"],"0.75")
    self.assertEqual(rows[0]["line"],"")
+
+ def test_missing_capture_timestamp_is_written_and_old_schema_migrates(self):
+  with tempfile.TemporaryDirectory() as d:
+   path=Path(d)/"pred.csv"
+   old_columns=["prediction_id","ticker","match_id","fecha","probabilidad_modelo"]
+   with path.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=old_columns); w.writeheader()
+    w.writerow({"prediction_id":"old","ticker":"KXREAL-OLD","match_id":"m1","fecha":"2026-10-20T00:00:00+00:00","probabilidad_modelo":"0.75"})
+   cols=old_columns+["capturado_en","mercado","line","seleccion","bloque","edge"]
+   future=(datetime.now(timezone.utc)+timedelta(days=2)).isoformat()
+   new={"prediction_id":"new","ticker":"KXREAL-NEW","match_id":"m2","fecha":future,"probabilidad_modelo":"0.66","mercado":"Over 2.5 goals","line":"2.5","seleccion":"YES","bloque":"SENCILLAS"}
+   summary=core.append_immutable_predictions(path,cols,[new],probability_field="probabilidad_modelo")
+   self.assertEqual(summary["accepted"],1)
+   with path.open(encoding="utf-8") as f:
+    reader=csv.DictReader(f); rows=list(reader); header=reader.fieldnames
+   self.assertEqual(header,cols)
+   self.assertEqual(rows[0]["prediction_id"],"old")
+   self.assertEqual(rows[1]["prediction_id"],"new")
+   self.assertTrue(rows[1]["capturado_en"])
+   self.assertLess(core.parse_datetime(rows[1]["capturado_en"]),core.parse_datetime(rows[1]["fecha"]))
+
+ def test_legacy_no_evaluable_is_replaced_by_official_kalshi_result(self):
+  with tempfile.TemporaryDirectory() as d:
+   p,r=Path(d)/"p.csv",Path(d)/"r.csv"
+   old=(datetime.now(timezone.utc)-timedelta(days=3)).isoformat()
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","match_id","lado","fecha","capturado_en","probabilidad_modelo"]); w.writeheader()
+    w.writerow({"prediction_id":"old","ticker":"KXTEST-VOIDLEGACY","match_id":"m1","lado":"YES","fecha":old,"capturado_en":old,"probabilidad_modelo":"0.7"})
+   with r.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","estado","marcador","resuelto_en"]); w.writeheader()
+    w.writerow({"prediction_id":"old","estado":"NO_EVALUABLE","marcador":"No había estadística","resuelto_en":old})
+   settled={"KXTEST-VOIDLEGACY":{"ticker":"KXTEST-VOIDLEGACY","status":"settled","result":"yes"}}
+   with patch.object(core,"_market_rows_for_series",return_value=settled):
+    summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado")
+   with r.open(encoding="utf-8") as f: rows=list(csv.DictReader(f))
+   self.assertEqual(summary["win"],1)
+   self.assertEqual(len(rows),1)
+   self.assertEqual(rows[0]["estado"],"WIN")
+   self.assertNotEqual(rows[0]["estado"],"NO_EVALUABLE")
 
 if __name__=="__main__": unittest.main()

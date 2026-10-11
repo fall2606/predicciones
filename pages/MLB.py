@@ -7,6 +7,7 @@ import pandas as pd
 import requests
 import streamlit as st
 from scipy.stats import nbinom, poisson
+from mlb_math import pitcher_stats_from_api, score_probability_matrix
 
 
 API = "https://statsapi.mlb.com/api/v1"
@@ -131,19 +132,9 @@ def cargar_pitcher(pitcher_id, season):
     for bloque in data.get("stats", []):
         for split in bloque.get("splits", []):
             stat = split.get("stat", {})
-            if stat.get("era") not in (None, "-"):
-                try:
-                    return {
-                        "nombre": split.get("player", {}).get("fullName", "Pitcher probable"),
-                        "era": float(stat["era"]),
-                        "innings": float(stat.get("inningsPitched") or 0),
-                        "strikeouts": float(stat.get("strikeOuts") or 0),
-                        "hits_allowed": float(stat.get("hits") or 0),
-                        "walks": float(stat.get("baseOnBalls") or 0),
-                        "earned_runs": float(stat.get("earnedRuns") or 0),
-                    }
-                except (TypeError, ValueError):
-                    pass
+            parsed = pitcher_stats_from_api(stat, split.get("player", {}).get("fullName", "Pitcher probable"))
+            if parsed is not None:
+                return parsed
     return None
 
 
@@ -500,8 +491,7 @@ for juego in [juego]:
         int(home["id"]), int(away["id"]), stats, forma_juego, promedio, era_liga,
         datos_abridor_local, datos_abridor_visita,
     )
-    matriz_prob = np.outer(distribucion_carreras(eje, mu_h), distribucion_carreras(eje, mu_a))
-    matriz_prob /= matriz_prob.sum()
+    matriz_prob = score_probability_matrix(eje, mu_h, mu_a)
     fecha = juego.get("gameDate", "")[:16].replace("T", " ")
     marcador = f" · Final {a_runs}-{h_runs}" if status == "Final" else ""
     with st.expander(f"{fecha} · {game['away']} @ {game['home']}{marcador}", expanded=status == "Preview"):

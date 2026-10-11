@@ -5,6 +5,8 @@ on:
     paths:
       - "prediction_core.py"
       - "mlb_engine.py"
+      - "mlb_math.py"
+      - "scripts/reparar_csv_predicciones.py"
       - "registrar_laliga.py"
       - "registrar_champions.py"
       - "liquidar_mlb.py"
@@ -41,8 +43,10 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencias compartidas
         run: python -m pip install requests pandas numpy scipy streamlit
+      - name: Reparar esquema mixto de historiales existentes
+        run: python scripts/reparar_csv_predicciones.py
       - name: Comprobar sintaxis de todo el sistema
-        run: python -m compileall -q prediction_core.py mlb_engine.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
+        run: python -m compileall -q prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
       - name: Capturar MLB antes del partido
         id: capture_mlb
         continue-on-error: true

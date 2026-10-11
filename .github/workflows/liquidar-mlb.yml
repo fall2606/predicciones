@@ -22,13 +22,15 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencia HTTP
         run: python -m pip install requests
+      - name: Reparar esquema mixto del historial
+        run: python scripts/reparar_csv_predicciones.py
       - name: Liquidar contratos cerrados por Kalshi
         run: python liquidar_mlb.py
       - name: Guardar solo resultados nuevos
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add resultados_mlb.csv
+          git add predicciones_mlb.csv resultados_mlb.csv
           if git diff --cached --quiet; then
             echo "No hay resultados nuevos"
           else

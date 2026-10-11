@@ -201,11 +201,11 @@ def mercado_probabilidad(market, game):
     category = clasificar(market.get("series_ticker", ""), market)
     home_code, away_code = codigo_equipo_mlb(h), codigo_equipo_mlb(a)
     contract_code = ticker.rsplit("-", 1)[-1].upper()
-    if category in {"Ganador (moneyline)", "Total por equipo"} and contract_code in {home_code, away_code}:
+    if category in {"Ganador (moneyline)", "Total por equipo", "Run line / margen"} and contract_code in {home_code, away_code}:
         home, away = contract_code == home_code, contract_code == away_code
 
     # Prefer the readable contract line; tickers are only a fallback.
-    runs = re.search(r"(?:over|under|more than|less than)\\s*\\$?([0-9]+(?:\\.[0-9]+)?)", text)
+    runs = re.search(r"(?:over|under|more than|less than)\s*\$?([0-9]+(?:\.[0-9]+)?)", text)
     line_match = re.search(r"(?:TOTAL|OVER|UNDER|RUNS|SPREAD)[A-Z_-]*([0-9]+(?:P[0-9]+)?)", ticker, re.I)
     line = float(runs.group(1)) if runs else (float(line_match.group(1).replace("P", ".")) if line_match else None)
     p_yes = None
@@ -271,7 +271,7 @@ def mercado_probabilidad(market, game):
             p_yes = 1 - p_yes
     elif category == "Marcador exacto":
         # Support explicit "X-Y" score contracts when team order can be inferred from the title.
-        score = re.search(r"\\b([0-9]{1,2})\\s*[-:]\\s*([0-9]{1,2})\\b", title)
+        score = re.search(r"\b([0-9]{1,2})\s*[-:]\s*([0-9]{1,2})\b", title)
         if score:
             x, y = int(score.group(1)), int(score.group(2))
             if home and away:
