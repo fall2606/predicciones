@@ -3,6 +3,7 @@
 import ast
 import csv
 import os
+import pandas as pd
 from datetime import datetime, timedelta, timezone
 import requests
 from prediction_core import append_immutable_predictions, rank_market_candidates, extract_line

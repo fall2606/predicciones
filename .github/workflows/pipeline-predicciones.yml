@@ -44,22 +44,40 @@ jobs:
       - name: Comprobar sintaxis de todo el sistema
         run: python -m compileall -q prediction_core.py mlb_engine.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
       - name: Capturar MLB antes del partido
+        id: capture_mlb
+        continue-on-error: true
         run: python mlb_engine.py
       - name: Capturar LaLiga antes del partido
+        id: capture_laliga
+        continue-on-error: true
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python registrar_laliga.py
       - name: Capturar Champions antes del partido
+        id: capture_champions
+        continue-on-error: true
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python registrar_champions.py
       - name: Liquidar todos los contratos MLB
+        id: liquidate_mlb
+        if: always()
+        continue-on-error: true
         run: python liquidar_mlb.py
       - name: Liquidar todos los contratos LaLiga
+        id: liquidate_laliga
+        if: always()
+        continue-on-error: true
         run: python liquidar_laliga.py
       - name: Liquidar todos los contratos Champions
+        id: liquidate_champions
+        if: always()
+        continue-on-error: true
         run: python liquidar_champions.py
       - name: Guardar predicciones y resultados en un único commit
+        id: commit_results
+        if: always()
+        continue-on-error: true
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
@@ -75,3 +93,21 @@ jobs:
             sleep $((intento * 3))
           done
           exit 1
+
+      - name: Informar errores después de intentar todas las liquidaciones
+        if: always()
+        env:
+          CAPTURE_MLB: ${{ steps.capture_mlb.outcome }}
+          CAPTURE_LALIGA: ${{ steps.capture_laliga.outcome }}
+          CAPTURE_CHAMPIONS: ${{ steps.capture_champions.outcome }}
+          LIQUIDATE_MLB: ${{ steps.liquidate_mlb.outcome }}
+          LIQUIDATE_LALIGA: ${{ steps.liquidate_laliga.outcome }}
+          LIQUIDATE_CHAMPIONS: ${{ steps.liquidate_champions.outcome }}
+          COMMIT_RESULTS: ${{ steps.commit_results.outcome }}
+        run: |
+          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Una tarea del pipeline falló: $result"
+              exit 1
+            fi
+          done
