@@ -348,7 +348,7 @@ def settle_from_score(row):
                     return None
                 spread_home, spread_away = half_home, half_away
                 period_label = "1.ª parte"
-            match_desc = re.search(r"(.+?)\\s+no pierde por más de\\s+([0-9]+(?:[.,][0-9]+)?)\\s+gol", description)
+            match_desc = re.search(r"(.+?)\s+no pierde por más de\s+([0-9]+(?:[.,][0-9]+)?)\s+gol", description)
             if not match_desc:
                 return None
             team_name = match_desc.group(1).strip()
