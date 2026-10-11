@@ -23,7 +23,7 @@ def _con_resultado_pendiente(filas, estado_partido):
     """Añade Resultado a cualquier tabla de pronósticos sin fingir una liquidación."""
     df = filas.copy() if isinstance(filas, pd.DataFrame) else pd.DataFrame(filas)
     if "Resultado" not in df.columns:
-        df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else "PENDIENTE"
+        df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar" if estado_partido in {"FINISHED", "AWARDED"} else "PENDIENTE")
     return df
 
 
@@ -283,7 +283,7 @@ if resumen_sencillo_kalshi:
             else:
                 _estado_historial = historial_partido["Resultado"].astype(str).str.upper()
                 _terminal_historial = _estado_historial.str.contains("WIN|LOSS|ANULADA", regex=True)
-                historial_partido.loc[~_terminal_historial, "Resultado"] = "SIN LIQUIDAR"
+                historial_partido.loc[~_terminal_historial, "Resultado"] = "sin datos para liquidar · mercado sin fuente compatible"
         with st.expander(f"Comparar todas las capturas guardadas ({len(historial_partido)})"):
             st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
 else:
@@ -319,7 +319,7 @@ if partido_cerrado:
         st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de alta probabilidad.")
 elif alta_vista:
     _alta_df = pd.DataFrame(alta_vista).copy()
-    _alta_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
+    _alta_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar · mercado sin fuente compatible" if partido_cerrado else "PENDIENTE")
     _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _alta_df.columns]
     st.dataframe(_tabla_con_resultado(_alta_df[_cols]), use_container_width=True, hide_index=True)
 else:
@@ -338,7 +338,7 @@ if partido_cerrado:
         _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
         _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"))
         _sin_ticker = _archivo_valor["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
-        _archivo_valor.loc[_archivo_valor["estado"].isna() & _sin_ticker, "Resultado"] = "NO EVALUABLE · SIN TICKER REAL DE KALSHI"
+        _archivo_valor.loc[_archivo_valor["estado"].isna() & _sin_ticker, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
         _archivo_valor.loc[_archivo_valor["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge"]:
             if _col not in _archivo_valor.columns:
