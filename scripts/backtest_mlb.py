@@ -4,7 +4,7 @@ from collections import defaultdict
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 PRED=ROOT/"predicciones_mlb.csv"; RES=ROOT/"resultados_mlb.csv"; OUT=ROOT/"backtest_mlb_resumen.csv"
-FIELDS=["tipo_mercado","n","brier_modelo","brier_precio_kalshi","diferencia_modelo_menos_precio","estado_calibracion"]
+FIELDS=["tipo_mercado","n_resueltos","n_con_precio","brier_modelo","brier_precio_kalshi","diferencia_modelo_menos_precio","estado_calibracion"]
 def read(path):
     if not path.exists() or not path.stat().st_size: return []
     with path.open(newline="",encoding="utf-8-sig") as f: return list(csv.DictReader(f))
@@ -33,13 +33,14 @@ def main():
     rows=[]
     types=sorted(set(groups)|{"primera_entrada","total_carreras","total_equipo","run_line","ganador","props_jugador"})
     for t in types:
-        vals=groups.get(t,[]); n=len(vals)
-        bm=sum((p-y)**2 for p,_,y in vals)/n if n else None
-        priced=[(q,y) for _,q,y in vals if q is not None]
-        bk=sum((q-y)**2 for q,y in priced)/len(priced) if priced else None
-        rows.append({"tipo_mercado":t,"n":n,"brier_modelo":"" if bm is None else f"{bm:.6f}","brier_precio_kalshi":"" if bk is None else f"{bk:.6f}","diferencia_modelo_menos_precio":"" if bm is None or bk is None else f"{bm-bk:.6f}","estado_calibracion":"CALIBRACIÓN AÚN INSUFICIENTE" if n<30 else "MUESTRA PARA EVALUAR"})
+        vals=groups.get(t,[]); n_resueltos=len(vals)
+        common=[(p,q,y) for p,q,y in vals if q is not None]
+        n=len(common)
+        bm=sum((p-y)**2 for p,_,y in common)/n if n else None
+        bk=sum((q-y)**2 for _,q,y in common)/n if n else None
+        rows.append({"tipo_mercado":t,"n_resueltos":n_resueltos,"n_con_precio":n,"brier_modelo":"" if bm is None else f"{bm:.6f}","brier_precio_kalshi":"" if bk is None else f"{bk:.6f}","diferencia_modelo_menos_precio":"" if bm is None or bk is None else f"{bm-bk:.6f}","estado_calibracion":"CALIBRACIÓN AÚN INSUFICIENTE" if n<30 else "MUESTRA PARA EVALUAR"})
     with OUT.open("w",newline="",encoding="utf-8") as f:
         w=csv.DictWriter(f,fieldnames=FIELDS); w.writeheader(); w.writerows(rows)
     print(f"BACKTEST MLB: contratos resueltos con probabilidad válida={sum(len(v) for v in groups.values())}; informe={OUT.name}")
-    for r in rows: print(f"BACKTEST MLB · {r['tipo_mercado']}: n={r['n']} · Brier modelo={r['brier_modelo'] or 'N/D'} · Brier precio Kalshi={r['brier_precio_kalshi'] or 'N/D'} · {r['estado_calibracion']}")
+    for r in rows: print(f"BACKTEST MLB · {r['tipo_mercado']}: resueltos={r['n_resueltos']} · comparables={r['n_con_precio']} · Brier modelo={r['brier_modelo'] or 'N/D'} · Brier precio Kalshi={r['brier_precio_kalshi'] or 'N/D'} · {r['estado_calibracion']}")
 if __name__=="__main__": main()
