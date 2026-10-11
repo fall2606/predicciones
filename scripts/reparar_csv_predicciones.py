@@ -173,53 +173,10 @@ def repair_file(path, current_columns, legacy_columns):
                                      "reason": reason, "raw_line": repr(values)})
         print(f"CSV REPARACIÓN: {path.name}: {len(quarantined_rows)} fila(s) irregular(es) preservada(s) en {quarantine.name}.")
 
-    if path.name == "predicciones_mlb.csv":
-        now = datetime.now(timezone.utc)
-        groups = {}
-        for index, row in enumerate(repaired_rows):
-            match_id = str(row.get("match_id", "")).strip()
-            if not match_id:
-                continue
-            try:
-                kickoff = datetime.fromisoformat(str(row.get("fecha", "")).replace("Z", "+00:00"))
-                if kickoff.tzinfo is None:
-                    kickoff = kickoff.replace(tzinfo=timezone.utc)
-            except (TypeError, ValueError):
-                continue
-            if now >= kickoff.astimezone(timezone.utc):
-                continue
-            block = str(row.get("bloque", ""))
-            if block in {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}:
-                groups.setdefault((match_id, block), []).append((index, row))
-        limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
-        drop = set()
-        for (_, block), items in groups.items():
-            limit = limits[block]
-            if len(items) <= limit:
-                continue
-            def score(item):
-                row = item[1]
-                field = "edge" if block == "A_TENER_EN_CUENTA" else "probabilidad_modelo"
-                try:
-                    value = float(row.get(field, ""))
-                    if not math.isfinite(value):
-                        value = -math.inf
-                except (TypeError, ValueError, OverflowError):
-                    value = -math.inf
-                try:
-                    probability = float(row.get("probabilidad_modelo", ""))
-                    if not math.isfinite(probability):
-                        probability = -math.inf
-                except (TypeError, ValueError, OverflowError):
-                    probability = -math.inf
-                return (value, probability, str(row.get("capturado_en", "")))
-            keep = {index for index, _ in sorted(items, key=score, reverse=True)[:limit]}
-            for index, _ in items:
-                if index not in keep:
-                    drop.add(index)
-        if drop:
-            removed_over_limit_pregame = len(drop)
-            repaired_rows = [row for index, row in enumerate(repaired_rows) if index not in drop]
+    # El historial de predicciones es un ledger inmutable: los límites de visualización
+    # (5/5/10) se aplican al presentar candidatos, nunca borrando capturas históricas.
+    # Se conserva el campo por compatibilidad de métricas, pero esta reparación no elimina filas.
+    removed_over_limit_pregame = 0
 
     changed = header != current_columns or metadata_modified or removed_invalid_pregame > 0 or removed_over_limit_pregame > 0 or bool(quarantined_rows) or any(
         len(values) != len(header) for values in data if values
