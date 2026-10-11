@@ -76,30 +76,50 @@ else:
         games = sorted(valid_current["match_id"].dropna().astype(str).unique()) if not valid_current.empty and "match_id" in valid_current else []
         if not games:
             st.info("No hay mercados prepartido válidos para recomendar en este momento.")
-        for game_id in games:
+        else:
+            opciones = {}
+            for game_id in games:
+                game_rows = valid_current[valid_current["match_id"].astype(str) == game_id]
+                first = game_rows.iloc[0]
+                local = str(first.get("local", "")).strip() or "Local"
+                visita = str(first.get("visita", "")).strip() or "Visitante"
+                fecha = str(first.get("fecha", ""))[:16].replace("T", " ")
+                opciones[f"{fecha} · {visita} @ {local}"] = game_id
+            indice_inicial = 0
+            for i, game_id in enumerate(opciones.values()):
+                filas = valid_current[valid_current["match_id"].astype(str) == game_id]
+                if filas["estado"].astype(str).str.upper().apply(lambda x: x not in {"WIN", "LOSS", "ANULADA"}).any():
+                    indice_inicial = i
+                    break
+            etiqueta_partido = st.selectbox(
+                "Elige un partido (solo se muestran sus predicciones)",
+                list(opciones.keys()),
+                index=indice_inicial,
+                key="selector_partido_nfl",
+            )
+            game_id = opciones[etiqueta_partido]
             group = valid_current[valid_current["match_id"].astype(str) == game_id].copy()
-            game_name = f"{group.iloc[0].get('local','')} vs {group.iloc[0].get('visita','')}"
-            with st.expander(game_name + " · " + str(group.iloc[0].get("fecha",""))[:10], expanded=True):
-                for block, label, limit in (("SENCILLAS","5 posibles sencillas",5),("ALTA_PROBABILIDAD","5 selecciones para combos",5),("A_TENER_EN_CUENTA","10 a tener en cuenta",10),("DETALLE","Otros mercados modelados",1000)):
-                    subset = group[group.get("bloque", pd.Series("", index=group.index)).eq(block)].copy()
-                    if subset.empty:
-                        if block != "DETALLE":
-                            st.caption(f"{label}: no hay suficientes selecciones válidas en este partido.")
-                        continue
-                    st.markdown(f"**{label}**")
-                    display = pd.DataFrame({
-                        "Mercado": subset.get("mercado", ""),
-                        "Lado": subset.get("lado", ""),
-                        "Prob. original": (pd.to_numeric(subset.get("probabilidad_modelo"), errors="coerce")*100).round(1).astype(str)+"%",
-                        "Prob. recalibrada": (pd.to_numeric(subset.get("probabilidad_calibrada", subset.get("probabilidad_modelo")), errors="coerce")*100).round(1).astype(str)+"%",
-                        "Precio captura": subset.get("precio_captura", ""),
-                        "Ventaja": (pd.to_numeric(subset.get("edge"), errors="coerce")*100).round(1).astype(str)+"%",
-                        "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
-                        "Ticker": subset.get("ticker", ""),
-                    })
-                    st.dataframe(display.head(limit), use_container_width=True, hide_index=True)
-                    if block != "DETALLE" and len(subset) < limit:
-                        st.caption(f"{len(subset)} de {limit} disponibles; no se completan cupos con selecciones que no superan los filtros del modelo.")
+            st.caption("Se muestran únicamente las selecciones del partido elegido. Cambia el partido desde el menú desplegable.")
+            for block, label, limit in (("SENCILLAS","5 posibles sencillas",5),("ALTA_PROBABILIDAD","5 selecciones para combos",5),("A_TENER_EN_CUENTA","10 a tener en cuenta",10),("DETALLE","Otros mercados modelados",1000)):
+                subset = group[group.get("bloque", pd.Series("", index=group.index)).eq(block)].copy()
+                if subset.empty:
+                    if block != "DETALLE":
+                        st.caption(f"{label}: no hay suficientes selecciones válidas en este partido.")
+                    continue
+                st.markdown(f"**{label}**")
+                display = pd.DataFrame({
+                    "Mercado": subset.get("mercado", ""),
+                    "Lado": subset.get("lado", ""),
+                    "Prob. original": (pd.to_numeric(subset.get("probabilidad_modelo"), errors="coerce")*100).round(1).astype(str)+"%",
+                    "Prob. recalibrada": (pd.to_numeric(subset.get("probabilidad_calibrada", subset.get("probabilidad_modelo")), errors="coerce")*100).round(1).astype(str)+"%",
+                    "Precio captura": subset.get("precio_captura", ""),
+                    "Ventaja": (pd.to_numeric(subset.get("edge"), errors="coerce")*100).round(1).astype(str)+"%",
+                    "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
+                    "Ticker": subset.get("ticker", ""),
+                })
+                st.dataframe(display.head(limit), use_container_width=True, hide_index=True)
+                if block != "DETALLE" and len(subset) < limit:
+                    st.caption(f"{len(subset)} de {limit} disponibles; no se completan cupos con selecciones que no superan los filtros del modelo.")
     with st.expander("Historial completo de predicciones NFL (incluye capturas excluidas)", expanded=False):
         st.dataframe(pred, use_container_width=True, hide_index=True)
 if not current.empty:
