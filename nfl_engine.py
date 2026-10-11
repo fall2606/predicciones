@@ -145,7 +145,7 @@ def build_candidates(events, stats):
     for event in events:
         title = str(event.get("title") or "")
         # Event title is normally "Team A vs Team B"; don't guess when names cannot be separated.
-        parts = re.split(r"\s+(?:vs\.?|versus|@)\s+", title, maxsplit=1, flags=re.I)
+        parts = re.split(r"\s+(?:vs\.?|versus|@|at)\s+", title, maxsplit=1, flags=re.I)
         if len(parts) != 2:
             continue
         home, away = parts[0].strip(), parts[1].strip()
@@ -195,7 +195,9 @@ def main():
         series = relevant
     events = events_for_series([x["ticker"] for x in series], statuses=("open",))
     stats = _team_stats()
+    print(f"NFL: equipos con estadísticas recientes={len(stats)}")
     candidates = build_candidates(events, stats)
+    print(f"NFL: partidos con proyección y mercados reconocidos={len(set(row['match_id'] for row in candidates))}")
     # Keep snapshots immutable; use market + side + event identity to avoid duplicates.
     existing = set()
     if PRED_FILE.exists():
