@@ -48,7 +48,7 @@ PRED_COLUMNS = [
     "seleccion", "bloque", "probabilidad_original", "probabilidad_calibrada",
     "version_calibracion", "probabilidad_modelo", "precio_captura",
     "probabilidad_implicita", "edge", "revision", "estado_modelo", "reglas",
-    "capturado_en", "hora_inicio", "disponibilidad",
+    "capturado_en", "hora_inicio", "disponibilidad", "argumento_modelo",
 ]
 RESULT_COLUMNS = [
     "schema_version", "prediction_id", "estado", "resultado_kalshi",
@@ -640,6 +640,50 @@ def _reason_for_empty(block, candidates):
     return "ninguna línea con precio y ventaja calculables supera los filtros del bloque"
 
 
+def argumento_modelo(kind, side, yes_team, home, away, line, prediction, model, market):
+    """Short, auditable explanation based only on model inputs actually used."""
+    h = model.get("teams", {}).get(home, {})
+    a = model.get("teams", {}).get(away, {})
+    home_pts = float(prediction["home_points_mean"])
+    away_pts = float(prediction["away_points_mean"])
+    total = float(prediction["total_mean"])
+    title = normalizar(" ".join(str(market.get(k) or "") for k in ("yes_sub_title", "title", "subtitle")))
+    yes_outcome = _yes_outcome(market, kind)
+    if kind == "winner":
+        team = yes_team or (home if side == "YES" else None)
+        if team not in {home, away}:
+            return "Fundamento limitado: el equipo de esta selección no se pudo identificar con certeza."
+        projected = home_pts if team == home else away_pts
+        opponent = away_pts if team == home else home_pts
+        elo_team = h.get("elo") if team == home else a.get("elo")
+        elo_opp = a.get("elo") if team == home else h.get("elo")
+        selected_team = team if side == "YES" else (away if team == home else home)
+        return (f"Proyección del modelo: {home} {home_pts:.1f} pts y {away} {away_pts:.1f} pts; "
+                f"Elo {home} {h.get('elo', float('nan')):.0f} vs {away} {a.get('elo', float('nan')):.0f}. "
+                f"La selección {'favorece' if side == 'YES' else 'va contra'} el equipo SÍ ({team}); "
+                "la estimación se basa en Elo y puntos recientes, no en datos individuales de jugadores.")
+    if kind == "total" and line is not None:
+        direction = yes_outcome
+        if side == "NO":
+            direction = {"over_gt":"under_le","over_ge":"under_lt","under_lt":"over_ge","under_le":"over_gt"}.get(direction, direction)
+        direction_label = "por encima" if str(direction).startswith("over") else "por debajo de"
+        return (f"El modelo proyecta {total:.1f} puntos combinados frente a la línea {float(line):g}; "
+                f"la tesis {'encaja' if (total > float(line) and direction.startswith('over')) or (total < float(line) and direction.startswith('under')) else 'no queda respaldada claramente'} "
+                f"con esa media. La dispersión de puntos hace que no sea seguro.")
+    if kind == "team_total" and line is not None and yes_team in {home, away}:
+        mean = home_pts if yes_team == home else away_pts
+        direction = yes_outcome
+        if side == "NO":
+            direction = {"over_gt":"under_le","over_ge":"under_lt","under_lt":"over_ge","under_le":"over_gt"}.get(direction, direction)
+        return (f"El modelo proyecta {yes_team} en {mean:.1f} puntos frente a la línea {float(line):g}; "
+                f"la selección es {'over' if direction.startswith('over') else 'under'} según el umbral del contrato. "
+                "Se apoya en puntos recientes a favor/en contra, no en una métrica individual.")
+    if kind == "spread" and line is not None and yes_team in {home, away}:
+        return (f"El margen medio proyectado es {home} por {prediction['margin_mean']:.1f} puntos "
+                f"(proyección de puntos: {home} {home_pts:.1f}, {away} {away_pts:.1f}); "
+                f"se compara con la línea {float(line):g}. El margen tiene alta variabilidad.")
+    return "No hay datos suficientes para construir un argumento específico y verificable para este mercado."
+
 def generate_candidates(events, model, now=None, upcoming_games=None):
     now = parse_dt(now) if now else datetime.now(timezone.utc)
     raw_by_match, rejected, catalog, match_info = {}, [], [], {}
@@ -719,6 +763,7 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
                     "reglas": market.get("rules_primary") or market.get("rules_secondary") or "",
                     "capturado_en": captured,
                     "disponibilidad": "Disponible en Kalshi" if price is not None else "Sin precio en Kalshi",
+                    "argumento_modelo": argumento_modelo(kind, side, yes_team or description_team, home, away, line, prediction, model, market),
                 })
 
     saved_rows, coverage = [], []
