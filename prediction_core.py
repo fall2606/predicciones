@@ -564,7 +564,7 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         teams = re.findall(r"(?<![\w])([A-Z][A-Za-zÀ-ÿ.'-]+(?:\s+[A-Z][A-Za-zÀ-ÿ.'-]+){0,2})", str(row.get("Apuesta sencilla") or row.get("Apuesta") or ""))
         # Ignore generic bet phrases: "Más de" is not a team and must not suppress totals.
         teams = [team for team in teams if team.casefold() not in {
-            "más de", "mas de", "menos de", "over", "under", "ambos equipos marcan",
+            "más", "mas", "menos", "más de", "mas de", "menos de", "over", "under", "ambos", "ambos equipos marcan",
             "más de goles", "menos de goles",
         }]
         if len(used_teams) >= 2 and teams and all(team.casefold() in used_teams for team in teams):
