@@ -9,7 +9,7 @@ import requests
 import streamlit as st
 from scipy.stats import nbinom, poisson
 from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
-from prediction_core import rank_single_candidates
+from prediction_core import rank_single_candidates, single_candidate_rejection_reasons
 
 
 API = "https://statsapi.mlb.com/api/v1"
@@ -615,14 +615,28 @@ for juego in [juego]:
                 _mask_bloque = _mask_bloque | archivadas_partido["categoria"].astype(str).str.startswith(codigo + " · ")
             bloque = archivadas_partido[_mask_bloque].copy()
             if bloque.empty:
-                st.info("Este bloque no tiene selecciones que superen sus filtros; no se rellenan con mercados inventados.")
+                if codigo == "SENCILLAS":
+                    st.info(
+                        "No hay Sencillas archivadas para este partido: una línea solo se guarda si tiene ticker y probabilidad válidos, "
+                        "precio Kalshi ≤ 88¢, ventaja ≥ 5 puntos porcentuales y no es una línea trivial. "
+                        "El historial no guarda las candidatas descartadas, así que no atribuyo falsamente el descarte a un único filtro."
+                    )
+                else:
+                    st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados.")
                 return
             bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", "PENDIENTE").fillna("PENDIENTE")
             if codigo == "SENCILLAS":
                 # Filtra también capturas antiguas para que no reaparezcan picks triviales.
                 sencillas = rank_single_candidates(bloque.to_dict("records"), limit=10)
                 if not sencillas:
-                    st.info("No hay sencillas que cumplan precio ≤ 88¢, ventaja mínima de 5 puntos y mercados no triviales.")
+                    motivos = single_candidate_rejection_reasons(bloque.to_dict("records"))
+                    detalle = " · ".join(f"{motivo}: {cantidad}" for motivo, cantidad in motivos.items())
+                    st.info(
+                        "Ninguna candidata guardada supera los filtros de Sencillas "
+                        "(precio ≤ 88¢, ventaja ≥ 5 pp, ticker/probabilidad válidos y línea no trivial). "
+                        + (f"Motivos contados en estas filas: {detalle}." if detalle else
+                           "No se pueden atribuir descartes individuales porque el archivo solo contiene las selecciones ya guardadas.")
+                    )
                     return
                 for pick in sencillas:
                     with st.container(border=True):
