@@ -808,9 +808,13 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
                 "Ventaja (edge)": edge, "Lado Kalshi": row["lado"],
             })
         singles = rank_single_candidates(candidates, limit=5)
+        min_edge = float(os.getenv("SENCILLAS_EDGE_MIN", "0.05"))
+        combo_price_max = float(os.getenv("COMBO_PRECIO_MAX", "0.90"))
         high_all, value_all = rank_market_candidates(
             candidates, min_probability=min_combo,
             high_limit=max(1, len(candidates)), value_limit=max(1, len(candidates)),
+            min_edge=min_edge, high_price_max=combo_price_max,
+            value_price_max=None, high_sort_by_edge=True, exclude_trivial=True,
         )
         high = sorted(high_all, key=_edge_number, reverse=True)[:5]
         # The shared ranking enforces line diversification; this final guard also enforces one pick per family.
