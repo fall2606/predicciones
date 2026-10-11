@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: predicciones-main
+  group: validar-nfl
   cancel-in-progress: false
 jobs:
   nfl-validation:
