@@ -725,7 +725,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
             "Ventaja (edge)": mejor.get("Ventaja (edge)"),
             "Revisión": mejor.get("Revisión", ""),
             "Clave interna": repr((mejor.get("_clave"), mejor.get("_lado"))),
-            "_p": mejor.get("_single_p", mejor.get("_p", 0.0)),
+            "_p": mejor.get("Probabilidad base", mejor.get("_p", 0.0)),
         })
     todas = [{k: v for k, v in fila.items() if k != "_p"} for fila in predicciones]
     top = todas[:10]
