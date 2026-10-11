@@ -21,6 +21,7 @@ PENDING_COLUMNS = [
     "motivo", "clasificacion", "cuenta_alerta", "horas_desde_inicio", "resuelto_en",
 ]
 GRACE_HOURS = max(1, int(os.getenv("KALSHI_SETTLEMENT_GRACE_HOURS", "72")))
+MATCH_LOOKUP_GRACE_HOURS = max(1, int(os.getenv("MATCH_LOOKUP_GRACE_HOURS", "6")))
 SESSION = requests.Session()
 KALSHI_CACHE = {}
 
@@ -169,6 +170,7 @@ def _row_report(name, row, latest, match_states, kind):
     is_final = official_state in final_states
     is_cancelled = official_state in cancelled_states
     grace_expired = bool(kickoff and now - kickoff >= timedelta(hours=GRACE_HOURS))
+    match_lookup_expired = bool(kickoff and now - kickoff >= timedelta(hours=MATCH_LOOKUP_GRACE_HOURS))
 
     base = {
         "deporte": name, "prediction_id": pid, "match_id": match_id, "fecha": text(row.get("fecha")),
@@ -196,31 +198,41 @@ def _row_report(name, row, latest, match_states, kind):
         base.update(motivo="partido no encontrado", clasificacion="HISTORICO_NO_PARTIDO")
         return base
 
-    # When the official fixture is not in the feed and the scheduled start is well
-    # in the past, report the missing fixture rather than silently omitting it.
-    if (not match_id and grace_expired) or (not official_state and grace_expired):
+    # Missing fixture IDs must not be silently skipped for 72 hours: after the
+    # sport's normal duration, report the missing fixture; Kalshi gets its own 72h grace.
+    if (not match_id or not official_state) and match_lookup_expired:
         market = kalshi_market(ticker)
         base["estado_kalshi"] = market.get("status", "")
         base["resultado_kalshi"] = market.get("result", "")
-        if market["kind"] == "ok" and market["result"] in {"yes", "no", "void", "canceled", "cancelled"}:
+        if market["kind"] == "ok" and market["result"] in {"yes", "no"}:
+            if captured_side(row) not in {"YES", "NO"}:
+                base.update(motivo="estado desconocido: captura sin selección YES/NO; no se puede liquidar con seguridad",
+                            clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+            else:
+                base.update(motivo="resultado de Kalshi disponible pero no registrado",
+                            clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+        elif market["kind"] == "ok" and market["result"] in {"void", "canceled", "cancelled"}:
             base.update(motivo="resultado de Kalshi disponible pero no registrado",
                         clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
-        elif market["kind"] == "missing":
+        elif market["kind"] == "missing" or market.get("status") in {"closed", "inactive", "unlisted", "not_found"}:
             base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
+        elif market["kind"] == "ok" and market.get("status") in {"open", "active", "unopened", "initialized", "pending"}:
+            if grace_expired:
+                base.update(motivo=f"Kalshi aún no liquida (plazo vencido: {GRACE_HOURS} h)",
+                            clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+            else:
+                base.update(motivo="partido no encontrado", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
         else:
-            base.update(motivo="partido no encontrado", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+            base.update(motivo="estado desconocido", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
         return base
 
     if not (is_final or is_cancelled):
-        # A missing/unparseable fixture is only assumed to have finished after a
-        # generous sport-specific duration; upcoming and in-play matches are not alerts.
-        if not grace_expired:
+        # If an official fixture remains scheduled/in-play far past its start,
+        # the status is stale or unknown and must be visible.
+        if match_lookup_expired:
+            base.update(motivo="estado desconocido", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+        else:
             base.update(motivo="partido no finalizado", clasificacion="NO_FINALIZADA")
-            return base
-        if not official_state:
-            base.update(motivo="partido no encontrado", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
-            return base
-        base.update(motivo="estado desconocido", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
         return base
 
     if is_cancelled:
@@ -318,7 +330,7 @@ def main():
         writer.writeheader()
         writer.writerows(all_rows)
     print(f"INFORME DE PENDIENTES: {PENDING_REPORT.name} | filas={len(all_rows)} | alerta={total_pending} "
-          f"| plazo_kalshi={GRACE_HOURS}h | errores={errors}")
+          f"| plazo_kalshi={GRACE_HOURS}h | plazo_busqueda_partido={MATCH_LOOKUP_GRACE_HOURS}h | errores={errors}")
     # The pipeline should still commit the diagnostic CSV. Fail the action only after
     # it has written the evidence, so the UI never falls back to a stale/missing report.
     if errors:

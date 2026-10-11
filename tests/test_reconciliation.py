@@ -95,6 +95,17 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(result["cuenta_alerta"], "NO")
 
 
+    @patch("scripts.auditar_reconciliacion.kalshi_market")
+    def test_missing_official_fixture_after_normal_match_duration_is_alerted(self, market):
+        past = (datetime.now(timezone.utc) - timedelta(hours=8)).isoformat()
+        market.return_value = {"kind":"ok","status":"open","result":""}
+        row = {"prediction_id":"missing-fixture","match_id":"not-in-feed","fecha":past,
+               "ticker":"KXTEST-MISSING","seleccion":"YES"}
+        result = _row_report("LaLiga", row, {}, {}, "football")
+        self.assertEqual(result["motivo"], "partido no encontrado")
+        self.assertEqual(result["cuenta_alerta"], "SI")
+
+
 
 if __name__ == "__main__":
     unittest.main()

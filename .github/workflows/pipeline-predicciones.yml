@@ -110,6 +110,7 @@ jobs:
         env:
           CLAVE: ${{ secrets.CLAVE }}
           KALSHI_SETTLEMENT_GRACE_HOURS: ${{ vars.KALSHI_SETTLEMENT_GRACE_HOURS || '72' }}
+          MATCH_LOOKUP_GRACE_HOURS: ${{ vars.MATCH_LOOKUP_GRACE_HOURS || '6' }}
         run: python scripts/auditar_reconciliacion.py
       - name: Guardar predicciones y resultados en un único commit
         id: commit_results
