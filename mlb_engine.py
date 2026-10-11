@@ -455,13 +455,19 @@ def main():
         limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
         existing_match = [item for item in existing if str(item.get("match_id", "")) == str(match_id)]
         block_counts = {name: 0 for name in limits}
+        existing_singles = []
         for item in existing_match:
             block_name = str(item.get("bloque", "") or "")
             if block_name not in limits:
                 category_name = str(item.get("categoria", ""))
                 block_name = next((name for name in limits if category_name.startswith(name + " · ")), "")
-            if block_name in limits:
+            if block_name == "SENCILLAS":
+                existing_singles.append(item)
+            elif block_name in limits:
                 block_counts[block_name] += 1
+        # Old, now-filtered singles must not occupy the slots forever; preserve them in the ledger
+        # but only count those which still meet the current public display rules.
+        block_counts["SENCILLAS"] = len(rank_single_candidates(existing_singles, limit=limits["SENCILLAS"]))
 
         for block, selected in (("SENCILLAS", singles), ("ALTA_PROBABILIDAD", high), ("A_TENER_EN_CUENTA", value)):
             count = block_counts[block]
