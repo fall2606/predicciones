@@ -198,6 +198,8 @@ def build_team_model(games, as_of=None):
     elo = {team: 1500.0 for team in TEAM_ALIASES}
     points_for = {team: [] for team in TEAM_ALIASES}
     points_against = {team: [] for team in TEAM_ALIASES}
+    last_played = {team: None for team in TEAM_ALIASES}
+    rest_residuals = []
     # Historical games are replayed chronologically; the current game is never used.
     for row in data.to_dict("records"):
         home, away = str(row["home_team"]).upper(), str(row["away_team"]).upper()
@@ -205,6 +207,13 @@ def build_team_model(games, as_of=None):
             continue
         hs, aws = float(row["home_score"]), float(row["away_score"])
         h_elo, a_elo = elo[home], elo[away]
+        kickoff = pd.Timestamp(row["gameday"])
+        previous_home, previous_away = last_played[home], last_played[away]
+        rest_home = max(0.0, min(21.0, (kickoff - previous_home).total_seconds() / 86400.0)) if previous_home is not None else 7.0
+        rest_away = max(0.0, min(21.0, (kickoff - previous_away).total_seconds() / 86400.0)) if previous_away is not None else 7.0
+        rest_difference = max(-14.0, min(14.0, rest_home - rest_away))
+        expected_margin = (h_elo - a_elo) / 25.0 + 1.7
+        rest_residuals.append((rest_difference, (hs - aws) - expected_margin))
         expected_home = 1 / (1 + 10 ** (-(h_elo + 55 - a_elo) / 400))
         actual_home = 1.0 if hs > aws else (0.5 if hs == aws else 0.0)
         margin = abs(hs - aws)
@@ -216,6 +225,20 @@ def build_team_model(games, as_of=None):
         points_against[home].append((aws, row["gameday"]))
         points_for[away].append((aws, row["gameday"]))
         points_against[away].append((hs, row["gameday"]))
+        last_played[home] = kickoff
+        last_played[away] = kickoff
+    # Learn the rest effect from historical margin residuals rather than manually
+    # subtracting points or adjusting edges. Fall back to neutral if sample/variance is weak.
+    rest_effect = 0.0
+    usable_rest = [(x, y) for x, y in rest_residuals if math.isfinite(x) and math.isfinite(y)]
+    if len(usable_rest) >= 100 and len({round(x, 3) for x, _ in usable_rest}) >= 3:
+        rest_x = np.asarray([x for x, _ in usable_rest], dtype=float)
+        rest_y = np.asarray([y for _, y in usable_rest], dtype=float)
+        if float(np.var(rest_x)) > 0.25:
+            design = np.column_stack((np.ones(len(rest_x)), rest_x))
+            coefficients, *_ = np.linalg.lstsq(design, rest_y, rcond=None)
+            if len(coefficients) > 1 and math.isfinite(float(coefficients[1])):
+                rest_effect = float(coefficients[1])
     def recent_average(values, fallback):
         if not values:
             return fallback
@@ -235,8 +258,10 @@ def build_team_model(games, as_of=None):
             "pf": recent_average(points_for[team], league_points),
             "pa": recent_average(points_against[team], league_points),
             "sample": len(points_for[team]),
+            "last_game_date": last_played[team].isoformat() if last_played[team] is not None else "",
         }
-    return {"teams": teams, "league_points": league_points, "trained_games": len(data)}
+    return {"teams": teams, "league_points": league_points, "trained_games": len(data),
+            "rest_effect_points_per_day": rest_effect, "rest_effect_sample_n": len(usable_rest)}
 
 
 def _normal_pmf(mean, sd, low, high, *, key_numbers=()):
@@ -253,19 +278,32 @@ def _normal_pmf(mean, sd, low, high, *, key_numbers=()):
     return values, probs / total
 
 
-def predict_game(model, home, away):
+def predict_game(model, home, away, kickoff=None):
     h = model["teams"].get(home)
     a = model["teams"].get(away)
     if not h or not a:
         return None
-    margin_mean = (h["elo"] - a["elo"]) / 25.0 + 1.7
+    rest_difference = 0.0
+    target = parse_dt(kickoff) if kickoff is not None else None
+    if target is not None:
+        def rest_days(team_row):
+            previous = parse_dt(team_row.get("last_game_date"))
+            if previous is None:
+                return 7.0
+            return max(0.0, min(21.0, (target - previous).total_seconds() / 86400.0))
+        rest_difference = max(-14.0, min(14.0, rest_days(h) - rest_days(a)))
+    rest_effect = float(model.get("rest_effect_points_per_day", 0.0) or 0.0)
+    if not math.isfinite(rest_effect):
+        rest_effect = 0.0
+    rest_adjustment = rest_effect * rest_difference
+    margin_mean = (h["elo"] - a["elo"]) / 25.0 + 1.7 + rest_adjustment
     home_mean = max(0.0, (h["pf"] + a["pa"]) / 2 + 1.0)
     away_mean = max(0.0, (a["pf"] + h["pa"]) / 2 - 1.0)
     total_mean = home_mean + away_mean
     margin_values, margin_probs = _normal_pmf(margin_mean, 13.5, -45, 45, key_numbers=(-14, -10, -7, -6, -3, 0, 3, 6, 7, 10, 14))
     total_values, total_probs = _normal_pmf(total_mean, 13.0, 0, 100, key_numbers=(3, 7, 10, 14, 17, 20, 21, 24, 27, 28, 31, 34, 35, 38, 41, 42, 45, 48, 49, 52, 55))
     return {
-        "margin_mean": margin_mean, "total_mean": total_mean,
+        "margin_mean": margin_mean, "total_mean": total_mean,\n        "rest_difference_days": rest_difference, "rest_adjustment_points": rest_adjustment,
         "home_points_mean": home_mean, "away_points_mean": away_mean,
         "home_win": float(margin_probs[margin_values > 0].sum() + 0.5 * margin_probs[margin_values == 0].sum()),
         "away_win": float(margin_probs[margin_values < 0].sum() + 0.5 * margin_probs[margin_values == 0].sum()),
@@ -669,7 +707,7 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
         if not kickoff or kickoff <= now:
             continue
         game = {"home": home, "away": away, "date": kickoff.isoformat(), "event_ticker": event.get("event_ticker", "")}
-        prediction = predict_game(model, home, away)
+        prediction = predict_game(model, home, away, kickoff=kickoff)
         if not prediction:
             continue
         match_id = _match_id(kickoff, home, away)
