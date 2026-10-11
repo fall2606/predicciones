@@ -154,6 +154,23 @@ class CoreTests(unittest.TestCase):
 
 
 
+ def test_officially_postponed_future_match_is_annulled_without_kalshi_call(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   p,r=Path(tmp)/"predicciones.csv",Path(tmp)/"resultados.csv"
+   future=(datetime.now(timezone.utc)+timedelta(days=2)).isoformat()
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","match_id","lado","fecha","capturado_en","probabilidad_modelo"])
+    w.writeheader()
+    w.writerow({"prediction_id":"postponed","ticker":"KXTEST-GAME","match_id":"m-postponed","lado":"YES","fecha":future,"capturado_en":datetime.now(timezone.utc).isoformat(),"probabilidad_modelo":"0.7"})
+   with patch.object(core,"kalshi_get") as fetch:
+    summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado",cancelled_match_ids={"m-postponed"})
+   self.assertEqual(summary["anuladas"],1)
+   fetch.assert_not_called()
+   with r.open(newline="",encoding="utf-8") as f:
+    row=next(csv.DictReader(f))
+   self.assertEqual(row["estado"],"ANULADA")
+   self.assertIn("fuente oficial",row["marcador"])
+
  def test_single_candidates_filter_trivial_price_edge_and_rank_by_edge(self):
   rows=[
    {"Ticker":"KXGOALS-TOTAL-OVER05","Apuesta sencilla":"Más de 0.5 goles","Categoría resumen":"Goles totales","Probabilidad del modelo":"97%","Precio de compra":"96%","Ventaja (edge)":0.01,"line":"0.5"},
