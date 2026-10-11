@@ -765,7 +765,7 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
                     "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
                     "edge": f"{edge:.6f}" if edge is not None else "",
                     "revision": "REVISAR" if edge is not None and edge > 0.20 else "",
-                    "estado_modelo": "NFL Elo + forma reciente; calibración insuficiente",
+                    "estado_modelo": f"NFL Elo + forma reciente + descanso aprendido; {calibration_status}",
                     "reglas": market.get("rules_primary") or market.get("rules_secondary") or "",
                     "capturado_en": captured,
                     "disponibilidad": "Disponible en Kalshi" if price is not None else "Sin precio en Kalshi",
