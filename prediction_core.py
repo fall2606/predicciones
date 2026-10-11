@@ -399,7 +399,7 @@ def _single_family(row):
     if any(x in label for x in ("primer gol", "first goal", "first scorer", "primeras 5 entradas", "first 5", "f5")):
         return "periodo_especial:" + (str(row.get("categoria") or row.get("Categoría resumen") or ticker).casefold())
     if any(x in label for x in ("total exact", "total runs", "total carreras", "goles totales", "goals total", "over ", "under ", "más de ", "menos de ", "team total", "total goles")):
-        if "team total" in label or "goles por equipo" in label or "carreras por equipo" in label:
+        if "team total" in label or "total por equipo" in label or "goles por equipo" in label or "carreras por equipo" in label:
             return "totales_equipo"
         return "totales_partido"
     if any(x in label for x in ("moneyline", "ganador", "resultado", "spread", "hándicap", "handicap", "run line", "gana ", "win")):
