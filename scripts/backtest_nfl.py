@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -14,6 +15,7 @@ from scipy.optimize import minimize
 import nfl_engine as nfl
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 SUMMARY = ROOT / "nfl_backtest_resumen.csv"
 CALIBRATION = ROOT / "nfl_calibracion.json"
 MIN_CALIBRATION_N = 100
