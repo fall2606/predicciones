@@ -113,10 +113,10 @@ def discover_nfl_series():
     found = []
     include_terms = (
         "GAME", "SPREAD", "TOTAL", "TEAMTOTAL", "PLAYER", "PASSYDS", "RUSHYDS",
-        "RECYDS", "RECEPTIONS", "TOUCHDOWN", "1H", "2H", "1Q", "2Q", "3Q", "4Q",
+        "RECYDS", "RECEPTIONS", "TOUCHDOWN", "TDPROT", "1H", "2H", "1Q", "2Q", "3Q", "4Q",
         "HALF", "QUARTER",
     )
-    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT", "TRADE", "CAREER", "DIVISIONWINS", "LASTTOWIN", "TDPROT")
+    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT", "TRADE", "CAREER", "DIVISIONWINS", "LASTTOWIN")
     for item in rows:
         ticker = str(item.get("ticker") or "").upper()
         title = normalizar(item.get("title") or item.get("name") or "")
