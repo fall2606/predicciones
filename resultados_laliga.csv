@@ -127,3 +127,16 @@ prediction_id,estado,marcador,resuelto_en
 564707|A_TENER_EN_CUENTA|KXLALIGATOTAL-26OCT11RSODEP-4|YES|2026101102,WIN,Resultado oficial Kalshi: YES,2026-10-11T16:39:30.066246+00:00
 564707|A_TENER_EN_CUENTA|KXLALIGATOTAL-26OCT11RSODEP-6|YES|2026101102,LOSS,Resultado oficial Kalshi: NO,2026-10-11T16:39:30.066259+00:00
 564707|ALTA_PROBABILIDAD|KXLALIGATOTAL-26OCT11RSODEP-1|YES,WIN,Resultado oficial Kalshi: YES,2026-10-11T16:39:31.105642+00:00
+564699|Goles por equipo|2026101012,WIN,"Marcador ESPN independiente: 1-2 (mercado KXLALIGATEAMTOTAL, selección NO)",2026-10-11T17:10:51.332334+00:00
+564699|Ambos marcan 1.ª parte|2026101012,LOSS,"Marcador ESPN independiente: 1-2 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-11T17:10:51.332931+00:00
+564699|Goles 2.ª parte|2026101012,LOSS,"Marcador ESPN independiente: 1-2 (mercado KXLALIGA2HTOTAL, selección NO)",2026-10-11T17:10:51.333535+00:00
+564699|Goles 1.ª parte|2026101012,WIN,"Marcador ESPN independiente: 1-2 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-11T17:10:51.334105+00:00
+564699|Goles totales|2026101012,WIN,"Marcador ESPN independiente: 1-2 (mercado KXLALIGATOTAL, selección NO)",2026-10-11T17:10:51.334684+00:00
+564699|Ambos marcan|2026101012,WIN,"Marcador ESPN independiente: 1-2 (mercado KXLALIGABTTS, selección YES)",2026-10-11T17:10:51.335265+00:00
+564699|Resultado|2026101012,LOSS,"Marcador ESPN independiente: 1-2 (mercado KXLALIGAGAME, selección YES)",2026-10-11T17:10:51.336399+00:00
+564700|Ambos marcan 1.ª parte|2026101012,WIN,"Marcador ESPN independiente: 3-0 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-11T17:10:51.336935+00:00
+564700|Goles 2.ª parte|2026101012,WIN,"Marcador ESPN independiente: 3-0 (mercado KXLALIGA2HTOTAL, selección YES)",2026-10-11T17:10:51.337476+00:00
+564700|Goles totales|2026101012,WIN,"Marcador ESPN independiente: 3-0 (mercado KXLALIGATOTAL, selección YES)",2026-10-11T17:10:51.338548+00:00
+564700|Resultado|2026101012,WIN,"Marcador ESPN independiente: 3-0 (mercado KXLALIGAGAME, selección YES)",2026-10-11T17:10:51.339074+00:00
+564700|Goles 1.ª parte|2026101012,WIN,"Marcador ESPN independiente: 3-0 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-11T17:10:51.341225+00:00
+564702|Goles por equipo|2026101018,WIN,"Marcador ESPN independiente: 1-0 (mercado KXLALIGATEAMTOTAL, selección NO)",2026-10-11T17:10:51.931246+00:00
