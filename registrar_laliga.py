@@ -169,6 +169,14 @@ def main():
                 elif primer_equipo_id == partido.get("awayTeam", {}).get("id"):
                     primer_gol = "visita"
                 else:
+                    goles = datos["resultado"]["partido"]
+                    cierres.append({
+                        "prediction_id": prediction_id,
+                        "estado": "NO_EVALUABLE",
+                        "marcador": f"{goles[0]}-{goles[1]} · La API no identifica el equipo del primer gol",
+                        "resuelto_en": datetime.now(timezone.utc).isoformat(),
+                    })
+                    ids_resueltos.add(prediction_id)
                     continue
             elif total_goles == 0:
                 primer_gol = "sin_goles"
