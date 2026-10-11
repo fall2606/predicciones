@@ -294,6 +294,59 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
         "win":sum(r["estado"]=="WIN" for r in new),"loss":sum(r["estado"]=="LOSS" for r in new),
         "anuladas":sum(r["estado"]=="ANULADA" for r in new),"sin_resolver_aun":skipped}
     print("LIQUIDACIÓN KALSHI:",summary); return summary
+def read_csv_rows_resilient(path):
+    """Read a CSV record-by-record; quarantine malformed rows without touching the source."""
+    path = Path(path)
+    if not path.exists() or path.stat().st_size == 0:
+        return []
+    with path.open("r", encoding="utf-8-sig", newline="") as f:
+        lines = f.readlines()
+    if not lines:
+        return []
+    try:
+        header = next(csv.reader([lines[0]], strict=True))
+    except (csv.Error, StopIteration) as exc:
+        raise ValueError(f"{path.name}: cabecera CSV ilegible: {exc}") from exc
+    if not header:
+        return []
+    valid, bad = [], []
+    for line_no, raw in enumerate(lines[1:], start=2):
+        if not raw.strip():
+            continue
+        try:
+            values = next(csv.reader([raw], strict=True))
+        except (csv.Error, StopIteration) as exc:
+            bad.append((line_no, raw.rstrip("\r\n"), f"CSV inválido: {exc}"))
+            continue
+        if len(values) != len(header):
+            bad.append((line_no, raw.rstrip("\r\n"),
+                        f"{len(values)} campos; se esperaban {len(header)}"))
+            continue
+        valid.append(dict(zip(header, values)))
+    if bad:
+        quarantine = path.with_suffix(path.suffix + ".malformed_rows.csv")
+        seen = set()
+        if quarantine.exists():
+            try:
+                with quarantine.open("r", encoding="utf-8-sig", newline="") as f:
+                    seen = {row.get("raw_line", "") for row in csv.DictReader(f)}
+            except (OSError, csv.Error):
+                seen = set()
+        new_bad = [item for item in bad if item[1] not in seen]
+        if new_bad:
+            needs_header = not quarantine.exists() or quarantine.stat().st_size == 0
+            with quarantine.open("a", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=["source", "line_number", "reason", "raw_line"])
+                if needs_header:
+                    writer.writeheader()
+                for line_no, raw, reason in new_bad:
+                    writer.writerow({"source": path.name, "line_number": line_no,
+                                     "reason": reason, "raw_line": raw})
+        print(f"CSV HISTORIAL: {path.name}: {len(bad)} fila(s) malformada(s) aislada(s); "
+              f"original intacto; copia en {quarantine.name}")
+    return valid
+
+
 def _probability(row):
     p=valid_probability(row.get("_p"))
     if p is not None: return p
@@ -426,6 +479,38 @@ def _is_trivial_single(row):
     return False
 
 
+def single_candidate_rejection_reasons(rows, *, price_max=None, min_edge=None):
+    """Count why raw candidates do not pass the simple-bet quality gate."""
+    if price_max is None:
+        price_max = float(os.getenv("SENCILLAS_PRECIO_MAX", "0.88"))
+    if min_edge is None:
+        min_edge = float(os.getenv("SENCILLAS_EDGE_MIN", "0.05"))
+    counts = {"sin ticker real": 0, "probabilidad inválida": 0, "sin precio Kalshi": 0,
+              "precio por encima del máximo": 0, "ventaja insuficiente": 0,
+              "línea trivial": 0, "candidata que sí cumple": 0}
+    for source in rows or []:
+        row = dict(source)
+        ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
+        p = _probability(row)
+        price = _candidate_price(row)
+        edge = _candidate_edge(row, price)
+        if not ticker or ticker in {"—", "-", "None", "nan"}:
+            counts["sin ticker real"] += 1
+        elif p is None:
+            counts["probabilidad inválida"] += 1
+        elif price is None:
+            counts["sin precio Kalshi"] += 1
+        elif price > price_max:
+            counts["precio por encima del máximo"] += 1
+        elif edge is None or edge < min_edge:
+            counts["ventaja insuficiente"] += 1
+        elif _is_trivial_single(row):
+            counts["línea trivial"] += 1
+        else:
+            counts["candidata que sí cumple"] += 1
+    return {key: value for key, value in counts.items() if value}
+
+
 def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=None, limit=10):
     """Select simple bets by model edge, avoiding trivial prices and correlated duplicates.
 
@@ -471,6 +556,11 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         label = " ".join(str(row.get(k) or "") for k in ("Apuesta sencilla", "Apuesta", "mercado"))
         # Keep the list diversified: no more than two selections tied to the same named team.
         teams = re.findall(r"(?<![\w])([A-Z][A-Za-zÀ-ÿ.'-]+(?:\s+[A-Z][A-Za-zÀ-ÿ.'-]+){0,2})", str(row.get("Apuesta sencilla") or row.get("Apuesta") or ""))
+        # Ignore generic bet phrases: "Más de" is not a team and must not suppress totals.
+        teams = [team for team in teams if team.casefold() not in {
+            "más de", "mas de", "menos de", "over", "under", "ambos equipos marcan",
+            "más de goles", "menos de goles",
+        }]
         if len(used_teams) >= 2 and teams and all(team.casefold() in used_teams for team in teams):
             continue
         selected.append(row)
