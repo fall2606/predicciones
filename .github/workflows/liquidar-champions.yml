@@ -1,9 +1,6 @@
 name: Liquidación automática de Champions League
 
 on:
-  # Reintenta periódicamente hasta que Kalshi publique la resolución oficial.
-  schedule:
-    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 permissions:
