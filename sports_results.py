@@ -81,15 +81,10 @@ _FD_CACHE = {}
 
 
 def _football_data_match(row):
-    """Use the documented football-data.org free API when CLAVE is available.
-
-    One cached season request serves all predictions in that competition/season,
-    avoiding one HTTP request per prediction and preserving the regulation-time score.
-    """
+    """Match the fixture by kickoff and team names; app match_id is not the API's match id."""
     token = os.getenv("CLAVE")
-    match_id = str(row.get("match_id") or "").strip()
     kickoff = _parse_date(row.get("fecha"))
-    if not token or not match_id.isdigit() or kickoff is None:
+    if not token or kickoff is None:
         return None
     ticker = str(row.get("ticker") or "").upper()
     key_text = str(row.get("clave_interna") or "").upper()
@@ -109,38 +104,51 @@ def _football_data_match(row):
                 timeout=_TIMEOUT,
             )
             response.raise_for_status()
-            matches = (response.json() or {}).get("matches") or []
-            _FD_CACHE[cache_key] = {str(item.get("id")): item for item in matches if item.get("id") is not None}
+            _FD_CACHE[cache_key] = (response.json() or {}).get("matches") or []
         except (requests.RequestException, ValueError, TypeError):
-            _FD_CACHE[cache_key] = {}
-    item = _FD_CACHE[cache_key].get(match_id)
-    if not item:
+            _FD_CACHE[cache_key] = []
+    local, away = str(row.get("local") or ""), str(row.get("visita") or "")
+    if not local or not away:
         return None
-    status = str(item.get("status") or "").upper()
-    score = item.get("score") or {}
-    full = score.get("fullTime") or {}
-    half = score.get("halfTime") or {}
-    home, away = full.get("home"), full.get("away")
-    half_home, half_away = half.get("home"), half.get("away")
-    half_home = int(half_home) if half_home is not None else None
-    half_away = int(half_away) if half_away is not None else None
-    if home is None or away is None:
-        return {
-            "confidence": 1.0, "event_id": match_id, "status": status,
-            "completed": False, "status_detail": "football-data.org: " + status,
-            "local_score": None, "away_score": None,
-            "half_local_score": half_home, "half_away_score": half_away,
-            "league": competition, "event_name": "", "source": "football-data.org",
-        }
-    return {
-        "confidence": 1.0, "event_id": match_id,
-        "status": "STATUS_FINAL" if status == "FINISHED" else status,
-        "completed": status == "FINISHED",
-        "status_detail": "Marcador reglamentario de football-data.org: " + status,
-        "local_score": int(home), "away_score": int(away),
-        "half_local_score": half_home, "half_away_score": half_away,
-        "league": competition, "event_name": "", "source": "football-data.org",
-    }
+    candidates = []
+    for item in _FD_CACHE[cache_key]:
+        home_team = (item.get("homeTeam") or {}).get("name") or (item.get("homeTeam") or {}).get("shortName") or ""
+        away_team = (item.get("awayTeam") or {}).get("name") or (item.get("awayTeam") or {}).get("shortName") or ""
+        match_date = _parse_date(item.get("utcDate"))
+        if match_date is None or abs((match_date - kickoff).total_seconds()) > 36 * 3600:
+            continue
+        direct = (_similar(local, home_team) + _similar(away, away_team)) / 2
+        reverse = (_similar(local, away_team) + _similar(away, home_team)) / 2
+        confidence = max(direct, reverse)
+        if confidence < 0.78:
+            continue
+        reversed_teams = reverse > direct
+        score = item.get("score") or {}
+        full = score.get("fullTime") or {}
+        half = score.get("halfTime") or {}
+        home_score, away_score = full.get("home"), full.get("away")
+        half_home, half_away = half.get("home"), half.get("away")
+        if reversed_teams:
+            home_score, away_score = away_score, home_score
+            half_home, half_away = half_away, half_home
+        status = str(item.get("status") or "").upper()
+        candidates.append({
+            "confidence": confidence, "event_id": str(item.get("id") or ""),
+            "status": "STATUS_FINAL" if status == "FINISHED" else status,
+            "completed": status == "FINISHED",
+            "status_detail": "Marcador reglamentario de football-data.org: " + status,
+            "local_score": int(home_score) if home_score is not None else None,
+            "away_score": int(away_score) if away_score is not None else None,
+            "half_local_score": int(half_home) if half_home is not None else None,
+            "half_away_score": int(half_away) if half_away is not None else None,
+            "league": competition, "event_name": f"{home_team} - {away_team}", "source": "football-data.org",
+        })
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: item["confidence"], reverse=True)
+    if len(candidates) > 1 and candidates[0]["confidence"] - candidates[1]["confidence"] < 0.025:
+        return None
+    return candidates[0]
 
 
 def find_match(row):
