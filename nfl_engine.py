@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import math
 import os
@@ -134,10 +135,8 @@ def load_kalshi_catalog(status="open", max_pages=2):
     series = discover_nfl_series()
     if not series:
         raise RuntimeError("La API pública de Kalshi no devolvió series identificables como NFL.")
-    events = []
-    # Upcoming match markets are open; avoid the much slower initialized/futures archive.
-    # Two pages per series keep the live capture bounded.
-    for item in series:
+
+    def fetch_series(item):
         try:
             rows = iter_kalshi_pages(
                 "events",
@@ -145,9 +144,21 @@ def load_kalshi_catalog(status="open", max_pages=2):
                  "with_nested_markets": "true"},
                 "events", max_pages,
             )
-            events.extend(rows)
+            return rows, ""
         except (requests.RequestException, ValueError, KeyError) as exc:
-            print("AVISO catálogo NFL {}: {}".format(item.get("ticker"), exc))
+            return [], "{}: {}".format(item.get("ticker"), exc)
+
+    events = []
+    # Bound capture time: query the discovered series concurrently. Individual API
+    # calls still use the shared client's retries/timeouts and the complete per-game
+    # market families are retained; this prevents serial waits on hundreds of series.
+    with ThreadPoolExecutor(max_workers=min(8, len(series))) as pool:
+        futures = [pool.submit(fetch_series, item) for item in series]
+        for future in as_completed(futures):
+            rows, warning = future.result()
+            events.extend(rows)
+            if warning:
+                print("AVISO catálogo NFL {}".format(warning))
     # Keep event and nested market data exactly as returned by Kalshi.
     seen = set()
     catalog = []
