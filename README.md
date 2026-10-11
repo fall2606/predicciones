@@ -8,7 +8,7 @@
 - Los mercados que requieren datos no incluidos de forma fiable en el marcador final (corners, primera/segunda parte, primer gol, tarjetas y props) siguen usando la resolución de Kalshi. Si no hay coincidencia segura, no se inventa un resultado.
 - Los partidos de Champions que el proveedor identifica como prórroga o penales se dejan a la resolución de Kalshi, porque el marcador reglamentario puede diferir del marcador final.
 - SofaScore no se usa como fuente automatizada: sus condiciones restringen la extracción y reutilización de su base de datos sin permiso explícito.
-- La liquidación de LaLiga y Champions se programa cada 10 minutos; las ejecuciones programadas pueden retrasarse. Un resultado externo solo se guarda cuando el partido aparece finalizado y la regla del mercado se puede calcular sin ambigüedad.
+- El workflow central `Pipeline automático de predicciones` comprueba la liquidación de MLB, LaLiga y Champions cada 5 minutos; los workflows individuales quedan disponibles para ejecución manual y no se programan en paralelo para evitar colas de concurrencia. Las ejecuciones programadas pueden retrasarse. Un resultado externo solo se guarda cuando el partido aparece finalizado y la regla del mercado se puede calcular sin ambigüedad.
 
 ## Historial de LaLiga
 
