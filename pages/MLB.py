@@ -92,6 +92,10 @@ try:
         else:
             latest = pd.NaT
         st.caption("Última liquidación MLB: " + (latest.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest) else "sin liquidaciones registradas"))
+        if pd.isna(latest):
+            st.warning("No hay liquidaciones MLB registradas todavía; cuando termine el primer partido con capturas debe aparecer WIN/LOSS/ANULADA.")
+        elif datetime.now(ZoneInfo("UTC")) - latest.to_pydatetime() > timedelta(hours=12):
+            st.warning("La última liquidación MLB tiene más de 12 horas. Comprueba el workflow y los contratos terminados recientes.")
         if not unresolved.empty:
             st.error(f"ALERTA MLB: {len(unresolved)} predicciones de partidos finalizados siguen sin resultado oficial.")
             try:
