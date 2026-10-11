@@ -96,6 +96,20 @@ class NFLModelTests(unittest.TestCase):
             self.assertIn(row["prediction_id"], excluded)
             self.assertTrue(excluded_path.exists())
 
+
+    def test_kickoff_lookup_uses_date_encoded_in_kalshi_ticker(self):
+        stats = {
+            "denver broncos": {"scored": 24, "allowed": 19, "games": 5},
+            "los angeles chargers": {"scored": 22, "allowed": 20, "games": 5},
+        }
+        nfl_engine.SCHEDULES[tuple(sorted(("denver broncos", "los angeles chargers")))] = [
+            "2026-01-04T21:25:00Z", "2026-10-11T20:05:00Z",
+        ]
+        kickoff = nfl_engine._scheduled_kickoff(
+            "DEN Broncos", "LA Chargers", stats, "KXNFLGAME-26OCT11DENLAC"
+        )
+        self.assertEqual(kickoff.isoformat(), "2026-10-11T20:05:00+00:00")
+
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
         self.assertIsNotNone(projected)
