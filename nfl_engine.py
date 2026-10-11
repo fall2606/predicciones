@@ -387,15 +387,15 @@ def _rank_nfl_game(rows):
 
     singles = choose(
         lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.50 and float(r["edge"]) >= 0.02,
-        5, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 3,
+        5, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 5,
     )
     combos = choose(
-        lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.65 and float(r["edge"]) >= 0.02,
-        5, lambda r: (float(r["probabilidad_calibrada"]), float(r["edge"])), 3, singles,
+        lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.60 and float(r["edge"]) >= 0.02,
+        5, lambda r: (float(r["probabilidad_calibrada"]), float(r["edge"])), 5, singles,
     )
     value = choose(
         lambda r: float(r["edge"]) >= 0.02,
-        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 4, singles | combos,
+        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 5, singles | combos,
     )
     return singles, combos, value
 
