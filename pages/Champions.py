@@ -15,7 +15,7 @@ from scipy.stats import nbinom, poisson
 
 
 from champions_engine import *
-from prediction_core import rank_market_candidates
+from prediction_core import rank_market_candidates, rank_single_candidates
 
  
 def _tabla_con_resultado(df, columna="Resultado"):
@@ -207,30 +207,33 @@ elif partido_cerrado:
     st.caption("No hay una captura previa guardada para este encuentro cerrado; no se inventa una predicción retrospectiva.")
 else:
     st.caption("Estimación en vivo. La captura automática se guarda cada dos horas; la hora de la última captura se muestra cuando esté disponible.")
+# Salvaguarda también las capturas históricas: las sencillas siempre respetan el filtro de valor.
+resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=10)
 if resumen_sencillo_kalshi:
     for jugada in resumen_sencillo_kalshi:
         with st.container(border=True):
-            st.markdown(f"**{jugada['Tipo']}:** {jugada['Jugada sencilla']}")
-            st.write(f"Probabilidad modelo: **{jugada['Probabilidad modelo']}**")
-            if partido_cerrado:
-                resultado_tarjeta = str(jugada.get("Resultado", "Pendiente de resultado"))
-                if "Se cumplió" in resultado_tarjeta or resultado_tarjeta == "WIN":
-                    st.success("WIN · Se cumplió")
-                elif "No se cumplió" in resultado_tarjeta or resultado_tarjeta == "LOSS":
-                    st.error("LOSS · No se cumplió")
-                elif "ANULADA" in resultado_tarjeta:
-                    st.info("ANULADA · Contrato anulado por Kalshi")
-                elif "NO EVALUABLE" in resultado_tarjeta:
-                    st.warning(resultado_tarjeta)
-                elif "Pendiente" in resultado_tarjeta:
-                    st.info("PENDIENTE · Esperando liquidación automática")
-                else:
-                    st.warning(resultado_tarjeta)
-            st.caption(f"Kalshi: {jugada['Precio ahora']} · {jugada['Disponibilidad']} · Ticker: {jugada.get('Ticker', '—')}")
-            if jugada.get("Calibración"):
-                st.caption(f"Calibración: {jugada['Calibración']}")
-            if jugada.get("capturado_en"):
-                st.caption(f"Captura inmutable · {jugada['capturado_en']}")
+            st.markdown(f"**{jugada.get('Tipo', 'Sencilla')}:** {jugada.get('Jugada sencilla', '—')}")
+            st.write(f"Probabilidad del modelo: **{jugada.get('Probabilidad modelo', jugada.get('Probabilidad del modelo', '—'))}**")
+            precio_txt = jugada.get("Precio de compra", jugada.get("Precio ahora", "—"))
+            st.write(f"Precio Kalshi: **{precio_txt}**")
+            try:
+                edge_num = float(jugada.get("Ventaja (edge)", 0))
+                if abs(edge_num) > 1:
+                    edge_num /= 100
+                edge_txt = f"{edge_num * 100:+.1f} puntos"
+            except (TypeError, ValueError):
+                edge_txt = "No disponible"
+            st.write(f"Ventaja: **{edge_txt}**")
+            resultado_tarjeta = str(jugada.get("Resultado", "PENDIENTE")).upper()
+            if "ANULADA" in resultado_tarjeta or "VOID" in resultado_tarjeta:
+                st.info("ANULADA")
+            elif resultado_tarjeta == "WIN" or "SE CUMPLIÓ" in resultado_tarjeta:
+                st.success("WIN")
+            elif resultado_tarjeta == "LOSS" or "NO SE CUMPLIÓ" in resultado_tarjeta:
+                st.error("LOSS")
+            else:
+                st.warning("PENDIENTE")
+            st.caption(f"Ticker: {jugada.get('Ticker', '—')}")
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
         with st.expander(f"Comparar todas las capturas guardadas ({len(historial_partido)})"):
