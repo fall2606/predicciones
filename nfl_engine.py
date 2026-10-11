@@ -785,6 +785,7 @@ def read_csv_tolerant(path, expected_columns=None):
         return []
     bad_rows = []
     parsed = []
+    header = []
     try:
         with path.open(newline="", encoding="utf-8-sig") as handle:
             reader = csv.reader(handle, strict=True)
