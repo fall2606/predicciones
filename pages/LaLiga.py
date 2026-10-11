@@ -334,7 +334,7 @@ if partido_cerrado:
         st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de valor.")
 elif valor_vista:
     _valor_df = pd.DataFrame(valor_vista).copy()
-    _valor_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
+    _valor_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar · mercado sin fuente compatible" if partido_cerrado else "PENDIENTE")
     _ticker_col = "Ticker" if "Ticker" in _valor_df.columns else ("ticker" if "ticker" in _valor_df.columns else None)
     if _ticker_col and estado_partido not in {"CANCELLED", "CANCELED", "POSTPONED"}:
         _sin_ticker = _valor_df[_ticker_col].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
