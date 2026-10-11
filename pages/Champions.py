@@ -30,8 +30,10 @@ def _tabla_con_resultado(df, columna="Resultado"):
             return "background-color: #d4edda; color: #155724; font-weight: bold"
         if "ANULADA" in texto or "VOID" in texto:
             return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
+        if "SIN LIQUIDAR" in texto:
+            return "background-color: #f8d7da; color: #721c24; font-weight: bold"
         if "PENDIENTE" in texto or "NO EVALUABLE" in texto:
-            return "background-color: #fff3cd; color: #856404; font-weight: bold"
+            return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
         return ""
     return df.style.map(_color, subset=[columna])
 
@@ -298,7 +300,8 @@ if partido_cerrado:
     if not _archivo_partido.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
-        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("PENDIENTE")
+        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
+        _archivo_partido.loc[_archivo_partido["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
             if _col not in _archivo_partido.columns:
                 _archivo_partido[_col] = ""
@@ -306,8 +309,10 @@ if partido_cerrado:
     else:
         st.info("No hay capturas prepartido guardadas en el bloque de alta probabilidad para este encuentro.")
 elif alta_vista:
-    _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker"] if c in alta_vista[0]]
-    st.dataframe(pd.DataFrame(alta_vista)[_cols], use_container_width=True, hide_index=True)
+    _alta_df = pd.DataFrame(alta_vista).copy()
+    _alta_df["Resultado"] = "SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"
+    _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _alta_df.columns]
+    st.dataframe(_tabla_con_resultado(_alta_df[_cols]), use_container_width=True, hide_index=True)
 else:
     st.info("No hay cinco selecciones independientes que superen el umbral configurable.")
 
@@ -322,7 +327,8 @@ if partido_cerrado:
     if not _archivo_valor.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
-        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("PENDIENTE")
+        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
+        _archivo_valor.loc[_archivo_valor["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge"]:
             if _col not in _archivo_valor.columns:
                 _archivo_valor[_col] = ""
@@ -330,8 +336,10 @@ if partido_cerrado:
     else:
         st.info("No hay capturas prepartido guardadas en el bloque de valor para este encuentro.")
 elif valor_vista:
-    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker"] if c in valor_vista[0]]
-    st.dataframe(pd.DataFrame(valor_vista)[_cols], use_container_width=True, hide_index=True)
+    _valor_df = pd.DataFrame(valor_vista).copy()
+    _valor_df["Resultado"] = "SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"
+    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _valor_df.columns]
+    st.dataframe(_tabla_con_resultado(_valor_df[_cols]), use_container_width=True, hide_index=True)
 else:
     st.info("No hay contratos con precio y edge calculable que entren en este bloque.")
 
