@@ -130,7 +130,7 @@ def discover_nfl_series():
     unique = {str(row.get("ticker") or ""): row for row in found if row.get("ticker")}
     return list(unique.values())
 
-def load_kalshi_catalog():
+def load_kalshi_catalog(status="open", max_pages=2):
     series = discover_nfl_series()
     if not series:
         raise RuntimeError("La API pública de Kalshi no devolvió series identificables como NFL.")
@@ -141,9 +141,9 @@ def load_kalshi_catalog():
         try:
             rows = iter_kalshi_pages(
                 "events",
-                {"limit": 200, "series_ticker": str(item["ticker"]), "status": "open",
+                {"limit": 200, "series_ticker": str(item["ticker"]), "status": str(status),
                  "with_nested_markets": "true"},
-                "events", 2,
+                "events", max_pages,
             )
             events.extend(rows)
         except (requests.RequestException, ValueError, KeyError) as exc:
