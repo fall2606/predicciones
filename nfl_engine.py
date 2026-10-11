@@ -645,15 +645,16 @@ if __name__ == "__main__":
         now = datetime.now(timezone.utc)
         game_events = [
             e for e in events
-            if len(_event_teams(e)) == 2
-            and _kickoff(e) is not None
-            and _kickoff(e) > now
+            if "GAME" in str(e.get("series_ticker") or e.get("event_ticker") or "").upper()
             and (e.get("markets") or [])
         ]
         example = next(({
             "event_ticker": e.get("event_ticker"),
+            "series_ticker": e.get("series_ticker") or str(e.get("event_ticker") or "").split("-")[0],
             "title": e.get("title") or e.get("sub_title"),
-            "start_time": _kickoff(e).isoformat(),
+            "subtitle": e.get("sub_title") or e.get("subtitle"),
+            "start_time": _kickoff(e).isoformat() if _kickoff(e) else None,
+            "teams_detected": _event_teams(e),
             "markets": [
                 {
                     "ticker": m.get("ticker"),
@@ -666,10 +667,21 @@ if __name__ == "__main__":
             ],
         } for e in game_events), None)
         if not example:
-            raise RuntimeError("La API de Kalshi no devolvió ningún evento NFL abierto con mercados anidados; no hay ejemplo real que validar.")
+            diagnostics = [
+                {
+                    "event_ticker": e.get("event_ticker"),
+                    "series_ticker": e.get("series_ticker"),
+                    "title": e.get("title"),
+                    "sub_title": e.get("sub_title"),
+                    "market_count": len(e.get("markets") or []),
+                }
+                for e in events[:20]
+            ]
+            print(json.dumps({"series_count": len(series), "series": [{"ticker": x.get("ticker"), "title": x.get("title")} for x in series], "events_count": len(events), "sample_events": diagnostics}, indent=2))
+            raise RuntimeError("La API de Kalshi no devolvió evento de partido con mercados anidados.")
         print(json.dumps({
             "series": [{"ticker": x.get("ticker"), "title": x.get("title")} for x in series],
             "open_event_count": len(events),
-            "upcoming_game_event_count": len(game_events),
+            "game_series_event_count": len(game_events),
             "example_event": example,
         }, indent=2))
