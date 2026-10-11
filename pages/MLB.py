@@ -34,7 +34,7 @@ with st.expander("Mercados MLB que se pueden proyectar", expanded=False):
     )
 
 
-st.caption("Las selecciones y su historial se muestran por partido. Las capturas originales se conservan y WIN/LOSS se añade tras la liquidación oficial.")
+st.caption("Las selecciones y su historial se muestran por partido. Las capturas originales se conservan y WIN/LOSS se añade tras la liquidación oficial.")\nif st.button("Actualizar datos ahora", key="actualizar_datos_mlb"):\n    st.cache_data.clear()\n    st.rerun()
 
 # Leer historial en segundo plano; la interfaz lo filtra por el partido seleccionado.
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,7 +58,7 @@ def leer_historial_mlb():
     except (OSError, ValueError, KeyError, pd.errors.ParserError):
         return pd.DataFrame()
 
-historial_mlb = leer_historial_mlb()
+historial_mlb = leer_historial_mlb()\nmostrar_actualizacion_archivos([("Predicciones", PRED_MLB), ("Resultados", RES_MLB), ("Reconciliación", ROOT / "reconciliacion_pendientes.csv")])
 try:
     candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_probabilidades_actuales.csv", dtype=str).fillna("")
 except (OSError, ValueError, pd.errors.ParserError):
