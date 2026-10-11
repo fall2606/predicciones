@@ -94,3 +94,64 @@ class MLBThreeBlocksTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MLBCalibrationFeedbackTests(unittest.TestCase):
+    def test_resolved_mlb_losses_adjust_future_probability_but_pending_do_not(self):
+        from probability_calibration import calibrate_probability
+
+        with tempfile.TemporaryDirectory() as tmp:
+            pred = Path(tmp) / "predicciones_mlb.csv"
+            res = Path(tmp) / "resultados_mlb.csv"
+            with pred.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=["prediction_id", "categoria", "probabilidad_modelo"])
+                writer.writeheader()
+                writer.writerows([
+                    {"prediction_id": f"settled-{i}", "categoria": "Ganador del partido",
+                     "probabilidad_modelo": "0.80"}
+                    for i in range(30)
+                ])
+                writer.writerow({"prediction_id": "pending", "categoria": "Ganador del partido",
+                                 "probabilidad_modelo": "0.80"})
+            with res.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=["prediction_id", "estado"])
+                writer.writeheader()
+                writer.writerows([
+                    {"prediction_id": f"settled-{i}", "estado": "LOSS" if i < 24 else "WIN"}
+                    for i in range(30)
+                ])
+                writer.writerow({"prediction_id": "pending", "estado": "PENDIENTE"})
+
+            adjusted, note = calibrate_probability(
+                0.80, "Ganador del partido", pred, res
+            )
+
+            self.assertLess(adjusted, 0.80)
+            self.assertIn("30 casos comparables", note)
+
+    def test_mlb_calibration_waits_for_minimum_30_resolved_comparable_cases(self):
+        from probability_calibration import calibrate_probability
+
+        with tempfile.TemporaryDirectory() as tmp:
+            pred = Path(tmp) / "predicciones_mlb.csv"
+            res = Path(tmp) / "resultados_mlb.csv"
+            with pred.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=["prediction_id", "categoria", "probabilidad_modelo"])
+                writer.writeheader()
+                writer.writerows([
+                    {"prediction_id": f"settled-{i}", "categoria": "Total de carreras",
+                     "probabilidad_modelo": "0.70"}
+                    for i in range(29)
+                ])
+            with res.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=["prediction_id", "estado"])
+                writer.writeheader()
+                writer.writerows([
+                    {"prediction_id": f"settled-{i}", "estado": "WIN"}
+                    for i in range(29)
+                ])
+
+            adjusted, note = calibrate_probability(0.70, "Total de carreras", pred, res)
+
+            self.assertEqual(adjusted, 0.70)
+            self.assertIn("29/30", note)
