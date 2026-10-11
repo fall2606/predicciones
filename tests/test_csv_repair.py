@@ -141,5 +141,31 @@ class CSVRepairTests(unittest.TestCase):
             self.assertEqual(saved["past-line"]["line"], "1.5")
 
 
+    def test_malformed_row_is_quarantined_and_valid_history_survives(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "predicciones_laliga.csv"
+            good = {column: "" for column in CURRENT_FOOTBALL}
+            good.update({
+                "prediction_id": "good-row", "match_id": "match-1",
+                "fecha": "2026-10-20T18:00:00+00:00", "local": "A", "visita": "B",
+                "categoria": "Goles totales", "jugada": "Más de 2.5 goles",
+                "probabilidad_base": "0.7", "probabilidad_calibrada": "0.7",
+                "ticker": "KXREAL-1", "capturado_en": "2026-10-10T12:00:00+00:00",
+            })
+            with path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=CURRENT_FOOTBALL)
+                writer.writeheader()
+                writer.writerow(good)
+                csv.writer(f).writerow(["bad-row"] + ["x"] * (len(CURRENT_FOOTBALL) - 1) + ["overflow"])
+            summary = repair_file(path, CURRENT_FOOTBALL, LEGACY_FOOTBALL)
+            self.assertEqual(summary["quarantined_rows"], 1)
+            with path.open(newline="", encoding="utf-8") as f:
+                saved = list(csv.DictReader(f))
+            self.assertEqual([row["prediction_id"] for row in saved], ["good-row"])
+            quarantine = path.with_suffix(path.suffix + ".malformed_rows.csv")
+            self.assertTrue(quarantine.exists())
+            self.assertIn("bad-row", quarantine.read_text(encoding="utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()
