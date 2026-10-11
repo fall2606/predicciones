@@ -45,7 +45,7 @@ def pedir_fd(path, clave, **params):
     return response.json()
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_partidos_y_estadisticas(clave, temporada, temporada_anterior):
     actual = pedir_fd("competitions/CL/matches", clave, season=temporada)["matches"]
     anteriores = []
@@ -759,7 +759,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
     return resumen_simple, margen_yes, margen_no, candidatos_yes, candidatos_no, top, todas, mercados_actuales, len(plantillas)
 
 
-@st.cache_data(ttl=21600, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def cargar_corners(temporadas):
     """La API usada aquí no aporta corners históricos de Champions League."""
     return None
