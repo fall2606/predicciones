@@ -617,6 +617,6 @@ if __name__ == "__main__":
                 "event_ticker": e.get("event_ticker"), "title": e.get("title"),
                 "markets": [{"ticker": m.get("ticker"), "title": m.get("title") or m.get("yes_sub_title"),
                              "yes_ask_dollars": m.get("yes_ask_dollars"), "no_ask_dollars": m.get("no_ask_dollars")}
-                            for m in (e.get("markets") or [])[:12]}
+                            for m in (e.get("markets") or [])[:12]]
             } for e in events if e.get("markets")), None),
         }, indent=2))
