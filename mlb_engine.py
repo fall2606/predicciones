@@ -451,7 +451,7 @@ def main():
         singles = rank_single_candidates(candidates, limit=5)
         if not singles:
             reasons = single_candidate_rejection_reasons(candidates)
-            print(f\"SENCILLAS SIN CANDIDATAS · {match_id} · {rows[0].get('local', '')} vs {rows[0].get('visita', '')}: {reasons or {'sin candidatos modelables': len(candidates)}}\")
+            print("SENCILLAS SIN CANDIDATAS · {} · {} vs {}: {}".format(match_id, rows[0].get("local", ""), rows[0].get("visita", ""), reasons or {"sin candidatos modelables": len(candidates)}))
 
         high, value = rank_market_candidates(candidates, min_probability=minimum_combo, high_limit=5, value_limit=10)
         limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
