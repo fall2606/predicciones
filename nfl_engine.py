@@ -1088,15 +1088,9 @@ def settle():
     import json
     import requests
     from prediction_core import kalshi_get
-    predictions = []
-    if PRED_FILE.exists():
-        with PRED_FILE.open(newline="", encoding="utf-8-sig") as handle:
-            predictions = list(csv.DictReader(handle))
-    results = []
-    if RESULT_FILE.exists():
-        with RESULT_FILE.open(newline="", encoding="utf-8-sig") as handle:
-            results = list(csv.DictReader(handle))
-    else:
+    predictions = read_csv_tolerant(PRED_FILE, PRED_COLUMNS) if PRED_FILE.exists() else []
+    results = read_csv_tolerant(RESULT_FILE, RESULT_COLUMNS) if RESULT_FILE.exists() else []
+    if not RESULT_FILE.exists():
         _write_report(RESULT_FILE, RESULT_COLUMNS, [])
     latest = {}
     for row in results:
