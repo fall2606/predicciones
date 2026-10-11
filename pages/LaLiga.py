@@ -29,7 +29,7 @@ def _tabla_con_resultado(df, columna="Resultado"):
         if texto == "WIN" or "SE CUMPLIÓ" in texto:
             return "background-color: #d4edda; color: #155724; font-weight: bold"
         if "ANULADA" in texto or "VOID" in texto:
-            return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
+            return "background-color: #dcd9ff; color: #37306b; font-weight: bold"
         if "SIN LIQUIDAR" in texto:
             return "background-color: #f8d7da; color: #721c24; font-weight: bold"
         if "PENDIENTE" in texto or "NO EVALUABLE" in texto:
@@ -261,7 +261,7 @@ if resumen_sencillo_kalshi:
             elif resultado_tarjeta == "LOSS" or "NO SE CUMPLIÓ" in resultado_tarjeta:
                 st.error("LOSS")
             else:
-                st.warning("PENDIENTE")
+                st.caption("PENDIENTE")
             st.caption(f"Ticker: {jugada.get('Ticker', '—')}")
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
