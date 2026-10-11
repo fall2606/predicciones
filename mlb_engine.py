@@ -204,10 +204,11 @@ def mercado_probabilidad(market, game):
     if category in {"Ganador (moneyline)", "Total por equipo", "Run line / margen"} and contract_code in {home_code, away_code}:
         home, away = contract_code == home_code, contract_code == away_code
 
-    # Prefer the readable contract line; tickers are only a fallback.
-    runs = re.search(r"(?:over|under|more than|less than)\s*\$?([0-9]+(?:\.[0-9]+)?)", text)
-    line_match = re.search(r"(?:TOTAL|OVER|UNDER|RUNS|SPREAD)[A-Z_-]*([0-9]+(?:P[0-9]+)?)", ticker, re.I)
-    line = float(runs.group(1)) if runs else (float(line_match.group(1).replace("P", ".")) if line_match else None)
+    # Prefer explicit natural-language lines; ticker parsing is a fallback.
+    runs = re.search(r"(?:over|under|more than|less than|mas de|menos de)\\s*\\$?([0-9]+(?:\\.[0-9]+)?)", text)
+    spread = re.search(r"(?:run line|runline|spread|handicap|hándicap)\\s*([+-]?[0-9]+(?:\\.[0-9]+)?)", text)
+    line_match = re.search(r"(?:TOTAL|OVER|UNDER|RUNS|SPREAD|F5)[A-Z_-]*([0-9]+(?:P[0-9]+)?)", ticker, re.I)
+    line = float(runs.group(1)) if runs else (float(spread.group(1)) if spread else (float(line_match.group(1).replace("P", ".")) if line_match else None))
     p_yes = None
     model_state = "modelado"
 
