@@ -179,6 +179,19 @@ def _tabla_con_resultado(df, columna="Resultado"):
         return ""
     return df.style.map(_color, subset=[columna])
 
+def motivo_sin_sencillas(match_id):
+    try:
+        cobertura = pd.read_csv(ROOT / "mlb_cobertura_por_partido.csv", dtype=str).fillna("")
+        fila = cobertura[cobertura["match_id"].astype(str).eq(str(match_id))]
+        if not fila.empty:
+            motivo = str(fila.iloc[0].get("motivo_si_vacio", "")).strip()
+            if motivo:
+                return motivo
+    except (OSError, ValueError, KeyError, pd.errors.ParserError):
+        pass
+    return "no hay capturas guardadas; comprobar emparejamiento de Kalshi y filtros de precio/probabilidad"
+
+
 def get_json(path, params):
     response = requests.get(f"{API}/{path}", params=params, timeout=TIMEOUT)
     response.raise_for_status()
@@ -711,7 +724,7 @@ for juego in [juego]:
             st.markdown(f"### {titulo}")
             if archivadas_partido.empty or "categoria" not in archivadas_partido.columns:
                 if codigo == "SENCILLAS":
-                    st.info("No hay contratos reales modelables archivados para este partido. El historial no contiene candidatas con ticker y probabilidad finita; por eso aún no hay filas sobre las que medir precio ≤ 88¢ o ventaja ≥ 5 pp. Revisa el emparejamiento del evento Kalshi y la cobertura del modelo.")
+                    st.info("No hay contratos reales modelables archivados para este partido. Motivo: " + motivo_sin_sencillas(game_id_archivo) + ".")
                 else:
                     st.info(f"No hay capturas de contratos archivadas para {codigo} en este partido.")
                 return
@@ -724,7 +737,7 @@ for juego in [juego]:
                     st.info(
                         "No hay Sencillas archivadas para este partido: una línea solo se guarda si tiene ticker y probabilidad válidos, "
                         "precio Kalshi ≤ 88¢, ventaja ≥ 5 puntos porcentuales y no es una línea trivial. "
-                        "El historial no guarda las candidatas descartadas, así que no atribuyo falsamente el descarte a un único filtro."
+                        "Motivo de cobertura: " + motivo_sin_sencillas(game_id_archivo) + "."
                     )
                 else:
                     st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados.")
