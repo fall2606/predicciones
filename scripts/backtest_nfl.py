@@ -84,7 +84,7 @@ def build_walk_forward(max_games=500):
         model = nfl.build_team_model(all_games, as_of=kickoff.to_pydatetime())
         if model["teams"][home]["sample"] < 4 or model["teams"][away]["sample"] < 4:
             continue
-        forecast = nfl.predict_game(model, home, away)
+        forecast = nfl.predict_game(model, home, away, kickoff=kickoff.to_pydatetime())
         if not forecast:
             continue
         home_score, away_score = float(row["home_score"]), float(row["away_score"])
