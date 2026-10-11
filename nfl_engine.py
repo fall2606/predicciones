@@ -515,7 +515,7 @@ def _canonical_team_code(value):
 
 def load_upcoming_games(days=21, now=None):
     """Load the public ESPN NFL schedule; team orientation comes from homeAway, not title order."""
-    start = (parse_dt(now) if now else datetime.now(timezone.utc)).date()
+    start = (parse_dt(now) if now else datetime.now(timezone.utc)).astimezone(TZ_ET).date()
     games = []
     for offset in range(max(1, int(days))):
         day = start + timedelta(days=offset)
