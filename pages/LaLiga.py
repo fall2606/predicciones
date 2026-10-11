@@ -210,6 +210,13 @@ except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     st.error(f"No pude consultar los mercados abiertos de Kalshi: {exc}")
 
 resumen_archivado = resumen_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
+if resumen_archivado and partido_cerrado:
+    for _jugada_archivada in resumen_archivado:
+        _resultado_actual = str(_jugada_archivada.get("Resultado", "")).upper()
+        if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"}:
+            _jugada_archivada["Resultado"] = "ANULADA"
+        elif not any(token in _resultado_actual for token in ("WIN", "LOSS", "ANULADA")):
+            _jugada_archivada["Resultado"] = "SIN LIQUIDAR"
 if resumen_archivado:
     resumen_sencillo_kalshi = resumen_archivado
 elif partido_cerrado:
@@ -260,6 +267,8 @@ if resumen_sencillo_kalshi:
                 st.success("WIN")
             elif resultado_tarjeta == "LOSS" or "NO SE CUMPLIÓ" in resultado_tarjeta:
                 st.error("LOSS")
+            elif "SIN LIQUIDAR" in resultado_tarjeta:
+                st.error("SIN LIQUIDAR · partido terminado sin resultado asociado")
             else:
                 st.caption("PENDIENTE")
             st.caption(f"Ticker: {jugada.get('Ticker', '—')}")
