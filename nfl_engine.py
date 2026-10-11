@@ -371,14 +371,22 @@ def _market_yes_team(market, home, away):
 
 
 def _yes_outcome(market, kind):
-    text = normalizar(" ".join(str(market.get(k) or "") for k in ("yes_sub_title", "title", "subtitle")))
+    raw = " ".join(str(market.get(k) or "") for k in ("yes_sub_title", "title", "subtitle")).casefold()
+    text = normalizar(raw)
     if kind in {"total", "team_total"}:
+        if any(token in text for token in ("at most", "or fewer", "no more than")):
+            return "under_le"
         if re.search(r"\bunder\b|\bless than\b|\bmenos de\b", text):
-            return "under"
-        if re.search(r"\bover\b|\bmore than\b|\bat least\b|\bor more\b|\+\s*$", text):
-            return "over"
+            return "under_lt"
+        if any(token in text for token in ("at least", "or more", "or higher")) or re.search(r"\d\s*\+", raw):
+            return "over_ge"
+        if re.search(r"\bover\b|\bmore than\b", text):
+            return "over_gt"
+    if kind == "spread":
+        if re.search(r"\b(?:win by|wins by|ganar por|ganan por|at least|or more)\b", text) or re.search(r"\d\s*\+", raw):
+            return "win_by"
+        return "spread_cover"
     return kind
-
 
 def _team_label(team):
     return TEAM_ALIASES.get(team, (str(team),))[0].title()
@@ -391,31 +399,34 @@ def _description(market, kind, home, away, side, line):
         return "", "", ""
     if kind == "winner":
         proposition = f"los {_team_label(yes_team)} ganan el partido"
-        desc = ("SÍ: " if side == "YES" else "NO: ") + (proposition if side == "YES" else f"los {_team_label(yes_team)} no ganan el partido")
+        desc = f"SÍ: {proposition}" if side == "YES" else f"NO: los {_team_label(yes_team)} no ganan el partido"
     elif kind == "spread":
         amount = f"{abs(float(line)):g}" if line not in (None, "") else ""
-        proposition = f"los {_team_label(yes_team)} ganan por {amount} o más puntos"
-        desc = ("SÍ: " if side == "YES" else "NO: ") + (proposition if side == "YES" else f"los {_team_label(yes_team)} no ganan por {amount} o más puntos")
+        if yes_outcome == "win_by":
+            proposition = f"los {_team_label(yes_team)} ganan por {amount} o más puntos"
+            desc = f"SÍ: {proposition}" if side == "YES" else f"NO: los {_team_label(yes_team)} no ganan por {amount} o más puntos"
+        else:
+            signed = f"{float(line):+g}"
+            desc = f"SÍ: los {_team_label(yes_team)} cubren el hándicap {signed}" if side == "YES" else f"NO: los {_team_label(yes_team)} no cubren el hándicap {signed}"
     elif kind == "total":
         amount = f"{float(line):g}" if line not in (None, "") else ""
-        if yes_outcome == "over":
+        if yes_outcome.startswith("over"):
             desc = f"SÍ: el partido supera {amount} puntos en total" if side == "YES" else f"NO: el partido no supera {amount} puntos en total"
-        elif yes_outcome == "under":
+        elif yes_outcome.startswith("under"):
             desc = f"SÍ: el partido termina por debajo de {amount} puntos" if side == "YES" else f"NO: el partido no termina por debajo de {amount} puntos"
         else:
             return "", yes_outcome, yes_team or ""
     elif kind == "team_total":
         amount = f"{float(line):g}" if line not in (None, "") else ""
-        if yes_outcome == "over":
+        if yes_outcome.startswith("over"):
             desc = f"SÍ: los {_team_label(yes_team)} superan {amount} puntos" if side == "YES" else f"NO: los {_team_label(yes_team)} no superan {amount} puntos"
-        elif yes_outcome == "under":
+        elif yes_outcome.startswith("under"):
             desc = f"SÍ: los {_team_label(yes_team)} se quedan por debajo de {amount} puntos" if side == "YES" else f"NO: los {_team_label(yes_team)} no se quedan por debajo de {amount} puntos"
         else:
             return "", yes_outcome, yes_team
     else:
         return "", yes_outcome, yes_team or ""
     return desc, yes_outcome, yes_team or ""
-
 
 def model_market(market, series_ticker, game, prediction):
     """Return P(YES) only for exact, supported full-game market semantics."""
@@ -459,25 +470,33 @@ def model_market(market, series_ticker, game, prediction):
             return None, "total sin umbral explícito en título/subtítulo de Kalshi"
         text = normalizar(title)
         values, probs = prediction["total_values"], prediction["total_probs"]
-        if re.search(r"\bunder\b|\bless than\b|\bmenos de\b", text):
+        outcome = _yes_outcome(market, kind)
+        if outcome == "under_le":
+            p = probs[values <= math.floor(line)].sum()
+        elif outcome == "under_lt":
             p = probs[values < line].sum()
-        elif re.search(r"\bover\b|\bmore than\b|\bat least\b|\bor more\b|\+\s*$", text):
+        elif outcome == "over_ge":
             p = probs[values >= math.ceil(line)].sum()
+        elif outcome == "over_gt":
+            p = probs[values > line].sum()
         else:
-            # Do not guess whether an integer threshold means >N or >=N.
             return None, "semántica del umbral total ambigua; no se genera"
         return valid_probability(float(p)), "Distribución discreta del total NFL; prórroga según reglas del contrato"
     if kind == "team_total":
-        team = _yes_team(market, game["home"], game["away"])
+        team = _market_yes_team(market, game["home"], game["away"])
         if not team or line is None:
             return None, "total por equipo sin equipo/línea inequívocos"
         mean = prediction["home_points_mean"] if team == game["home"] else prediction["away_points_mean"]
         values, probs = _normal_pmf(mean, 9.5, 0, 70)
-        text = normalizar(title)
-        if "under" in text or "less than" in text:
+        outcome = _yes_outcome(market, kind)
+        if outcome == "under_le":
+            p = probs[values <= math.floor(line)].sum()
+        elif outcome == "under_lt":
             p = probs[values < line].sum()
-        elif "over" in text or "or more" in text or "+" in title:
+        elif outcome == "over_ge":
             p = probs[values >= math.ceil(line)].sum()
+        elif outcome == "over_gt":
+            p = probs[values > line].sum()
         else:
             return None, "semántica del total por equipo ambigua"
         return valid_probability(float(p)), "Distribución de puntos del equipo; prórroga según reglas del contrato"
