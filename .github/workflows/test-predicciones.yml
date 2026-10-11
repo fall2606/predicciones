@@ -1,7 +1,7 @@
 name: Verificación del sistema de predicciones
 on:
   push:
-    branches: [main]
+    branches: [main, "feature/nfl-final-verification-v2"]
   pull_request:
   workflow_dispatch:
 permissions:
