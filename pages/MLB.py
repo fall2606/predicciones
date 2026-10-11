@@ -626,22 +626,22 @@ for juego in [juego]:
                 for pick in sencillas:
                     with st.container(border=True):
                         categoria = str(pick.get("categoria", "Mercado MLB"))
-                        categoria = re.sub(r"^SENCILLAS\\s*·\\s*", "", categoria).strip() or "Mercado MLB"
+                        categoria = re.sub(r"^SENCILLAS\s*·\s*", "", categoria).strip() or "Mercado MLB"
                         mercado = str(pick.get("mercado") or pick.get("seleccion") or "Contrato Kalshi")
                         lado = str(pick.get("lado") or pick.get("seleccion") or "YES").upper()
                         frase = mercado
                         if categoria == "Total de carreras":
-                            mas = re.search(r"(?:\\+|or more|or higher|at least)\\s*$", mercado, re.I)
-                            linea_mas = re.search(r"([0-9]+(?:\\.[0-9]+)?)\\s*(?:\\+|or more|or higher|at least)", mercado, re.I)
+                            mas = re.search(r"(?:\+|or more|or higher|at least)\s*$", mercado, re.I)
+                            linea_mas = re.search(r"([0-9]+(?:\.[0-9]+)?)\s*(?:\+|or more|or higher|at least)", mercado, re.I)
                             if linea_mas:
                                 frase = f"{linea_mas.group(1)} o más carreras en el partido"
                             else:
-                                total_linea = re.search(r"(over|under|more than|less than)\\s*([0-9]+(?:\\.[0-9]+)?)", mercado, re.I)
+                                total_linea = re.search(r"(over|under|more than|less than)\s*([0-9]+(?:\.[0-9]+)?)", mercado, re.I)
                                 if total_linea:
                                     verbo = "más de" if total_linea.group(1).lower() in {"over", "more than"} else "menos de"
                                     frase = f"{verbo} {total_linea.group(2)} carreras en el partido"
                         if categoria == "Entradas parciales":
-                            categoria = "Primeras 5 entradas (F5)" if re.search(r"first\\s*(?:5|five)", mercado, re.I) else "Entradas parciales"
+                            categoria = "Primeras 5 entradas (F5)" if re.search(r"first\s*(?:5|five)", mercado, re.I) else "Entradas parciales"
                         prefijo = "SÍ" if lado == "YES" else "NO"
                         st.markdown(f"**{prefijo}: {frase}**")
                         st.caption(f"Categoría: {categoria}")
