@@ -126,6 +126,11 @@ def mostrar_tarjeta(row):
         }
         color = colors.get(state, "#777777")
         st.markdown(f'**Resultado:** <span style="background:{color};color:white;padding:3px 8px;border-radius:5px;font-weight:700">{state}</span>', unsafe_allow_html=True)
+        argumento = str(row.get("argumento_modelo") or "").strip()
+        if argumento:
+            st.caption("Por qué el modelo la considera: " + argumento)
+        else:
+            st.warning("Sin argumento estadístico específico guardado: no tratar como sencilla recomendada.")
         st.caption(f"{categoria_legible(row.get('categoria'))} · Ticker: {row.get('ticker') or '—'}")
 
 
