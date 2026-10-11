@@ -295,7 +295,8 @@ def mercado_probabilidad(market, game):
         margin = axis[:, None] - axis[None, :] if home else axis[None, :] - axis[:, None]
         # A signed line is the team's handicap: +1.5 wins if margin > -1.5;
         # -1.5 wins if margin > +1.5. Unsigned titles are interpreted as a favorite line.
-        threshold = -line if line > 0 or "+" in title or "plus" in text else abs(line)
+        signed_positive = (signed_line is not None and float(signed_line.group(1)) > 0) or "plus" in text
+        threshold = -abs(line) if signed_positive else abs(line)
         p_yes = float(mat[margin > threshold].sum())
     elif category == "1.ª entrada / YRFI-NRFI":
         p_any_run = 1 - math.exp(-(game["mu_home"] + game["mu_away"]) / 9)
