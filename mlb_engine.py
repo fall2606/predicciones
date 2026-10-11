@@ -47,6 +47,10 @@ PRED_COLUMNS = [
 RESULT_COLUMNS = ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"]
 UNMATCHED_REPORT = ROOT / "mlb_eventos_sin_emparejar.csv"
 UNMATCHED_COLUMNS = ["event_ticker", "series_ticker", "title", "start_time", "motivo"]
+REJECTED_REPORT = ROOT / "mlb_candidatos_descartados.csv"
+REJECTED_COLUMNS = ["match_id", "local", "visita", "event_ticker", "ticker", "lado", "categoria", "probabilidad_modelo", "precio", "edge", "motivo"]
+COVERAGE_REPORT = ROOT / "mlb_cobertura_por_partido.csv"
+COVERAGE_COLUMNS = ["match_id", "fecha", "local", "visita", "contratos_modelables", "sencillas_validas", "alta_probabilidad_validas", "a_tener_en_cuenta_validas", "motivo_si_vacio"]
 
 
 def get_json(url, params=None):
@@ -464,6 +468,7 @@ def main():
     per_match_valid_contracts = {}
     unsupported_market_count = 0
     modelable_market_count = 0
+    rejected_candidates = []
 
     # Model every actual, match-specific Kalshi market that this model supports.
     # Unmodelled contracts are deliberately excluded instead of being saved as NaN/blank picks.
@@ -503,6 +508,12 @@ def main():
             p_yes, model_state = mercado_probabilidad(market, game)
             if valid_probability(p_yes) is None:
                 unsupported_market_count += 1
+                rejected_candidates.append({
+                    "match_id": game.get("id", ""), "local": game.get("home", ""), "visita": game.get("away", ""),
+                    "event_ticker": event.get("event_ticker", ""), "ticker": ticker, "lado": "",
+                    "categoria": category, "probabilidad_modelo": "", "precio": "", "edge": "",
+                    "motivo": model_state or "sin modelo específico/datos finitos",
+                })
                 continue
             modelable_market_count += 1
             per_match_valid_contracts[str(game.get("id", ""))] = per_match_valid_contracts.get(str(game.get("id", "")), 0) + 1
@@ -605,9 +616,16 @@ def main():
                 reasons.append("sin edge calculable para el bloque de valor")
             if not reasons or "candidata que sí cumple" in simple_reasons:
                 reasons.append("excluida por diversificación de familia/equipo o límite del bloque")
+            reason_text = "; ".join(dict.fromkeys(reasons))
             print("CANDIDATO MLB DESCARTADO · match_id={} · ticker={} · lado={} · motivo={}".format(
-                match_id, key[0], key[1], "; ".join(dict.fromkeys(reasons))
+                match_id, key[0], key[1], reason_text
             ))
+            rejected_candidates.append({
+                "match_id": match_id, "local": raw.get("local", ""), "visita": raw.get("visita", ""),
+                "event_ticker": raw.get("event_ticker", ""), "ticker": key[0], "lado": key[1],
+                "categoria": raw.get("categoria", ""), "probabilidad_modelo": raw.get("probabilidad_modelo", ""),
+                "precio": raw.get("precio_captura", ""), "edge": raw.get("edge", ""), "motivo": reason_text,
+            })
         print("BLOQUES MLB DISPONIBLES · match_id={} · {} vs {} · sencillas_validas={} · alta_probabilidad_validas={} · a_tener_en_cuenta_validas={}".format(
             match_id, rows[0].get("local", ""), rows[0].get("visita", ""),
             len(singles), len(high), len(value)
@@ -656,6 +674,43 @@ def main():
         writer.writerows(unmatched_events)
     print("CLASIFICACIÓN DE EVENTOS MLB SIN PARTIDO: " + repr(unmatched_reasons))
     print(f"INFORME DE EVENTOS SIN EMPAREJAR: {UNMATCHED_REPORT.name} · filas={len(unmatched_events)}")
+    with REJECTED_REPORT.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=REJECTED_COLUMNS)
+        writer.writeheader()
+        writer.writerows(rejected_candidates)
+    print(f"INFORME DE CANDIDATOS DESCARTADOS: {REJECTED_REPORT.name} · filas={len(rejected_candidates)}")
+    coverage_rows = []
+    captured_rows = existing + new_rows
+    for game in games:
+        if game.get("status") != "Preview":
+            continue
+        match_id = str(game.get("id", ""))
+        rows_for_game = [row for row in captured_rows if str(row.get("match_id", "")) == match_id]
+        counts = {name: 0 for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")}
+        for row in rows_for_game:
+            block = str(row.get("bloque", "") or "")
+            if block not in counts:
+                category_name = str(row.get("categoria", ""))
+                block = next((name for name in counts if category_name.startswith(name + " · ")), "")
+            if block in counts:
+                counts[block] += 1
+        if match_id not in by_match:
+            reason = "sin evento Kalshi emparejado o sin contrato con probabilidad modelable"
+        elif not any(counts.values()):
+            reason = "todos los candidatos descartados por precio, edge, umbral, diversificación o falta de precio"
+        else:
+            reason = ""
+        coverage_rows.append({
+            "match_id": match_id, "fecha": game.get("date", ""), "local": game.get("home", ""), "visita": game.get("away", ""),
+            "contratos_modelables": per_match_valid_contracts.get(match_id, 0),
+            "sencillas_validas": counts["SENCILLAS"], "alta_probabilidad_validas": counts["ALTA_PROBABILIDAD"],
+            "a_tener_en_cuenta_validas": counts["A_TENER_EN_CUENTA"], "motivo_si_vacio": reason,
+        })
+    with COVERAGE_REPORT.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=COVERAGE_COLUMNS)
+        writer.writeheader()
+        writer.writerows(coverage_rows)
+    print(f"COBERTURA POR PARTIDO: {COVERAGE_REPORT.name} · partidos_preview={len(coverage_rows)}")
     for match_id, rows in sorted(by_match.items()):
         counts = {name: 0 for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")}
         for row in existing + new_rows:
