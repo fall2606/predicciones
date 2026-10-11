@@ -158,19 +158,19 @@ def repair_file(path, current_columns, legacy_columns):
         if quarantine.exists():
             try:
                 with quarantine.open("r", newline="", encoding="utf-8-sig") as f:
-                    seen = {row.get("raw_fields", "") for row in csv.DictReader(f)}
+                    seen = {row.get("raw_line", "") for row in csv.DictReader(f)}
             except (OSError, csv.Error):
                 seen = set()
         new_bad = [item for item in quarantined_rows if repr(item[1]) not in seen]
         if new_bad:
             needs_header = not quarantine.exists() or quarantine.stat().st_size == 0
             with quarantine.open("a", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=["source", "line_number", "reason", "raw_fields"])
+                writer = csv.DictWriter(f, fieldnames=["source", "line_number", "reason", "raw_line"])
                 if needs_header:
                     writer.writeheader()
                 for line_no, values, reason in new_bad:
                     writer.writerow({"source": path.name, "line_number": line_no,
-                                     "reason": reason, "raw_fields": repr(values)})
+                                     "reason": reason, "raw_line": repr(values)})
         print(f"CSV REPARACIÓN: {path.name}: {len(quarantined_rows)} fila(s) irregular(es) preservada(s) en {quarantine.name}.")
 
     if path.name == "predicciones_mlb.csv":
