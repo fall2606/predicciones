@@ -249,3 +249,5 @@ prediction_id,estado,marcador,resuelto_en
 564703|Corners totales|2026101100,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-11T20:23:20.652619+00:00
 564701|Hándicap 1.ª parte|2026101100,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 5-2 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.654942+00:00
 564701|Corners por equipo|2026101100,WIN,"Marcador independiente (football-data.org, córners): 8-4 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.656260+00:00
+564703|Primer gol|2026101021,WIN,"Marcador independiente (football-data.org): 0-0 (mercado KXLALIGAFIRSTGOAL, selección NO)",2026-10-11T20:28:29.137510+00:00
+564703|Primer gol|2026101100,WIN,"Marcador independiente (football-data.org): 0-0 (mercado KXLALIGAFIRSTGOAL, selección NO)",2026-10-11T20:28:29.231890+00:00
