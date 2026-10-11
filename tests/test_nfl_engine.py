@@ -47,7 +47,7 @@ class NFLModelTests(unittest.TestCase):
 
 
     def test_event_start_falls_back_to_kalshi_market_close_time(self):
-        event = {"markets": [{"close_time": "2026-10-12T00:15:00Z"}]}
+        event = {"markets": [{"close_time": "2026-10-13T20:05:00Z", "expected_expiration_time": "2026-10-12T00:15:00Z"}]}
         self.assertEqual(nfl_engine._event_start(event), "2026-10-12T00:15:00Z")
 
 
