@@ -221,8 +221,8 @@ def predict_game(model, home, away):
     return {
         "margin_mean": margin_mean, "total_mean": total_mean,
         "home_points_mean": home_mean, "away_points_mean": away_mean,
-        "home_win": float(margin_probs[margin_values > 0].sum()),
-        "away_win": float(margin_probs[margin_values < 0].sum()),
+        "home_win": float(margin_probs[margin_values > 0].sum() + 0.5 * margin_probs[margin_values == 0].sum()),
+        "away_win": float(margin_probs[margin_values < 0].sum() + 0.5 * margin_probs[margin_values == 0].sum()),
         "margin_values": margin_values, "margin_probs": margin_probs,
         "total_values": total_values, "total_probs": total_probs,
     }
