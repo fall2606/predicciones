@@ -18,7 +18,7 @@ permissions:
   actions: read
 concurrency:
   group: nfl-predicciones-main
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   nfl:
     runs-on: ubuntu-latest
