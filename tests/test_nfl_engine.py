@@ -54,3 +54,20 @@ def test_all_probability_values_in_saved_candidates_are_valid():
     pred = nfl.predict_game(model, "KC", "BAL")
     for key in ("home_win", "away_win"):
         assert nfl.valid_probability(pred[key]) is not None
+
+
+
+def test_kalshi_event_date_uses_et_date_and_espn_fixture_for_exact_kickoff():
+    event = {
+        "event_ticker": "KXNFLGAME-26OCT11CINMIA",
+        "title": "CIN Bengals vs MIA Dolphins",
+        "sub_title": "CIN vs MIA (Oct 11)",
+    }
+    assert nfl._kickoff(event) is None
+    assert str(nfl._event_date(event)) == "2026-10-11"
+    fixtures = [{
+        "home": "MIA", "away": "CIN", "date": "2026-10-11T17:00:00Z",
+        "match_id": "NFL:2026-10-11:CIN@MIA",
+    }]
+    matched = nfl._match_catalog_event(event, nfl._event_teams(event), fixtures, None)
+    assert matched is fixtures[0]
