@@ -257,7 +257,7 @@ def construir_forma(equipos_juegos, antes_de):
     return forma
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_pitcher(pitcher_id, season):
     data = get_json(
         f"people/{pitcher_id}/stats",
@@ -272,7 +272,7 @@ def cargar_pitcher(pitcher_id, season):
     return None
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_bateadores_equipo(team_id, season):
     """Season batting stats for candidates; does not imply a confirmed lineup."""
     data = get_json("stats", {
@@ -399,7 +399,7 @@ def crear_apuestas_sencillas(juego, datos_abridor_local, datos_abridor_visita, t
     return sorted(picks, key=lambda x: x["Probabilidad estimada"], reverse=True)
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_era_liga(season):
     data = get_json(
         "teams/stats",
@@ -417,7 +417,7 @@ def cargar_era_liga(season):
     return float(np.mean(eras)) if eras else 4.20
 
 
-@st.cache_data(ttl=900, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_calendario(inicio, fin):
     data = get_json(
         "schedule",
