@@ -110,7 +110,7 @@ def _market_probability(market, home, away, home_score, away_score):
     total = home_score + away_score
     # Winner/team markets: only match explicit team name, avoid interpreting arbitrary player props.
     if any(x in text for x in ("winner", "win", "moneyline", "to beat", "victory", "game")):
-        team = _team_in_market(full_text, home, away)
+        team = _team_in_market(title, home, away)
         if team:
             p_home = _normal_cdf(margin, 0, 13.5)
             return p_home if team == home else 1-p_home, "Ganador del partido"
