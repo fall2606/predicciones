@@ -136,18 +136,27 @@ def summarize(observations):
         y_test = np.array([item["y"] for item in test], dtype=float)
         p_cal_test = None
         status = "calibración insuficiente"
+        raw_brier = _brier(p_test, y_test)
+        raw_logloss = _logloss(p_test, y_test)
+        cal_brier = None
+        cal_logloss = None
         if len(train) >= MIN_CALIBRATION_N and len(np.unique(y_train)) == 2:
             try:
                 a_test, b_test = fit_platt(p_train, y_train)
                 p_cal_test = apply_platt(p_test, a_test, b_test)
-                # Production coefficients use all walk-forward observations after evaluation is calculated.
-                a_full, b_full = fit_platt(np.array([item["p"] for item in items]), np.array([item["y"] for item in items]))
-                if market in {"winner", "spread_-3.5", "total_over_44.5"}:
-                    calibrators[market] = {
-                        "intercept": a_full, "slope": b_full, "n_train": n,
-                        "version": f"platt_{market}_n{n}_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
-                    }
-                status = f"Platt entrenado n={n}; evaluación temporal separada"
+                cal_brier = _brier(p_cal_test, y_test)
+                cal_logloss = _logloss(p_cal_test, y_test)
+                if cal_brier < raw_brier and cal_logloss < raw_logloss:
+                    # Production coefficients use all walk-forward observations only when both held-out scores improve.
+                    a_full, b_full = fit_platt(np.array([item["p"] for item in items]), np.array([item["y"] for item in items]))
+                    if market in {"winner", "spread_-3.5", "total_over_44.5"}:
+                        calibrators[market] = {
+                            "intercept": a_full, "slope": b_full, "n_train": n,
+                            "version": f"platt_{market}_n{n}_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
+                        }
+                    status = f"Platt aplicado: mejora Brier y log loss en holdout; n={n}"
+                else:
+                    status = "No aplicada: no mejora simultáneamente Brier y log loss en holdout"
             except (RuntimeError, ValueError, FloatingPointError):
                 status = "calibración insuficiente: ajuste no estable"
         p_mean = float(np.mean(p_test))
@@ -160,10 +169,10 @@ def summarize(observations):
             bias = "sin sesgo claro en esta muestra"
         summary.append({
             "mercado": market, "n_train": len(train), "n_test": len(test),
-            "brier_sin_calibrar": round(_brier(p_test, y_test), 6),
-            "log_loss_sin_calibrar": round(_logloss(p_test, y_test), 6),
-            "brier_calibrado": round(_brier(p_cal_test, y_test), 6) if p_cal_test is not None else "",
-            "log_loss_calibrado": round(_logloss(p_cal_test, y_test), 6) if p_cal_test is not None else "",
+            "brier_sin_calibrar": round(raw_brier, 6),
+            "log_loss_sin_calibrar": round(raw_logloss, 6),
+            "brier_calibrado": round(cal_brier, 6) if cal_brier is not None else "",
+            "log_loss_calibrado": round(cal_logloss, 6) if cal_logloss is not None else "",
             "brier_baseline_50": round(_brier(np.full(len(y_test), 0.5), y_test), 6),
             "log_loss_baseline_50": round(_logloss(np.full(len(y_test), 0.5), y_test), 6),
             "tasa_real": round(y_mean, 6), "probabilidad_media": round(p_mean, 6), "sesgo": bias,
