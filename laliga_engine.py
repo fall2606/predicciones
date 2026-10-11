@@ -1071,6 +1071,15 @@ def resumen_guardado(match_id, predicciones, resultados):
     filas = filas.sort_values("capturado_en").drop_duplicates("categoria", keep="last")
     for _, fila in filas.sort_values(["categoria"]).iterrows():
         p = float(fila.get("probabilidad_calibrada", fila["probabilidad_base"]))
+        precio_raw = fila.get("precio", "—")
+        try:
+            precio_match = re.search(r"[-+]?\\d+(?:[.,]\\d+)?", str(precio_raw))
+            precio_num = float(precio_match.group(0).replace(",", ".")) if precio_match else None
+            if precio_num is not None and ("%" in str(precio_raw) or precio_num > 1):
+                precio_num /= 100
+            edge_guardado = round(p - precio_num, 6) if precio_num is not None and 0 < precio_num < 1 else None
+        except (TypeError, ValueError, OverflowError):
+            edge_guardado = None
         capturado = datetime.fromisoformat(str(fila.get("capturado_en", ""))).astimezone(TZ).strftime("%d/%m %H:%M hora Chicago")
         capturas.append({
             "Tipo": fila["categoria"],
@@ -1086,7 +1095,7 @@ def resumen_guardado(match_id, predicciones, resultados):
             }.get(estados.get(fila["prediction_id"]), "Pendiente de liquidación automática"),
             "Precio ahora": fila.get("precio", "—"),
             "Precio de compra": fila.get("precio", "—"),
-            "Ventaja (edge)": fila.get("edge", ""),
+            "Ventaja (edge)": edge_guardado,
             "Probabilidad base": p,
             "Disponibilidad": fila.get("disponibilidad", "—"),
             "Ticker": fila.get("ticker", "—"),
