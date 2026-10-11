@@ -357,7 +357,7 @@ def settle_from_score(row):
         proposition = None
         if series.endswith("GAME") and outcome in {"local", "visita", "empate"}:
             proposition = home > away if outcome == "local" else away > home if outcome == "visita" else home == away
-        elif series.endswith("FTTS") and outcome in {"local", "visita", "home", "away"}:
+        elif (series.endswith("FTTS") or series.endswith("FIRSTGOAL")) and outcome in {"local", "visita", "home", "away"}:
             # A team-to-score-first contract is false when the final score is 0-0.
             # Otherwise require ESPN's ordered scoring-play list; never infer the scorer from score alone.
             if total == 0:
@@ -466,9 +466,10 @@ def settle_from_score(row):
         won = proposition if str(yes_no).upper() == "YES" else not proposition
         state = "WIN" if won else "LOSS"
         label = f", {period_label}" if period_label else ""
+        source_label = "ESPN" if period_label == "córners" else match.get("source", "ESPN")
         return {
             "match": match, "state": state,
-            "reason": f"Marcador independiente ({match.get('source', 'ESPN')}{label}): {shown_home}-{shown_away} (mercado {series}, selección {yes_no})",
+            "reason": f"Marcador independiente ({source_label}{label}): {shown_home}-{shown_away} (mercado {series}, selección {yes_no})",
         }
     except (ValueError, TypeError, SyntaxError, IndexError):
         return None

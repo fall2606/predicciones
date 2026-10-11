@@ -78,6 +78,11 @@ class ScoreSettlementTests(unittest.TestCase):
         result = sports_results.settle_from_score(row("KXLALIGAFTTS", "local", None, "NO"))
         self.assertEqual(result["state"], "WIN")
 
+    @patch("sports_results.find_match", return_value=match(0, 0, half_home=0, half_away=0))
+    def test_legacy_firstgoal_series_no_when_match_finishes_scoreless(self, _):
+        result = sports_results.settle_from_score(row("KXLALIGAFIRSTGOAL", "local", None, "NO"))
+        self.assertEqual(result["state"], "WIN")
+
     @patch("sports_results._espn_summary", return_value={
         "scoringPlays": [{"team": {"displayName": "Celta"}}]
     })

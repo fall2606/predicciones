@@ -47,28 +47,38 @@ jobs:
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python liquidar_laliga.py
-      - name: Generar reconciliación de todas las competiciones
-        if: always()
-        continue-on-error: true
+      - name: Guardar resultados y reconciliación sin modificar pronósticos
         env:
           CLAVE: ${{ secrets.CLAVE }}
           KALSHI_SETTLEMENT_GRACE_HOURS: ${{ vars.KALSHI_SETTLEMENT_GRACE_HOURS || '72' }}
           MATCH_LOOKUP_GRACE_HOURS: ${{ vars.MATCH_LOOKUP_GRACE_HOURS || '6' }}
-        run: python scripts/auditar_reconciliacion.py
-
-      - name: Guardar resultados sin modificar pronósticos
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_laliga.csv resultados_laliga.csv reconciliacion_pendientes.csv
-          if git diff --cached --quiet; then
-            echo "No hay resultados nuevos"
-          else
+          git add predicciones_laliga.csv resultados_laliga.csv
+          if ! git diff --cached --quiet; then
             git commit -m "Liquidar pronósticos finalizados de LaLiga"
+            pushed=false
             for intento in 1 2 3; do
-              git pull --rebase origin main && git push origin HEAD:main && exit 0
+              if git pull --rebase origin main && git push origin HEAD:main; then pushed=true; break; fi
               git rebase --abort || true
               sleep $((intento * 3))
             done
-            exit 1
+            if [ "$pushed" != true ]; then exit 1; fi
+          fi
+          # Reconciliar DESPUÉS de sincronizar y publicar los resultados. Así ambos
+          # liquidadores no compiten por subir versiones obsoletas del mismo informe.
+          git fetch origin main
+          git reset --hard origin/main
+          python scripts/auditar_reconciliacion.py
+          git add reconciliacion_pendientes.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualizar reconciliación tras liquidación de fútbol"
+            pushed=false
+            for intento in 1 2 3; do
+              if git pull --rebase origin main && git push origin HEAD:main; then pushed=true; break; fi
+              git rebase --abort || true
+              sleep $((intento * 3))
+            done
+            if [ "$pushed" != true ]; then exit 1; fi
           fi
