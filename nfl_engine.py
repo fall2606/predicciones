@@ -907,12 +907,29 @@ def read_csv_tolerant(path, expected_columns=None):
     if bad_rows:
         bad_path = path.with_name(path.stem + "_filas_malas.csv")
         _write_report(bad_path, ["linea", "motivo", "contenido"], bad_rows)
+    # Normalize known legacy column names before the page or liquidator consumes rows.
+    legacy_aliases = {
+        "selection": "seleccion", "side": "lado", "market": "mercado",
+        "linea": "line", "precio": "precio_captura", "probabilidad": "probabilidad_modelo",
+        "fecha_captura": "capturado_en", "kickoff": "hora_inicio", "match": "match_id",
+    }
+    for row in parsed:
+        for old_name, new_name in legacy_aliases.items():
+            if not str(row.get(new_name) or "").strip() and str(row.get(old_name) or "").strip():
+                row[new_name] = row[old_name]
+        side = str(row.get("lado") or row.get("seleccion") or "").strip().upper()
+        if side in {"YES", "NO"}:
+            row["lado"] = side
+            row["seleccion"] = side
+        if expected_columns and "schema_version" in expected_columns:
+            old_version = str(row.get("schema_version") or "").strip()
+            # Missing/zero schema is migrated in memory to the current normalized row shape.
+            if old_version in {"", "0"}:
+                row["schema_version"] = SCHEMA_VERSION
     if expected_columns:
         for row in parsed:
             for column in expected_columns:
                 row.setdefault(column, "")
-            if "schema_version" in expected_columns and not row.get("schema_version"):
-                row["schema_version"] = "0" if "schema_version" not in header else SCHEMA_VERSION
     return parsed
 
 
