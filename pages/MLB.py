@@ -114,11 +114,14 @@ except (requests.RequestException, ValueError, TypeError, KeyError) as exc:
  
 def etiqueta_mercado_primera_entrada(row):
     """Human-readable outcome for KXMLBINNINGWIN contracts; retain the side's meaning."""
-    ticker = str(row.get("ticker", "")).upper()
+    ticker = str(row.get("ticker") or row.get("Ticker") or "").upper()
     if "BINNINGWIN" not in ticker:
-        return str(row.get("mercado") or row.get("seleccion") or "Contrato Kalshi")
+        return str(row.get("mercado") or row.get("seleccion") or row.get("Apuesta") or "Contrato Kalshi")
     code = ticker.rsplit("-", 1)[-1]
-    side = str(row.get("lado") or row.get("seleccion") or "YES").upper()
+    side = str(row.get("lado") or row.get("seleccion") or row.get("Lado Kalshi") or "").upper()
+    if side not in {"YES", "NO"}:
+        apuesta = str(row.get("Apuesta", "")).upper()
+        side = "NO" if apuesta.rstrip().endswith("· NO") else ("YES" if apuesta.rstrip().endswith("· YES") else "YES")
     if code == "TIE":
         return ("SÍ: habrá empate al terminar la 1.ª entrada"
                 if side == "YES" else "NO: no habrá empate al terminar la 1.ª entrada")
