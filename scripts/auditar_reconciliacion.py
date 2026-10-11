@@ -50,16 +50,19 @@ def parse_dt(value):
 
 
 def latest_results(result_rows):
-    latest = {}
+    # A valid terminal outcome wins over any stale legacy NO_EVALUABLE/UNKNOWN row.
+    terminal_rows = {}
+    nonterminal_rows = {}
     for row in result_rows:
         pid = text(row.get("prediction_id"))
         if not pid:
             continue
-        prev = latest.get(pid)
+        target = terminal_rows if text(row.get("estado")).upper() in TERMINAL else nonterminal_rows
+        prev = target.get(pid)
         stamp = text(row.get("resuelto_en"))
         if prev is None or stamp >= text(prev.get("resuelto_en")):
-            latest[pid] = row
-    return latest
+            target[pid] = row
+    return {**nonterminal_rows, **terminal_rows}
 
 
 def finished_matches(kind, competition, predictions):
@@ -129,6 +132,25 @@ def kalshi_market(ticker):
         result = {"kind": "error", "status": type(exc).__name__, "result": ""}
     KALSHI_CACHE[ticker] = result
     return result
+
+
+def captured_side(row):
+    for key in ("lado", "seleccion"):
+        side = text(row.get(key)).upper()
+        if side in {"YES", "NO"}:
+            return side
+    raw = text(row.get("clave_interna"))
+    if raw:
+        try:
+            import ast
+            parsed = ast.literal_eval(raw)
+            if isinstance(parsed, tuple) and len(parsed) == 2:
+                side = text(parsed[1]).upper()
+                if side in {"YES", "NO"}:
+                    return side
+        except (ValueError, SyntaxError, TypeError):
+            pass
+    return None
 
 
 def _row_report(name, row, latest, match_states, kind):
@@ -208,9 +230,14 @@ def _row_report(name, row, latest, match_states, kind):
         base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
     elif market["kind"] == "error":
         base.update(motivo="estado desconocido", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+    elif market["result"] in {"yes", "no"} and captured_side(row) not in {"YES", "NO"}:
+        base.update(motivo="estado desconocido: captura sin selección YES/NO; no se puede liquidar con seguridad",
+                    clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
     elif market["result"] in {"yes", "no", "void", "canceled", "cancelled"}:
         base.update(motivo="resultado de Kalshi disponible pero no registrado",
                     clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+    elif market["status"] in {"closed", "inactive", "unlisted", "not_found"}:
+        base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
     elif market["status"] in {"open", "active", "unopened", "initialized", "pending"}:
         if grace_expired:
             base.update(motivo=f"Kalshi aún no liquida (plazo vencido: {GRACE_HOURS} h)",

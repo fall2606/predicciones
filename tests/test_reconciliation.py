@@ -67,6 +67,25 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(result["motivo"], "estado desconocido")
         self.assertEqual(result["cuenta_alerta"], "SI")
 
+    @patch("scripts.auditar_reconciliacion.kalshi_market")
+    def test_settled_market_with_missing_captured_side_is_not_guessed(self, market):
+        past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
+        market.return_value = {"kind":"ok","status":"finalized","result":"no"}
+        row = {"prediction_id":"p-side-missing","match_id":"m5","fecha":past,
+               "ticker":"KXTEST-5","seleccion":"","clave_interna":"(('KXTEST', None), None)"}
+        result = _row_report("LaLiga", row, {}, {"m5":"FINISHED"}, "football")
+        self.assertIn("sin selección YES/NO", result["motivo"])
+        self.assertEqual(result["cuenta_alerta"], "SI")
+
+    def test_terminal_result_wins_over_later_legacy_nonterminal_row(self):
+        from scripts.auditar_reconciliacion import latest_results
+        data = [
+            {"prediction_id":"p","estado":"WIN","resuelto_en":"2026-10-01T00:00:00+00:00"},
+            {"prediction_id":"p","estado":"NO_EVALUABLE","resuelto_en":"2026-10-02T00:00:00+00:00"},
+        ]
+        self.assertEqual(latest_results(data)["p"]["estado"], "WIN")
+
+
 
 if __name__ == "__main__":
     unittest.main()
