@@ -5,9 +5,6 @@ on:
     paths:
       - "prediction_core.py"
       - "mlb_engine.py"
-      - "mlb_eventos_sin_emparejar.csv"
-      - "mlb_candidatos_descartados.csv"
-      - "mlb_cobertura_por_partido.csv"
       - "mlb_math.py"
       - "scripts/reparar_csv_predicciones.py"
       - "scripts/reintegrar_capturas_mlb.py"
