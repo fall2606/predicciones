@@ -219,7 +219,7 @@ def _trusted_terminal_result(row,result_columns,state_field="estado"):
     if "resultado_kalshi" in result_columns:
         return str(row.get("resultado_kalshi","")).upper() in {"YES","NO","VOID"}
     marker=str(row.get("marcador",""))
-    return marker.startswith("Resultado oficial Kalshi:") or marker.startswith("Contrato anulado/cancelado por Kalshi")
+    return marker.startswith("Resultado oficial Kalshi:") or marker.startswith("Contrato anulado/cancelado por")
 
 def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_field="lado",ticker_field="ticker",id_field="prediction_id",state_field="estado",cancelled_match_ids=()):
     """Recover every old prediction; trust Kalshi's final YES/NO/void outcome."""
