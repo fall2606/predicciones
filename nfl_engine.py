@@ -39,6 +39,7 @@ NFLVERSE_GAMES_URL = os.getenv(
 )
 ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
 API_KALSHI = KALSHI_API_BASE
+ESPN_SCOREBOARD_CACHE = {}
 SCHEMA_VERSION = "1"
 PRED_COLUMNS = [
     "schema_version", "prediction_id", "event_ticker", "ticker", "match_id",
@@ -798,6 +799,14 @@ def capture():
     return {"series": series, "events": events, "catalog": catalog, "saved": saved, "rejected": rejected}
 
 
+def _espn_events_for_date(day):
+    key = day.isoformat()
+    if key not in ESPN_SCOREBOARD_CACHE:
+        payload = _get(ESPN_SCOREBOARD_URL, {"dates": day.strftime("%Y%m%d"), "limit": 100})
+        ESPN_SCOREBOARD_CACHE[key] = payload.get("events") or []
+    return ESPN_SCOREBOARD_CACHE[key]
+
+
 def settle_from_espn(row):
     """Independent fallback for supported full-game markets; refuses ambiguous fixtures/pushes."""
     kickoff = parse_dt(row.get("hora_inicio") or row.get("fecha"))
@@ -811,10 +820,10 @@ def settle_from_espn(row):
     for delta in range(-3, 4):
         day = base_date + timedelta(days=delta)
         try:
-            payload = _get(ESPN_SCOREBOARD_URL, {"dates": day.strftime("%Y%m%d"), "limit": 100})
+            events_for_day = _espn_events_for_date(day)
         except (requests.RequestException, ValueError):
             continue
-        for event in payload.get("events") or []:
+        for event in events_for_day:
             competitions = event.get("competitions") or []
             if not competitions:
                 continue
@@ -940,16 +949,19 @@ def settle():
         if pid and (pid not in latest or str(row.get("resuelto_en", "")) > str(latest[pid].get("resuelto_en", ""))):
             latest[pid] = row
     new_results = []
+    market_cache = {}
     for row in predictions:
         pid = str(row.get("prediction_id") or "")
         if not pid or str(latest.get(pid, {}).get("estado", "")).upper() in TERMINAL:
             continue
         ticker = str(row.get("ticker") or "")
         score = ""
-        try:
-            market_data = kalshi_get(f"markets/{ticker}").get("market", {})
-        except (requests.RequestException, ValueError, KeyError):
-            market_data = {}
+        if ticker not in market_cache:
+            try:
+                market_cache[ticker] = kalshi_get(f"markets/{ticker}").get("market", {})
+            except (requests.RequestException, ValueError, KeyError):
+                market_cache[ticker] = {}
+        market_data = market_cache[ticker]
         kalshi_result = str(market_data.get("result") or "").lower()
         if kalshi_result in {"void", "canceled", "cancelled"}:
             state, source, reason = "ANULADA", "Kalshi", "contrato anulado/cancelado por Kalshi"
