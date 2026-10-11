@@ -6,9 +6,6 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-concurrency:
-  group: predicciones-main
-  cancel-in-progress: false
 
 jobs:
   verify:
