@@ -1,0 +1,25 @@
+name: Tests de predicciones
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Instalar dependencias
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+      - name: Comprobar sintaxis
+        run: python -m compileall -q .
+      - name: Ejecutar pruebas unitarias
+        run: python -m unittest discover -s tests -p "test_*.py" -v
