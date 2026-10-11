@@ -255,3 +255,16 @@ def test_calibration_requires_minimum_sample_and_preserves_probability_bounds():
     assert 0 <= calibrated <= 1
     assert version == "platt_winner_n150"
     assert status == "aplicada"
+
+def test_calibration_is_not_applied_when_held_out_metrics_do_not_improve():
+    calibration = {
+        "markets": {},
+        "evaluations": {"total_over_44.5": {"status": "no_improvement"}},
+    }
+    calibrated, version, status = nfl.calibrate_probability(
+        0.62, "total", 44.5, "over_gt", calibration=calibration
+    )
+    assert calibrated is None and version is None
+    assert "no mejora" in status
+
+
