@@ -38,6 +38,13 @@ class FirstInningWinnerTests(unittest.TestCase):
         self.assertTrue(0 < p_dodgers < 1)
         self.assertNotAlmostEqual(1 - p_tie, 1 - p_dodgers, places=3)
 
+    def test_later_inning_winner_is_not_mislabelled_or_given_first_inning_probability(self):
+        market = {"ticker": "KXMLBINNINGWIN-26OCT112000LADMIL-2-TIE", "series_ticker": "KXMLBINNINGWIN", "title": "Second inning winner"}
+        probability, state = mercado_probabilidad(market, self.game)
+        self.assertIsNone(probability)
+        self.assertIn("solo se modela la 1.ª entrada", state)
+        self.assertEqual(clasificar("KXMLBINNINGWIN", market), "Ganador de la 2.ª entrada")
+
     def test_first_inning_market_is_classified_explicitly(self):
         self.assertEqual(clasificar("KXMLBINNINGWIN", {"ticker": "KXMLBINNINGWIN-1-TIE", "title": "First inning winner"}), "Ganador de la 1.ª entrada")
 
