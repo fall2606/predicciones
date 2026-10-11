@@ -1,0 +1,1 @@
+schema_version,prediction_id,event_ticker,ticker,match_id,fecha,local,visita,categoria,mercado,line,lado,equipo_yes,tipo_salida,descripcion,seleccion,bloque,probabilidad_original,probabilidad_calibrada,version_calibracion,probabilidad_modelo,precio_captura,probabilidad_implicita,edge,revision,estado_modelo,reglas,capturado_en,hora_inicio,disponibilidad
