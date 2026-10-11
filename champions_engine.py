@@ -13,6 +13,7 @@ import pandas as pd
 import requests
 import streamlit as st
 from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line, rank_single_candidates, read_csv_rows_resilient
+from sports_results import settle_from_score
 from scipy.stats import nbinom, poisson
 
 
@@ -962,9 +963,8 @@ def leer_historial_fijo():
     predicciones = pd.DataFrame(read_csv_rows_resilient(PREDICCIONES_ARCHIVO), columns=columnas_pred)
     resultados = pd.DataFrame(read_csv_rows_resilient(RESULTADOS_ARCHIVO), columns=columnas_res)
     if not predicciones.empty and "ticker" in predicciones.columns:
-        ticker_ok = predicciones["ticker"].astype(str).str.strip().ne("") & ~predicciones["ticker"].astype(str).str.strip().isin(["—", "-", "None", "nan"])
         p = pd.to_numeric(predicciones.get("probabilidad_calibrada"), errors="coerce")
-        predicciones = predicciones[ticker_ok & np.isfinite(p) & p.between(0, 1)].copy()
+        predicciones = predicciones[np.isfinite(p) & p.between(0, 1)].copy()
     if not resultados.empty and "resuelto_en" in resultados.columns:
         resultados = resultados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
     return predicciones, resultados
@@ -1016,23 +1016,24 @@ def calibrar_resumen(resumen, predicciones, resultados):
     return salida
 
 
-def _resultado_visible(estado, ticker):
-    """Never show legacy rows without a real Kalshi contract as indefinitely pending."""
+def _resultado_visible(estado, ticker, fila=None):
+    """Never label a finished fixture PENDIENTE: stored result, score settlement, or clear no-data state."""
     value = str(estado or "").strip().upper()
-    labels = {
-        "WIN": "✅ WIN · Se cumplió",
-        "LOSS": "❌ LOSS · No se cumplió",
-        "ANULADA": "ANULADA",
-        "UNKNOWN": "Sin dato",
-        "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
-    }
-    if value in labels:
-        return labels[value]
+    if value in {"WIN", "LOSS", "ANULADA"}:
+        return value
     ticker_txt = str(ticker or "").strip().upper()
     if ticker_txt in {"", "—", "-", "NONE", "NAN"}:
-        return "⚠️ NO EVALUABLE · Sin ticker real de Kalshi"
-    return "Pendiente de resultado"
-
+        return "sin datos para liquidar · histórico sin contrato"
+    if fila is not None:
+        try:
+            external = settle_from_score(fila)
+            if external and external.get("state") in {"WIN", "LOSS"}:
+                return external["state"]
+            if external and str(external.get("reason", "")).startswith("estado_partido:"):
+                return "ANULADA"
+        except (requests.RequestException, ValueError, KeyError, TypeError):
+            pass
+    return "sin datos para liquidar · mercado sin fuente compatible"
 
 def resumen_guardado(match_id, predicciones, resultados):
     """Return the immutable pre-match summary joined with its separately appended result."""
@@ -1061,7 +1062,7 @@ def resumen_guardado(match_id, predicciones, resultados):
             "Jugada sencilla": fila["jugada"],
             "Probabilidad modelo": f"{p:.1%}",
             "Calibración": fila.get("calibracion", "Sin dato"),
-            "Resultado": _resultado_visible(estados.get(fila["prediction_id"]), fila.get("ticker", "")),
+            "Resultado": _resultado_visible(estados.get(fila["prediction_id"]), fila.get("ticker", ""), fila.to_dict()),
             "Precio ahora": fila.get("precio", "—"),
             "Precio de compra": fila.get("precio", "—"),
             "Ventaja (edge)": edge_guardado,
@@ -1082,7 +1083,7 @@ def historial_guardado(match_id, predicciones, resultados):
         return pd.DataFrame()
     estados = resultados.set_index("prediction_id")["estado"].to_dict() if not resultados.empty else {}
     filas["Resultado"] = [
-        _resultado_visible(estados.get(row["prediction_id"]), row.get("ticker", ""))
+        _resultado_visible(estados.get(row["prediction_id"]), row.get("ticker", ""), row.to_dict())
         for _, row in filas.iterrows()
     ]
     filas["Captura (Chicago)"] = pd.to_datetime(filas["capturado_en"], utc=True).dt.tz_convert(TZ).dt.strftime("%d/%m %H:%M")
