@@ -1044,6 +1044,16 @@ def calibrar_resumen(resumen, predicciones, resultados):
             ajustada = (ganados + 20 * base) / (len(cercanos) + 20)
         copia["Probabilidad base"] = base
         copia["Probabilidad modelo"] = f"{ajustada:.1%}"
+        precio_raw = copia.get("Precio de compra", copia.get("Precio ahora", ""))
+        try:
+            precio_match = re.search(r"[-+]?\\d+(?:[.,]\\d+)?", str(precio_raw))
+            precio_num = float(precio_match.group(0).replace(",", ".")) if precio_match else None
+            if precio_num is not None and ("%" in str(precio_raw) or precio_num > 1):
+                precio_num /= 100
+            copia["Ventaja (edge)"] = round(ajustada - precio_num, 6) if precio_num is not None and 0 < precio_num < 1 else None
+        except (TypeError, ValueError, OverflowError):
+            copia["Ventaja (edge)"] = None
+        copia["_p"] = ajustada
         copia["Calibración"] = f"Aprendida con {len(cercanos)} resultados" if len(cercanos) >= 30 else "Sin calibrar: faltan 30 casos comparables"
         salida.append(copia)
     return salida
