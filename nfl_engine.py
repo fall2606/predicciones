@@ -229,7 +229,11 @@ def main():
     events = merge_game_events(raw_events)
     stats = _team_stats()
     print(f"NFL: equipos con estadísticas recientes={len(stats)}")
-    print("NFL: muestra de eventos:", [(e.get("title"), e.get("start_time"), e.get("strike_date"), len(e.get("markets") or [])) for e in events[:3]])
+    print("NFL: muestra de eventos:", [(e.get("title"), e.get("start_time"), e.get("strike_date"), e.get("start_date"), len(e.get("markets") or [])) for e in events[:3]])
+    if events and events[0].get("markets"):
+        sample_market = events[0]["markets"][0]
+        print("NFL: claves evento/mercado:", sorted(events[0].keys()), sorted(sample_market.keys()))
+        print("NFL: campos de hora del mercado:", {k: sample_market.get(k) for k in ("close_time", "expiration_time", "expected_expiration_time", "open_time", "latest_expiration_time")})
     if events:
         fixture = str(events[0].get("title") or "").split(":", 1)[0].strip()
         teams = re.split(r"\s+(?:vs\.?|versus|@|at)\s+", fixture, maxsplit=1, flags=re.I)
