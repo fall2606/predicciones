@@ -110,6 +110,10 @@ try:
     else:
         started_without_result = pd.DataFrame()
     st.caption("Última liquidación: " + (latest_settlement.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest_settlement) else "sin liquidaciones registradas"))
+    if pd.isna(latest_settlement):
+        st.warning("No hay liquidaciones registradas; no se puede confirmar la frescura del proceso hasta que se resuelva el primer contrato.")
+    elif datetime.now(ZoneInfo("UTC")) - latest_settlement.to_pydatetime() > timedelta(hours=12):
+        st.warning("La última liquidación tiene más de 12 horas. Comprueba el workflow y los contratos terminados recientes.")
     if len(started_without_result):
         st.error(f"ALERTA: {len(started_without_result)} predicciones de partidos terminados siguen sin resultado registrado.")
         try:
