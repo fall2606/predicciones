@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from mlb_engine import mercado_probabilidad, clasificar, encontrar_partido, motivo_evento_sin_partido
+from scripts.reintegrar_capturas_mlb import OPERATIVE_METADATA_FIXES
 from mlb_math import score_probability_matrix
 
 
@@ -58,6 +59,13 @@ class FirstInningWinnerTests(unittest.TestCase):
         self.assertIsNotNone(p_plus)
         self.assertIsNotNone(p_minus)
         self.assertGreater(p_plus, p_minus)
+
+    def test_recovered_tampa_contract_is_linked_to_correct_october_15_fixture(self):
+        fixed = OPERATIVE_METADATA_FIXES["KXMLBGAME-26OCT151800TBCLE-TB|YES|SENCILLAS"]
+        self.assertEqual(fixed["match_id"], "849818")
+        self.assertEqual(fixed["fecha"], "2026-10-15T22:00:00Z")
+        self.assertEqual(fixed["local"], "Cleveland Guardians")
+        self.assertEqual(fixed["visita"], "Tampa Bay Rays")
 
     def test_esports_series_is_classified_as_not_mlb(self):
         event = {"event_ticker": "KXMLBBGAME-26OCT110230VAMFL", "series_ticker": "KXMLBBGAME", "title": "Team Vamos vs. Team Flash"}
