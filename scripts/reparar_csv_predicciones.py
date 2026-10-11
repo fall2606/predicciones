@@ -31,7 +31,12 @@ CURRENT_MLB = [
 ]
 
 
-def _line_from(row):
+def _line_from(row, allow_line_correction=False):
+    text = str(row.get("mercado") or row.get("jugada") or "")
+    if allow_line_correction:
+        plus = re.search(r"(?<!\w)(\d+(?:[.,]\d+)?)\s*\+", text)
+        if plus:
+            return plus.group(1).replace(",", ".") + "+"
     if str(row.get("line", "")).strip():
         return str(row["line"]).strip()
     raw = str(row.get("clave_interna", "") or "")
@@ -42,7 +47,6 @@ def _line_from(row):
             return str(key[2])
     except (ValueError, SyntaxError, TypeError):
         pass
-    text = str(row.get("mercado") or row.get("jugada") or "")
     match = re.search(r"(?i)(?:over|under|más de|menos de|gana por|handicap|spread|total)[^\d+-]*([+-]?\d+(?:[.,]\d+)?)", text)
     if match:
         return match.group(1).replace(",", ".")
@@ -52,10 +56,10 @@ def _line_from(row):
     return ""
 
 
-def _metadata(row):
+def _metadata(row, allow_line_correction=False):
     if not str(row.get("mercado", "")).strip():
         row["mercado"] = row.get("jugada") or row.get("ticker") or ""
-    row["line"] = _line_from(row)
+    row["line"] = _line_from(row, allow_line_correction=allow_line_correction)
     side = str(row.get("seleccion") or row.get("lado") or "").upper().strip()
     if side not in {"YES", "NO"}:
         try:
@@ -134,8 +138,17 @@ def repair_file(path, current_columns, legacy_columns):
             ):
                 removed_invalid_pregame += 1
                 continue
+        allow_line_correction = False
+        if str(row.get("match_id", "")).strip():
+            try:
+                kickoff_for_line = datetime.fromisoformat(str(row.get("fecha", "")).replace("Z", "+00:00"))
+                if kickoff_for_line.tzinfo is None:
+                    kickoff_for_line = kickoff_for_line.replace(tzinfo=timezone.utc)
+                allow_line_correction = datetime.now(timezone.utc) < kickoff_for_line.astimezone(timezone.utc)
+            except (TypeError, ValueError):
+                allow_line_correction = False
         before = dict(row)
-        row = _metadata(row)
+        row = _metadata(row, allow_line_correction=allow_line_correction)
         if row != before:
             metadata_modified = True
         repaired_rows.append({column: row.get(column, "") for column in current_columns})

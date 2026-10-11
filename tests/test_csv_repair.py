@@ -111,6 +111,35 @@ class CSVRepairTests(unittest.TestCase):
             self.assertEqual(len(saved), 10)
             self.assertNotIn("m|KXMLBTOTAL-0|YES|A_TENER_EN_CUENTA", [r["prediction_id"] for r in saved])
 
+    def test_literal_plus_line_is_corrected_only_before_kickoff(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "predicciones_laliga.csv"
+            future = (datetime.now(timezone.utc) + timedelta(hours=8)).isoformat()
+            past = (datetime.now(timezone.utc) - timedelta(hours=8)).isoformat()
+            base = {
+                "local": "A", "visita": "B", "categoria": "SENCILLAS · Hándicap",
+                "jugada": "Deportivo gana por 2+ goles", "probabilidad_base": "0.7",
+                "probabilidad_calibrada": "0.7", "calibracion": "", "precio": "0.4",
+                "disponibilidad": "Disponible en Kalshi", "ticker": "KXLALIGASPREAD-TEST",
+                "mercado": "Deportivo gana por 2+ goles", "line": "1.5", "seleccion": "YES",
+                "bloque": "SENCILLAS", "edge": "0.3",
+                "clave_interna": "(('KXLALIGASPREAD', 'over', 1.5, 'over'), 'YES')",
+                "capturado_en": (datetime.now(timezone.utc) - timedelta(hours=10)).isoformat(),
+            }
+            rows = []
+            for pid, kickoff in [("future-line", future), ("past-line", past)]:
+                rows.append({**base, "prediction_id": pid, "match_id": pid, "fecha": kickoff})
+            with path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=CURRENT_FOOTBALL)
+                writer.writeheader()
+                writer.writerows(rows)
+            repair_file(path, CURRENT_FOOTBALL, LEGACY_FOOTBALL)
+            with path.open(newline="", encoding="utf-8") as f:
+                saved = {r["prediction_id"]: r for r in csv.DictReader(f)}
+            self.assertEqual(saved["future-line"]["line"], "2+")
+            self.assertEqual(saved["past-line"]["line"], "1.5")
+
 
 if __name__ == "__main__":
     unittest.main()
