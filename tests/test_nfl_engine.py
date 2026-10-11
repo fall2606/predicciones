@@ -140,7 +140,7 @@ class NFLModelTests(unittest.TestCase):
     def test_nfl_rankings_are_per_game_and_limit_each_block(self):
         rows = []
         categories = ["Ganador del partido", "Hándicap de puntos", "Total de puntos", "Total de puntos del equipo"]
-        for i in range(8):
+        for i in range(12):
             category = categories[i % len(categories)]
             rows.append({
                 "prediction_id": f"game|ticker{i}|YES", "ticker": f"KXNFL{i}-MARKET",
