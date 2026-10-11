@@ -23,6 +23,8 @@ PRED_COLUMNS = ["prediction_id","event_ticker","ticker","match_id","fecha","loca
 RESULT_COLUMNS = ["prediction_id","estado","resultado_kalshi","marcador","resuelto_en"]
 ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
 TIMEOUT = 15
+# All NFL rows captured before this validated pregame model release belong to the initial bad batch.
+INITIAL_BAD_CAPTURE_CUTOFF = datetime(2026, 10, 11, 21, 55, tzinfo=timezone.utc)
 
 def _json(url, params=None):
     r = requests.get(url, params=params or {}, timeout=TIMEOUT)
@@ -273,12 +275,15 @@ def reconcile_exclusions(stats):
         late_capture = kickoff is not None and captured is not None and captured >= kickoff
         misdated_capture = (kickoff is not None and stored_kickoff is not None
                             and abs((stored_kickoff - kickoff).total_seconds()) > 6 * 3600)
-        if not market_is_period and not event_is_period and not late_capture and not misdated_capture:
+        initial_bad_batch = captured is not None and captured < INITIAL_BAD_CAPTURE_CUTOFF
+        if not market_is_period and not event_is_period and not late_capture and not misdated_capture and not initial_bad_batch:
             continue
         if market_is_period:
             reason = "Contrato de periodo/cuarto no cubierto por el modelo NFL"
         elif event_is_period:
             reason = "Captura histórica asociada a una serie de periodo; excluida por el modelo inicial incorrecto"
+        elif initial_bad_batch:
+            reason = "Captura de la primera versión no validada; excluida de resultados y calibración"
         elif misdated_capture:
             reason = "Fecha histórica difiere del kickoff real en más de 6 horas; captura inicial inválida"
         else:
