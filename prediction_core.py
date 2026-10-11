@@ -500,7 +500,7 @@ def rank_market_candidates(
         item["_edge"]=edge; candidates.append(item)
 
     def passes(x, price_max):
-        if x["_price"] is None or (price_max is not None and x["_price"] > price_max):
+        if price_max is not None and (x["_price"] is None or x["_price"] > price_max):
             return False
         if min_edge is not None and (x["_edge"] is None or x["_edge"] < min_edge):
             return False
