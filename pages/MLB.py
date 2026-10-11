@@ -59,7 +59,7 @@ def leer_historial_mlb():
 
 historial_mlb = leer_historial_mlb()
 try:
-    candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_candidatos_descartados.csv", dtype=str).fillna("")
+    candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_probabilidades_actuales.csv", dtype=str).fillna("")
 except (OSError, ValueError, pd.errors.ParserError):
     candidatos_descartados_actuales = pd.DataFrame()
 
