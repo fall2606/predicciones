@@ -17,7 +17,7 @@ permissions:
   contents: write
   actions: read
 concurrency:
-  group: nfl-predicciones-main
+  group: nfl-predicciones-main-v2
   cancel-in-progress: true
 jobs:
   nfl:
