@@ -41,6 +41,10 @@ def leer_historial_mlb():
     try:
         pred = pd.read_csv(PRED_MLB, dtype=str).fillna("") if PRED_MLB.exists() else pd.DataFrame()
         res = pd.read_csv(RES_MLB, dtype=str).fillna("") if RES_MLB.exists() else pd.DataFrame()
+        if not pred.empty and "ticker" in pred.columns and "probabilidad_modelo" in pred.columns:
+            p = pd.to_numeric(pred["probabilidad_modelo"], errors="coerce")
+            ticker_ok = pred["ticker"].astype(str).str.strip().ne("") & ~pred["ticker"].astype(str).str.strip().isin(["—", "-", "None", "nan"])
+            pred = pred[ticker_ok & np.isfinite(p) & p.between(0, 1)].copy()
         if not res.empty and "resuelto_en" in res.columns:
             res = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
         if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:

@@ -975,6 +975,10 @@ def leer_historial_fijo():
         resultados = pd.read_csv(RESULTADOS_ARCHIVO, dtype={"prediction_id": str})
     except (FileNotFoundError, pd.errors.EmptyDataError):
         resultados = pd.DataFrame(columns=columnas_res)
+    if not predicciones.empty and "ticker" in predicciones.columns:
+        ticker_ok = predicciones["ticker"].astype(str).str.strip().ne("") & ~predicciones["ticker"].astype(str).str.strip().isin(["—", "-", "None", "nan"])
+        p = pd.to_numeric(predicciones.get("probabilidad_calibrada"), errors="coerce")
+        predicciones = predicciones[ticker_ok & np.isfinite(p) & p.between(0, 1)].copy()
     if not resultados.empty and "resuelto_en" in resultados.columns:
         resultados = resultados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
     return predicciones, resultados

@@ -121,11 +121,20 @@ def _market_rows_for_series(series_tickers):
             ticker=str(market.get("ticker") or "")
             if ticker: found[ticker]=market
     return found
+def _trusted_terminal_result(row,result_columns,state_field="estado"):
+    state=str(row.get(state_field,"")).upper()
+    if state not in TERMINAL_STATES:
+        return False
+    if "resultado_kalshi" in result_columns:
+        return str(row.get("resultado_kalshi","")).upper() in {"YES","NO","VOID"}
+    marker=str(row.get("marcador",""))
+    return marker.startswith("Resultado oficial Kalshi:") or marker.startswith("Contrato anulado/cancelado por Kalshi")
+
 def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_field="lado",ticker_field="ticker",id_field="prediction_id",state_field="estado"):
     """Recover every old prediction; trust Kalshi's final YES/NO/void outcome."""
     predictions_path=Path(predictions_path); results_path=Path(results_path)
     predictions=read_rows(predictions_path); results=read_rows(results_path)
-    terminal={str(r.get(id_field,"")) for r in results if str(r.get(state_field,"")).upper() in TERMINAL_STATES}
+    terminal={str(r.get(id_field,"")) for r in results if _trusted_terminal_result(r,result_columns,state_field)}
     pending=[r for r in predictions if str(r.get(id_field,"")) not in terminal and str(r.get(ticker_field,"")).strip() not in {"","—","-","None","nan"}]
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
     markets=_market_rows_for_series(series); new=[]; skipped=0
@@ -150,7 +159,7 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     latest={}
     for row in results + new:
         state=str(row.get(state_field,"")).upper()
-        if state not in TERMINAL_STATES:
+        if not _trusted_terminal_result(row,result_columns,state_field):
             continue
         pid=str(row.get(id_field,""))
         previous=latest.get(pid)

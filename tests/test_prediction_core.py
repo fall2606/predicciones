@@ -43,4 +43,23 @@ class CoreTests(unittest.TestCase):
    {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"78%","Ventaja (edge)":0.05,"Apuesta":"4+ corners"}]
   high,value=core.rank_market_candidates(rows,0.7)
   self.assertEqual(len(high),2); self.assertEqual(len(value),3); self.assertEqual(high[0]["Apuesta"],"Más de 1.5 goles")
+
+ def test_legacy_score_based_result_is_retried_against_kalshi(self):
+  with tempfile.TemporaryDirectory() as d:
+   p,r=Path(d)/"p.csv",Path(d)/"r.csv"
+   old=(datetime.now(timezone.utc)-timedelta(days=5)).isoformat()
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","lado","fecha","capturado_en","probabilidad_modelo"]); w.writeheader()
+    w.writerow({"prediction_id":"legacy","ticker":"KXTEST-REAL","lado":"YES","fecha":old,"capturado_en":old,"probabilidad_modelo":"0.6"})
+   with r.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","estado","marcador","resuelto_en"]); w.writeheader()
+    w.writerow({"prediction_id":"legacy","estado":"WIN","marcador":"3-0","resuelto_en":old})
+   with patch.object(core,"_market_rows_for_series",return_value={"KXTEST-REAL":{"ticker":"KXTEST-REAL","status":"settled","result":"no"}}):
+    summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado")
+   self.assertEqual(summary["loss"],1)
+   with r.open(encoding="utf-8") as f: rows=list(csv.DictReader(f))
+   self.assertEqual(len(rows),1)
+   self.assertEqual(rows[0]["estado"],"LOSS")
+   self.assertEqual(rows[0]["marcador"],"Resultado oficial Kalshi: NO")
+
 if __name__=="__main__": unittest.main()
