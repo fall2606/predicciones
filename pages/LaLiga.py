@@ -16,7 +16,7 @@ from scipy.stats import nbinom, poisson
 
 from laliga_engine import *
 from prediction_core import rank_market_candidates, rank_single_candidates
-from reconciliacion_ui import mostrar_reconciliacion
+from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
 
  
 def _con_resultado_pendiente(filas, estado_partido):
@@ -51,6 +51,9 @@ st.title("🇪🇸 LaLiga · mercados y probabilidades de Kalshi")
 st.caption(
     "Pronósticos de LaLiga para partidos próximos, con comparación inmutable de capturas anteriores y calibración basada en resultados."
 )
+if st.button("Actualizar datos ahora", key="actualizar_datos_laliga"):
+    st.cache_data.clear()
+    st.rerun()
 st.link_button("Abrir Kalshi", "https://kalshi.com/")
 
 
@@ -76,7 +79,7 @@ except (ValueError, KeyError, TypeError) as exc:
     st.stop()
 
 corners = cargar_corners(codigos_corners)
-predicciones_guardadas, resultados_guardados = leer_historial_fijo()
+predicciones_guardadas, resultados_guardados = leer_historial_fijo()\nmostrar_actualizacion_archivos([("Predicciones", PREDICCIONES_ARCHIVO), ("Resultados", RESULTADOS_ARCHIVO), ("Reconciliación", os.path.join(os.path.dirname(os.path.dirname(__file__)), "reconciliacion_pendientes.csv"))])
 ids_con_captura = (
     set(predicciones_guardadas["match_id"].astype(str))
     if not predicciones_guardadas.empty else set()
@@ -287,16 +290,16 @@ if partido_cerrado:
     if not _archivo_partido.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
-        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"))
+        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar" if partido_cerrado else "PENDIENTE"))
         _sin_ticker_alta = _archivo_partido["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
-        _archivo_partido.loc[_archivo_partido["estado"].isna() & _sin_ticker_alta, "Resultado"] = "NO EVALUABLE · SIN TICKER REAL DE KALSHI"
+        _archivo_partido.loc[_archivo_partido["estado"].isna() & _sin_ticker_alta, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
         _archivo_partido.loc[_archivo_partido["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
             if _col not in _archivo_partido.columns:
                 _archivo_partido[_col] = ""
         st.dataframe(_tabla_con_resultado(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
     else:
-        st.info("No hay capturas prepartido guardadas en el bloque de alta probabilidad para este encuentro.")
+        st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de alta probabilidad.")
 elif alta_vista:
     _alta_df = pd.DataFrame(alta_vista).copy()
     _alta_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
@@ -325,7 +328,7 @@ if partido_cerrado:
                 _archivo_valor[_col] = ""
         st.dataframe(_tabla_con_resultado(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
     else:
-        st.info("No hay capturas prepartido guardadas en el bloque de valor para este encuentro.")
+        st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de valor.")
 elif valor_vista:
     _valor_df = pd.DataFrame(valor_vista).copy()
     _valor_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
