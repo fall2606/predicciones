@@ -351,3 +351,129 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
     def clean(items):
         return [{k:v for k,v in x.items() if k not in {"_prob","_family","_edge"}} for x in items]
     return clean(high),clean(value)
+
+
+def _candidate_price(row):
+    for key in ("Precio de compra", "precio_captura", "precio", "price", "Precio Kalshi"):
+        raw = row.get(key)
+        if raw in (None, "", "—", "-"):
+            continue
+        try:
+            value = float(re.search(r"[-+]?\\d+(?:[.,]\\d+)?", str(raw)).group(0).replace(",", "."))
+            if "%" in str(raw) or value > 1:
+                value /= 100
+            if math.isfinite(value) and 0 < value < 1:
+                return value
+        except (AttributeError, TypeError, ValueError, OverflowError):
+            continue
+    return None
+
+
+def _candidate_edge(row, price):
+    for key in ("Ventaja (edge)", "edge"):
+        try:
+            value = float(row.get(key))
+            if math.isfinite(value):
+                # Some legacy CSVs store edge in percentage points.
+                return value / 100 if abs(value) > 1 else value
+        except (TypeError, ValueError, OverflowError):
+            pass
+    p = _probability(row)
+    return p - price if p is not None and price is not None else None
+
+
+def _single_family(row):
+    label = " ".join(str(row.get(k) or "") for k in (
+        "Categoría resumen", "categoria", "Apuesta sencilla", "Apuesta", "mercado", "Ticker", "ticker"
+    )).casefold()
+    ticker = str(row.get("Ticker") or row.get("ticker") or "").upper()
+    if any(x in label for x in ("corner", "córner")):
+        return "corners"
+    if any(x in label for x in ("strikeout", "ponche", "pitcher", "home run", "batter", "bateador", "hits allowed", "bases total", "carreras impulsadas")):
+        return "jugadores:" + (str(row.get("categoria") or row.get("Categoría resumen") or "jugadores").casefold())
+    if any(x in label for x in ("ambos marcan", "both teams", "btts")):
+        return "ambos_marcan"
+    if any(x in label for x in ("primer gol", "first goal", "first scorer", "primeras 5 entradas", "first 5", "f5")):
+        return "periodo_especial:" + (str(row.get("categoria") or row.get("Categoría resumen") or ticker).casefold())
+    if any(x in label for x in ("total exact", "total runs", "total carreras", "goles totales", "goals total", "over ", "under ", "más de ", "menos de ", "team total", "total goles")):
+        if "team total" in label or "goles por equipo" in label or "carreras por equipo" in label:
+            return "totales_equipo"
+        return "totales_partido"
+    if any(x in label for x in ("moneyline", "ganador", "resultado", "spread", "hándicap", "handicap", "run line", "gana ", "win")):
+        return "resultado"
+    category = str(row.get("categoria") or row.get("Categoría resumen") or "").casefold()
+    if category:
+        return "categoria:" + category
+    return "serie:" + (ticker.split("-", 1)[0] or "otros")
+
+
+def _is_trivial_single(row):
+    label = " ".join(str(row.get(k) or "") for k in (
+        "Apuesta sencilla", "Apuesta", "mercado", "line", "seleccion"
+    )).casefold()
+    category = " ".join(str(row.get(k) or "") for k in ("categoria", "Categoría resumen")).casefold()
+    if re.search(r"(?:más de|mas de|over|at least|at least)\\s*0[.,]5", label):
+        return any(word in label + " " + category for word in (
+            "gol", "goal", "carrera", "run", "corner", "córner", "total"
+        ))
+    return False
+
+
+def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=None, limit=10):
+    """Select simple bets by model edge, avoiding trivial prices and correlated duplicates.
+
+    Defaults are environment-configurable: SENCILLAS_PRECIO_MAX=0.88,
+    SENCILLAS_EDGE_MIN=0.05 and SENCILLAS_EDGE_REVISAR=0.20.
+    """
+    if price_max is None:
+        price_max = float(os.getenv("SENCILLAS_PRECIO_MAX", "0.88"))
+    if min_edge is None:
+        min_edge = float(os.getenv("SENCILLAS_EDGE_MIN", "0.05"))
+    if review_edge is None:
+        review_edge = float(os.getenv("SENCILLAS_EDGE_REVISAR", "0.20"))
+    accepted = []
+    for source in rows or []:
+        row = dict(source)
+        nested = row.get("_row")
+        if isinstance(nested, dict):
+            combined = dict(nested)
+            combined.update({k: v for k, v in row.items() if k != "_row"})
+            row = combined
+        ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
+        p = _probability(row)
+        price = _candidate_price(row)
+        edge = _candidate_edge(row, price)
+        if not ticker or ticker in {"—", "-", "None", "nan"} or p is None or price is None or edge is None:
+            continue
+        if price > price_max or edge < min_edge or _is_trivial_single(row):
+            continue
+        row["_single_price"] = price
+        row["_single_edge"] = edge
+        row["_single_p"] = p
+        row["_single_family"] = _single_family(row)
+        row["Revisión"] = "REVISAR" if edge > review_edge else ""
+        accepted.append(row)
+    selected = []
+    families = set()
+    used_teams = set()
+    for row in sorted(accepted, key=lambda x: (x["_single_edge"], x["_single_p"]), reverse=True):
+        family = row["_single_family"]
+        if family in families:
+            continue
+        label = " ".join(str(row.get(k) or "") for k in ("Apuesta sencilla", "Apuesta", "mercado")).casefold()
+        # Keep the list diversified: no more than two selections tied to the same named team.
+        teams = re.findall(r"(?<![\\w])([A-Z][A-Za-zÀ-ÿ.'-]+(?:\\s+[A-Z][A-Za-zÀ-ÿ.'-]+){0,2})", str(row.get("Apuesta sencilla") or row.get("Apuesta") or ""))
+        if len(used_teams) >= 2 and teams and all(team.casefold() in used_teams for team in teams):
+            continue
+        selected.append(row)
+        families.add(family)
+        used_teams.update(team.casefold() for team in teams)
+        if len(selected) >= limit:
+            break
+    for row in selected:
+        row["Ventaja (edge)"] = round(row["_single_edge"], 6)
+        row["Precio de compra"] = f"{row['_single_price']:.0%}"
+        row["Probabilidad del modelo"] = f"{row['_single_p']:.1%}"
+        for key in ("_single_price", "_single_edge", "_single_p", "_single_family", "_p", "_row", "_lado"):
+            row.pop(key, None)
+    return selected
