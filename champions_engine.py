@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line
+from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line, rank_single_candidates
 from scipy.stats import nbinom, poisson
 
 
@@ -722,34 +722,24 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 "_p": probabilidad,
             })
 
-    predicciones.sort(key=lambda x: x["_p"], reverse=True)
-    candidatos_resumen = {}
-    for fila in predicciones:
-        categoria = fila["Categoría resumen"]
-        if categoria in {"Resultado", "Resultado 1.ª parte", "Resultado 2.ª parte"} and fila["Lado Kalshi"] == "NO" and "empate" in fila["Apuesta"].lower():
-            # Prefer double-chance phrasing (1X/X2) over the less readable no-draw outcome.
-            continue
-        if categoria:
-            candidatos_resumen.setdefault(categoria, []).append(fila)
-    resumen_por_categoria = {}
-    for categoria, filas in candidatos_resumen.items():
-        # Prefer useful mid-range probabilities to ultra-short lines with negligible payout.
-        rango_util = [fila for fila in filas if 0.55 <= fila["_p"] <= 0.80]
-        mejor = max(rango_util or filas, key=lambda fila: fila["_p"])
-        resumen_por_categoria[categoria] = {
-            "Tipo": categoria,
-            "Jugada sencilla": mejor["Apuesta sencilla"],
-            "Probabilidad modelo": mejor["Probabilidad del modelo"],
-            "Precio ahora": mejor["Precio de compra"],
-            "Disponibilidad": mejor["Disponibilidad"],
-            "Ticker": mejor["Ticker"],
-            "Resultado": mejor["Resultado"],
-            "Probabilidad base": mejor["_p"],
-            "Clave interna": repr((mejor["_clave"], mejor["_lado"])),
-            "_p": mejor["_p"],
-        }
-    resumen_simple = sorted(resumen_por_categoria.values(), key=lambda fila: fila["_p"], reverse=True)[:10]
-    resumen_simple = [{k: v for k, v in fila.items() if k != "_p"} for fila in resumen_simple]
+    sencillas_filtradas = rank_single_candidates(predicciones, limit=10)
+    resumen_simple = []
+    for mejor in sencillas_filtradas:
+        resumen_simple.append({
+            "Tipo": mejor.get("Categoría resumen", "Mercado"),
+            "Jugada sencilla": mejor.get("Apuesta sencilla", mejor.get("Apuesta", "")),
+            "Probabilidad modelo": mejor.get("Probabilidad del modelo", "—"),
+            "Probabilidad del modelo": mejor.get("Probabilidad del modelo", "—"),
+            "Probabilidad base": mejor.get("_single_p", mejor.get("_p", 0.0)),
+            "Precio ahora": mejor.get("Precio de compra", "—"),
+            "Disponibilidad": mejor.get("Disponibilidad", "—"),
+            "Ticker": mejor.get("Ticker", "—"),
+            "Resultado": mejor.get("Resultado", "PENDIENTE"),
+            "Ventaja (edge)": mejor.get("Ventaja (edge)"),
+            "Revisión": mejor.get("Revisión", ""),
+            "Clave interna": repr((mejor.get("_clave"), mejor.get("_lado"))),
+            "_p": mejor.get("_single_p", mejor.get("_p", 0.0)),
+        })
     todas = [{k: v for k, v in fila.items() if k != "_p"} for fila in predicciones]
     top = todas[:10]
     oportunidades_margen.sort(key=lambda x: (x["_roi"], x["_ev"]), reverse=True)
@@ -1043,6 +1033,9 @@ def resumen_guardado(match_id, predicciones, resultados):
                 "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
             }.get(estados.get(fila["prediction_id"]), "Pendiente de resultado"),
             "Precio ahora": fila.get("precio", "—"),
+            "Precio de compra": fila.get("precio", "—"),
+            "Ventaja (edge)": fila.get("edge", ""),
+            "Probabilidad base": p,
             "Disponibilidad": fila.get("disponibilidad", "—"),
             "Ticker": fila.get("ticker", "—"),
             "capturado_en": capturado,
