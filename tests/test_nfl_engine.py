@@ -50,6 +50,7 @@ def test_market_semantics_are_conservative():
     p, reason = nfl.model_market(unknown, "KXNFLPLAYERPASSYDS", game, pred)
     assert p is None
     assert "prop de jugador" in reason
+    assert nfl._market_type({"title": "Touchdown prop"}, "KXNFLTDPROT") == "unsupported_player_prop"
 
 
 def test_nfl_integer_margin_key_numbers_do_not_break_normalization():
