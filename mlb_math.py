@@ -51,3 +51,31 @@ def score_probability_matrix(axis, mu_home, mu_away):
     if not np.all(np.isfinite(matrix)):
         raise ValueError("La matriz de probabilidad MLB contiene valores no finitos.")
     return matrix
+
+
+def summarize_score_probabilities(matrix, axis):
+    """Return readable game-level probabilities from a normalized score matrix.
+
+    Rows represent home runs and columns represent away runs. Win probabilities
+    are conditional on a non-tie score because MLB games continue into extras.
+    """
+    scores = np.asarray(axis, dtype=float)
+    probs = np.asarray(matrix, dtype=float)
+    if probs.shape != (len(scores), len(scores)) or not np.all(np.isfinite(probs)):
+        raise ValueError("Matriz de marcadores MLB inválida.")
+    if np.any(probs < 0) or float(probs.sum()) <= 0:
+        raise ValueError("La matriz de marcadores MLB debe tener probabilidades válidas.")
+    home_grid, away_grid = np.meshgrid(scores, scores, indexing="ij")
+    home_win = float(probs[home_grid > away_grid].sum())
+    away_win = float(probs[away_grid > home_grid].sum())
+    tie = float(probs[home_grid == away_grid].sum())
+    decisive = home_win + away_win
+    if decisive <= 0:
+        raise ValueError("La matriz no permite estimar un ganador MLB.")
+    over_8_5 = float(probs[(home_grid + away_grid) > 8.5].sum())
+    return {
+        "home_win": home_win / decisive,
+        "away_win": away_win / decisive,
+        "tie_score": tie,
+        "over_8_5": over_8_5,
+    }
