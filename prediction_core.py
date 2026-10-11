@@ -342,8 +342,14 @@ def read_csv_rows_resilient(path):
                 for line_no, raw, reason in new_bad:
                     writer.writerow({"source": path.name, "line_number": line_no,
                                      "reason": reason, "raw_line": raw})
-        print(f"CSV HISTORIAL: {path.name}: {len(bad)} fila(s) malformada(s) aislada(s); "
-              f"original intacto; copia en {quarantine.name}")
+        # After quarantining raw malformed records, rewrite only valid records with the original header.
+        # This self-repairs the CSV while preserving every malformed line verbatim in the sidecar.
+        with path.open("w", encoding="utf-8", newline="") as repaired:
+            writer = csv.writer(repaired)
+            writer.writerow(header)
+            for row in valid:
+                writer.writerow([row.get(column, "") for column in header])
+        print(f"CSV HISTORIAL REPARADO: {path.name}: {len(bad)} fila(s) preservada(s) en {quarantine.name}; {len(valid)} filas válidas conservadas.")
     return valid
 
 
