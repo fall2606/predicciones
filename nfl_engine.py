@@ -337,6 +337,8 @@ def _line_from_market(market):
     patterns = [
         r"(?i)\b(?:over|under|at least|at most|more than|less than)\s*\$?(-?\d+(?:\.\d+)?)",
         r"(?i)(-?\d+(?:\.\d+)?)\s*(?:\+ points|or more|or higher|points or more)",
+        r"(?i)(?:win by|wins by|by|spread)\s*(-?\d+(?:\.\d+)?)\s*\+?",
+        r"(?i)(-?\d+(?:\.\d+)?)\s*\+",
         r"(?<![A-Za-z])(-?\d+\.\d+)(?![A-Za-z])",
     ]
     for pattern in patterns:
@@ -371,9 +373,9 @@ def _market_yes_team(market, home, away):
 def _yes_outcome(market, kind):
     text = normalizar(" ".join(str(market.get(k) or "") for k in ("yes_sub_title", "title", "subtitle")))
     if kind in {"total", "team_total"}:
-        if re.search(r"\\bunder\\b|\\bless than\\b|\\bmenos de\\b", text):
+        if re.search(r"\bunder\b|\bless than\b|\bmenos de\b", text):
             return "under"
-        if re.search(r"\\bover\\b|\\bmore than\\b|\\bat least\\b|\\bor more\\b|\\+\\s*$", text):
+        if re.search(r"\bover\b|\bmore than\b|\bat least\b|\bor more\b|\+\s*$", text):
             return "over"
     return kind
 
@@ -432,17 +434,26 @@ def model_market(market, series_ticker, game, prediction):
         p = prediction["home_win"] if team == game["home"] else prediction["away_win"]
         return valid_probability(p), "Elo NFL + puntos recientes; temporada regular/prórroga pendiente de regla Kalshi"
     if kind == "spread":
-        team = _yes_team(market, game["home"], game["away"])
+        team = _market_yes_team(market, game["home"], game["away"])
         if not team or line is None:
             return None, "hándicap sin equipo SÍ y línea exacta verificables"
+        text = normalizar(title)
         values, probs = prediction["margin_values"], prediction["margin_probs"]
-        # Kalshi lines are interpreted literally; integer 'N+' means margin >= N.
-        if "+" in title or re.search(r"\b(?:at least|or more)\b", normalizar(title)):
-            threshold = math.ceil(line)
-            p = probs[values >= threshold].sum() if team == game["home"] else probs[values <= -threshold].sum()
+        if re.search(r"\b(?:win by|wins by|ganar por|ganan por|at least|or more)\b", text) or "+" in title:
+            threshold = abs(float(line))
+            p = probs[values >= math.ceil(threshold)].sum() if team == game["home"] else probs[values <= -math.ceil(threshold)].sum()
+        elif "cover" in text or "spread" in text or re.search(r"(?<!\w)[+-]\d+(?:\.\d+)?", title):
+            # A negative line is a favorite laying points; a positive line is an underdog receiving points.
+            signed_line = float(line)
+            threshold = abs(signed_line)
+            if signed_line < 0:
+                p = probs[values > threshold].sum() if team == game["home"] else probs[values < -threshold].sum()
+            else:
+                p = probs[values > -threshold].sum() if team == game["home"] else probs[values < threshold].sum()
         else:
-            p = probs[values > line].sum() if team == game["home"] else probs[values < -line].sum()
-        return valid_probability(float(p)), "Distribución discreta de margen NFL; prórroga según reglas del contrato"
+            return None, "semántica del hándicap ambigua; no se genera"
+        return valid_probability(float(p)), "Distribución discreta del margen NFL; línea interpretada literalmente; prórroga según reglas Kalshi"
+
     if kind == "total":
         if line is None:
             return None, "total sin umbral explícito en título/subtítulo de Kalshi"
@@ -504,7 +515,7 @@ def load_upcoming_games(days=21, now=None):
             if kickoff and "home" in teams and "away" in teams:
                 games.append({
                     "home": teams["home"], "away": teams["away"], "date": kickoff.isoformat(),
-                    "match_id": f"NFL:{kickoff.date().isoformat()}:{teams['away']}@{teams['home']}",
+                    "match_id": f"NFL:{kickoff.astimezone(TZ_ET).date().isoformat()}:{teams['away']}@{teams['home']}",
                     "status": (event.get("status") or {}).get("type", {}).get("name", ""),
                     "espn_id": str(event.get("id") or ""),
                 })
@@ -534,7 +545,7 @@ def _match_catalog_event(event, event_teams, upcoming_games, event_kickoff):
 
 
 def _match_id(kickoff, home, away):
-    return f"NFL:{kickoff.date().isoformat()}:{away}@{home}"
+    return f"NFL:{kickoff.astimezone(TZ_ET).date().isoformat()}:{away}@{home}"
 
 
 def _edge_number(candidate):
