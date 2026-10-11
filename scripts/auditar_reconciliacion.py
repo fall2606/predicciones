@@ -64,7 +64,10 @@ def finished_ids(kind, competition):
         games = [g for day in response.json().get("dates", []) for g in day.get("games", [])]
         return {str(g["gamePk"]) for g in games
                 if g.get("gamePk") is not None
-                and str(g.get("status", {}).get("abstractGameState", "")).casefold() == "final"}
+                and (
+                    str(g.get("status", {}).get("abstractGameState", "")).casefold() == "final"
+                    or str(g.get("status", {}).get("detailedState", "")).casefold() in {"postponed", "cancelled", "canceled"}
+                )}
     token = os.getenv("CLAVE")
     if not token:
         raise RuntimeError("falta secreto CLAVE; no se puede comprobar calendario oficial")
