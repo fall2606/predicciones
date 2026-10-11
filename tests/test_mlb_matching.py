@@ -6,6 +6,27 @@ import mlb_engine
 
 
 class MLBMarketMatchingTests(unittest.TestCase):
+    def test_extreme_finite_api_run_rate_cannot_create_nan_probability_matrix(self):
+        game = {
+            "gamePk": 123,
+            "gameDate": "2026-10-12T20:00:00Z",
+            "status": {"abstractGameState": "Preview"},
+            "teams": {
+                "home": {"team": {"id": 1, "name": "Home"}},
+                "away": {"team": {"id": 2, "name": "Away"}},
+            },
+        }
+        # Finite but absurd API rates make the old 0..25 truncated PMFs underflow to sum=0.
+        stats = {
+            1: {"name": "Home", "rpg": 1_000_000.0, "games": 100.0},
+            2: {"name": "Away", "rpg": 1_000_000.0, "games": 100.0},
+        }
+        modeled = mlb_engine.modelo_partido(game, stats)
+        self.assertIsNotNone(modeled)
+        self.assertTrue(np.all(np.isfinite(modeled["matrix"])))
+        self.assertAlmostEqual(float(modeled["matrix"].sum()), 1.0, places=10)
+
+
     def test_abbreviated_kalshi_event_matches_full_statsapi_team_names(self):
         event = {
             "event_ticker": "KXMLBGAME-26OCT112000LADMIL",
