@@ -20,7 +20,7 @@ from scipy.stats import norm
 
 from prediction_core import (
     KALSHI_API_BASE, append_immutable_predictions, valid_probability,
-    sports_series, events_for_series, rank_market_candidates,
+    sports_series, iter_kalshi_pages, events_for_series, rank_market_candidates,
     rank_single_candidates, single_candidate_rejection_reasons,
 )
 
@@ -96,19 +96,35 @@ def _get(url, params=None):
 
 
 def discover_nfl_series():
-    """Discover NFL series from Kalshi's live Sports series list; no ticker is assumed."""
-    rows = sports_series()
+    """Discover game-related NFL series from Kalshi's public API, not assumed ticker lists."""
+    try:
+        # Kalshi's public API supports tags=Football; use it to avoid paging through every sport.
+        rows = iter_kalshi_pages(
+            "series", {"limit": 200, "category": "Sports", "tags": "Football"},
+            "series", 10,
+        )
+    except (requests.RequestException, ValueError, KeyError):
+        rows = sports_series()
     found = []
+    include_terms = (
+        "GAME", "SPREAD", "TOTAL", "TEAMTOTAL", "PLAYER", "PASSYDS", "RUSHYDS",
+        "RECYDS", "RECEPTIONS", "TOUCHDOWN", "1H", "2H", "1Q", "2Q", "3Q", "4Q",
+        "HALF", "QUARTER",
+    )
+    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT")
     for item in rows:
         ticker = str(item.get("ticker") or "").upper()
         title = normalizar(item.get("title") or item.get("name") or "")
-        # Exclude college football and other football competitions.
         is_nfl = ("NFL" in ticker or "NATIONAL FOOTBALL LEAGUE" in title or
                   ("PRO FOOTBALL" in title and "COLLEGE" not in title))
-        if is_nfl and not any(x in ticker for x in ("CFB", "NCAA", "COLLEGE")):
+        game_related = any(token in ticker or token.casefold() in title for token in include_terms)
+        if (is_nfl and game_related
+                and not any(x in ticker for x in ("CFB", "NCAA", "COLLEGE"))
+                and not any(x in ticker for x in exclude_terms)):
             found.append(item)
-    return found
-
+    # Stable unique list avoids duplicate API requests if the series endpoint repeats a row.
+    unique = {str(row.get("ticker") or ""): row for row in found if row.get("ticker")}
+    return list(unique.values())
 
 def load_kalshi_catalog():
     series = discover_nfl_series()
