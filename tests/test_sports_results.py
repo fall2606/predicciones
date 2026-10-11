@@ -8,8 +8,8 @@ def row(series, outcome, line, side):
     return {"clave_interna": repr(((series, outcome, line, None), side))}
 
 
-def match(home=2, away=1, detail="Final", half_home=1, half_away=0):
-    return {
+def match(home=2, away=1, detail="Final", half_home=1, half_away=0, **extra):
+    result = {
         "status": "STATUS_FINAL",
         "completed": True,
         "status_detail": detail,
@@ -18,6 +18,8 @@ def match(home=2, away=1, detail="Final", half_home=1, half_away=0):
         "half_local_score": half_home,
         "half_away_score": half_away,
     }
+    result.update(extra)
+    return result
 
 
 class ScoreSettlementTests(unittest.TestCase):
@@ -71,10 +73,47 @@ class ScoreSettlementTests(unittest.TestCase):
         result = sports_results.settle_from_score(row("KXLALIGA1HTOTAL", "over", 0.5, "YES"))
         self.assertIsNone(result)
 
+    @patch("sports_results.find_match", return_value=match(0, 0, half_home=0, half_away=0))
+    def test_first_team_to_score_no_when_match_finishes_scoreless(self, _):
+        result = sports_results.settle_from_score(row("KXLALIGAFTTS", "local", None, "NO"))
+        self.assertEqual(result["state"], "WIN")
+
+    @patch("sports_results._espn_summary", return_value={
+        "scoringPlays": [{"team": {"displayName": "Celta"}}]
+    })
+    @patch("sports_results.find_match", return_value=match(1, 0, event_id="evt2", league="esp.1"))
+    def test_first_team_to_score_uses_ordered_espn_scoring_plays(self, _find, _summary):
+        captured = row("KXLALIGAFTTS", "visita", None, "YES")
+        captured.update({"local": "Elche", "visita": "Celta"})
+        result = sports_results.settle_from_score(captured)
+        self.assertEqual(result["state"], "WIN")
+
     @patch("sports_results.find_match", return_value=match(2, 1))
-    def test_unsupported_corners_fall_back(self, _):
+    def test_unsupported_corners_fall_back_when_summary_unavailable(self, _):
         result = sports_results.settle_from_score(row("KXLALIGACORNERS", "over", 8.5, "YES"))
         self.assertIsNone(result)
+
+    @patch("sports_results.find_match", return_value=match(0, 0, half_home=0, half_away=0))
+    def test_spread_from_explicit_saved_description(self, _):
+        captured = row("KXLALIGA1HSPREAD", "local", 1.0, "NO")
+        captured.update({"jugada": "Celta no pierde por más de 1 gol (1.ª parte)", "local": "Elche", "visita": "Celta"})
+        result = sports_results.settle_from_score(captured)
+        self.assertEqual(result["state"], "LOSS")
+        self.assertIn("1.ª parte", result["reason"])
+
+    @patch("sports_results._espn_summary", return_value={
+        "boxscore": {"teams": [
+            {"team": {"displayName": "Elche"}, "statistics": [{"name": "wonCorners", "displayValue": "5"}]},
+            {"team": {"displayName": "Celta"}, "statistics": [{"name": "wonCorners", "displayValue": "2"}]},
+        ]}
+    })
+    @patch("sports_results.find_match", return_value=match(0, 0, half_home=0, half_away=0, event_id="evt1", league="esp.1"))
+    def test_total_corners_from_matched_espn_boxscore(self, _find, _summary):
+        captured = row("KXLALIGACORNERS", "over", 7.0, "YES")
+        captured.update({"local": "Elche", "visita": "Celta"})
+        result = sports_results.settle_from_score(captured)
+        self.assertEqual(result["state"], "WIN")
+        self.assertIn("5-2", result["reason"])
 
     @patch("sports_results.find_match", return_value=match(2, 1, "Final/Extra Time"))
     def test_extra_time_defers_to_kalshi(self, _):
