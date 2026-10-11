@@ -10,7 +10,7 @@ import streamlit as st
 from scipy.stats import nbinom, poisson
 from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
 from prediction_core import rank_single_candidates, single_candidate_rejection_reasons
-from reconciliacion_ui import mostrar_reconciliacion
+from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
 
 
 API = "https://statsapi.mlb.com/api/v1"
@@ -194,7 +194,7 @@ def get_json(path, params):
     return response.json()
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_stats(season):
     # El endpoint oficial devuelve estadísticas de bateo por equipo.
     data = get_json(
@@ -219,7 +219,7 @@ def cargar_stats(season):
     return equipos
 
 
-@st.cache_data(ttl=900, show_spinner=False)
+@st.cache_data(ttl=180, show_spinner=False)
 def cargar_partidos_recientes(inicio, fin):
     return cargar_calendario(inicio, fin)
 
