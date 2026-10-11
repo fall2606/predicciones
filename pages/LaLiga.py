@@ -274,6 +274,13 @@ if resumen_sencillo_kalshi:
             st.caption(f"Ticker: {jugada.get('Ticker', '—')}")
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
+        if not historial_partido.empty and partido_cerrado:
+            if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"}:
+                historial_partido["Resultado"] = "ANULADA"
+            else:
+                _estado_historial = historial_partido["Resultado"].astype(str).str.upper()
+                _terminal_historial = _estado_historial.str.contains("WIN|LOSS|ANULADA", regex=True)
+                historial_partido.loc[~_terminal_historial, "Resultado"] = "SIN LIQUIDAR"
         with st.expander(f"Comparar todas las capturas guardadas ({len(historial_partido)})"):
             st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
 else:
