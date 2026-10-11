@@ -7,7 +7,7 @@ import pandas as pd
 import requests
 import streamlit as st
 from scipy.stats import nbinom, poisson
-from mlb_math import pitcher_stats_from_api, score_probability_matrix
+from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
 
 
 API = "https://statsapi.mlb.com/api/v1"
@@ -457,6 +457,55 @@ st.caption(
     f"promedio {promedio:.2f} carreras/equipo · últimos 10 juegos disponibles · "
     "datos actualizados cada 15 minutos."
 )
+
+# Resumen sencillo, similar a la página de fútbol: una fila por partido.
+# Estas probabilidades usan temporada + forma reciente; el detalle del partido
+# incorpora el abridor probable cuando sus estadísticas están disponibles.
+resumen_partidos = []
+for juego_resumen in partidos:
+    estado_resumen = juego_resumen.get("status", {}).get("abstractGameState", "Preview")
+    if estado_resumen == "Final":
+        continue
+    teams_resumen = juego_resumen.get("teams", {})
+    home_resumen = teams_resumen.get("home", {}).get("team", {})
+    away_resumen = teams_resumen.get("away", {}).get("team", {})
+    if not home_resumen.get("id") or not away_resumen.get("id"):
+        continue
+    id_home = int(home_resumen["id"])
+    id_away = int(away_resumen["id"])
+    fecha_resumen = juego_resumen.get("gameDate", "9999")
+    forma_resumen = construir_forma(juegos_forma, fecha_resumen)
+    media_home, media_away = estimar_carreras(
+        id_home, id_away, stats, forma_resumen, promedio, era_liga
+    )
+    matriz_resumen = score_probability_matrix(eje, media_home, media_away)
+    probabilidades = summarize_score_probabilities(matriz_resumen, eje)
+    home_name = home_resumen.get("name", "Local")
+    away_name = away_resumen.get("name", "Visita")
+    p_home = probabilidades["home_win"]
+    p_away = probabilidades["away_win"]
+    favorito = home_name if p_home >= p_away else away_name
+    p_favorito = max(p_home, p_away)
+    resumen_partidos.append({
+        "Fecha (UTC)": fecha_resumen[:16].replace("T", " "),
+        "Partido": f"{away_name} @ {home_name}",
+        "Marcador estimado (local-visita)": f"{media_home:.1f} - {media_away:.1f}",
+        "Favorito": favorito,
+        "Prob. de victoria": f"{p_favorito:.0%}",
+        "Más de 8.5 carreras": f"{probabilidades['over_8_5']:.0%}",
+    })
+
+st.subheader("Predicciones rápidas de todos los partidos")
+st.caption(
+    "Empieza por el favorito y la probabilidad de victoria. El marcador es una estimación, "
+    "y el total indica la probabilidad de que ambos equipos sumen 9 carreras o más. "
+    "La probabilidad de victoria se calcula entre los resultados sin empate; en MLB se juegan entradas extra si hace falta."
+)
+if resumen_partidos:
+    st.dataframe(pd.DataFrame(resumen_partidos), use_container_width=True, hide_index=True)
+else:
+    st.info("No hay partidos pendientes o en juego para resumir en este rango de fechas.")
+st.divider()
 
 partidos = sorted(partidos, key=lambda p: p.get("gameDate", ""))
 opciones = {}
