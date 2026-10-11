@@ -24,10 +24,10 @@ def _tabla_con_resultado(df, columna="Resultado"):
         return df
     def _color(valor):
         texto = str(valor or "").strip().upper()
-        if texto == "WIN" or "SE CUMPLIÓ" in texto:
-            return "background-color: #d4edda; color: #155724; font-weight: bold"
         if texto == "LOSS" or "NO SE CUMPLIÓ" in texto:
             return "background-color: #f8d7da; color: #721c24; font-weight: bold"
+        if texto == "WIN" or "SE CUMPLIÓ" in texto:
+            return "background-color: #d4edda; color: #155724; font-weight: bold"
         if "ANULADA" in texto or "VOID" in texto:
             return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
         if "PENDIENTE" in texto or "NO EVALUABLE" in texto:
