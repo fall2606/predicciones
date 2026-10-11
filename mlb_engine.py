@@ -20,6 +20,24 @@ RESULT_FILE = ROOT / "resultados_mlb.csv"
 TZ = "America/Chicago"
 TIMEOUT = 15
 
+MLB_TEAM_CODES = {
+    "arizona diamondbacks": "ARI", "atlanta braves": "ATL", "baltimore orioles": "BAL",
+    "boston red sox": "BOS", "chicago cubs": "CHC", "chicago white sox": "CWS",
+    "cincinnati reds": "CIN", "cleveland guardians": "CLE", "colorado rockies": "COL",
+    "detroit tigers": "DET", "houston astros": "HOU", "kansas city royals": "KC",
+    "los angeles angels": "LAA", "los angeles dodgers": "LAD", "miami marlins": "MIA",
+    "milwaukee brewers": "MIL", "minnesota twins": "MIN", "new york mets": "NYM",
+    "new york yankees": "NYY", "athletics": "ATH", "oakland athletics": "ATH",
+    "philadelphia phillies": "PHI", "pittsburgh pirates": "PIT", "san diego padres": "SD",
+    "san francisco giants": "SF", "seattle mariners": "SEA", "st louis cardinals": "STL",
+    "tampa bay rays": "TB", "texas rangers": "TEX", "toronto blue jays": "TOR",
+    "washington nationals": "WSH",
+}
+
+
+def codigo_equipo_mlb(nombre):
+    return MLB_TEAM_CODES.get(normalizar(nombre), "")
+
 PRED_COLUMNS = [
     "prediction_id", "event_ticker", "ticker", "match_id", "fecha", "local", "visita",
     "categoria", "mercado", "line", "lado", "seleccion", "bloque", "probabilidad_modelo", "precio_captura",
@@ -181,6 +199,10 @@ def mercado_probabilidad(market, game):
     home, away = normalizar(h) in text, normalizar(a) in text
     ticker = str(market.get("ticker", ""))
     category = clasificar(market.get("series_ticker", ""), market)
+    home_code, away_code = codigo_equipo_mlb(h), codigo_equipo_mlb(a)
+    contract_code = ticker.rsplit("-", 1)[-1].upper()
+    if category in {"Ganador (moneyline)", "Total por equipo"} and contract_code in {home_code, away_code}:
+        home, away = contract_code == home_code, contract_code == away_code
 
     # Prefer the readable contract line; tickers are only a fallback.
     runs = re.search(r"(?:over|under|more than|less than)\\s*\\$?([0-9]+(?:\\.[0-9]+)?)", text)
@@ -216,10 +238,11 @@ def mercado_probabilidad(market, game):
             category = "Total de carreras"
 
     if category == "Ganador (moneyline)":
+        tie_probability = float(np.trace(mat))
         if home:
-            p_yes = float(mat[np.tril_indices_from(mat, -1)].sum())
+            p_yes = float(mat[np.tril_indices_from(mat, -1)].sum() + 0.5 * tie_probability)
         elif away:
-            p_yes = float(mat[np.triu_indices_from(mat, 1)].sum())
+            p_yes = float(mat[np.triu_indices_from(mat, 1)].sum() + 0.5 * tie_probability)
     elif category == "Total de carreras" and line is not None:
         total = axis[:, None] + axis[None, :]
         if "under" in text or "less than" in text:
@@ -278,13 +301,19 @@ def eventos_mlb(series=None):
 
 def encontrar_partido(event, games):
     title = normalizar(event.get("title") or event.get("sub_title") or "")
+    event_ticker = str(event.get("event_ticker") or "").upper()
     event_date = str(event.get("strike_date") or event.get("expected_expiration_time") or event.get("start_time") or "")[:10]
     ranked = []
     for g in games:
         def aparece(nombre):
-            nombre = normalizar(nombre)
-            ultima = nombre.split()[-1] if nombre else ""
-            return bool(nombre and nombre in title) or bool(len(ultima) >= 4 and re.search(r"\b" + re.escape(ultima) + r"\b", title))
+            normalized = normalizar(nombre)
+            code = codigo_equipo_mlb(nombre)
+            if code and code in event_ticker:
+                return True
+            tokens = normalized.split()
+            phrases = [normalized, " ".join(tokens[:2]) if len(tokens) >= 2 else "", tokens[0] if tokens else ""]
+            ultima = tokens[-1] if tokens else ""
+            return any(phrase and len(phrase) >= 4 and phrase in title for phrase in phrases) or bool(len(ultima) >= 4 and re.search(r"\b" + re.escape(ultima) + r"\b", title))
         score = int(aparece(g["home"])) + int(aparece(g["away"]))
         if score == 2:
             try:
