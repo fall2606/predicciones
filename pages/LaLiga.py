@@ -248,6 +248,17 @@ if resumen_sencillo_kalshi:
             except (TypeError, ValueError):
                 edge_txt = "No disponible"
             st.write(f"Ventaja: **{edge_txt}**")
+            mercado_texto = str(jugada.get("Jugada sencilla") or jugada.get("Apuesta") or jugada.get("Tipo") or "")
+            fundamento = (f"El modelo proyecta {local} {gl:.2f} goles y {visita} {gv:.2f}. "
+                          "Esta proyección es el punto de partida; por sí sola no justifica una apuesta si el mercado y la línea no encajan.")
+            try:
+                linea_contexto = float(jugada.get("line"))
+                if any(token in mercado_texto.casefold() for token in ("más de", "over", "total goles")):
+                    total_esperado = gl + gv
+                    fundamento += f" Total esperado: {total_esperado:.2f} frente a la línea {linea_contexto:g}."
+            except (TypeError, ValueError):
+                fundamento += " No hay una línea numérica legible en la tarjeta para contrastar el umbral."
+            st.caption("Fundamento del modelo: " + fundamento)
             if jugada.get("Revisión") == "REVISAR":
                 st.warning("REVISAR · ventaja superior a 20 puntos; comprobar precio y modelo.")
             resultado_tarjeta = str(jugada.get("Resultado", "PENDIENTE")).upper()
