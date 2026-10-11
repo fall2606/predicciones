@@ -299,32 +299,99 @@ def eventos_mlb(series=None):
     return events_for_series(series if series is not None else series_mlb(), statuses=("open",))
 
 
+MLB_TEAM_ALIASES = {
+    "ARI": ("arizona diamondbacks", "diamondbacks", "d backs", "dbacks", "ari"),
+    "ATL": ("atlanta braves", "braves", "atl"),
+    "BAL": ("baltimore orioles", "orioles", "bal"),
+    "BOS": ("boston red sox", "red sox", "bos"),
+    "CHC": ("chicago cubs", "cubs", "chc"),
+    "CWS": ("chicago white sox", "white sox", "cws", "chw"),
+    "CIN": ("cincinnati reds", "reds", "cin"),
+    "CLE": ("cleveland guardians", "guardians", "cle"),
+    "COL": ("colorado rockies", "rockies", "col"),
+    "DET": ("detroit tigers", "tigers", "det"),
+    "HOU": ("houston astros", "astros", "hou"),
+    "KC": ("kansas city royals", "royals", "kc", "kcr"),
+    "LAA": ("los angeles angels", "la angels", "angels", "laa"),
+    "LAD": ("los angeles dodgers", "los angeles d", "la dodgers", "dodgers", "lad"),
+    "MIA": ("miami marlins", "marlins", "mia"),
+    "MIL": ("milwaukee brewers", "milwaukee", "brewers", "mil"),
+    "MIN": ("minnesota twins", "twins", "min"),
+    "NYM": ("new york mets", "ny mets", "mets", "nym"),
+    "NYY": ("new york yankees", "ny yankees", "yankees", "nyy"),
+    "ATH": ("athletics", "oakland athletics", "sacramento athletics", "ath"),
+    "PHI": ("philadelphia phillies", "phillies", "phi"),
+    "PIT": ("pittsburgh pirates", "pirates", "pit"),
+    "SD": ("san diego padres", "sd padres", "padres", "sd"),
+    "SF": ("san francisco giants", "sf giants", "giants", "sf"),
+    "SEA": ("seattle mariners", "mariners", "sea"),
+    "STL": ("st louis cardinals", "st louis", "cardinals", "stl"),
+    "TB": ("tampa bay rays", "tampa bay", "rays", "tb"),
+    "TEX": ("texas rangers", "rangers", "tex"),
+    "TOR": ("toronto blue jays", "blue jays", "tor"),
+    "WSH": ("washington nationals", "nationals", "nats", "wsh", "was"),
+}
+
+
+def _team_matches_event(name, event_ticker, title):
+    code = codigo_equipo_mlb(name)
+    # Team codes are embedded in compact Kalshi event tickers such as LADMIL.
+    if code and code in event_ticker:
+        return True
+    aliases = MLB_TEAM_ALIASES.get(code, (normalizar(name),))
+    for alias in aliases:
+        alias = normalizar(alias)
+        if not alias:
+            continue
+        if len(alias) <= 3:
+            if re.search(r"\\b" + re.escape(alias) + r"\\b", title):
+                return True
+        elif alias in title:
+            return True
+    return False
+
+
+def motivo_evento_sin_partido(event, games):
+    title = normalizar(event.get("title") or event.get("sub_title") or "")
+    ticker = str(event.get("event_ticker") or "").upper()
+    series = normalizar(event.get("series_ticker") or "")
+    if any(token in series or token in title for token in
+           ("player", "strikeout", "homerun", "home run", "total bases", "pitcher", "mvp", "award", "division", "series winner", "champion")):
+        return "mercado_no_partido/prop"
+    matched = sum(
+        any(_team_matches_event(team, ticker, title) for team in (game["home"], game["away"]))
+        for game in games
+    )
+    if matched:
+        return "equipo_identificado_sin_emparejamiento_unico_o_fecha"
+    if any(token in series or token in title for token in ("game", "moneyline", "spread", "runline", "total")):
+        return "aparenta_mercado_de_partido_pero_no_hay_alias_suficiente"
+    return "evento_no_identificado/otro"
+
+
 def encontrar_partido(event, games):
     title = normalizar(event.get("title") or event.get("sub_title") or "")
     event_ticker = str(event.get("event_ticker") or "").upper()
     event_date = str(event.get("strike_date") or event.get("expected_expiration_time") or event.get("start_time") or "")[:10]
     ranked = []
-    for g in games:
-        def aparece(nombre):
-            normalized = normalizar(nombre)
-            code = codigo_equipo_mlb(nombre)
-            if code and code in event_ticker:
-                return True
-            tokens = normalized.split()
-            phrases = [normalized, " ".join(tokens[:2]) if len(tokens) >= 2 else "", tokens[0] if tokens else ""]
-            ultima = tokens[-1] if tokens else ""
-            return any(phrase and len(phrase) >= 4 and phrase in title for phrase in phrases) or bool(len(ultima) >= 4 and re.search(r"\b" + re.escape(ultima) + r"\b", title))
-        score = int(aparece(g["home"])) + int(aparece(g["away"]))
-        if score == 2:
-            try:
-                delta = abs((datetime.fromisoformat(g["date"].replace("Z", "+00:00")).date()
-                             - datetime.fromisoformat(event_date).date()).days) if event_date else 0
-            except ValueError:
-                delta = 0
-            ranked.append((delta, g))
-    ranked.sort(key=lambda x: x[0])
-    return ranked[0][1] if ranked else None
-
+    for game in games:
+        score = int(_team_matches_event(game["home"], event_ticker, title)) + int(_team_matches_event(game["away"], event_ticker, title))
+        if score != 2:
+            continue
+        try:
+            delta = abs((datetime.fromisoformat(game["date"].replace("Z", "+00:00")).date()
+                         - datetime.fromisoformat(event_date).date()).days) if event_date else 0
+        except ValueError:
+            delta = 0
+        if event_date and delta > 1:
+            continue
+        ranked.append((delta, game))
+    ranked.sort(key=lambda item: item[0])
+    if not ranked:
+        return None
+    if len(ranked) > 1 and ranked[0][0] == ranked[1][0] and ranked[0][1]["id"] != ranked[1][1]["id"]:
+        return None
+    return ranked[0][1]
 
 def mercados_liquidados(series):
     """Consulta por serie para reducir llamadas y respetar los límites de Kalshi."""
@@ -364,6 +431,8 @@ def main():
     by_match = {}
     event_count = 0
     unmatched_event_count = 0
+    unmatched_reasons = {}
+    per_match_valid_contracts = {}
     unsupported_market_count = 0
     modelable_market_count = 0
 
@@ -381,6 +450,8 @@ def main():
         game = encontrar_partido(event, games)
         if not game:
             unmatched_event_count += 1
+            reason = motivo_evento_sin_partido(event, games)
+            unmatched_reasons[reason] = unmatched_reasons.get(reason, 0) + 1
             continue
         if game.get("status") != "Preview":
             continue
@@ -398,6 +469,7 @@ def main():
                 unsupported_market_count += 1
                 continue
             modelable_market_count += 1
+            per_match_valid_contracts[str(game.get("id", ""))] = per_match_valid_contracts.get(str(game.get("id", "")), 0) + 1
             yes_price = _price(market, "yes_ask_dollars")
             no_price = _price(market, "no_ask_dollars")
             kickoff = game.get("date") or event.get("start_time") or event.get("expected_expiration_time") or ""
@@ -500,6 +572,16 @@ def main():
         PRED_FILE, PRED_COLUMNS, new_rows, probability_field="probabilidad_modelo"
     )
     print("Eventos MLB emparejados: {} | eventos sin partido StatsAPI coincidente: {} | contratos sin modelo específico/datos finitos: {} | contratos modelables: {} | capturas aceptadas: {} | descartadas: {}. Los resultados solo los escribe liquidar_mlb.py.".format(event_count, unmatched_event_count, unsupported_market_count, modelable_market_count, capture_summary["accepted"], capture_summary["rejected"]))
+    print("CLASIFICACIÓN DE EVENTOS MLB SIN PARTIDO: " + repr(unmatched_reasons))
+    for match_id, rows in sorted(by_match.items()):
+        counts = {name: 0 for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")}
+        for row in existing + new_rows:
+            if str(row.get("match_id", "")) == match_id and str(row.get("bloque", "")) in counts:
+                counts[str(row["bloque"])] += 1
+        print("COBERTURA MLB · match_id={} · {} vs {} · contratos_modelables={} · capturas_guardadas_por_bloque={}".format(
+            match_id, rows[0].get("local", ""), rows[0].get("visita", ""),
+            per_match_valid_contracts.get(match_id, 0), counts
+        ))
 
 
 def _price(market, *keys):
