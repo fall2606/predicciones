@@ -75,7 +75,10 @@ try:
     final_game_ids = {
         str(g.get("gamePk")) for g in schedule_games
         if g.get("gamePk") is not None
-        and str(g.get("status", {}).get("abstractGameState", "")).casefold() == "final"
+        and (
+            str(g.get("status", {}).get("abstractGameState", "")).casefold() == "final"
+            or str(g.get("status", {}).get("detailedState", "")).casefold() in {"postponed", "cancelled", "canceled"}
+        )
     }
     if not historial_mlb.empty and "match_id" in historial_mlb.columns:
         settled_states = {"WIN", "LOSS", "ANULADA"}
@@ -743,7 +746,8 @@ for juego in [juego]:
                     st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados.")
                 return
             game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
-            unresolved_label = "ANULADA" if game_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
+            detailed_state = str(juego.get("detailed_status", "")).casefold()
+            unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
             bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", unresolved_label).fillna(unresolved_label)
             bloque.loc[bloque["Resultado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
             if codigo == "SENCILLAS":
@@ -851,7 +855,8 @@ for juego in [juego]:
         with st.expander("Historial y contratos Kalshi de este partido", expanded=False):
             if not historial_partido.empty:
                 game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
-                unresolved_label = "ANULADA" if game_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
+                detailed_state = str(juego.get("detailed_status", "")).casefold()
+                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
                 if "estado" not in historial_partido.columns:
                     historial_partido["estado"] = unresolved_label
                 historial_partido["estado"] = historial_partido["estado"].replace("", unresolved_label).fillna(unresolved_label)
