@@ -3,11 +3,17 @@ import csv
 import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import sys
 
 import requests
-from prediction_core import _side_from_row
 
 ROOT = Path(__file__).resolve().parent.parent
+# When launched as `python scripts/auditar_reconciliacion.py`, Python puts
+# scripts/ rather than the repository root at sys.path[0]. Keep CLI and import
+# execution consistent so shared core imports work in GitHub Actions.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from prediction_core import _side_from_row
 SPORTS = {
     "LaLiga": ("predicciones_laliga.csv", "resultados_laliga.csv", "football", "PD"),
     "Champions": ("predicciones_champions.csv", "resultados_champions.csv", "football", "CL"),
