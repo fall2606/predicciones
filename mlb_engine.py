@@ -742,8 +742,8 @@ def main():
                 block = next((name for name in counts if category_name.startswith(name + " · ")), "")
             if block in counts:
                 counts[block] += 1
-        if match_id not in by_match:
-            reason = "sin evento Kalshi emparejado o sin contrato con probabilidad modelable"
+        if not any(counts.values()) and match_id not in by_match:
+            reason = "sin evento Kalshi emparejado en esta ejecución; no hay capturas guardadas para este partido"
         elif not any(counts.values()):
             reason = "todos los candidatos descartados por precio, edge, umbral, diversificación o falta de precio"
         else:
