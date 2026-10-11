@@ -188,3 +188,16 @@ def test_calibration_requires_minimum_sample_and_preserves_probability_bounds():
     assert 0 <= calibrated <= 1
     assert version == "platt_winner_n150"
     assert status == "aplicada"
+
+
+
+def test_csv_reader_quarantines_bad_rows_and_migrates_missing_schema(tmp_path):
+    path = tmp_path / "predicciones_nfl.csv"
+    path.write_text("prediction_id,ticker\n1,KXNFLGAME-TEST\n2,KXNFLGAME-TEST,EXTRA\n", encoding="utf-8")
+    rows = nfl.read_csv_tolerant(path, expected_columns=["prediction_id", "ticker", "schema_version"])
+    assert len(rows) == 1
+    assert rows[0]["schema_version"] == "0"
+    quarantine = tmp_path / "predicciones_nfl_filas_malas.csv"
+    assert quarantine.exists()
+    bad = pd.read_csv(quarantine, dtype=str)
+    assert "columnas" in bad.loc[0, "motivo"]
