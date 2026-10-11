@@ -168,6 +168,25 @@ class NFLModelTests(unittest.TestCase):
         self.assertTrue(all(row["precio_captura"] is not None for row in candidates))
 
 
+
+    def test_build_candidates_rejects_period_contract_even_if_grouped_under_game_event(self):
+        kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
+        event = {
+            "event_ticker": "KXNFLGAME-26OCT13BUFMIA",
+            "title": "BUF Bills vs MIA Dolphins: Game Winner",
+            "start_time": kickoff,
+            "markets": [{
+                "ticker": "KXNFL2QSPREAD-26OCT13BUFMIA-BUF",
+                "title": "BUF Bills wins by over 3.5 points in 2nd quarter",
+                "yes_sub_title": "BUF Bills wins by over 3.5 points",
+                "status": "open",
+                "yes_ask_dollars": "0.55",
+                "no_ask_dollars": "0.47",
+            }],
+        }
+        candidates = nfl_engine.build_candidates([event], self.stats)
+        self.assertEqual(candidates, [])
+
     def test_period_market_is_skipped_when_only_full_game_model_exists(self):
         p, category = nfl_engine._market_probability(
             {"ticker": "KXNFL1HSPREAD-TEST", "title": "BUF Bills vs MIA Dolphins: 1st Half Spread",
