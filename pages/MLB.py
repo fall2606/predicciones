@@ -26,12 +26,9 @@ st.caption(
 with st.expander("Mercados MLB que se pueden proyectar", expanded=False):
     st.markdown(
         "- **Partido/equipos:** ganador, run line, total de carreras y total por equipo. "
-        "Marcador exacto y márgenes se dejan en el detalle porque son menos estables.
-"
-        "- **Pitchers:** ponches y, cuando hay muestra suficiente, hits permitidos, carreras limpias y bases por bolas.
-"
-        "- **Bateadores:** 1+ hit, bases totales, carreras impulsadas y home run.
-"
+        "Marcador exacto y márgenes se dejan en el detalle porque son menos estables.\n"
+        "- **Pitchers:** ponches y, cuando hay muestra suficiente, hits permitidos, carreras limpias y bases por bolas.\n"
+        "- **Bateadores:** 1+ hit, bases totales, carreras impulsadas y home run.\n"
         "- **Entradas y mercados especiales:** se muestran en el historial de Kalshi del partido si están disponibles, "
         "pero no reciben una probabilidad propia sin datos por entrada suficientes."
     )
@@ -260,7 +257,7 @@ def construir_forma(equipos_juegos, antes_de):
     return forma
 
 
-@st.cache_data(ttl=180, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False)
 def cargar_pitcher(pitcher_id, season):
     data = get_json(
         f"people/{pitcher_id}/stats",
@@ -275,7 +272,7 @@ def cargar_pitcher(pitcher_id, season):
     return None
 
 
-@st.cache_data(ttl=180, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False)
 def cargar_bateadores_equipo(team_id, season):
     """Season batting stats for candidates; does not imply a confirmed lineup."""
     data = get_json("stats", {
@@ -402,7 +399,7 @@ def crear_apuestas_sencillas(juego, datos_abridor_local, datos_abridor_visita, t
     return sorted(picks, key=lambda x: x["Probabilidad estimada"], reverse=True)
 
 
-@st.cache_data(ttl=180, show_spinner=False)
+@st.cache_data(ttl=1800, show_spinner=False)
 def cargar_era_liga(season):
     data = get_json(
         "teams/stats",
@@ -420,7 +417,7 @@ def cargar_era_liga(season):
     return float(np.mean(eras)) if eras else 4.20
 
 
-@st.cache_data(ttl=180, show_spinner=False)
+@st.cache_data(ttl=900, show_spinner=False)
 def cargar_calendario(inicio, fin):
     data = get_json(
         "schedule",
@@ -861,7 +858,7 @@ for juego in [juego]:
             if not historial_partido.empty:
                 game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
                 detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
-                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE")
+                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
                 if "estado" not in historial_partido.columns:
                     historial_partido["estado"] = unresolved_label
                 historial_partido["estado"] = historial_partido["estado"].replace("", unresolved_label).fillna(unresolved_label)
@@ -881,7 +878,7 @@ for juego in [juego]:
                 if "estado" in historial_mostrar.columns:
                     historial_mostrar = historial_mostrar.rename(columns={"estado": "Resultado"})
                     historial_mostrar["Resultado"] = historial_mostrar["Resultado"].replace({
-                        "": "sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE", "WIN": "WIN", "LOSS": "LOSS"
+                        "": ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE"), "WIN": "WIN", "LOSS": "LOSS"
                     }).fillna("PENDIENTE")
                     st.dataframe(_tabla_con_resultado(historial_mostrar), use_container_width=True, hide_index=True)
                 else:
