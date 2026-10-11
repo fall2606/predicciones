@@ -158,6 +158,28 @@ def test_atomic_save_preserves_yes_no_side_and_freezes_duplicates(tmp_path):
 
 
 
+def test_reader_migrates_legacy_columns_and_quarantines_bad_rows(tmp_path):
+    path = tmp_path / "predicciones_nfl.csv"
+    path.write_text(
+        "prediction_id,ticker,selection,market,linea,precio,probabilidad,fecha_captura,kickoff\\n"
+        "legacy-1,KXNFLGAME-26OCT18CINMIA-MIA,NO,Winner,3,0.45,0.55,2026-10-10T12:00:00Z,2026-10-18T17:00:00Z\\n"
+        "malformed,row,too,short\\n",
+        encoding="utf-8",
+    )
+    rows = nfl.read_csv_tolerant(path, expected_columns=nfl.PRED_COLUMNS)
+    assert len(rows) == 1
+    assert rows[0]["lado"] == "NO"
+    assert rows[0]["seleccion"] == "NO"
+    assert rows[0]["mercado"] == "Winner"
+    assert rows[0]["line"] == "3"
+    assert rows[0]["precio_captura"] == "0.45"
+    assert rows[0]["probabilidad_modelo"] == "0.55"
+    assert rows[0]["schema_version"] == nfl.SCHEMA_VERSION
+    quarantine = tmp_path / "predicciones_nfl_filas_malas.csv"
+    assert quarantine.exists()
+    assert "malformed" in quarantine.read_text(encoding="utf-8")
+
+
 def test_espn_fallback_settles_finished_winner_by_teams_and_date(monkeypatch):
     nfl.ESPN_SCOREBOARD_CACHE.clear()
     event = {
