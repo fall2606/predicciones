@@ -253,6 +253,14 @@ def _trusted_terminal_result(row,result_columns,state_field="estado"):
         return False
     marker=str(row.get("marcador",""))
     if marker.startswith("Marcador independiente ("):
+        upper_marker=marker.upper()
+        # Reject legacy records that accidentally used the full-time score for a half-time market.
+        if "MERCADO KXLALIGA1H" in upper_marker or "MERCADO KXUCL1H" in upper_marker:
+            if "1.ª PARTE" not in upper_marker:
+                return False
+        if "MERCADO KXLALIGA2H" in upper_marker or "MERCADO KXUCL2H" in upper_marker:
+            if "2.ª PARTE" not in upper_marker:
+                return False
         return "resultado_kalshi" not in result_columns
     if "resultado_kalshi" in result_columns:
         return str(row.get("resultado_kalshi","")).upper() in {"YES","NO","VOID"}
