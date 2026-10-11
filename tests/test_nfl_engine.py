@@ -45,6 +45,11 @@ class NFLModelTests(unittest.TestCase):
         self.assertEqual({m["ticker"] for m in merged[0]["markets"]},
                          {"KXNFL1HSPREAD-M1", "KXNFLGAME-M2"})
 
+
+    def test_event_start_falls_back_to_kalshi_market_close_time(self):
+        event = {"markets": [{"close_time": "2026-10-12T00:15:00Z"}]}
+        self.assertEqual(nfl_engine._event_start(event), "2026-10-12T00:15:00Z")
+
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
         self.assertIsNotNone(projected)
