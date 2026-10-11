@@ -82,7 +82,7 @@ class CSVRepairTests(unittest.TestCase):
             with path.open(newline="", encoding="utf-8") as f:
                 self.assertEqual(list(csv.DictReader(f)), [])
 
-    def test_mlb_value_block_is_capped_at_ten_before_kickoff(self):
+    def test_mlb_history_above_display_limit_is_never_deleted(self):
         from datetime import datetime, timedelta, timezone
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "predicciones_mlb.csv"
@@ -91,7 +91,7 @@ class CSVRepairTests(unittest.TestCase):
             for i in range(11):
                 rows.append({
                     "prediction_id": f"m|KXMLBTOTAL-{i}|YES|A_TENER_EN_CUENTA",
-                    "event_ticker": f"KXMLBTOTAL-EVENT", "ticker": f"KXMLBTOTAL-{i}",
+                    "event_ticker": "KXMLBTOTAL-EVENT", "ticker": f"KXMLBTOTAL-{i}",
                     "match_id": "game-1", "fecha": kickoff, "local": "A", "visita": "B",
                     "categoria": "A_TENER_EN_CUENTA · Total", "mercado": f"Over {i}.5 runs",
                     "line": f"{i}.5", "lado": "YES", "seleccion": "YES",
@@ -99,6 +99,7 @@ class CSVRepairTests(unittest.TestCase):
                     "precio_captura": "0.4", "probabilidad_implicita": "0.4",
                     "edge": f"{i/100:.2f}", "estado_modelo": "modelado", "reglas": "",
                     "capturado_en": datetime.now(timezone.utc).isoformat(),
+                    "disponibilidad": "Disponible en Kalshi",
                 })
             with path.open("w", newline="", encoding="utf-8") as f:
                 writer = csv.DictWriter(f, fieldnames=CURRENT_MLB)
@@ -107,9 +108,14 @@ class CSVRepairTests(unittest.TestCase):
             summary = repair_file(path, CURRENT_MLB, LEGACY_MLB)
             with path.open(newline="", encoding="utf-8") as f:
                 saved = list(csv.DictReader(f))
-            self.assertEqual(summary["removed_over_limit_pregame"], 1)
-            self.assertEqual(len(saved), 10)
-            self.assertNotIn("m|KXMLBTOTAL-0|YES|A_TENER_EN_CUENTA", [r["prediction_id"] for r in saved])
+            self.assertEqual(summary["removed_over_limit_pregame"], 0)
+            self.assertEqual(len(saved), 11)
+            self.assertEqual(
+                [r["prediction_id"] for r in saved],
+                [r["prediction_id"] for r in rows],
+            )
+            second = repair_file(path, CURRENT_MLB, LEGACY_MLB)
+            self.assertFalse(second["repaired"])
 
     def test_literal_plus_line_is_corrected_only_before_kickoff(self):
         from datetime import datetime, timedelta, timezone
