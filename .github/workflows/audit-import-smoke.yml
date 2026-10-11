@@ -1,0 +1,35 @@
+name: Prueba de importación de auditoría de fútbol
+
+on:
+  push:
+    branches: [fix/audit-script-import-path]
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/auditar_reconciliacion.py"
+      - "prediction_core.py"
+      - "tests/**"
+      - ".github/workflows/audit-import-smoke.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audit-import-smoke
+  cancel-in-progress: false
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependencias
+        run: python -m pip install requests pandas numpy scipy streamlit
+      - name: Comprobar sintaxis
+        run: python -m compileall -q prediction_core.py sports_results.py laliga_engine.py champions_engine.py scripts/auditar_reconciliacion.py pages/LaLiga.py pages/Champions.py pages/MLB.py
+      - name: Ejecutar toda la suite de regresión
+        run: python -m unittest discover -s tests -v
