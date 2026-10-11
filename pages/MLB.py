@@ -59,6 +59,43 @@ def leer_historial_mlb():
 
 historial_mlb = leer_historial_mlb()
 
+# Estado operativo de liquidación: solo alerta sobre partidos que StatsAPI marca como finalizados.
+try:
+    hoy_utc = datetime.now(ZoneInfo("UTC")).date()
+    desde_utc = hoy_utc - timedelta(days=14)
+    schedule_resp = requests.get(
+        f"{API}/schedule",
+        params={"sportId": 1, "startDate": desde_utc.isoformat(),
+                "endDate": hoy_utc.isoformat(), "gameTypes": "R,F,D,L,W"},
+        timeout=5,
+    )
+    schedule_resp.raise_for_status()
+    schedule_games = [g for d in schedule_resp.json().get("dates", [])
+                      for g in d.get("games", [])]
+    final_game_ids = {
+        str(g.get("gamePk")) for g in schedule_games
+        if g.get("gamePk") is not None
+        and str(g.get("status", {}).get("abstractGameState", "")).casefold() == "final"
+    }
+    if not historial_mlb.empty and "match_id" in historial_mlb.columns:
+        settled_states = {"WIN", "LOSS", "ANULADA"}
+        unresolved = historial_mlb[
+            historial_mlb["match_id"].astype(str).isin(final_game_ids)
+            & ~historial_mlb.get("estado", pd.Series("", index=historial_mlb.index))
+                .fillna("").astype(str).str.upper().isin(settled_states)
+        ]
+        if "resuelto_en" in historial_mlb.columns:
+            latest = pd.to_datetime(historial_mlb["resuelto_en"], errors="coerce", utc=True).max()
+        else:
+            latest = pd.NaT
+        st.caption("Última liquidación MLB: " + (latest.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest) else "sin liquidaciones registradas"))
+        if not unresolved.empty:
+            st.error(f"ALERTA MLB: {len(unresolved)} predicciones de partidos finalizados siguen sin resultado oficial.")
+        else:
+            st.success("Liquidación MLB: no hay predicciones pendientes de partidos finalizados detectadas en los últimos 14 días.")
+except (requests.RequestException, ValueError, TypeError, KeyError) as exc:
+    st.warning(f"No se pudo verificar el estado de liquidación MLB en StatsAPI: {exc}")
+
  
 def _tabla_con_resultado(df, columna="Resultado"):
     """WIN/LOSS/ANULADA y estados pendientes con el mismo código visual."""
