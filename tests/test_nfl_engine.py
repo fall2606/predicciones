@@ -156,6 +156,16 @@ class NFLModelTests(unittest.TestCase):
         self.assertIsNone(p)
         self.assertEqual(category, "")
 
+
+    def test_team_total_uses_the_selected_team_projection(self):
+        p, category = nfl_engine._market_probability(
+            {"ticker": "KXNFLTEAMTOTAL-TEST", "title": "BUF Bills Over 24.5 Team Total",
+             "yes_sub_title": "BUF Bills Over 24.5"},
+            "BUF Bills", "MIA Dolphins", 28.0, 17.0,
+        )
+        self.assertGreater(p, 0.5)
+        self.assertEqual(category, "Total de puntos del equipo")
+
     def test_total_points_market_uses_line_and_nfl_score_projection(self):
         p, category = nfl_engine._market_probability(
             {"ticker": "KXNFLTOTAL-TEST", "title": "Over 44.5 total points"},
