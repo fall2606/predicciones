@@ -154,6 +154,7 @@ def modelo_partido(game, stats):
         "away": a.get("team", {}).get("name", "Visitante"),
         "date": game.get("gameDate", ""),
         "status": (game.get("status") or {}).get("abstractGameState", ""),
+        "detailed_status": (game.get("status") or {}).get("detailedState", ""),
         "runs_home": h.get("score"), "runs_away": a.get("score"),
         "mu_home": mh, "mu_away": ma, "axis": axis, "matrix": matrix,
     }
