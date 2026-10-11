@@ -51,10 +51,9 @@ def leer_historial_mlb():
     try:
         pred = pd.read_csv(PRED_MLB, dtype=str).fillna("") if PRED_MLB.exists() else pd.DataFrame()
         res = pd.read_csv(RES_MLB, dtype=str).fillna("") if RES_MLB.exists() else pd.DataFrame()
-        if not pred.empty and "ticker" in pred.columns and "probabilidad_modelo" in pred.columns:
+        if not pred.empty and "probabilidad_modelo" in pred.columns:
             p = pd.to_numeric(pred["probabilidad_modelo"], errors="coerce")
-            ticker_ok = pred["ticker"].astype(str).str.strip().ne("") & ~pred["ticker"].astype(str).str.strip().isin(["—", "-", "None", "nan"])
-            pred = pred[ticker_ok & np.isfinite(p) & p.between(0, 1)].copy()
+            pred = pred[np.isfinite(p) & p.between(0, 1)].copy()
         if not res.empty and "resuelto_en" in res.columns:
             res = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
         if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
@@ -737,7 +736,7 @@ for juego in [juego]:
                 return
             game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
             detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
-            unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
+            unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE")
             bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", unresolved_label).fillna(unresolved_label)
             bloque.loc[bloque["Resultado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
             if codigo == "SENCILLAS":
@@ -816,10 +815,12 @@ for juego in [juego]:
                             st.error("LOSS")
                         elif estado in {"ANULADA", "VOID", "CANCELLED"}:
                             st.info("ANULADA")
+                        elif "SIN DATOS PARA LIQUIDAR" in estado:
+                            st.caption(estado)
                         elif "SIN LIQUIDAR" in estado:
-                            st.error("SIN LIQUIDAR · partido terminado sin resultado asociado")
+                            st.error("SIN LIQUIDAR · revisar liquidación del contrato")
                         else:
-                            st.caption("PENDIENTE")
+                            st.caption("PENDIENTE" if game_state != "final" else "sin datos para liquidar · mercado sin fuente compatible")
                         st.caption(f"Ticker: {pick.get('ticker', '—')}")
                 return
             bloque["Revisión"] = bloque.apply(_over_pendiente_de_calibracion, axis=1)
@@ -860,7 +861,7 @@ for juego in [juego]:
             if not historial_partido.empty:
                 game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
                 detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
-                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
+                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE")
                 if "estado" not in historial_partido.columns:
                     historial_partido["estado"] = unresolved_label
                 historial_partido["estado"] = historial_partido["estado"].replace("", unresolved_label).fillna(unresolved_label)
@@ -880,7 +881,7 @@ for juego in [juego]:
                 if "estado" in historial_mostrar.columns:
                     historial_mostrar = historial_mostrar.rename(columns={"estado": "Resultado"})
                     historial_mostrar["Resultado"] = historial_mostrar["Resultado"].replace({
-                        "": "PENDIENTE", "WIN": "WIN", "LOSS": "LOSS"
+                        "": "sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE", "WIN": "WIN", "LOSS": "LOSS"
                     }).fillna("PENDIENTE")
                     st.dataframe(_tabla_con_resultado(historial_mostrar), use_container_width=True, hide_index=True)
                 else:
