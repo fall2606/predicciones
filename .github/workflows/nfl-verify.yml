@@ -58,7 +58,7 @@ jobs:
           python - <<'PY'
           import json, os
           from pathlib import Path
-          Path(".streamlit/secrets.toml").write_text("CLAVE = " + json.dumps(os.getenv("CLAVE", "")) + "\\n", encoding="utf-8")
+          Path(".streamlit/secrets.toml").write_text("CLAVE = " + json.dumps(os.getenv("CLAVE", "")) + "\n", encoding="utf-8")
           PY
           python scripts/verify_streamlit_pages.py
       - name: Pruebas de regresión NFL
