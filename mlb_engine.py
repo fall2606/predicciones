@@ -234,14 +234,16 @@ def mercado_probabilidad(market, game):
         else:
             return None, "sin_modelo_especifico: código de resultado de 1.ª entrada desconocido"
         return min(max(p_yes, 0.001), 0.999), "modelado_primera_entrada"
-    if category in {"Ganador (moneyline)", "Total por equipo", "Run line / margen"} and contract_code in {home_code, away_code}:
+    if contract_code in {home_code, away_code}:
+        # The ticker's terminal team code is more reliable than a title mentioning both teams.
         home, away = contract_code == home_code, contract_code == away_code
 
     # Prefer explicit natural-language lines; ticker parsing is a fallback.
     runs = re.search(r"(?:over|under|more than|less than|mas de|menos de)\s*\$?([0-9]+(?:\.[0-9]+)?)", text)
     spread = re.search(r"(?:run line|runline|spread|handicap|hándicap)\s*([+-]?[0-9]+(?:\.[0-9]+)?)", text)
+    signed_line = re.search(r"(?<!\w)([+-][0-9]+(?:\.[0-9]+)?)", title)
     line_match = re.search(r"(?:TOTAL|OVER|UNDER|RUNS|SPREAD|F5)[A-Z_-]*([0-9]+(?:P[0-9]+)?)", ticker, re.I)
-    line = float(runs.group(1)) if runs else (float(spread.group(1)) if spread else (float(line_match.group(1).replace("P", ".")) if line_match else None))
+    line = float(runs.group(1)) if runs else (float(spread.group(1)) if spread else (float(signed_line.group(1)) if signed_line else (float(line_match.group(1).replace("P", ".")) if line_match else None)))
     p_yes = None
     model_state = "modelado"
 
@@ -291,10 +293,10 @@ def mercado_probabilidad(market, game):
             p_yes = float(mat[scores > line].sum())
     elif category == "Run line / margen" and line is not None and (home or away):
         margin = axis[:, None] - axis[None, :] if home else axis[None, :] - axis[:, None]
-        if "under" in text or "plus" in text or "+" in title:
-            p_yes = float(mat[margin > -line].sum())
-        else:
-            p_yes = float(mat[margin > line].sum())
+        # A signed line is the team's handicap: +1.5 wins if margin > -1.5;
+        # -1.5 wins if margin > +1.5. Unsigned titles are interpreted as a favorite line.
+        threshold = -line if line > 0 or "+" in title or "plus" in text else abs(line)
+        p_yes = float(mat[margin > threshold].sum())
     elif category == "1.ª entrada / YRFI-NRFI":
         p_any_run = 1 - math.exp(-(game["mu_home"] + game["mu_away"]) / 9)
         p_yes = p_any_run if any(x in text for x in ("yrfi", "yes run", "at least one run", "a run scored")) else 1 - p_any_run
