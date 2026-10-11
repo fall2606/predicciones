@@ -932,6 +932,8 @@ def settle():
     if RESULT_FILE.exists():
         with RESULT_FILE.open(newline="", encoding="utf-8-sig") as handle:
             results = list(csv.DictReader(handle))
+    else:
+        _write_report(RESULT_FILE, RESULT_COLUMNS, [])
     latest = {}
     for row in results:
         pid = str(row.get("prediction_id") or "")
@@ -943,6 +945,7 @@ def settle():
         if not pid or str(latest.get(pid, {}).get("estado", "")).upper() in TERMINAL:
             continue
         ticker = str(row.get("ticker") or "")
+        score = ""
         try:
             market_data = kalshi_get(f"markets/{ticker}").get("market", {})
         except (requests.RequestException, ValueError, KeyError):
@@ -965,7 +968,7 @@ def settle():
             score = fallback.get("score", "")
         new_results.append({
             "schema_version": SCHEMA_VERSION, "prediction_id": pid, "estado": state,
-            "resultado_kalshi": kalshi_result, "marcador": locals().get("score", ""), "fuente": source,
+            "resultado_kalshi": kalshi_result, "marcador": score, "fuente": source,
             "motivo": reason, "resuelto_en": datetime.now(timezone.utc).isoformat(),
         })
     if new_results:
