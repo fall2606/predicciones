@@ -219,3 +219,33 @@ prediction_id,estado,marcador,resuelto_en
 564705|A_TENER_EN_CUENTA|KXLALIGAFTTS-26OCT11SANVCF-VCF|NO|2026101102,LOSS,Resultado oficial Kalshi: YES,2026-10-11T20:06:15.262582+00:00
 564705|A_TENER_EN_CUENTA|KXLALIGA1H-26OCT11SANVCF-VCF|NO|2026101102,WIN,Resultado oficial Kalshi: NO,2026-10-11T20:06:15.265244+00:00
 564701|SENCILLAS|KXLALIGATCORNERS-26OCT11RBBOSA-RBB6|None,LOSS,Resultado oficial Kalshi: YES,2026-10-11T20:06:15.456559+00:00
+564699|Hándicap 1.ª parte|2026101012,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 1-2 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:19.379062+00:00
+564699|Hándicap de goles|2026101012,LOSS,"Marcador independiente (football-data.org): 1-2 (mercado KXLALIGASPREAD, selección NO)",2026-10-11T20:23:19.380210+00:00
+564700|Hándicap 1.ª parte|2026101012,WIN,"Marcador independiente (football-data.org, 1.ª parte): 3-0 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:19.919996+00:00
+564700|Corners totales|2026101012,WIN,"Marcador independiente (football-data.org, córners): 9-3 (mercado KXLALIGACORNERS, selección YES)",2026-10-11T20:23:19.996596+00:00
+564700|Corners por equipo|2026101012,WIN,"Marcador independiente (football-data.org, córners): 9-3 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:19.998112+00:00
+564700|Hándicap de goles|2026101012,WIN,"Marcador independiente (football-data.org): 3-0 (mercado KXLALIGASPREAD, selección NO)",2026-10-11T20:23:20.000313+00:00
+564702|Corners por equipo|2026101012,WIN,"Marcador independiente (football-data.org, córners): 9-3 (mercado KXLALIGATCORNERS, selección YES)",2026-10-11T20:23:20.077140+00:00
+564703|Hándicap 1.ª parte|2026101012,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 0-0 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.078000+00:00
+564703|Corners por equipo|2026101012,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.198050+00:00
+564703|Corners totales|2026101012,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-11T20:23:20.199462+00:00
+564703|Primer gol|2026101012,WIN,"Marcador independiente (football-data.org): 0-0 (mercado KXLALIGAFTTS, selección NO)",2026-10-11T20:23:20.200212+00:00
+564701|Hándicap 1.ª parte|2026101012,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 5-2 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.201053+00:00
+564701|Corners por equipo|2026101012,LOSS,"Marcador independiente (football-data.org, córners): 8-4 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.264634+00:00
+564702|Corners por equipo|2026101018,WIN,"Marcador independiente (football-data.org, córners): 9-3 (mercado KXLALIGATCORNERS, selección YES)",2026-10-11T20:23:20.617989+00:00
+564703|Hándicap 1.ª parte|2026101018,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 0-0 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.618763+00:00
+564703|Corners por equipo|2026101018,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.619981+00:00
+564703|Corners totales|2026101018,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-11T20:23:20.621222+00:00
+564703|Primer gol|2026101018,WIN,"Marcador independiente (football-data.org): 0-0 (mercado KXLALIGAFTTS, selección NO)",2026-10-11T20:23:20.622011+00:00
+564701|Hándicap 1.ª parte|2026101018,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 5-2 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.622819+00:00
+564701|Corners por equipo|2026101018,LOSS,"Marcador independiente (football-data.org, córners): 8-4 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.624157+00:00
+564703|Hándicap 1.ª parte|2026101021,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 0-0 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.634183+00:00
+564703|Corners por equipo|2026101021,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.635404+00:00
+564703|Corners totales|2026101021,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-11T20:23:20.636624+00:00
+564701|Hándicap 1.ª parte|2026101021,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 5-2 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.638961+00:00
+564701|Corners por equipo|2026101021,WIN,"Marcador independiente (football-data.org, córners): 8-4 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.640285+00:00
+564703|Hándicap 1.ª parte|2026101100,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 0-0 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.650210+00:00
+564703|Corners por equipo|2026101100,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.651405+00:00
+564703|Corners totales|2026101100,WIN,"Marcador independiente (football-data.org, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-11T20:23:20.652619+00:00
+564701|Hándicap 1.ª parte|2026101100,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 5-2 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-11T20:23:20.654942+00:00
+564701|Corners por equipo|2026101100,WIN,"Marcador independiente (football-data.org, córners): 8-4 (mercado KXLALIGATCORNERS, selección NO)",2026-10-11T20:23:20.656260+00:00
