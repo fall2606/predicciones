@@ -16,7 +16,7 @@ RESULT_FILE = ROOT / "resultados_nfl.csv"
 CURRENT_FILE = ROOT / "nfl_probabilidades_actuales.csv"
 PRED_COLUMNS = ["prediction_id","event_ticker","ticker","match_id","fecha","local","visita","categoria",
                 "mercado","line","lado","seleccion","bloque","probabilidad_modelo","probabilidad_calibrada",
-                "precio_captura","probabilidad_implicita","edge","capturado_en","disponibilidad"]
+                "precio_captura","probabilidad_implicita","edge","capturado_en","disponibilidad","calibracion","marcador_proyectado"]
 RESULT_COLUMNS = ["prediction_id","estado","resultado_kalshi","marcador","resuelto_en"]
 ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
 TIMEOUT = 15
@@ -65,7 +65,7 @@ def _match_team(name, stats):
     key = _norm(name)
     if key in stats:
         return key
-    matches = [team for team in stats if key and (key in team or team in key)]
+    matches = [team for team in stats if key and (key in team or team in key or (key.split() and team.split() and key.split()[-1] == team.split()[-1]))]
     return max(matches, key=len) if len(matches) == 1 else None
 
 def projected_score(home, away, stats):
@@ -174,10 +174,6 @@ def main():
     events = events_for_series([x["ticker"] for x in series], statuses=("open",))
     stats = _team_stats()
     candidates = build_candidates(events, stats)
-    from csv import DictWriter
-    with CURRENT_FILE.open("w", newline="", encoding="utf-8") as f:
-        fields = ["event_ticker","ticker","local","visita","fecha","categoria","mercado","lado","probabilidad_modelo","precio_captura","edge","marcador_proyectado"]
-        writer = DictWriter(f, fieldnames=fields, extrasaction="ignore"); writer.writeheader(); writer.writerows(candidates)
     # Keep snapshots immutable; use market + side + event identity to avoid duplicates.
     existing = set()
     if PRED_FILE.exists():
@@ -196,17 +192,22 @@ def main():
         row["bloque"] = ""
         row["capturado_en"] = captured
         row["prediction_id"] = f'{row["event_ticker"]}|{row["ticker"]}|{row["lado"]}'
-        if row["prediction_id"] in existing: continue
-        rows.append(row)
+        if row["prediction_id"] not in existing:
+            rows.append(row)
     priced = [r for r in rows if r.get("precio_captura") is not None]
-    high, value = rank_market_candidates(
-        [{"_row": r, "_p": r["probabilidad_calibrada"], "_edge": r["edge"] or -1}
-         for r in priced], min_probability=0.65, high_limit=5, value_limit=10)
-    high_ids = {x["_row"]["prediction_id"] for x in high}
-    value_ids = {x["_row"]["prediction_id"] for x in value}
-    singles = rank_single_candidates([{"_row": r, "_p": r["probabilidad_calibrada"], "_edge": r["edge"] or -1}
-                                       for r in priced], limit=5)
-    single_ids = {x["_row"]["prediction_id"] for x in singles}
+    ranking_rows = [dict(r, _p=r["probabilidad_calibrada"], **{"Ventaja (edge)": r["edge"], "Apuesta sencilla": r["mercado"]}) for r in priced]
+    high, value = rank_market_candidates(ranking_rows, min_probability=0.65, high_limit=5, value_limit=10)
+    high_ids = {x["prediction_id"] for x in high}
+    value_ids = {x["prediction_id"] for x in value}
+    singles = rank_single_candidates(ranking_rows, limit=5)
+    single_ids = {x["prediction_id"] for x in singles}
+    # Current snapshot is replaceable; prediction history below remains append-only.
+    from csv import DictWriter
+    current_fields = ["event_ticker","ticker","local","visita","fecha","categoria","mercado","lado","probabilidad_modelo","probabilidad_calibrada","precio_captura","edge","calibracion","marcador_proyectado"]
+    with CURRENT_FILE.open("w", newline="", encoding="utf-8") as f:
+        writer = DictWriter(f, fieldnames=current_fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(candidates)
     for row in rows:
         row["bloque"] = ("SENCILLAS" if row["prediction_id"] in single_ids else
                          "ALTA_PROBABILIDAD" if row["prediction_id"] in high_ids else
