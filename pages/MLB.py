@@ -713,9 +713,7 @@ for juego in [juego]:
         if not archivadas_partido.empty:
             archivadas_partido["p_num"] = pd.to_numeric(archivadas_partido.get("probabilidad_modelo", ""), errors="coerce")
             archivadas_partido = archivadas_partido[
-                archivadas_partido["ticker"].astype(str).ne("")
-                & archivadas_partido["ticker"].astype(str).ne("—")
-                & np.isfinite(archivadas_partido["p_num"])
+                np.isfinite(archivadas_partido["p_num"])
                 & archivadas_partido["p_num"].between(0, 1)
             ].copy()
 
@@ -735,6 +733,8 @@ for juego in [juego]:
             detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
             unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE")
             bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", unresolved_label).fillna(unresolved_label)
+            sin_ticker = bloque["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
+            bloque.loc[sin_ticker & bloque["Resultado"].astype(str).str.upper().isin(["PENDIENTE", "SIN DATOS PARA LIQUIDAR · MERCADO SIN FUENTE COMPATIBLE"]), "Resultado"] = "sin datos para liquidar · histórico sin contrato"
             bloque.loc[bloque["Resultado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
             if codigo == "SENCILLAS":
                 # Filtra también capturas antiguas para que no reaparezcan picks triviales.
@@ -862,6 +862,8 @@ for juego in [juego]:
                 if "estado" not in historial_partido.columns:
                     historial_partido["estado"] = unresolved_label
                 historial_partido["estado"] = historial_partido["estado"].replace("", unresolved_label).fillna(unresolved_label)
+                sin_ticker_hist = historial_partido["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
+                historial_partido.loc[sin_ticker_hist & historial_partido["estado"].astype(str).str.upper().isin(["PENDIENTE", "SIN DATOS PARA LIQUIDAR · MERCADO SIN FUENTE COMPATIBLE"]), "estado"] = "sin datos para liquidar · histórico sin contrato"
                 # Replace empty cells with a readable status instead of showing confusing nulls.
                 if "probabilidad_modelo" in historial_partido.columns:
                     historial_partido["probabilidad_modelo"] = historial_partido["probabilidad_modelo"].replace("", "Sin modelo específico")
