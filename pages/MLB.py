@@ -133,19 +133,31 @@ except (requests.RequestException, ValueError, TypeError, KeyError) as exc:
     st.warning(f"No se pudo verificar el estado de liquidación MLB en StatsAPI: {exc}")
 
  
+def numero_entrada_ticker(ticker):
+    match = re.search(r"-(\d+)-(?:TIE|[A-Z]{2,3})$", str(ticker or "").upper())
+    return int(match.group(1)) if match else 1
+
+
+def categoria_ganador_entrada(categoria, ticker):
+    texto = str(categoria or "")
+    prefijo = texto.split(" · ", 1)[0] + " · " if " · " in texto else ""
+    return prefijo + f"Ganador de la {numero_entrada_ticker(ticker)}.ª entrada"
+
+
 def etiqueta_mercado_primera_entrada(row):
     """Human-readable outcome for KXMLBINNINGWIN contracts; retain the side's meaning."""
     ticker = str(row.get("ticker") or row.get("Ticker") or "").upper()
     if "BINNINGWIN" not in ticker:
         return str(row.get("mercado") or row.get("seleccion") or row.get("Apuesta") or "Contrato Kalshi")
     code = ticker.rsplit("-", 1)[-1]
+    entrada = f"{numero_entrada_ticker(ticker)}.ª entrada"
     side = str(row.get("lado") or row.get("seleccion") or row.get("Lado Kalshi") or "").upper()
     if side not in {"YES", "NO"}:
         apuesta = str(row.get("Apuesta", "")).upper()
         side = "NO" if apuesta.rstrip().endswith("· NO") else ("YES" if apuesta.rstrip().endswith("· YES") else "YES")
     if code == "TIE":
-        return ("SÍ: habrá empate al terminar la 1.ª entrada"
-                if side == "YES" else "NO: no habrá empate al terminar la 1.ª entrada")
+        return (f"SÍ: habrá empate al terminar la {entrada}"
+                if side == "YES" else f"NO: no habrá empate al terminar la {entrada}")
     code_to_name = {
         "ARI": "los Diamondbacks", "ATL": "los Braves", "BAL": "los Orioles",
         "BOS": "los Red Sox", "CHC": "los Cubs", "CWS": "los White Sox",
@@ -160,8 +172,8 @@ def etiqueta_mercado_primera_entrada(row):
     }
     team = code_to_name.get(code)
     if team:
-        return (f"SÍ: {team} ganan la 1.ª entrada" if side == "YES"
-                else f"NO: {team} no ganan la 1.ª entrada")
+        return (f"SÍ: {team} ganan la {entrada}" if side == "YES"
+                else f"NO: {team} no ganan la {entrada}")
     return f"{side}: resultado de la 1.ª entrada ({code})"
 
 
@@ -861,9 +873,10 @@ for juego in [juego]:
                 vista["mercado"] = etiquetas.values
             if "categoria" in vista.columns and "ticker" in vista.columns:
                 _primera = vista["ticker"].astype(str).str.upper().str.contains("BINNINGWIN")
-                vista.loc[_primera, "categoria"] = vista.loc[_primera, "categoria"].astype(str).map(
-                    lambda x: (x.split(" · ", 1)[0] + " · " if " · " in x else "") + "Ganador de la 1.ª entrada"
-                )
+                vista.loc[_primera, "categoria"] = [
+                    categoria_ganador_entrada(row.get("categoria", ""), row.get("ticker", ""))
+                    for _, row in vista.loc[_primera].iterrows()
+                ]
             if "Resultado" in vista.columns:
                 st.dataframe(_tabla_con_resultado(vista), use_container_width=True, hide_index=True)
             else:
