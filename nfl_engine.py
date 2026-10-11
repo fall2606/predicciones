@@ -205,6 +205,12 @@ def main():
     events = events_for_series([x["ticker"] for x in series], statuses=("open",))
     stats = _team_stats()
     print(f"NFL: equipos con estadísticas recientes={len(stats)}")
+    print("NFL: muestra de eventos:", [(e.get("title"), e.get("start_time"), e.get("strike_date"), len(e.get("markets") or [])) for e in events[:3]])
+    if events:
+        fixture = str(events[0].get("title") or "").split(":", 1)[0].strip()
+        teams = re.split(r"\\s+(?:vs\\.?|versus|@|at)\\s+", fixture, maxsplit=1, flags=re.I)
+        if len(teams) == 2:
+            print(f"NFL: proyección de diagnóstico {teams[0]} vs {teams[1]}: {projected_score(teams[0], teams[1], stats)}")
     candidates = build_candidates(events, stats)
     print(f"NFL: partidos con proyección y mercados reconocidos={len(set(row['match_id'] for row in candidates))}")
     # Keep snapshots immutable; use market + side + event identity to avoid duplicates.
