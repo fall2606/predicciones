@@ -8,6 +8,26 @@ class CoreTests(unittest.TestCase):
  def test_probability_validation(self):
   for v in ("NaN","inf","-inf",-0.1,1.1,None,""): self.assertIsNone(core.valid_probability(v))
   self.assertEqual(core.valid_probability(0),0); self.assertEqual(core.valid_probability(1),1)
+
+ def test_rank_single_candidates_preserves_yes_no_for_immutable_capture(self):
+  row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
+       "Probabilidad del modelo":"75%","Precio de compra":"50%","Ventaja (edge)":0.20,"_lado":"YES"}
+  selected=core.rank_single_candidates([row],limit=1)
+  self.assertEqual(len(selected),1)
+  self.assertEqual(selected[0].get("_lado"),"YES")
+
+ def test_legacy_missing_side_is_inferred_only_for_unambiguous_game_and_btts(self):
+  game={"ticker":"KXLALIGAGAME-TEST-AWAY","local":"Elche","visita":"Celta","jugada":"Gana Celta",
+        "seleccion":"","clave_interna":"(('KXLALIGAGAME', 'visita', None, None), None)"}
+  btts={"ticker":"KXLALIGABTTS-TEST","local":"Elche","visita":"Celta",
+        "jugada":"Uno o ambos equipos se quedan sin marcar","seleccion":"",
+        "clave_interna":"(('KXLALIGABTTS', 'ambos', None, None), None)"}
+  spread={"ticker":"KXLALIGASPREAD-TEST","local":"Elche","visita":"Celta",
+          "jugada":"Elche no pierde por más de 1.5 goles","seleccion":"",
+          "clave_interna":"(('KXLALIGASPREAD', 'visita', 1.5, None), None)"}
+  self.assertEqual(core._side_from_row(game,"lado"),"YES")
+  self.assertEqual(core._side_from_row(btts,"lado"),"NO")
+  self.assertIsNone(core._side_from_row(spread,"lado"))
  def test_freeze_and_probability_gate(self):
   now=datetime.now(timezone.utc)
   with tempfile.TemporaryDirectory() as d:
