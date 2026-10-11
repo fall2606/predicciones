@@ -148,13 +148,26 @@ def _price(market, side):
             pass
     return None
 
+def _event_start(event):
+    for field in ("start_time", "strike_date", "start_date"):
+        value = event.get(field)
+        if value:
+            return str(value)
+    # Kalshi game events may omit kickoff on the event object; market close_time is
+    # the conservative fallback because it normally closes at kickoff, unlike settlement time.
+    for market in event.get("markets") or []:
+        value = market.get("close_time")
+        if value:
+            return str(value)
+    return ""
+
 def merge_game_events(events):
     """Merge per-market Kalshi events into one fixture, retaining every real market ticker."""
     grouped = {}
     for source in events or []:
         event = dict(source)
         fixture = str(event.get("title") or "").split(":", 1)[0].strip()
-        start = str(event.get("start_time") or event.get("strike_date") or "")
+        start = _event_start(event)
         teams = re.split(r"\s+(?:vs\.?|versus|@|at)\s+", fixture, maxsplit=1, flags=re.I)
         if len(teams) != 2:
             continue
@@ -181,7 +194,7 @@ def build_candidates(events, stats):
         if len(parts) != 2:
             continue
         home, away = parts[0].strip(), parts[1].strip()
-        start = str(event.get("start_time") or event.get("strike_date") or "")
+        start = _event_start(event)
         try:
             kickoff = datetime.fromisoformat(start.replace("Z", "+00:00"))
             if kickoff.tzinfo is None: kickoff = kickoff.replace(tzinfo=timezone.utc)
