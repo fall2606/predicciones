@@ -30,6 +30,21 @@ class NFLModelTests(unittest.TestCase):
         self.assertEqual(mocked.call_args.args[0], nfl_engine.ESPN)
         self.assertIn("seasontype", mocked.call_args.args[1])
 
+
+    def test_merge_game_events_combines_market_series_for_same_fixture(self):
+        kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
+        events = [
+            {"event_ticker": "KXNFL1HSPREAD-EVENT", "title": "BUF Bills vs MIA Dolphins: 1st Half Spread",
+             "start_time": kickoff, "markets": [{"ticker": "KXNFL1HSPREAD-M1", "title": "first half"}]},
+            {"event_ticker": "KXNFLGAME-EVENT", "title": "BUF Bills vs MIA Dolphins: Game Winner",
+             "start_time": kickoff, "markets": [{"ticker": "KXNFLGAME-M2", "title": "winner"}]},
+        ]
+        merged = nfl_engine.merge_game_events(events)
+        self.assertEqual(len(merged), 1)
+        self.assertEqual(merged[0]["title"], "BUF Bills vs MIA Dolphins")
+        self.assertEqual({m["ticker"] for m in merged[0]["markets"]},
+                         {"KXNFL1HSPREAD-M1", "KXNFLGAME-M2"})
+
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
         self.assertIsNotNone(projected)
