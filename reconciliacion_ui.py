@@ -1,5 +1,7 @@
 """Streamlit rendering for the shared reconciliation report."""
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import streamlit as st
@@ -68,3 +70,23 @@ def mostrar_reconciliacion(deporte):
             st.dataframe(historic_nonmatch[cols].head(100), use_container_width=True, hide_index=True)
             if len(historic_nonmatch) > 100:
                 st.caption(f"Se muestran 100 de {len(historic_nonmatch)} filas; el CSV de reconciliación conserva todas.")
+
+
+def mostrar_actualizacion_archivos(archivos):
+    """Mostrar marcas de tiempo de los CSV que la página realmente lee del checkout local."""
+    zona = ZoneInfo("America/Chicago")
+    marcas = []
+    for etiqueta, ruta in archivos:
+        ruta = Path(ruta)
+        try:
+            stat = ruta.stat()
+            fecha = datetime.fromtimestamp(stat.st_mtime, zona)
+            marcas.append((etiqueta, fecha, stat.st_size, ruta.name))
+        except OSError:
+            marcas.append((etiqueta, None, 0, ruta.name))
+    disponibles = [x for x in marcas if x[1] is not None]
+    if disponibles:
+        ultima = max(x[1] for x in disponibles)
+        st.caption("Actualización local de datos (hora de Chicago): " + ultima.strftime("%Y-%m-%d %H:%M:%S %Z") + ". " + " · ".join(f"{nombre}: {fecha.strftime('%H:%M:%S') if fecha else 'no encontrado'}" for nombre, fecha, _, _ in marcas))
+    else:
+        st.warning("No se encontraron los archivos locales de resultados/predicciones: " + ", ".join(nombre for nombre, _, _, nombre in marcas))
