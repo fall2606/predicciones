@@ -148,6 +148,10 @@ def settle_from_score(row):
         return {"match": match, "state": None, "reason": "estado_partido:" + status}
     if not match["completed"] or not any(token in status for token in ("FINAL", "FULL_TIME", "STATUS_FINAL")):
         return {"match": match, "state": None, "reason": "partido_no_finalizado:" + status}
+    # Kalshi football contracts generally use regulation time; defer knockout games
+    # that ESPN labels as extra-time or penalties to Kalshi's own settlement.
+    if re.search(r"extra.?time|penalt|\baet\b|after extra", match.get("status_detail", ""), re.I):
+        return None
     try:
         parsed = ast.literal_eval(str(row.get("clave_interna") or ""))
         if not (isinstance(parsed, tuple) and len(parsed) == 2 and isinstance(parsed[0], tuple)):
@@ -164,17 +168,17 @@ def settle_from_score(row):
             proposition = home > away if outcome == "local" else away > home if outcome == "visita" else home == away
         elif series.endswith("BTTS") and outcome in {"ambos", "btts"}:
             proposition = home > 0 and away > 0
-        elif series.endswith("TOTAL") and outcome in {"over", "under"} and line is not None:
-            threshold = float(line)
-            proposition = total > threshold if outcome == "over" else total < threshold
-            if total == threshold:
-                # Whole-number lines can push; defer to Kalshi's exact market resolution.
-                return None
         elif series.endswith("TEAMTOTAL") and outcome in {"local", "visita", "home", "away"} and line is not None:
             team_score = home if outcome in {"local", "home"} else away
             threshold = float(line)
             proposition = team_score > threshold
             if team_score == threshold:
+                return None
+        elif series.endswith("TOTAL") and outcome in {"over", "under"} and line is not None:
+            threshold = float(line)
+            proposition = total > threshold if outcome == "over" else total < threshold
+            if total == threshold:
+                # Whole-number lines can push; defer to Kalshi's exact market resolution.
                 return None
         else:
             return None
