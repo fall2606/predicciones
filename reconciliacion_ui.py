@@ -73,20 +73,36 @@ def mostrar_reconciliacion(deporte):
 
 
 def mostrar_actualizacion_archivos(archivos):
-    """Mostrar marcas de tiempo de los CSV que la página realmente lee del checkout local."""
+    """Mostrar frescura de los CSV leídos directamente por la página, sin caché."""
     zona = ZoneInfo("America/Chicago")
     marcas = []
     for etiqueta, ruta in archivos:
         ruta = Path(ruta)
         try:
             stat = ruta.stat()
-            fecha = datetime.fromtimestamp(stat.st_mtime, zona)
-            marcas.append((etiqueta, fecha, stat.st_size, ruta.name))
-        except OSError:
-            marcas.append((etiqueta, None, 0, ruta.name))
-    disponibles = [x for x in marcas if x[1] is not None]
-    if disponibles:
-        ultima = max(x[1] for x in disponibles)
-        st.caption("Actualización local de datos (hora de Chicago): " + ultima.strftime("%Y-%m-%d %H:%M:%S %Z") + ". " + " · ".join(f"{nombre}: {fecha.strftime('%H:%M:%S') if fecha else 'no encontrado'}" for nombre, fecha, _, _ in marcas))
-    else:
-        st.warning("No se encontraron los archivos locales de resultados/predicciones: " + ", ".join(nombre for nombre, _, _, nombre in marcas))
+            mtime = datetime.fromtimestamp(stat.st_mtime, zona)
+            data_time = None
+            if ruta.suffix.lower() == ".csv" and stat.st_size:
+                frame = pd.read_csv(ruta, dtype=str, usecols=lambda col: col in {"resuelto_en", "capturado_en"})
+                candidatos = []
+                for columna in ("resuelto_en", "capturado_en"):
+                    if columna in frame.columns:
+                        fechas = pd.to_datetime(frame[columna], utc=True, errors="coerce").dropna()
+                        if not fechas.empty:
+                            candidatos.append(fechas.max())
+                if candidatos:
+                    data_time = max(candidatos).to_pydatetime().astimezone(zona)
+            marcas.append((etiqueta, ruta.name, mtime, data_time))
+        except (OSError, ValueError, pd.errors.ParserError):
+            marcas.append((etiqueta, ruta.name, None, None))
+    disponibles = [x for x in marcas if x[2] is not None]
+    if not disponibles:
+        st.warning("No se encontraron los CSV locales de predicciones/resultados: " + ", ".join(nombre for _, nombre, _, _ in marcas))
+        return
+    ultima_resolucion = max((x[3] for x in marcas if x[3] is not None), default=None)
+    texto_resolucion = ultima_resolucion.strftime("%Y-%m-%d %H:%M:%S %Z") if ultima_resolucion else "sin resolución registrada"
+    detalles = " · ".join(
+        f"{nombre}: archivo {mtime.strftime('%H:%M:%S')}, última fila resuelta/capturada {data_time.strftime('%Y-%m-%d %H:%M:%S %Z') if data_time else 'sin fecha de resolución/captura'}"
+        for _, nombre, mtime, data_time in marcas
+    )
+    st.caption(f"Datos leídos directamente del disco local, sin caché de CSV. Última resolución/captura registrada: {texto_resolucion}. {detalles}")
