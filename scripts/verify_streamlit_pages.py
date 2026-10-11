@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
 from streamlit.testing.v1 import AppTest
 
 ROOT = Path(__file__).resolve().parents[1]
+# Streamlit runs page scripts with the project root on sys.path; mirror that in AppTest.
+sys.path.insert(0, str(ROOT))
 PAGES = [
     ("MLB", ROOT / "pages" / "MLB.py", ("predicciones_mlb.csv", "resultados_mlb.csv")),
     ("LaLiga", ROOT / "pages" / "LaLiga.py", ("predicciones_laliga.csv", "resultados_laliga.csv")),
