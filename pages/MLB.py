@@ -755,6 +755,25 @@ for juego in [juego]:
             if bloque.empty:
                 st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados. Motivo: {motivo_cobertura_bloque(game_id_archivo, codigo)}.")
                 return
+            # Capturas históricas inmutables; mostrar aparte la calibración más reciente para todos los mercados MLB.
+            recalculadas = []
+            edges_recalculados = []
+            for _, fila_actual in bloque.iterrows():
+                p_actual = probabilidad_recalculada_mlb(fila_actual.get("ticker", ""), fila_actual.get("lado", ""))
+                recalculadas.append(f"{p_actual:.1%}" if p_actual is not None else "—")
+                try:
+                    precio_actual = float(fila_actual.get("precio_captura", ""))
+                    if precio_actual > 1:
+                        precio_actual /= 100
+                    if p_actual is None or not np.isfinite(precio_actual) or not 0 <= precio_actual <= 1:
+                        edges_recalculados.append("—")
+                    else:
+                        edges_recalculados.append(f"{(p_actual - precio_actual) * 100:+.1f} pp")
+                except (TypeError, ValueError, OverflowError):
+                    edges_recalculados.append("—")
+            bloque["Probabilidad recalculada"] = recalculadas
+            bloque["Ventaja recalculada"] = edges_recalculados
+
             game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
             detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
             unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE")
@@ -825,7 +844,7 @@ for juego in [juego]:
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
                         _ticker_card = str(pick.get("ticker") or pick.get("Ticker") or "")
                         _lado_card = str(pick.get("lado") or pick.get("Lado Kalshi") or "")
-                        _p_actual = probabilidad_recalculada_mlb(_ticker_card, _lado_card) if "BINNINGWIN" in _ticker_card.upper() else None
+                        _p_actual = probabilidad_recalculada_mlb(_ticker_card, _lado_card)
                         _p_original = prob
                         if _p_actual is not None and abs(_p_actual - _p_original) >= 0.03:
                             st.warning(f"REVISAR · captura histórica {_p_original:.2%}; modelo corregido actual {_p_actual:.2%}. Se conserva la probabilidad original para no alterar el historial.")
@@ -865,7 +884,7 @@ for juego in [juego]:
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
-        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Revisión", "ticker", "Resultado"]
+        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Ventaja recalculada", "Revisión", "ticker", "Resultado"]
         mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
         mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
         mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)
