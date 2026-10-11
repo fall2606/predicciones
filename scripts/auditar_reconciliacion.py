@@ -13,6 +13,34 @@ SPORTS = {
     "MLB": ("predicciones_mlb.csv", "resultados_mlb.csv", "mlb", ""),
 }
 TERMINAL = {"WIN", "LOSS", "ANULADA"}
+PENDING_REPORT = ROOT / "reconciliacion_pendientes.csv"
+PENDING_COLUMNS = ["deporte", "prediction_id", "match_id", "ticker", "motivo"]
+
+
+def motivo_pendiente(row, kind):
+    ticker = str(row.get("ticker", "")).strip()
+    if not ticker:
+        return "predicción sin ticker real"
+    if kind == "mlb":
+        try:
+            response = requests.get(
+                f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}",
+                timeout=6,
+            )
+            if response.status_code == 404:
+                return "ticker no encontrado en Kalshi"
+            response.raise_for_status()
+            market = (response.json() or {}).get("market") or {}
+            result = str(market.get("result") or "").lower().strip()
+            status = str(market.get("status") or "").lower().strip()
+            if result not in {"yes", "no", "void", "canceled", "cancelled"} and status not in {"void", "canceled", "cancelled"}:
+                return f"mercado Kalshi sin resolución terminal (status={status or 'vacío'}, result={result or 'vacío'})"
+            return f"Kalshi informa estado no reconocido (status={status or 'vacío'}, result={result or 'vacío'})"
+        except requests.RequestException as exc:
+            return f"no se pudo consultar Kalshi: {type(exc).__name__}"
+        except (ValueError, TypeError, KeyError):
+            return "respuesta de Kalshi con formato no reconocido"
+    return "partido finalizado, pero no hay resultado terminal WIN/LOSS/ANULADA enlazado por prediction_id"
 
 
 def rows(path):
@@ -82,12 +110,24 @@ def reconcile(name, pred_name, result_name, kind, competition):
     print(f"RECONCILIACIÓN {name}: predicciones_partido_terminado={len(finished_predictions)} "
           f"| resultados_terminales_asociados={registered} | diferencia={len(pending)} "
           f"| pendientes={len(pending)} | teóricas_sin_ticker_excluidas={theoretical_without_contract}")
-    if pending:
-        for row in pending[:30]:
-            print(f"PENDIENTE {name} · {row.get('prediction_id')} · match_id={row.get('match_id')} · ticker={row.get('ticker','')}")
-        if len(pending) > 30:
-            print(f"... y {len(pending)-30} pendientes adicionales")
+    for row in pending[:30]:
+        reason = motivo_pendiente(row, kind)
+        row["_motivo"] = reason
+        print(f"PENDIENTE {name} · {row.get('prediction_id')} · match_id={row.get('match_id')} · ticker={row.get('ticker','')} · motivo={reason}")
+    if len(pending) > 30:
+        print(f"... y {len(pending)-30} pendientes adicionales")
+    for row in pending:
+        PENDING_ROWS.append({
+            "deporte": name,
+            "prediction_id": row.get("prediction_id", ""),
+            "match_id": row.get("match_id", ""),
+            "ticker": row.get("ticker", ""),
+            "motivo": row.get("_motivo") or motivo_pendiente(row, kind),
+        })
     return len(pending)
+
+
+PENDING_ROWS = []
 
 
 def main():
@@ -98,6 +138,11 @@ def main():
         except (requests.RequestException, ValueError, KeyError, RuntimeError) as exc:
             print(f"ERROR RECONCILIACIÓN {name}: {exc}")
             total_pending += 1
+    with PENDING_REPORT.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=PENDING_COLUMNS)
+        writer.writeheader()
+        writer.writerows(PENDING_ROWS)
+    print(f"INFORME DE PENDIENTES: {PENDING_REPORT.name} · filas={len(PENDING_ROWS)}")
     print(f"RECONCILIACIÓN TOTAL: pendientes={total_pending}")
     if total_pending:
         raise SystemExit(1)
