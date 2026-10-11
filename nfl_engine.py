@@ -29,6 +29,8 @@ PRED_FILE = ROOT / "predicciones_nfl.csv"
 RESULT_FILE = ROOT / "resultados_nfl.csv"
 CATALOG_REPORT = ROOT / "nfl_catalogo_actual.csv"
 REJECTED_REPORT = ROOT / "nfl_candidatos_descartados.csv"
+COVERAGE_REPORT = ROOT / "nfl_cobertura_por_partido.csv"
+COVERAGE_COLUMNS = ["match_id", "fecha", "local", "visita", "contratos_modelables", "sencillas_validas", "alta_probabilidad_validas", "a_tener_en_cuenta_validas", "motivo_sencillas", "motivo_alta_probabilidad", "motivo_a_tener_en_cuenta"]
 TZ_ET = ZoneInfo("America/New_York")
 TIMEOUT = int(os.getenv("NFL_HTTP_TIMEOUT", "12"))
 NFLVERSE_GAMES_URL = os.getenv(
@@ -40,10 +42,10 @@ API_KALSHI = KALSHI_API_BASE
 SCHEMA_VERSION = "1"
 PRED_COLUMNS = [
     "schema_version", "prediction_id", "event_ticker", "ticker", "match_id",
-    "fecha", "local", "visita", "categoria", "mercado", "line", "lado",
+    "fecha", "local", "visita", "categoria", "mercado", "line", "lado", "equipo_yes", "tipo_salida", "descripcion",
     "seleccion", "bloque", "probabilidad_original", "probabilidad_calibrada",
     "version_calibracion", "probabilidad_modelo", "precio_captura",
-    "probabilidad_implicita", "edge", "estado_modelo", "reglas",
+    "probabilidad_implicita", "edge", "revision", "estado_modelo", "reglas",
     "capturado_en", "hora_inicio", "disponibilidad",
 ]
 RESULT_COLUMNS = [
@@ -260,24 +262,17 @@ def predict_game(model, home, away):
 
 
 def _price(market, side):
-    keys = (f"{side.lower()}_ask_dollars", f"{side.lower()}_bid_dollars")
-    for key in keys:
+    # Only asks represent the price to buy; a bid is not a buy price.
+    for key in (f"{side.lower()}_ask_dollars", f"{side.lower()}_ask"):
         try:
             value = float(market.get(key))
-        except (TypeError, ValueError):
-            continue
-        if math.isfinite(value) and 0 < value < 1:
-            return value
-    # Older API payloads may only expose integer-cent quotes.
-    for key in (f"{side.lower()}_ask", f"{side.lower()}_bid"):
-        try:
-            value = float(market.get(key)) / 100
+            if key.endswith("_ask") and not key.endswith("_ask_dollars"):
+                value /= 100
         except (TypeError, ValueError):
             continue
         if math.isfinite(value) and 0 < value < 1:
             return value
     return None
-
 
 def _event_teams(event):
     title = normalizar(" ".join(str(event.get(k) or "") for k in ("title", "sub_title", "subtitle")))
@@ -364,6 +359,61 @@ def _yes_team(market, home, away):
             matched.append(team)
     return matched[0] if len(set(matched)) == 1 else None
 
+def _market_yes_team(market, home, away):
+    team = _yes_team(market, home, away)
+    if team:
+        return team
+    suffix = str(market.get("ticker") or "").upper().rsplit("-", 1)[-1]
+    matches = [team for team in (home, away) if suffix == team or suffix.startswith(team)]
+    return matches[0] if len(matches) == 1 else None
+
+
+def _yes_outcome(market, kind):
+    text = normalizar(" ".join(str(market.get(k) or "") for k in ("yes_sub_title", "title", "subtitle")))
+    if kind in {"total", "team_total"}:
+        if re.search(r"\\bunder\\b|\\bless than\\b|\\bmenos de\\b", text):
+            return "under"
+        if re.search(r"\\bover\\b|\\bmore than\\b|\\bat least\\b|\\bor more\\b|\\+\\s*$", text):
+            return "over"
+    return kind
+
+
+def _team_label(team):
+    return TEAM_ALIASES.get(team, (str(team),))[0].title()
+
+
+def _description(market, kind, home, away, side, line):
+    yes_team = _market_yes_team(market, home, away)
+    yes_outcome = _yes_outcome(market, kind)
+    if kind in {"winner", "spread", "team_total"} and not yes_team:
+        return "", "", ""
+    if kind == "winner":
+        proposition = f"los {_team_label(yes_team)} ganan el partido"
+        desc = ("SÍ: " if side == "YES" else "NO: ") + (proposition if side == "YES" else f"los {_team_label(yes_team)} no ganan el partido")
+    elif kind == "spread":
+        amount = f"{abs(float(line)):g}" if line not in (None, "") else ""
+        proposition = f"los {_team_label(yes_team)} ganan por {amount} o más puntos"
+        desc = ("SÍ: " if side == "YES" else "NO: ") + (proposition if side == "YES" else f"los {_team_label(yes_team)} no ganan por {amount} o más puntos")
+    elif kind == "total":
+        amount = f"{float(line):g}" if line not in (None, "") else ""
+        if yes_outcome == "over":
+            desc = f"SÍ: el partido supera {amount} puntos en total" if side == "YES" else f"NO: el partido no supera {amount} puntos en total"
+        elif yes_outcome == "under":
+            desc = f"SÍ: el partido termina por debajo de {amount} puntos" if side == "YES" else f"NO: el partido no termina por debajo de {amount} puntos"
+        else:
+            return "", yes_outcome, yes_team or ""
+    elif kind == "team_total":
+        amount = f"{float(line):g}" if line not in (None, "") else ""
+        if yes_outcome == "over":
+            desc = f"SÍ: los {_team_label(yes_team)} superan {amount} puntos" if side == "YES" else f"NO: los {_team_label(yes_team)} no superan {amount} puntos"
+        elif yes_outcome == "under":
+            desc = f"SÍ: los {_team_label(yes_team)} se quedan por debajo de {amount} puntos" if side == "YES" else f"NO: los {_team_label(yes_team)} no se quedan por debajo de {amount} puntos"
+        else:
+            return "", yes_outcome, yes_team
+    else:
+        return "", yes_outcome, yes_team or ""
+    return desc, yes_outcome, yes_team or ""
+
 
 def model_market(market, series_ticker, game, prediction):
     """Return P(YES) only for exact, supported full-game market semantics."""
@@ -371,7 +421,7 @@ def model_market(market, series_ticker, game, prediction):
     title = str(market.get("yes_sub_title") or market.get("title") or "")
     line = _line_from_market(market)
     if kind == "winner":
-        team = _yes_team(market, game["home"], game["away"])
+        team = _market_yes_team(market, game["home"], game["away"])
         if not team:
             # Winner contracts often encode the YES team in the real market ticker.
             ticker = str(market.get("ticker") or "").upper()
@@ -487,19 +537,48 @@ def _match_id(kickoff, home, away):
     return f"NFL:{kickoff.date().isoformat()}:{away}@{home}"
 
 
+def _edge_number(candidate):
+    try:
+        value = float(candidate.get("Ventaja (edge)", candidate.get("edge", "")))
+        return value if math.isfinite(value) else -999.0
+    except (TypeError, ValueError):
+        return -999.0
+
+
+def _market_family(row):
+    kind = str(row.get("categoria") or "")
+    if kind in {"winner", "spread"}:
+        return "resultado"
+    if kind == "team_total":
+        return "total_equipo:" + str(row.get("equipo_yes") or "desconocido")
+    if kind == "total":
+        return "total_partido"
+    return kind
+
+
+def _reason_for_empty(block, candidates):
+    if not candidates:
+        return "no hay contratos con modelo NFL verificable para este partido"
+    reasons = single_candidate_rejection_reasons(candidates)
+    if block == "SENCILLAS":
+        return "ninguna línea cumple precio máximo, ventaja mínima y diversificación: " + ", ".join(f"{k}={v}" for k, v in reasons.items())
+    if block == "ALTA_PROBABILIDAD":
+        return "ninguna línea cumple probabilidad mínima y precio máximo de 90¢ sin correlación"
+    return "ninguna línea con precio y ventaja calculables supera los filtros del bloque"
+
+
 def generate_candidates(events, model, now=None, upcoming_games=None):
     now = parse_dt(now) if now else datetime.now(timezone.utc)
-    rows, rejected, catalog = [], [], []
+    raw_by_match, rejected, catalog, match_info = {}, [], [], {}
     upcoming_games = upcoming_games if upcoming_games is not None else load_upcoming_games(now=now)
     for event in events:
-        kickoff = _kickoff(event)
+        event_kickoff = _kickoff(event)
         teams = _event_teams(event)
         if len(teams) != 2:
             continue
-        fixture = _match_catalog_event(event, teams, upcoming_games, kickoff)
+        fixture = _match_catalog_event(event, teams, upcoming_games, event_kickoff)
         if not fixture:
             continue
-        # ESPN provides the authoritative home/away orientation; ambiguous event matches are skipped.
         home, away = fixture["home"], fixture["away"]
         kickoff = parse_dt(fixture["date"])
         if not kickoff or kickoff <= now:
@@ -509,59 +588,153 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
         if not prediction:
             continue
         match_id = _match_id(kickoff, home, away)
+        match_info[match_id] = {"fecha": kickoff.isoformat(), "local": home, "visita": away}
+        raw_by_match.setdefault(match_id, [])
         for market in event.get("markets") or []:
             ticker = str(market.get("ticker") or "").strip()
             if not ticker:
                 continue
             series = str(market.get("series_ticker") or event.get("series_ticker") or "")
             market = {**market, "series_ticker": series}
+            kind = _market_type(market, series)
             p_yes, reason = model_market(market, series, game, prediction)
+            line = _line_from_market(market)
+            yes_team = _market_yes_team(market, home, away)
             catalog.append({
                 "event_ticker": event.get("event_ticker", ""), "ticker": ticker,
-                "series_ticker": series, "event_title": event.get("title") or event.get("sub_title") or "",
-                "market_title": market.get("yes_sub_title") or market.get("title") or "",
+                "series_ticker": series, "event_title": " ".join(str(event.get(k) or "") for k in ("title", "sub_title")),
+                "market_title": market.get("yes_sub_title") or market.get("title") or ticker,
                 "market_status": market.get("status") or "", "yes_bid_dollars": market.get("yes_bid_dollars"),
                 "yes_ask_dollars": market.get("yes_ask_dollars"), "no_bid_dollars": market.get("no_bid_dollars"),
                 "no_ask_dollars": market.get("no_ask_dollars"), "modelable": "SI" if valid_probability(p_yes) is not None else "NO",
                 "motivo": "" if valid_probability(p_yes) is not None else reason,
             })
             if valid_probability(p_yes) is None:
-                rejected.append({"match_id": match_id, "local": home, "visita": away, "event_ticker": event.get("event_ticker", ""), "ticker": ticker, "categoria": _market_type(market, series), "motivo": reason})
+                rejected.append({"match_id": match_id, "local": home, "visita": away, "event_ticker": event.get("event_ticker", ""), "ticker": ticker, "categoria": kind, "motivo": reason})
                 continue
             for side, p in (("YES", p_yes), ("NO", 1 - p_yes)):
                 price = _price(market, side)
                 edge = p - price if price is not None else None
+                description, yes_outcome, description_team = _description(market, kind, home, away, side, line)
+                if not description:
+                    rejected.append({"match_id": match_id, "local": home, "visita": away, "event_ticker": event.get("event_ticker", ""), "ticker": ticker, "categoria": kind, "motivo": "no se pudo generar una frase de apuesta inequívoca"})
+                    continue
                 captured = now.isoformat()
-                pid = hashlib.sha256(f"{ticker}|{side}|{captured}".encode()).hexdigest()[:24]
-                rows.append({
-                    "schema_version": SCHEMA_VERSION, "prediction_id": pid,
+                raw_by_match[match_id].append({
+                    "schema_version": SCHEMA_VERSION, "prediction_id": "",
                     "event_ticker": event.get("event_ticker", ""), "ticker": ticker,
                     "match_id": match_id, "fecha": kickoff.isoformat(), "hora_inicio": kickoff.isoformat(),
-                    "local": home, "visita": away, "categoria": _market_type(market, series),
+                    "local": home, "visita": away, "categoria": kind,
                     "mercado": market.get("yes_sub_title") or market.get("title") or ticker,
-                    "line": _line_from_market(market) if _line_from_market(market) is not None else "",
-                    "lado": side, "seleccion": side, "bloque": "",
-                    "probabilidad_original": f"{p:.8f}", "probabilidad_calibrada": "",
-                    "version_calibracion": "calibración insuficiente",
-                    "probabilidad_modelo": f"{p:.8f}",
+                    "line": line if line is not None else "", "lado": side, "seleccion": side,
+                    "equipo_yes": yes_team or description_team, "tipo_salida": yes_outcome, "descripcion": description,
+                    "bloque": "", "probabilidad_original": f"{p:.8f}", "probabilidad_calibrada": "",
+                    "version_calibracion": "calibración insuficiente", "probabilidad_modelo": f"{p:.8f}",
                     "precio_captura": f"{price:.6f}" if price is not None else "",
                     "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
                     "edge": f"{edge:.6f}" if edge is not None else "",
-                    "estado_modelo": "NFL Elo + forma reciente; sin calibración por falta de muestra auditada",
+                    "revision": "REVISAR" if edge is not None and edge > 0.20 else "",
+                    "estado_modelo": "NFL Elo + forma reciente; calibración insuficiente",
                     "reglas": market.get("rules_primary") or market.get("rules_secondary") or "",
                     "capturado_en": captured,
                     "disponibilidad": "Disponible en Kalshi" if price is not None else "Sin precio en Kalshi",
                 })
-    return rows, rejected, catalog
 
+    saved_rows, coverage = [], []
+    min_combo = float(os.getenv("NFL_PROBABILIDAD_MINIMA_COMBO", "0.65"))
+    for match_id, info in match_info.items():
+        raw_rows = raw_by_match.get(match_id, [])
+        candidates = []
+        for row in raw_rows:
+            p = valid_probability(row.get("probabilidad_modelo"))
+            if p is None:
+                continue
+            try:
+                price = float(row.get("precio_captura")) if row.get("precio_captura") else None
+            except (TypeError, ValueError):
+                price = None
+            try:
+                edge = float(row.get("edge")) if row.get("edge") else None
+            except (TypeError, ValueError):
+                edge = None
+            candidates.append({
+                **row, "_p": p, "_lado": row["lado"], "Ticker": row["ticker"],
+                "Apuesta": row["descripcion"], "Categoría resumen": row["categoria"],
+                "Probabilidad del modelo": f"{p:.1%}",
+                "Precio de compra": f"{price:.0%}" if price is not None else "—",
+                "Ventaja (edge)": edge, "Lado Kalshi": row["lado"],
+            })
+        singles = rank_single_candidates(candidates, limit=5)
+        high_all, value_all = rank_market_candidates(
+            candidates, min_probability=min_combo,
+            high_limit=max(1, len(candidates)), value_limit=max(1, len(candidates)),
+        )
+        high = sorted(high_all, key=_edge_number, reverse=True)[:5]
+        # The shared ranking enforces line diversification; this final guard also enforces one pick per family.
+        value, families = [], set()
+        for candidate in sorted(value_all, key=_edge_number, reverse=True):
+            family = _market_family(candidate)
+            if family in families:
+                continue
+            families.add(family)
+            value.append(candidate)
+            if len(value) >= 10:
+                break
+        selected = {
+            "SENCILLAS": singles,
+            "ALTA_PROBABILIDAD": high,
+            "A_TENER_EN_CUENTA": value,
+        }
+        key_to_raw = {(row["ticker"], row["lado"]): row for row in raw_rows}
+        for block, chosen in selected.items():
+            for candidate in chosen:
+                key = (str(candidate.get("ticker") or candidate.get("Ticker") or ""), str(candidate.get("lado") or candidate.get("_lado") or "").upper())
+                raw = key_to_raw.get(key)
+                if not raw:
+                    continue
+                row = dict(raw)
+                row["bloque"] = block
+                row["prediction_id"] = hashlib.sha256(
+                    f"{row['ticker']}|{row['lado']}|{block}|{row['capturado_en']}".encode()
+                ).hexdigest()[:24]
+                saved_rows.append(row)
+        reasons = single_candidate_rejection_reasons(candidates)
+        coverage.append({
+            "match_id": match_id, **info, "contratos_modelables": len(candidates),
+            "sencillas_validas": len(singles), "alta_probabilidad_validas": len(high),
+            "a_tener_en_cuenta_validas": len(value),
+            "motivo_sencillas": "" if singles else _reason_for_empty("SENCILLAS", candidates),
+            "motivo_alta_probabilidad": "" if high else _reason_for_empty("ALTA_PROBABILIDAD", candidates),
+            "motivo_a_tener_en_cuenta": "" if value else _reason_for_empty("A_TENER_EN_CUENTA", candidates),
+        })
+        selected_keys = {(str(c.get("ticker") or c.get("Ticker") or ""), str(c.get("lado") or c.get("_lado") or "").upper()) for chosen in selected.values() for c in chosen}
+        for candidate in candidates:
+            key = (str(candidate["ticker"]), str(candidate["lado"]).upper())
+            if key not in selected_keys:
+                rejected.append({
+                    "match_id": match_id, "local": info["local"], "visita": info["visita"],
+                    "event_ticker": candidate.get("event_ticker", ""), "ticker": candidate["ticker"],
+                    "categoria": candidate["categoria"],
+                    "motivo": "excluida por filtros/diversificación/límite; " + "; ".join(f"{k}={v}" for k, v in reasons.items()),
+                })
+    return saved_rows, rejected, catalog, coverage
 
 def save_capture(rows, path=PRED_FILE):
-    """Shared append-only writer; rejects any prediction captured at/after kickoff."""
-    return append_immutable_predictions(
-        path, PRED_COLUMNS, rows, probability_field="probabilidad_modelo",
+    """Shared immutable writer wrapped in an atomic file replacement."""
+    import shutil
+    path = Path(path)
+    tmp = path.with_name(path.name + ".capture.tmp")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        shutil.copyfile(path, tmp)
+    elif tmp.exists():
+        tmp.unlink()
+    result = append_immutable_predictions(
+        tmp, PRED_COLUMNS, rows, probability_field="probabilidad_modelo",
         kickoff_field="hora_inicio", capture_field="capturado_en",
     )
-
+    os.replace(tmp, path)
+    return result
 
 def _write_report(path, columns, rows):
     path = Path(path)
@@ -581,13 +754,14 @@ def capture():
     model = build_team_model(games)
     series, events = load_kalshi_catalog()
     upcoming = load_upcoming_games()
-    rows, rejected, catalog = generate_candidates(events, model, upcoming_games=upcoming)
+    rows, rejected, catalog, coverage = generate_candidates(events, model, upcoming_games=upcoming)
     # Archive full observed catalog and rejection reasons for auditability.
     _write_report(CATALOG_REPORT,
         ["event_ticker", "ticker", "series_ticker", "event_title", "market_title", "market_status",
          "yes_bid_dollars", "yes_ask_dollars", "no_bid_dollars", "no_ask_dollars", "modelable", "motivo"], catalog)
     _write_report(REJECTED_REPORT,
         ["match_id", "local", "visita", "event_ticker", "ticker", "categoria", "motivo"], rejected)
+    _write_report(COVERAGE_REPORT, COVERAGE_COLUMNS, coverage)
     saved = save_capture(rows)
     print(f"NFL catálogo: series={len(series)} eventos={len(events)} mercados={len(catalog)} modelables={sum(x['modelable']=='SI' for x in catalog)} descartados={len(rejected)}")
     print(f"NFL captura: aceptadas={saved['accepted']} rechazadas={saved['rejected']} histórico_modelo={model['trained_games']} duración_s={time.monotonic()-started:.1f}")
