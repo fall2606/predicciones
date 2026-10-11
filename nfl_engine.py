@@ -125,6 +125,15 @@ def _market_probability(market, home, away, home_score, away_score):
     line = float(line_match.group(1)) if line_match else None
 
     is_total = "TOTAL" in ticker or "total" in text
+    if "TEAMTOTAL" in ticker and line is not None:
+        team = _team_in_market(title, home, away)
+        if not team:
+            return None, ""
+        projected_team_total = home_score if team == home else away_score
+        over = _normal_cdf(projected_team_total, line, 7.5)
+        if "under" in title.lower() or "below" in title.lower():
+            over = 1 - over
+        return over, "Total de puntos del equipo"
     if is_total and line is not None:
         over = _normal_cdf(total, line, 10.5)
         if "under" in title.lower() or "below" in title.lower():
