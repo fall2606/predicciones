@@ -40,10 +40,10 @@ class CoreTests(unittest.TestCase):
    with patch.object(core,"_market_rows_for_series",return_value=fake): s=core.liquidate_kalshi_ledger(p,r,cols,side_field="lado")
    self.assertEqual(s["resultados_nuevos"],0)
  def test_rank_filters_duplicate_correlated_families(self):
-  rows=[{"Ticker":"KXSOCCERTOTAL-1","Probabilidad del modelo":"90%","Ventaja (edge)":0.1,"Apuesta":"Más de 1.5 goles"},
-   {"Ticker":"KXSOCCERTOTAL-2","Probabilidad del modelo":"85%","Ventaja (edge)":0.08,"Apuesta":"Más de 2.5 goles"},
-   {"Ticker":"KXSOCCERBTTS-3","Probabilidad del modelo":"80%","Ventaja (edge)":0.07,"Apuesta":"Ambos marcan"},
-   {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"78%","Ventaja (edge)":0.05,"Apuesta":"4+ corners"}]
+  rows=[{"Ticker":"KXSOCCERTOTAL-1","Probabilidad del modelo":"90%","Precio de compra":"70%","Ventaja (edge)":0.1,"Apuesta":"Más de 1.5 goles"},
+   {"Ticker":"KXSOCCERTOTAL-2","Probabilidad del modelo":"85%","Precio de compra":"65%","Ventaja (edge)":0.08,"Apuesta":"Más de 2.5 goles"},
+   {"Ticker":"KXSOCCERBTTS-3","Probabilidad del modelo":"80%","Precio de compra":"60%","Ventaja (edge)":0.07,"Apuesta":"Ambos marcan"},
+   {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"78%","Precio de compra":"55%","Ventaja (edge)":0.05,"Apuesta":"4+ corners"}]
   high,value=core.rank_market_candidates(rows,0.7)
   self.assertEqual(len(high),2); self.assertEqual(len(value),3); self.assertEqual(high[0]["Apuesta"],"Más de 1.5 goles")
 
