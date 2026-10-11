@@ -1,7 +1,7 @@
-tipo_mercado,n,brier_modelo,brier_precio_kalshi,diferencia_modelo_menos_precio,estado_calibracion
-ganador,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-primera_entrada,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-props_jugador,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-run_line,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-total_carreras,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-total_equipo,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+tipo_mercado,n_resueltos,n_con_precio,brier_modelo,brier_precio_kalshi,diferencia_modelo_menos_precio,estado_calibracion
+ganador,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+primera_entrada,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+props_jugador,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+run_line,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+total_carreras,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+total_equipo,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
