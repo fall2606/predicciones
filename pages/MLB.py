@@ -731,8 +731,11 @@ for juego in [juego]:
                                     frase = f"{verbo} {total_linea.group(2)} carreras en el partido"
                         if categoria == "Entradas parciales":
                             categoria = "Primeras 5 entradas (F5)" if re.search(r"first\s*(?:5|five)", mercado, re.I) else "Entradas parciales"
-                        prefijo = "SÍ" if lado == "YES" else "NO"
-                        st.markdown(f"**{prefijo}: {frase}**")
+                        if "BINNINGWIN" in str(pick.get("ticker", "")).upper():
+                            st.markdown(f"**{frase}**")
+                        else:
+                            prefijo = "SÍ" if lado == "YES" else "NO"
+                            st.markdown(f"**{prefijo}: {frase}**")
                         st.caption(f"Categoría: {categoria}")
                         try:
                             prob = float(pick.get("probabilidad_modelo", 0))
