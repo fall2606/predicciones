@@ -126,7 +126,7 @@ jobs:
           LIQUIDATE_CHAMPIONS: ${{ steps.liquidate_champions.outcome }}
           COMMIT_RESULTS: ${{ steps.commit_results.outcome }}
         run: |
-          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$RESTORE_MLB" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
+          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$RESTORE_MLB" "$AUDIT_RECONCILIATION" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
             if [ "$result" != "success" ]; then
               echo "::error::Una tarea del pipeline falló: $result"
               exit 1
