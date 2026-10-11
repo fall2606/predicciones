@@ -188,3 +188,16 @@ def test_calibration_requires_minimum_sample_and_preserves_probability_bounds():
     assert 0 <= calibrated <= 1
     assert version == "platt_winner_n150"
     assert status == "aplicada"
+
+
+def test_discover_nfl_series_keeps_protected_player_props():
+    original = nfl.iter_kalshi_pages
+    try:
+        nfl.iter_kalshi_pages = lambda *args, **kwargs: [{
+            "ticker": "KXNFLTDPROT",
+            "title": "NFL protected player touchdowns",
+        }]
+        found = nfl.discover_nfl_series()
+        assert any(row.get("ticker") == "KXNFLTDPROT" for row in found)
+    finally:
+        nfl.iter_kalshi_pages = original
