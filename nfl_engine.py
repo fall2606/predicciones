@@ -354,6 +354,50 @@ def build_candidates(events, stats):
                 })
     return candidates
 
+def _rank_nfl_game(rows):
+    """NFL-specific diversified ranking: one side per contract and per-game limits."""
+    by_ticker = {}
+    for row in rows or []:
+        ticker = str(row.get("ticker") or "").strip()
+        try:
+            p = float(row.get("probabilidad_calibrada"))
+            price = float(row.get("precio_captura"))
+            edge = float(row.get("edge"))
+        except (TypeError, ValueError):
+            continue
+        if not ticker or not (0 < p < 1) or not (0 < price < 1) or not math.isfinite(edge):
+            continue
+        previous = by_ticker.get(ticker)
+        if previous is None or edge > float(previous.get("edge") or -999):
+            by_ticker[ticker] = row
+    eligible = list(by_ticker.values())
+
+    def choose(predicate, limit, sort_key, per_category):
+        picked, counts = [], {}
+        for row in sorted((x for x in eligible if predicate(x)), key=sort_key, reverse=True):
+            category = str(row.get("categoria") or "").split(" · ", 1)[0]
+            if counts.get(category, 0) >= per_category:
+                continue
+            picked.append(row["prediction_id"])
+            counts[category] = counts.get(category, 0) + 1
+            if len(picked) >= limit:
+                break
+        return set(picked)
+
+    singles = choose(
+        lambda r: float(r["precio_captura"]) <= 0.88 and float(r["probabilidad_calibrada"]) >= 0.55 and float(r["edge"]) >= 0.05,
+        5, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 2,
+    )
+    combos = choose(
+        lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.65 and float(r["edge"]) >= 0.02,
+        5, lambda r: (float(r["probabilidad_calibrada"]), float(r["edge"])), 2,
+    )
+    value = choose(
+        lambda r: float(r["edge"]) >= 0.02,
+        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 3,
+    )
+    return singles, combos, value
+
 def main():
     series = sports_series(("KXNFL",))
     if not series:
@@ -406,24 +450,26 @@ def main():
         row["prediction_id"] = base_id + "|validado_prepartido" if base_id in excluded_ids else base_id
         if row["prediction_id"] not in existing:
             rows.append(row)
-    priced = [r for r in rows if r.get("precio_captura") is not None]
-    ranking_rows = [dict(r, _p=r["probabilidad_calibrada"], **{"Ventaja (edge)": r["edge"], "Apuesta sencilla": r["mercado"]}) for r in priced]
-    high, value = rank_market_candidates(ranking_rows, min_probability=0.65, high_limit=5, value_limit=10)
-    high_ids = {x["prediction_id"] for x in high}
-    value_ids = {x["prediction_id"] for x in value}
-    singles = rank_single_candidates(ranking_rows, limit=5)
-    single_ids = {x["prediction_id"] for x in singles}
-    # Current snapshot is replaceable; prediction history below remains append-only.
+    single_ids, high_ids, value_ids = set(), set(), set()
+    by_match = {}
+    for row in candidates:
+        by_match.setdefault(row["match_id"], []).append(row)
+    for game_rows in by_match.values():
+        singles, combos, value = _rank_nfl_game(game_rows)
+        single_ids.update(singles)
+        high_ids.update(combos)
+        value_ids.update(value)
+    for row in candidates:
+        row["bloque"] = ("SENCILLAS" if row["prediction_id"] in single_ids else
+                         "ALTA_PROBABILIDAD" if row["prediction_id"] in high_ids else
+                         "A_TENER_EN_CUENTA" if row["prediction_id"] in value_ids else "DETALLE")
+    # Current recommendations are recalculated per match; the historical ledger remains append-only.
     from csv import DictWriter
-    current_fields = ["event_ticker","ticker","local","visita","fecha","categoria","mercado","lado","probabilidad_modelo","probabilidad_calibrada","precio_captura","edge","calibracion","marcador_proyectado"]
+    current_fields = ["event_ticker","match_id","prediction_id","ticker","local","visita","fecha","categoria","mercado","lado","bloque","probabilidad_modelo","probabilidad_calibrada","precio_captura","edge","calibracion","marcador_proyectado"]
     with CURRENT_FILE.open("w", newline="", encoding="utf-8") as f:
         writer = DictWriter(f, fieldnames=current_fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(candidates)
-    for row in rows:
-        row["bloque"] = ("SENCILLAS" if row["prediction_id"] in single_ids else
-                         "ALTA_PROBABILIDAD" if row["prediction_id"] in high_ids else
-                         "A_TENER_EN_CUENTA" if row["prediction_id"] in value_ids else "DETALLE")
     append_immutable_predictions(PRED_FILE, PRED_COLUMNS, rows, probability_field="probabilidad_modelo")
     print(f"NFL: eventos brutos={len(raw_events)}, partidos agrupados={len(events)}")
     print(f"NFL: eventos abiertos={len(events)}, candidatos modelados={len(candidates)}, capturas nuevas={len(rows)}")
