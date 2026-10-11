@@ -859,6 +859,8 @@ for juego in [juego]:
                             st.error("LOSS")
                         elif estado in {"ANULADA", "VOID", "CANCELLED"}:
                             st.info("ANULADA")
+                        elif "SIN LIQUIDAR" in estado:
+                            st.error("SIN LIQUIDAR · partido terminado sin resultado asociado")
                         else:
                             st.caption("PENDIENTE")
                         st.caption(f"Ticker: {pick.get('ticker', '—')}")
