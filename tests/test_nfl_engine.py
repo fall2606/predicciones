@@ -201,3 +201,17 @@ def test_csv_reader_quarantines_bad_rows_and_migrates_missing_schema(tmp_path):
     assert quarantine.exists()
     bad = pd.read_csv(quarantine, dtype=str)
     assert "columnas" in bad.loc[0, "motivo"]
+
+
+
+def test_player_prop_without_verified_player_model_is_never_generated():
+    market = {
+        "ticker": "KXNFLPLAYERPASSYDS-TEST-QB-250",
+        "series_ticker": "KXNFLPLAYERPASSYDS",
+        "title": "Test QB over 249.5 passing yards",
+    }
+    kind = nfl._market_type(market, "KXNFLPLAYERPASSYDS")
+    probability, reason = nfl.model_market(market, "KXNFLPLAYERPASSYDS", {"home": "KC", "away": "BAL"}, {})
+    assert kind == "unsupported_player_prop"
+    assert probability is None
+    assert "prop" in reason.lower()
