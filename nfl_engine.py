@@ -14,6 +14,9 @@ ROOT = Path(__file__).resolve().parent
 PRED_FILE = ROOT / "predicciones_nfl.csv"
 RESULT_FILE = ROOT / "resultados_nfl.csv"
 CURRENT_FILE = ROOT / "nfl_probabilidades_actuales.csv"
+EXCLUDED_FILE = ROOT / "nfl_predicciones_excluidas.csv"
+EXCLUDED_COLUMNS = ["prediction_id", "motivo", "kickoff_real", "detectado_en"]
+SCHEDULES = {}
 PRED_COLUMNS = ["prediction_id","event_ticker","ticker","match_id","fecha","local","visita","categoria",
                 "mercado","line","lado","seleccion","bloque","probabilidad_modelo","probabilidad_calibrada",
                 "precio_captura","probabilidad_implicita","edge","capturado_en","disponibilidad","calibracion","marcador_proyectado"]
@@ -30,10 +33,11 @@ def _norm(s):
     return re.sub(r"[^a-z0-9]+", " ", str(s or "").lower()).strip()
 
 def _team_stats(days=100):
-    # ESPN's NFL scoreboard accepts a season/year filter more reliably than arbitrary date ranges.
+    # ESPN season scoreboard supplies both completed results and scheduled kickoff times.
     now = datetime.now(timezone.utc)
     season_year = now.year if now.month >= 8 else now.year - 1
     scores = {}
+    SCHEDULES.clear()
     season_types = [2, 3] if now.month in (1, 2) else [2]
     for season_type in season_types:
         try:
@@ -41,18 +45,20 @@ def _team_stats(days=100):
         except (requests.RequestException, ValueError, TypeError):
             continue
         for event in data.get("events", []):
-            comp = (event.get("competitions") or [{}])[0]
-            if not comp.get("status", {}).get("type", {}).get("completed"):
-                continue
-            competitors = comp.get("competitors") or []
+            competitors = (event.get("competitions") or [{}])[0].get("competitors") or []
             if len(competitors) != 2:
                 continue
             try:
                 home = next(x for x in competitors if x.get("homeAway") == "home")
                 away = next(x for x in competitors if x.get("homeAway") == "away")
-                hs, aws = float(home["score"]), float(away["score"])
                 hn = _norm(home.get("team", {}).get("displayName") or home.get("team", {}).get("name"))
                 an = _norm(away.get("team", {}).get("displayName") or away.get("team", {}).get("name"))
+                game_date = str(event.get("date") or "")
+                if hn and an and game_date:
+                    SCHEDULES[tuple(sorted((hn, an)))] = game_date
+                if not (event.get("competitions") or [{}])[0].get("status", {}).get("type", {}).get("completed"):
+                    continue
+                hs, aws = float(home["score"]), float(away["score"])
             except (StopIteration, KeyError, TypeError, ValueError):
                 continue
             if not hn or not an:
