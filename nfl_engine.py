@@ -255,11 +255,9 @@ def _read_rows(path):
         return list(csv.DictReader(f))
 
 def reconcile_exclusions(stats):
-    """Append-only quarantine for historical captures made at/after real kickoff."""
+    """Keep a canonical quarantine ledger for invalid historical captures."""
     existing_rows = _read_rows(EXCLUDED_FILE)
     existing_by_id = {str(row.get("prediction_id") or "").strip(): row for row in existing_rows}
-    excluded = set(existing_by_id)
-    new_rows = []
     for row in _read_rows(PRED_FILE):
         pid = str(row.get("prediction_id") or "").strip()
         if not pid:
@@ -267,36 +265,36 @@ def reconcile_exclusions(stats):
         event_ticker = str(row.get("event_ticker") or "").upper()
         market_ticker = str(row.get("ticker") or "").upper()
         period_pattern = r"KXNFL(?:1H|2H|1Q|2Q|3Q|4Q|Q1|Q2|Q3|Q4)"
-        period_contract = bool(re.search(period_pattern, event_ticker) or re.search(period_pattern, market_ticker))
+        event_is_period = bool(re.search(period_pattern, event_ticker))
+        market_is_period = bool(re.search(period_pattern, market_ticker))
         kickoff = _scheduled_kickoff(row.get("local"), row.get("visita"), stats, row.get("event_ticker") or row.get("ticker"))
         captured = _parse_datetime(row.get("capturado_en"))
         late_capture = kickoff is not None and captured is not None and captured >= kickoff
-        if not period_contract and not late_capture:
+        if not market_is_period and not event_is_period and not late_capture:
             continue
-        reason = ("Contrato de periodo/cuarto no cubierto por el modelo NFL" if period_contract else
-                  "Captura registrada a la hora del inicio real o después; excluida de calibración prepartido")
-        kickoff_value = kickoff.isoformat() if kickoff else ""
+        if market_is_period:
+            reason = "Contrato de periodo/cuarto no cubierto por el modelo NFL"
+        elif event_is_period:
+            reason = "Captura histórica asociada a una serie de periodo; excluida por el modelo inicial incorrecto"
+        else:
+            reason = "Captura registrada a la hora del inicio real o después; excluida de calibración prepartido"
         previous = existing_by_id.get(pid)
+        kickoff_value = kickoff.isoformat() if kickoff else ""
         if previous and previous.get("kickoff_real", "") == kickoff_value and previous.get("motivo", "") == reason:
             continue
-        record = {
+        existing_by_id[pid] = {
             "prediction_id": pid,
             "motivo": reason,
             "kickoff_real": kickoff_value,
             "detectado_en": datetime.now(timezone.utc).isoformat(),
         }
-        new_rows.append(record)
-        existing_by_id[pid] = record
-        excluded.add(pid)
     import csv
-    if not EXCLUDED_FILE.exists() or not EXCLUDED_FILE.stat().st_size:
-        with EXCLUDED_FILE.open("w", newline="", encoding="utf-8") as f:
-            csv.DictWriter(f, fieldnames=EXCLUDED_COLUMNS).writeheader()
-    if new_rows:
-        with EXCLUDED_FILE.open("a", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=EXCLUDED_COLUMNS, extrasaction="ignore")
-            writer.writerows(new_rows)
-    return excluded
+    with EXCLUDED_FILE.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=EXCLUDED_COLUMNS, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(existing_by_id.values())
+    return set(existing_by_id)
+
 
 def build_candidates(events, stats):
     candidates = []
