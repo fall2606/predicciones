@@ -1,0 +1,188 @@
+"""Fast independent football score checks using ESPN's public scoreboard endpoint.
+
+The endpoint is public but undocumented; keep request volume low and never settle a
+market from it unless its semantics can be derived safely from the captured prediction.
+Special markets (corners, cards, player props, first goal, half-time) fall back to Kalshi.
+"""
+from __future__ import annotations
+
+import ast
+import re
+import unicodedata
+from datetime import datetime, timedelta, timezone
+from difflib import SequenceMatcher
+
+import requests
+
+LEAGUES = {"KXLALIGA": "esp.1", "KXUCL": "uefa.champions"}
+_CACHE = {}
+_SESSION = requests.Session()
+_TIMEOUT = 8
+ALIASES = {
+    "barca": "barcelona", "barcelona fc": "barcelona",
+    "atleti": "atletico madrid", "atletico": "atletico madrid",
+    "atletico de madrid": "atletico madrid", "atletico madrid": "atletico madrid",
+    "real sociedad": "real sociedad", "real madrid cf": "real madrid",
+    "athletic club": "athletic bilbao", "athletic": "athletic bilbao",
+    "club brugge": "club brugge", "brugge": "club brugge",
+    "inter": "inter milan", "internazionale": "inter milan",
+    "psg": "paris saint germain", "paris sg": "paris saint germain",
+    "bayern": "bayern munich", "bayern munchen": "bayern munich",
+    "sporting": "sporting cp", "sporting lisbon": "sporting cp",
+    "psv": "psv eindhoven", "ajax": "ajax amsterdam",
+}
+
+
+def _norm(value):
+    value = unicodedata.normalize("NFKD", str(value or "")).encode("ascii", "ignore").decode().lower()
+    value = re.sub(r"\b(fc|cf|afc|club|de|the)\b", " ", value)
+    value = re.sub(r"[^a-z0-9]+", " ", value).strip()
+    value = re.sub(r"\s+", " ", value)
+    return ALIASES.get(value, value)
+
+
+def _similar(a, b):
+    aa, bb = _norm(a), _norm(b)
+    if not aa or not bb:
+        return 0.0
+    if aa == bb:
+        return 1.0
+    if aa in bb or bb in aa:
+        return min(len(aa), len(bb)) / max(len(aa), len(bb)) * 0.15 + 0.82
+    return SequenceMatcher(None, aa, bb).ratio()
+
+
+def _parse_date(value):
+    try:
+        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
+def _scoreboard(league, day):
+    key = (league, day)
+    if key in _CACHE:
+        return _CACHE[key]
+    url = f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard"
+    response = _SESSION.get(url, params={"dates": day, "limit": 100}, timeout=_TIMEOUT)
+    response.raise_for_status()
+    events = (response.json() or {}).get("events") or []
+    _CACHE[key] = events
+    return events
+
+
+def find_match(row):
+    """Return a confidently matched scoreboard event, or None rather than guessing."""
+    ticker = str(row.get("ticker") or "").upper()
+    key = str(row.get("clave_interna") or "").upper()
+    league = next((slug for prefix, slug in LEAGUES.items() if ticker.startswith(prefix) or prefix in key), None)
+    if not league:
+        return None
+    kickoff = _parse_date(row.get("fecha"))
+    if kickoff is None:
+        return None
+    local, away = str(row.get("local") or ""), str(row.get("visita") or "")
+    if not local or not away:
+        return None
+    days = [(kickoff + timedelta(days=offset)).strftime("%Y%m%d") for offset in (0, -1, 1)]
+    candidates = []
+    for day in days:
+        try:
+            events = _scoreboard(league, day)
+        except (requests.RequestException, ValueError, TypeError):
+            continue
+        for event in events:
+            comps = event.get("competitions") or []
+            competitors = (comps[0].get("competitors") or []) if comps else []
+            home = next((c for c in competitors if c.get("homeAway") == "home"), None)
+            away_team = next((c for c in competitors if c.get("homeAway") == "away"), None)
+            if not home or not away_team:
+                continue
+            home_name = (home.get("team") or {}).get("displayName") or (home.get("team") or {}).get("name") or ""
+            away_name = (away_team.get("team") or {}).get("displayName") or (away_team.get("team") or {}).get("name") or ""
+            direct = (_similar(local, home_name) + _similar(away, away_name)) / 2
+            reverse = (_similar(local, away_name) + _similar(away, home_name)) / 2
+            score = max(direct, reverse)
+            if score < 0.78:
+                continue
+            # A reversed home/away mapping is accepted only when both teams still match well.
+            if direct >= reverse:
+                local_score, away_score = home.get("score"), away_team.get("score")
+            else:
+                local_score, away_score = away_team.get("score"), home.get("score")
+            status = (event.get("status") or {}).get("type") or {}
+            candidates.append({
+                "confidence": score, "event_id": str(event.get("id") or ""),
+                "status": str(status.get("name") or status.get("state") or "").upper(),
+                "completed": bool(status.get("completed")),
+                "status_detail": str(status.get("detail") or status.get("description") or ""),
+                "local_score": local_score, "away_score": away_score,
+                "league": league, "event_name": str(event.get("name") or ""),
+            })
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: item["confidence"], reverse=True)
+    if len(candidates) > 1 and candidates[0]["confidence"] - candidates[1]["confidence"] < 0.025:
+        return None
+    best = candidates[0]
+    if best["local_score"] in (None, "") or best["away_score"] in (None, ""):
+        return best
+    try:
+        best["local_score"] = int(best["local_score"])
+        best["away_score"] = int(best["away_score"])
+    except (ValueError, TypeError):
+        return None
+    return best
+
+
+def settle_from_score(row):
+    """Resolve only full-time game result, full-time goals, BTTS, and team-goal totals."""
+    match = find_match(row)
+    if not match:
+        return None
+    status = match["status"]
+    if any(token in status for token in ("POSTPONED", "SUSPENDED", "CANCELLED", "CANCELED", "ABANDONED")):
+        return {"match": match, "state": None, "reason": "estado_partido:" + status}
+    if not match["completed"] or not any(token in status for token in ("FINAL", "FULL_TIME", "STATUS_FINAL")):
+        return {"match": match, "state": None, "reason": "partido_no_finalizado:" + status}
+    try:
+        parsed = ast.literal_eval(str(row.get("clave_interna") or ""))
+        if not (isinstance(parsed, tuple) and len(parsed) == 2 and isinstance(parsed[0], tuple)):
+            return None
+        contract, yes_no = parsed
+        if len(contract) < 3 or str(yes_no).upper() not in {"YES", "NO"}:
+            return None
+        series, outcome = str(contract[0]).upper(), str(contract[1]).lower()
+        line = contract[2]
+        home, away = match["local_score"], match["away_score"]
+        total = home + away
+        proposition = None
+        if series.endswith("GAME") and outcome in {"local", "visita", "empate"}:
+            proposition = home > away if outcome == "local" else away > home if outcome == "visita" else home == away
+        elif series.endswith("BTTS") and outcome in {"ambos", "btts"}:
+            proposition = home > 0 and away > 0
+        elif series.endswith("TOTAL") and outcome in {"over", "under"} and line is not None:
+            threshold = float(line)
+            proposition = total > threshold if outcome == "over" else total < threshold
+            if total == threshold:
+                # Whole-number lines can push; defer to Kalshi's exact market resolution.
+                return None
+        elif series.endswith("TEAMTOTAL") and outcome in {"local", "visita", "home", "away"} and line is not None:
+            team_score = home if outcome in {"local", "home"} else away
+            threshold = float(line)
+            proposition = team_score > threshold
+            if team_score == threshold:
+                return None
+        else:
+            return None
+        won = proposition if str(yes_no).upper() == "YES" else not proposition
+        state = "WIN" if won else "LOSS"
+        return {
+            "match": match, "state": state,
+            "reason": f"Marcador ESPN independiente: {home}-{away} (mercado {series}, selección {yes_no})",
+        }
+    except (ValueError, TypeError, SyntaxError, IndexError):
+        return None
