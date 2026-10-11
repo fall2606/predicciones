@@ -194,7 +194,7 @@ class CoreTests(unittest.TestCase):
    path.write_text("\n".join([
     "prediction_id,estado,marcador,resuelto_en",
     "old,WIN,Marcador,2026-10-10T10:00:00Z",
-    "bad,LOSS,Marcador,extra,2026-10-10T11:00:00Z",
+    "bad,LOSS,Marcador,extra,more,bad-time",
     "new,LOSS,Marcador,2026-10-10T12:00:00Z",
    ]) + "\n",encoding="utf-8")
    rows=core.read_csv_rows_resilient(path)
