@@ -3,30 +3,8 @@ name: Verificación NFL y regresión del proyecto
 on:
   pull_request:
     branches: [main]
-    paths:
-      - "nfl_engine.py"
-      - "pages/NFL.py"
-      - "prediction_core.py"
-      - "scripts/auditar_reconciliacion.py"
-      - "scripts/backtest_nfl.py"
-      - "scripts/verify_nfl_cycle.py"
-      - "scripts/verify_streamlit_pages.py"
-      - "tests/test_nfl_engine.py"
-      - ".github/workflows/nfl-verify.yml"
-      - ".github/workflows/pipeline-predicciones.yml"
   push:
     branches: [main]
-    paths:
-      - "nfl_engine.py"
-      - "pages/NFL.py"
-      - "prediction_core.py"
-      - "scripts/auditar_reconciliacion.py"
-      - "scripts/backtest_nfl.py"
-      - "scripts/verify_nfl_cycle.py"
-      - "scripts/verify_streamlit_pages.py"
-      - "tests/test_nfl_engine.py"
-      - ".github/workflows/nfl-verify.yml"
-      - ".github/workflows/pipeline-predicciones.yml"
   workflow_dispatch:
 
 permissions:
