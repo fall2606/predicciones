@@ -175,3 +175,16 @@ def test_espn_fallback_settles_finished_winner_by_teams_and_date(monkeypatch):
     settled_no = nfl.settle_from_espn(row)
     assert settled_no and settled_no["state"] == "LOSS"
     assert "24" in settled["score"] and "17" in settled["score"]
+
+
+
+def test_calibration_requires_minimum_sample_and_preserves_probability_bounds():
+    p, version, status = nfl.calibrate_probability(0.73, "winner", None, "winner", calibration={})
+    assert p is None and version is None and status == "calibración insuficiente"
+    calibration = {"markets": {"winner": {
+        "n_train": 150, "intercept": 0.1, "slope": 0.9, "version": "platt_winner_n150",
+    }}}
+    calibrated, version, status = nfl.calibrate_probability(0.73, "winner", None, "winner", calibration=calibration)
+    assert 0 <= calibrated <= 1
+    assert version == "platt_winner_n150"
+    assert status == "aplicada"
