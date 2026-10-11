@@ -157,7 +157,7 @@ def main():
                 "disponibilidad": fila["Disponibilidad"],
                 "ticker": fila.get("Ticker", "—"),
                 "mercado": market_title_by_ticker.get(str(fila.get("Ticker", "")), str(fila.get("Jugada sencilla", ""))),
-                "line": str(market_key[2]) if isinstance(market_key, (tuple, list)) and len(market_key) > 2 and market_key[2] is not None else "",
+                "line": extract_line(market_title_by_ticker.get(str(fila.get("Ticker", "")), str(fila.get("Jugada sencilla", "")))) or (str(market_key[2]) if isinstance(market_key, (tuple, list)) and len(market_key) > 2 and market_key[2] is not None else ""),
                 "seleccion": lado,
                 "bloque": bloque,
                 "edge": "" if fila.get("edge") is None else f"{float(fila.get('edge')):.6f}",
