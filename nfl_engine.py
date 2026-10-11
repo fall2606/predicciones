@@ -130,7 +130,20 @@ def load_kalshi_catalog():
     series = discover_nfl_series()
     if not series:
         raise RuntimeError("La API pública de Kalshi no devolvió series identificables como NFL.")
-    events = events_for_series([str(s["ticker"]) for s in series], statuses=("open", "initialized"))
+    events = []
+    # Upcoming match markets are open; avoid the much slower initialized/futures archive.
+    # Two pages per series keep the live capture bounded.
+    for item in series:
+        try:
+            rows = iter_kalshi_pages(
+                "events",
+                {"limit": 200, "series_ticker": str(item["ticker"]), "status": "open",
+                 "with_nested_markets": "true"},
+                "events", 2,
+            )
+            events.extend(rows)
+        except (requests.RequestException, ValueError, KeyError) as exc:
+            print("AVISO catálogo NFL {}: {}".format(item.get("ticker"), exc))
     # Keep event and nested market data exactly as returned by Kalshi.
     seen = set()
     catalog = []
