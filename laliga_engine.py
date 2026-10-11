@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line, rank_single_candidates
+from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line, rank_single_candidates, read_csv_rows_resilient
 from scipy.stats import nbinom, poisson
 
 
@@ -996,14 +996,8 @@ def leer_historial_fijo():
         "clave_interna", "capturado_en",
     ]
     columnas_res = ["prediction_id", "estado", "marcador", "resuelto_en"]
-    try:
-        predicciones = pd.read_csv(PREDICCIONES_ARCHIVO, dtype={"prediction_id": str, "match_id": str})
-    except (FileNotFoundError, pd.errors.EmptyDataError):
-        predicciones = pd.DataFrame(columns=columnas_pred)
-    try:
-        resultados = pd.read_csv(RESULTADOS_ARCHIVO, dtype={"prediction_id": str})
-    except (FileNotFoundError, pd.errors.EmptyDataError):
-        resultados = pd.DataFrame(columns=columnas_res)
+    predicciones = pd.DataFrame(read_csv_rows_resilient(PREDICCIONES_ARCHIVO), columns=columnas_pred)
+    resultados = pd.DataFrame(read_csv_rows_resilient(RESULTADOS_ARCHIVO), columns=columnas_res)
     if not predicciones.empty and "ticker" in predicciones.columns:
         ticker_ok = predicciones["ticker"].astype(str).str.strip().ne("") & ~predicciones["ticker"].astype(str).str.strip().isin(["—", "-", "None", "nan"])
         p = pd.to_numeric(predicciones.get("probabilidad_calibrada"), errors="coerce")
