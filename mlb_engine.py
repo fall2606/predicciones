@@ -10,7 +10,7 @@ import unicodedata
 import requests
 import numpy as np
 from scipy.stats import nbinom
-from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates, extract_line
+from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates, rank_single_candidates, extract_line
 
 API_MLB = "https://statsapi.mlb.com/api/v1"
 API_KALSHI = KALSHI_API_BASE
@@ -448,21 +448,8 @@ def main():
                 "Lado Kalshi": row["lado"],
             })
 
-        # Singles preserve the conservative 62%-85% range and avoid repeated labels/categories.
-        singles, labels, category_count = [], set(), {}
-        for candidate in sorted(candidates, key=lambda x: x["_p"], reverse=True):
-            if not 0.62 <= candidate["_p"] <= 0.85:
-                continue
-            row = candidate["_row"]
-            label = str(row["mercado"]).casefold()
-            category = row["categoria"]
-            if label in labels or category_count.get(category, 0) >= 2:
-                continue
-            singles.append(candidate)
-            labels.add(label)
-            category_count[category] = category_count.get(category, 0) + 1
-            if len(singles) == 5:
-                break
+        # Singles: price cap, positive edge, trivial-line exclusion and family diversification.
+        singles = rank_single_candidates(candidates, limit=5)
 
         high, value = rank_market_candidates(candidates, min_probability=minimum_combo, high_limit=5, value_limit=10)
         limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
