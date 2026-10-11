@@ -134,6 +134,7 @@ def main():
         model = nfl.build_team_model(games, as_of=now)
         upcoming = nfl.load_upcoming_games(days=21, now=now)
         open_series, open_events = nfl.load_kalshi_catalog(status="open", max_pages=1)
+        print(f"LIVE_KALSHI_CATALOG_OK series={len(open_series)} events={len(open_events)}")
         live_rows, rejected, catalog, coverage = nfl.generate_candidates(
             open_events, model, now=now, upcoming_games=upcoming
         )
@@ -146,6 +147,7 @@ def main():
         first_match = min(future_rows, key=lambda row: nfl.parse_dt(row["hora_inicio"]))
         selected_match = first_match["match_id"]
         live_rows = [row for row in future_rows if row["match_id"] == selected_match]
+        print(f"LIVE_MATCH_EXAMPLE event={first_match.get('event_ticker')} ticker={first_match.get('ticker')} market={first_match.get('mercado')} kickoff={first_match.get('hora_inicio')}")
         _write(live_predictions, nfl.PRED_COLUMNS, [])
         saved = nfl.save_capture(live_rows, path=live_predictions)
         if saved.get("accepted", 0) <= 0:
@@ -253,8 +255,12 @@ def main():
         )
 
         void_fixture = None
+        void_checks = 0
         for prop_event in prop_events:
             for prop_market in prop_event.get("markets") or []:
+                void_checks += 1
+                if void_checks > 100:
+                    break
                 prop_ticker = str(prop_market.get("ticker") or "")
                 if not prop_ticker:
                     continue
@@ -263,7 +269,7 @@ def main():
                 if result in {"void", "canceled", "cancelled", "annulled"}:
                     void_fixture = (prop_event, prop_market, details)
                     break
-            if void_fixture:
+            if void_fixture or void_checks > 100:
                 break
         if void_fixture:
             prop_event, prop_market, details = void_fixture
