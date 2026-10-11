@@ -295,7 +295,7 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
         "anuladas":sum(r["estado"]=="ANULADA" for r in new),"sin_resolver_aun":skipped}
     print("LIQUIDACIÓN KALSHI:",summary); return summary
 def read_csv_rows_resilient(path):
-    """Read a CSV record-by-record; quarantine malformed rows without touching the source."""
+    """Repair mixed-schema CSV history; quarantine unrecoverable raw rows before rewriting."""
     path = Path(path)
     if not path.exists() or path.stat().st_size == 0:
         return []
@@ -309,7 +309,13 @@ def read_csv_rows_resilient(path):
         raise ValueError(f"{path.name}: cabecera CSV ilegible: {exc}") from exc
     if not header:
         return []
+    legacy_football = [
+        "prediction_id", "match_id", "fecha", "local", "visita", "categoria", "jugada",
+        "probabilidad_base", "probabilidad_calibrada", "calibracion", "precio",
+        "disponibilidad", "ticker", "clave_interna", "capturado_en",
+    ]
     valid, bad = [], []
+    migrated = False
     for line_no, raw in enumerate(lines[1:], start=2):
         if not raw.strip():
             continue
@@ -318,11 +324,31 @@ def read_csv_rows_resilient(path):
         except (csv.Error, StopIteration) as exc:
             bad.append((line_no, raw.rstrip("\r\n"), f"CSV inválido: {exc}"))
             continue
-        if len(values) != len(header):
-            bad.append((line_no, raw.rstrip("\r\n"),
-                        f"{len(values)} campos; se esperaban {len(header)}"))
+        if len(values) == len(header):
+            valid.append(dict(zip(header, values)))
             continue
-        valid.append(dict(zip(header, values)))
+        # Historical football rows had 15 columns before market/line/side/block/edge were added.
+        if (path.name in {"predicciones_laliga.csv", "predicciones_champions.csv"}
+                and len(values) == len(legacy_football) and len(header) >= 20):
+            row = dict(zip(legacy_football, values))
+            row.update({column: "" for column in header if column not in row})
+            row["mercado"] = row.get("jugada", "")
+            row["line"] = extract_line(row.get("jugada", ""))
+            category = str(row.get("categoria", ""))
+            row["bloque"] = next((name for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")
+                                  if category.startswith(name + " · ")), "SENCILLAS")
+            valid.append(row)
+            migrated = True
+            continue
+        # Recover unquoted commas in the free-text marker of 4-column settlement ledgers.
+        if len(header) == 4 and header[-1] == "resuelto_en" and len(values) > 4:
+            timestamp = values[-1]
+            if re.match(r"^\d{4}-\d{2}-\d{2}T", timestamp):
+                valid.append(dict(zip(header, [values[0], values[1], ",".join(values[2:-1]), timestamp])))
+                migrated = True
+                continue
+        bad.append((line_no, raw.rstrip("\r\n"),
+                    f"{len(values)} campos; se esperaban {len(header)}"))
     if bad:
         quarantine = path.with_suffix(path.suffix + ".malformed_rows.csv")
         seen = set()
@@ -333,8 +359,8 @@ def read_csv_rows_resilient(path):
             except (OSError, csv.Error):
                 seen = set()
         new_bad = [item for item in bad if item[1] not in seen]
+        needs_header = not quarantine.exists() or quarantine.stat().st_size == 0
         if new_bad:
-            needs_header = not quarantine.exists() or quarantine.stat().st_size == 0
             with quarantine.open("a", encoding="utf-8", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=["source", "line_number", "reason", "raw_line"])
                 if needs_header:
@@ -342,15 +368,20 @@ def read_csv_rows_resilient(path):
                 for line_no, raw, reason in new_bad:
                     writer.writerow({"source": path.name, "line_number": line_no,
                                      "reason": reason, "raw_line": raw})
-        # After quarantining raw malformed records, rewrite only valid records with the original header.
-        # This self-repairs the CSV while preserving every malformed line verbatim in the sidecar.
+    if bad or migrated:
+        # The sidecar is durable before the primary CSV is rewritten; no malformed source row is lost.
         with path.open("w", encoding="utf-8", newline="") as repaired:
             writer = csv.writer(repaired)
             writer.writerow(header)
             for row in valid:
                 writer.writerow([row.get(column, "") for column in header])
-        print(f"CSV HISTORIAL REPARADO: {path.name}: {len(bad)} fila(s) preservada(s) en {quarantine.name}; {len(valid)} filas válidas conservadas.")
+        if bad:
+            print(f"CSV HISTORIAL REPARADO: {path.name}: {len(bad)} fila(s) preservada(s) en "
+                  f"{quarantine.name}; {len(valid)} filas válidas conservadas.")
+        elif migrated:
+            print(f"CSV HISTORIAL MIGRADO: {path.name}: {len(valid)} filas conservadas en el esquema actual.")
     return valid
+
 
 
 def _probability(row):
