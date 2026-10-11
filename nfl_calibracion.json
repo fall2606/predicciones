@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "generated_at": "",
+  "source": "nflverse games.csv",
+  "minimum_sample": 100,
+  "markets": {},
+  "limitation": "Calibración insuficiente hasta ejecutar backtest walk-forward con muestra mínima."
+}
