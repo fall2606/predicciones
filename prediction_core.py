@@ -228,7 +228,7 @@ def _side_from_row(row,side_field):
             try:
                 strike = float(line)
                 low_range = re.search(r"(?:^|\s)0\s*[–—-]\s*(\d+)", pick)
-                high_range = re.search(r"(\d+)\s*\\+", pick)
+                high_range = re.search(r"(\d+)\s*[+]", pick)
                 if low_range and abs(strike - (int(low_range.group(1)) + 1)) < 1e-9:
                     return "NO"
                 if high_range and abs(strike - int(high_range.group(1))) < 1e-9:
