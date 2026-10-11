@@ -57,7 +57,7 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          for archivo in predicciones_nfl.csv resultados_nfl.csv nfl_probabilidades_actuales.csv; do
+          for archivo in predicciones_nfl.csv resultados_nfl.csv nfl_probabilidades_actuales.csv nfl_predicciones_excluidas.csv; do
             if [ -f "$archivo" ]; then git add "$archivo"; fi
           done
           if git diff --cached --quiet; then
