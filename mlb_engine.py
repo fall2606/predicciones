@@ -169,6 +169,8 @@ def clasificar(serie, market):
     if (any(x in s for x in ("player", "strikeout", "home_run", "hits", "total_bases", "rbi", "pitcher", "kxmlbhr", "kxmlbtb", "kxmlbrbi", "kxmlbsb", "kxmlbouts", "kxmlber", "kxmlbwalk"))
             or any(x in text for x in ("home run", "total bases", "strikeout", "hits", "rbis", "walks", "outs recorded", "earned runs", "stolen bases"))):
         return "Props de jugador"
+    if "inningwin" in s or "first inning winner" in text or "win the first inning" in text:
+        return "Ganador de la 1.ª entrada"
     if any(x in text for x in ("first inning", "1st inning", "yrfi", "nrfi")) or "firstinning" in s:
         return "1.ª entrada / YRFI-NRFI"
     if any(x in text for x in ("first 5", "first five", "first 3", "first three", "first 7", "first seven", "f5 ", "f5 total")) or any(x in s for x in ("first5", "first3", "first7", "f5total", "kxmlbf5")):
@@ -202,6 +204,28 @@ def mercado_probabilidad(market, game):
     category = clasificar(market.get("series_ticker", ""), market)
     home_code, away_code = codigo_equipo_mlb(h), codigo_equipo_mlb(a)
     contract_code = ticker.rsplit("-", 1)[-1].upper()
+
+    # KXMLBINNINGWIN is a distinct first-inning outcome market. Model the
+    # first inning itself; do not reuse the full-game moneyline probability.
+    if "BINNINGWIN" in ticker.upper() or "BINNINGWIN" in str(market.get("series_ticker", "")).upper():
+        inning_axis = np.arange(0, 8)
+        shape = 1 / 0.12
+        def inning_pmf(mu):
+            mean = max(0.01, float(mu) / 9)
+            probs = nbinom.pmf(inning_axis, shape, shape / (shape + mean))
+            total = float(probs.sum())
+            return probs / total if total > 0 and math.isfinite(total) else np.array([1.0] + [0.0] * 7)
+        inning_mat = np.outer(inning_pmf(game["mu_home"]), inning_pmf(game["mu_away"]))
+        inning_mat /= inning_mat.sum()
+        if contract_code == "TIE":
+            p_yes = float(np.trace(inning_mat))
+        elif contract_code == home_code:
+            p_yes = float(inning_mat[np.tril_indices_from(inning_mat, -1)].sum())
+        elif contract_code == away_code:
+            p_yes = float(inning_mat[np.triu_indices_from(inning_mat, 1)].sum())
+        else:
+            return None, "sin_modelo_especifico: código de resultado de 1.ª entrada desconocido"
+        return min(max(p_yes, 0.001), 0.999), "modelado_primera_entrada"
     if category in {"Ganador (moneyline)", "Total por equipo", "Run line / margen"} and contract_code in {home_code, away_code}:
         home, away = contract_code == home_code, contract_code == away_code
 
