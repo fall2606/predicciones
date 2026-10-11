@@ -206,7 +206,11 @@ def settle_from_score(row):
     # Prefer the documented, match-ID-based score source; use ESPN's public
     # scoreboard only when the official API/token is unavailable or has no match.
     match = _football_data_match(row)
-    if not match or not match.get("completed"):
+    known_incident = match and any(
+        token in str(match.get("status", "")).upper()
+        for token in ("POSTPONED", "SUSPENDED", "CANCELLED", "CANCELED", "ABANDONED")
+    )
+    if not match or (not match.get("completed") and not known_incident):
         espn_match = find_match(row)
         if espn_match and espn_match.get("completed"):
             match = espn_match
