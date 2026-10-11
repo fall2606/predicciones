@@ -170,6 +170,11 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     for row in pending:
         pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip(); market=markets.get(ticker)
         if market is None:
+            # Avoid thousands of per-ticker calls during backlog recovery. Once the
+            # series catalogue is mostly resolved, retry individual missing tickers.
+            if len(pending) > 50:
+                skipped += 1
+                continue
             try:
                 payload=kalshi_get(f"markets/{ticker}"); market=payload.get("market") or (payload.get("markets") or [{}])[0]
             except (requests.RequestException,ValueError,KeyError,IndexError,TypeError): skipped+=1; continue
