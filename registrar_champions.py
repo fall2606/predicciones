@@ -54,6 +54,11 @@ def main():
         eventos, errores_series, total_series = cargar_eventos_kalshi_champions()
     except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
         eventos, errores_series, total_series = [], [f"No se pudo listar Champions League: {exc}"], 0
+    market_title_by_ticker = {
+        str(mercado.get("ticker")): str(mercado.get("yes_sub_title") or mercado.get("title") or mercado.get("ticker") or "")
+        for evento in eventos for mercado in evento.get("markets", [])
+        if mercado.get("ticker")
+    }
     ids_existentes = set(predicciones["prediction_id"].astype(str)) if not predicciones.empty else set()
     ids_resueltos = set(resultados["prediction_id"].astype(str)) if not resultados.empty else set()
 
@@ -151,8 +156,8 @@ def main():
                 "precio": fila["Precio ahora"],
                 "disponibilidad": fila["Disponibilidad"],
                 "ticker": fila.get("Ticker", "—"),
-                "mercado": str(fila.get("Jugada sencilla", "")),
-                "line": extract_line(fila.get("Jugada sencilla", "")),
+                "mercado": market_title_by_ticker.get(str(fila.get("Ticker", "")), str(fila.get("Jugada sencilla", ""))),
+                "line": str(market_key[2]) if isinstance(market_key, (tuple, list)) and len(market_key) > 2 and market_key[2] is not None else "",
                 "seleccion": lado,
                 "bloque": bloque,
                 "edge": "" if fila.get("edge") is None else f"{float(fila.get('edge')):.6f}",
