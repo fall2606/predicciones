@@ -60,6 +60,37 @@ def test_nfl_integer_margin_key_numbers_do_not_break_normalization():
     assert abs(float(probs.sum()) - 1.0) < 1e-9
 
 
+def test_shared_combo_ranking_uses_edge_and_common_filters():
+    from prediction_core import rank_market_candidates
+
+    candidates = [
+        {
+            "ticker": "KXNFLGAME-26OCT18CINMIA-MIA", "lado": "YES", "_p": 0.80,
+            "precio_captura": "0.70", "edge": 0.10, "Ventaja (edge)": 0.10,
+            "Apuesta": "SÍ: los Miami Dolphins ganan el partido",
+        },
+        {
+            "ticker": "KXNFLTOTAL-26OCT18CINMIA-OVER44", "lado": "YES", "_p": 0.75,
+            "precio_captura": "0.50", "edge": 0.25, "Ventaja (edge)": 0.25,
+            "Apuesta": "SÍ: el partido supera 44.5 puntos en total",
+        },
+        {
+            "ticker": "KXNFLTEAMTOTAL-26OCT18CINMIA-MIA", "lado": "YES", "_p": 0.95,
+            "precio_captura": "0.92", "edge": 0.03, "Ventaja (edge)": 0.03,
+            "Apuesta": "SÍ: los Miami Dolphins superan 20.5 puntos",
+        },
+    ]
+    high, value = rank_market_candidates(
+        candidates, min_probability=0.65, high_limit=5, value_limit=10,
+        min_edge=0.05, high_price_max=0.90, value_price_max=None,
+        high_sort_by_edge=True, exclude_trivial=True,
+    )
+    assert high[0]["ticker"] == "KXNFLTOTAL-26OCT18CINMIA-OVER44"
+    assert all(float(row["edge"]) >= 0.05 for row in high + value)
+    assert all(float(row["precio_captura"]) <= 0.90 for row in high)
+    assert all(row["ticker"] != "KXNFLTEAMTOTAL-26OCT18CINMIA-MIA" for row in high + value)
+
+
 def test_all_probability_values_in_saved_candidates_are_valid():
     model = nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z")
     pred = nfl.predict_game(model, "KC", "BAL")
