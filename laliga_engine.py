@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from difflib import get_close_matches
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from math import ceil, floor
@@ -26,6 +26,25 @@ DISPERSION_CORNERS = 16
 TZ = ZoneInfo("America/Chicago")
 PREDICCIONES_ARCHIVO = Path(__file__).resolve().parent / "predicciones_laliga.csv"
 RESULTADOS_ARCHIVO = Path(__file__).resolve().parent / "resultados_laliga.csv"
+
+def partido_bloqueado(partido, ahora=None):
+    """Bloquea nuevas predicciones cuando faltan 30 minutos o el inicio ya pasó.
+
+    Las fechas inválidas se bloquean por seguridad para no regenerar snapshots
+    cuando no se puede demostrar que el partido siga fuera de la ventana.
+    """
+    ahora = ahora or datetime.now(timezone.utc)
+    if ahora.tzinfo is None:
+        ahora = ahora.replace(tzinfo=timezone.utc)
+    fecha_txt = partido.get("utcDate") or partido.get("fecha") or partido.get("date")
+    try:
+        inicio = datetime.fromisoformat(str(fecha_txt).replace("Z", "+00:00"))
+        if inicio.tzinfo is None:
+            inicio = inicio.replace(tzinfo=timezone.utc)
+        return inicio <= ahora + timedelta(minutes=30)
+    except (TypeError, ValueError, OverflowError):
+        return True
+
 
 def pedir_fd(path, clave, **params):
     response = requests.get(
