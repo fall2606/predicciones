@@ -58,6 +58,27 @@ def leer_historial_mlb():
         return pd.DataFrame()
 
 historial_mlb = leer_historial_mlb()
+try:
+    candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_candidatos_descartados.csv", dtype=str).fillna("")
+except (OSError, ValueError, pd.errors.ParserError):
+    candidatos_descartados_actuales = pd.DataFrame()
+
+
+def probabilidad_recalculada_mlb(ticker, lado):
+    if candidatos_descartados_actuales.empty or not {"ticker", "lado", "probabilidad_modelo"}.issubset(candidatos_descartados_actuales.columns):
+        return None
+    filas = candidatos_descartados_actuales[
+        candidatos_descartados_actuales["ticker"].astype(str).str.upper().eq(str(ticker).upper())
+        & candidatos_descartados_actuales["lado"].astype(str).str.upper().eq(str(lado).upper())
+    ]
+    if filas.empty:
+        return None
+    try:
+        value = float(filas.iloc[0]["probabilidad_modelo"])
+        return value if np.isfinite(value) and 0 <= value <= 1 else None
+    except (TypeError, ValueError, OverflowError):
+        return None
+
 
 # Estado operativo de liquidación: solo alerta sobre partidos que StatsAPI marca como finalizados.
 try:
@@ -811,6 +832,12 @@ for juego in [juego]:
                             edge_txt = "—"
                         st.write(f"Probabilidad del modelo: **{prob_txt}**")
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
+                        _ticker_card = str(pick.get("ticker") or pick.get("Ticker") or "")
+                        _lado_card = str(pick.get("lado") or pick.get("Lado Kalshi") or "")
+                        _p_actual = probabilidad_recalculada_mlb(_ticker_card, _lado_card) if "BINNINGWIN" in _ticker_card.upper() else None
+                        _p_original = prob
+                        if _p_actual is not None and abs(_p_actual - _p_original) >= 0.03:
+                            st.warning(f"REVISAR · captura histórica {_p_original:.2%}; modelo corregido actual {_p_actual:.2%}. Se conserva la probabilidad original para no alterar el historial.")
                         if pick.get("Revisión") == "REVISAR" or _over_pendiente_de_calibracion(pick) == "REVISAR":
                             st.warning("REVISAR · ventaja alta en un mercado Over sin muestra de calibración suficiente; no se ha aplicado corrección arbitraria.")
                         estado = str(pick.get("Resultado", pick.get("estado", unresolved_label)) or unresolved_label).upper()
@@ -842,7 +869,7 @@ for juego in [juego]:
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
-        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "precio_captura", "disponibilidad", "edge", "Revisión", "ticker", "Resultado"]
+        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Revisión", "ticker", "Resultado"]
         mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
         mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
         mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)
