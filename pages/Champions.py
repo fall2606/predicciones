@@ -335,7 +335,7 @@ if partido_cerrado:
     if not _archivo_valor.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
-        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"))
+        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar · mercado sin fuente compatible" if partido_cerrado else "PENDIENTE"))
         _sin_ticker = _archivo_valor["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
         _archivo_valor.loc[_archivo_valor["estado"].isna() & _sin_ticker, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
         _archivo_valor.loc[_archivo_valor["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
@@ -351,7 +351,7 @@ elif valor_vista:
     _ticker_col = "Ticker" if "Ticker" in _valor_df.columns else ("ticker" if "ticker" in _valor_df.columns else None)
     if _ticker_col and estado_partido not in {"CANCELLED", "CANCELED", "POSTPONED"}:
         _sin_ticker = _valor_df[_ticker_col].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
-        _valor_df.loc[_sin_ticker, "Resultado"] = "NO EVALUABLE · SIN TICKER REAL DE KALSHI"
+        _valor_df.loc[_sin_ticker, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
     _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _valor_df.columns]
     st.dataframe(_tabla_con_resultado(_valor_df[_cols]), use_container_width=True, hide_index=True)
 else:
