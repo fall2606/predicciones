@@ -113,6 +113,11 @@ def _historical_overtime_fixture(series, historical_games, now):
             continue
         if not _is_overtime(fixture, historical_games, game_date):
             continue
+        status_text = f"{fixture['status']} {fixture['status_detail']}".upper()
+        fixture["overtime_verified_by"] = (
+            "ESPN status" if ("OT" in status_text or "OVERTIME" in status_text)
+            else "nflverse games.csv overtime flag"
+        )
         series_ticker = str(event.get("series_ticker") or event.get("event_ticker") or "").split("-")[0]
         for market in event.get("markets") or []:
             ticker = str(market.get("ticker") or "")
@@ -231,7 +236,7 @@ def main():
         print(
             f"HISTORICAL_OT_SETTLEMENT_OK event={event.get('event_ticker')} ticker={market.get('ticker')} "
             f"kalshi_result={details.get('result') or market.get('result')} state={result_rows[-1].get('estado')} "
-            f"source={result_rows[-1].get('fuente')} status={fixture['status']}"
+            f"source={result_rows[-1].get('fuente')} status={fixture['status']} overtime_verified_by={fixture['overtime_verified_by']}"
         )
 
         player_series = [
@@ -296,7 +301,7 @@ def main():
                 raise AssertionError("Kalshi publicó un caso void pero el liquidador no lo marcó ANULADA.")
             print(f"VOID_SETTLEMENT_OK ticker={prop_market.get('ticker')} state=ANULADA")
         else:
-            print("VOID_SETTLEMENT_NOT_FOUND: no se encontró un prop NFL anulado entre los contratos consultados; no se inventó un caso.")
+            print(f"VOID_SETTLEMENT_NOT_FOUND: no se encontró un prop NFL anulado entre {void_checks} mercados consultados; no se inventó un caso.")
 
         print("LIMITATION: los contratos liquidados no proporcionan snapshot prepartido fiable; el fixture histórico no se presenta como predicción real de producción.")
 
