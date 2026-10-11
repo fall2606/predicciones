@@ -322,8 +322,13 @@ def build_candidates(events, stats):
             continue
         hs, aws = projected
         for market in event.get("markets") or []:
-            ticker = str(market.get("ticker") or "")
-            if not ticker or str(market.get("status") or "open").lower() not in {"open", "active"}:
+            ticker = str(market.get("ticker") or "").upper()
+            event_ticker = str(event.get("event_ticker") or "").upper()
+            # A grouped fixture may contain markets fetched from several Kalshi series.
+            # Never score period/quarter contracts or relabel a period event as full game.
+            period_pattern = r"KXNFL(?:1H|2H|1Q|2Q|3Q|4Q|Q1|Q2|Q3|Q4)"
+            if (not ticker or re.search(period_pattern, ticker) or re.search(period_pattern, event_ticker)
+                    or str(market.get("status") or "open").lower() not in {"open", "active"}):
                 continue
             p_yes, category = _market_probability(market, home, away, hs, aws)
             if p_yes is None or not 0.01 < p_yes < 0.99:
