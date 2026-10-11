@@ -140,3 +140,5 @@ prediction_id,estado,marcador,resuelto_en
 564700|Resultado|2026101012,WIN,"Marcador independiente (football-data.org): 3-0 (mercado KXLALIGAGAME, selección YES)",2026-10-11T17:14:42.451481+00:00
 564700|Goles 1.ª parte|2026101012,WIN,"Marcador independiente (football-data.org): 3-0 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-11T17:14:42.451579+00:00
 564702|Goles por equipo|2026101018,WIN,"Marcador independiente (football-data.org): 1-0 (mercado KXLALIGATEAMTOTAL, selección NO)",2026-10-11T17:14:43.837785+00:00
+564703|SENCILLAS|KXLALIGAGAME-26OCT11ELCRCC-RCC|None,LOSS,Resultado oficial Kalshi: NO,2026-10-11T17:16:28.853876+00:00
+564703|SENCILLAS|KXLALIGABTTS-26OCT11ELCRCC-BTTS|None,WIN,Resultado oficial Kalshi: NO,2026-10-11T17:16:28.853926+00:00
