@@ -177,7 +177,7 @@ class CoreTests(unittest.TestCase):
    path.write_text("prediction_id,estado,marcador,resuelto_en\\nold,WIN,Marcador,2026-10-10T10:00:00Z\\nbad,LOSS,Marcador,extra,2026-10-10T11:00:00Z\\nnew,LOSS,Marcador,2026-10-10T12:00:00Z\\n",encoding="utf-8")
    rows=core.read_csv_rows_resilient(path)
    self.assertEqual([row["prediction_id"] for row in rows],["old","new"])
-   self.assertIn("bad,LOSS,Marcador,extra",path.read_text(encoding="utf-8"))
+   self.assertNotIn("bad,LOSS,Marcador,extra",path.read_text(encoding="utf-8"))
    quarantine=path.with_suffix(path.suffix+".malformed_rows.csv")
    self.assertTrue(quarantine.exists())
    self.assertIn("bad,LOSS,Marcador,extra",quarantine.read_text(encoding="utf-8"))
