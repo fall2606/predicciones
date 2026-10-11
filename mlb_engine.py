@@ -45,6 +45,8 @@ PRED_COLUMNS = [
     "probabilidad_implicita", "edge", "estado_modelo", "reglas", "capturado_en", "disponibilidad",
 ]
 RESULT_COLUMNS = ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"]
+UNMATCHED_REPORT = ROOT / "mlb_eventos_sin_emparejar.csv"
+UNMATCHED_COLUMNS = ["event_ticker", "series_ticker", "title", "start_time", "motivo"]
 
 
 def get_json(url, params=None):
@@ -370,7 +372,7 @@ def _team_matches_event(name, event_ticker, title):
         if not alias:
             continue
         if len(alias) <= 3:
-            if re.search(r"\\b" + re.escape(alias) + r"\\b", title):
+            if re.search(r"\b" + re.escape(alias) + r"\b", title):
                 return True
         elif alias in title:
             return True
@@ -458,6 +460,7 @@ def main():
     event_count = 0
     unmatched_event_count = 0
     unmatched_reasons = {}
+    unmatched_events = []
     per_match_valid_contracts = {}
     unsupported_market_count = 0
     modelable_market_count = 0
@@ -478,6 +481,13 @@ def main():
             unmatched_event_count += 1
             reason = motivo_evento_sin_partido(event, games)
             unmatched_reasons[reason] = unmatched_reasons.get(reason, 0) + 1
+            unmatched_events.append({
+                "event_ticker": event.get("event_ticker", ""),
+                "series_ticker": event.get("series_ticker", ""),
+                "title": event.get("title") or event.get("sub_title") or "",
+                "start_time": event.get("start_time") or event.get("expected_expiration_time") or event.get("strike_date") or "",
+                "motivo": reason,
+            })
             continue
         if game.get("status") != "Preview":
             continue
@@ -640,7 +650,12 @@ def main():
         PRED_FILE, PRED_COLUMNS, new_rows, probability_field="probabilidad_modelo"
     )
     print("Eventos MLB emparejados: {} | eventos sin partido StatsAPI coincidente: {} | contratos sin modelo específico/datos finitos: {} | contratos modelables: {} | capturas aceptadas: {} | descartadas: {}. Los resultados solo los escribe liquidar_mlb.py.".format(event_count, unmatched_event_count, unsupported_market_count, modelable_market_count, capture_summary["accepted"], capture_summary["rejected"]))
+    with UNMATCHED_REPORT.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=UNMATCHED_COLUMNS)
+        writer.writeheader()
+        writer.writerows(unmatched_events)
     print("CLASIFICACIÓN DE EVENTOS MLB SIN PARTIDO: " + repr(unmatched_reasons))
+    print(f"INFORME DE EVENTOS SIN EMPAREJAR: {UNMATCHED_REPORT.name} · filas={len(unmatched_events)}")
     for match_id, rows in sorted(by_match.items()):
         counts = {name: 0 for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")}
         for row in existing + new_rows:
