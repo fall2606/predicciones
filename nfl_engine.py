@@ -111,7 +111,7 @@ def discover_nfl_series():
         "RECYDS", "RECEPTIONS", "TOUCHDOWN", "1H", "2H", "1Q", "2Q", "3Q", "4Q",
         "HALF", "QUARTER",
     )
-    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT")
+    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT", "TRADE", "CAREER", "DIVISIONWINS", "LASTTOWIN", "TDPROT")
     for item in rows:
         ticker = str(item.get("ticker") or "").upper()
         title = normalizar(item.get("title") or item.get("name") or "")
@@ -642,23 +642,34 @@ if __name__ == "__main__":
         settle()
     else:
         series, events = load_kalshi_catalog()
+        now = datetime.now(timezone.utc)
+        game_events = [
+            e for e in events
+            if len(_event_teams(e)) == 2
+            and _kickoff(e) is not None
+            and _kickoff(e) > now
+            and (e.get("markets") or [])
+        ]
         example = next(({
             "event_ticker": e.get("event_ticker"),
             "title": e.get("title") or e.get("sub_title"),
+            "start_time": _kickoff(e).isoformat(),
             "markets": [
                 {
                     "ticker": m.get("ticker"),
+                    "series_ticker": m.get("series_ticker") or e.get("series_ticker"),
                     "title": m.get("title") or m.get("yes_sub_title"),
                     "yes_ask_dollars": m.get("yes_ask_dollars"),
                     "no_ask_dollars": m.get("no_ask_dollars"),
                 }
                 for m in (e.get("markets") or [])[:12]
             ],
-        } for e in events if e.get("markets")), None)
+        } for e in game_events), None)
         if not example:
             raise RuntimeError("La API de Kalshi no devolvió ningún evento NFL abierto con mercados anidados; no hay ejemplo real que validar.")
         print(json.dumps({
             "series": [{"ticker": x.get("ticker"), "title": x.get("title")} for x in series],
             "open_event_count": len(events),
+            "upcoming_game_event_count": len(game_events),
             "example_event": example,
         }, indent=2))
