@@ -83,6 +83,23 @@ def probabilidad_recalculada_mlb(ticker, lado):
     except (TypeError, ValueError, OverflowError):
         return None
 
+def precio_recalculado_mlb(ticker, lado):
+    if candidatos_descartados_actuales.empty or not {"ticker", "lado", "precio_captura"}.issubset(candidatos_descartados_actuales.columns):
+        return None
+    filas = candidatos_descartados_actuales[
+        candidatos_descartados_actuales["ticker"].astype(str).str.upper().eq(str(ticker).upper())
+        & candidatos_descartados_actuales["lado"].astype(str).str.upper().eq(str(lado).upper())
+    ]
+    if filas.empty:
+        return None
+    try:
+        value = float(filas.iloc[0]["precio_captura"])
+        if value > 1:
+            value /= 100
+        return value if np.isfinite(value) and 0 <= value <= 1 else None
+    except (TypeError, ValueError, OverflowError):
+        return None
+
 
 mostrar_reconciliacion("MLB")
 
@@ -761,16 +778,11 @@ for juego in [juego]:
             for _, fila_actual in bloque.iterrows():
                 p_actual = probabilidad_recalculada_mlb(fila_actual.get("ticker", ""), fila_actual.get("lado", ""))
                 recalculadas.append(f"{p_actual:.1%}" if p_actual is not None else "—")
-                try:
-                    precio_actual = float(fila_actual.get("precio_captura", ""))
-                    if precio_actual > 1:
-                        precio_actual /= 100
-                    if p_actual is None or not np.isfinite(precio_actual) or not 0 <= precio_actual <= 1:
-                        edges_recalculados.append("—")
-                    else:
-                        edges_recalculados.append(f"{(p_actual - precio_actual) * 100:+.1f} pp")
-                except (TypeError, ValueError, OverflowError):
+                precio_actual = precio_recalculado_mlb(fila_actual.get("ticker", ""), fila_actual.get("lado", ""))
+                if p_actual is None or precio_actual is None:
                     edges_recalculados.append("—")
+                else:
+                    edges_recalculados.append(f"{(p_actual - precio_actual) * 100:+.1f} pp")
             bloque["Probabilidad recalculada"] = recalculadas
             bloque["Ventaja recalculada"] = edges_recalculados
 
