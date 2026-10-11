@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from mlb_engine import mercado_probabilidad, clasificar
+from mlb_engine import mercado_probabilidad, clasificar, encontrar_partido, motivo_evento_sin_partido
 from mlb_math import score_probability_matrix
 
 
@@ -39,6 +39,20 @@ class FirstInningWinnerTests(unittest.TestCase):
 
     def test_first_inning_market_is_classified_explicitly(self):
         self.assertEqual(clasificar("KXMLBINNINGWIN", {"ticker": "KXMLBINNINGWIN-1-TIE", "title": "First inning winner"}), "Ganador de la 1.ª entrada")
+
+    def test_event_ticker_time_disambiguates_same_teams_on_same_utc_date(self):
+        games = [
+            {"id": "early", "home": "Los Angeles Dodgers", "away": "Milwaukee Brewers", "date": "2026-10-12T00:00:00Z"},
+            {"id": "late", "home": "Los Angeles Dodgers", "away": "Milwaukee Brewers", "date": "2026-10-12T21:00:00Z"},
+        ]
+        event = {"event_ticker": "KXMLBEXTRAS-26OCT112000LADMIL", "title": "Los Angeles D vs Milwaukee: Extra Innings"}
+        match = encontrar_partido(event, games)
+        self.assertIsNotNone(match)
+        self.assertEqual(match["id"], "early")
+
+    def test_esports_series_is_classified_as_not_mlb(self):
+        event = {"event_ticker": "KXMLBBGAME-26OCT110230VAMFL", "series_ticker": "KXMLBBGAME", "title": "Team Vamos vs. Team Flash"}
+        self.assertIn("no_es_MLB", motivo_evento_sin_partido(event, []))
 
     def test_unknown_first_inning_outcome_is_not_given_a_probability(self):
         market = {
