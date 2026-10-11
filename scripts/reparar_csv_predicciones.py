@@ -105,6 +105,7 @@ def repair_file(path, current_columns, legacy_columns):
     data = raw_rows[1:]
     repaired_rows, schemas = [], {}
     metadata_modified = False
+    quarantined_rows = []
     removed_invalid_pregame = 0
     removed_over_limit_pregame = 0
     for line_no, values in enumerate(data, start=2):
@@ -117,11 +118,9 @@ def repair_file(path, current_columns, legacy_columns):
         elif len(values) == len(legacy_columns):
             source_columns = legacy_columns
         else:
-            raise ValueError(
-                f"{path.name}:{line_no}: fila con {len(values)} campos; "
-                f"cabecera={len(header)}, esquema_actual={len(current_columns)}, "
-                f"legado={len(legacy_columns)}. Se detiene para no perder datos."
-            )
+            quarantined_rows.append((line_no, values,
+                f"fila con {len(values)} campos; cabecera={len(header)}, esquema_actual={len(current_columns)}, legado={len(legacy_columns)}"))
+            continue
         row = dict(zip(source_columns, values))
         # Two MLB series families were incorrectly attached to a single game in the
         # latest pregame capture. Remove only while that game's kickoff is still ahead.
@@ -153,6 +152,27 @@ def repair_file(path, current_columns, legacy_columns):
             metadata_modified = True
         repaired_rows.append({column: row.get(column, "") for column in current_columns})
         schemas[str(len(values))] = schemas.get(str(len(values)), 0) + 1
+    if quarantined_rows:
+        quarantine = path.with_suffix(path.suffix + ".malformed_rows.csv")
+        seen = set()
+        if quarantine.exists():
+            try:
+                with quarantine.open("r", newline="", encoding="utf-8-sig") as f:
+                    seen = {row.get("raw_fields", "") for row in csv.DictReader(f)}
+            except (OSError, csv.Error):
+                seen = set()
+        new_bad = [item for item in quarantined_rows if repr(item[1]) not in seen]
+        if new_bad:
+            needs_header = not quarantine.exists() or quarantine.stat().st_size == 0
+            with quarantine.open("a", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=["source", "line_number", "reason", "raw_fields"])
+                if needs_header:
+                    writer.writeheader()
+                for line_no, values, reason in new_bad:
+                    writer.writerow({"source": path.name, "line_number": line_no,
+                                     "reason": reason, "raw_fields": repr(values)})
+        print(f"CSV REPARACIÓN: {path.name}: {len(quarantined_rows)} fila(s) irregular(es) preservada(s) en {quarantine.name}.")
+
     if path.name == "predicciones_mlb.csv":
         now = datetime.now(timezone.utc)
         groups = {}
@@ -201,7 +221,7 @@ def repair_file(path, current_columns, legacy_columns):
             removed_over_limit_pregame = len(drop)
             repaired_rows = [row for index, row in enumerate(repaired_rows) if index not in drop]
 
-    changed = header != current_columns or metadata_modified or removed_invalid_pregame > 0 or removed_over_limit_pregame > 0 or any(
+    changed = header != current_columns or metadata_modified or removed_invalid_pregame > 0 or removed_over_limit_pregame > 0 or bool(quarantined_rows) or any(
         len(values) != len(header) for values in data if values
     )
     if changed:
@@ -211,7 +231,7 @@ def repair_file(path, current_columns, legacy_columns):
             writer.writeheader()
             writer.writerows(repaired_rows)
         tmp.replace(path)
-    return {"file": path.name, "rows": len(repaired_rows), "repaired": changed or removed_invalid_pregame > 0, "schemas": schemas, "removed_invalid_pregame": removed_invalid_pregame, "removed_over_limit_pregame": removed_over_limit_pregame}
+    return {"file": path.name, "rows": len(repaired_rows), "repaired": changed or removed_invalid_pregame > 0, "schemas": schemas, "removed_invalid_pregame": removed_invalid_pregame, "removed_over_limit_pregame": removed_over_limit_pregame, "quarantined_rows": len(quarantined_rows)}
 
 
 def main():
