@@ -858,7 +858,7 @@ for juego in [juego]:
             if not historial_partido.empty:
                 game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
                 detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
-                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("SIN LIQUIDAR" if game_state == "final" else "PENDIENTE")
+                unresolved_label = "ANULADA" if detailed_state in {"postponed", "cancelled", "canceled"} else ("sin datos para liquidar · mercado sin fuente compatible" if game_state == "final" else "PENDIENTE")
                 if "estado" not in historial_partido.columns:
                     historial_partido["estado"] = unresolved_label
                 historial_partido["estado"] = historial_partido["estado"].replace("", unresolved_label).fillna(unresolved_label)
