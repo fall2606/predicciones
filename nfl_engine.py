@@ -30,6 +30,7 @@ RESULT_FILE = ROOT / "resultados_nfl.csv"
 CATALOG_REPORT = ROOT / "nfl_catalogo_actual.csv"
 REJECTED_REPORT = ROOT / "nfl_candidatos_descartados.csv"
 COVERAGE_REPORT = ROOT / "nfl_cobertura_por_partido.csv"
+CALIBRATION_FILE = ROOT / "nfl_calibracion.json"
 COVERAGE_COLUMNS = ["match_id", "fecha", "local", "visita", "contratos_modelables", "sencillas_validas", "alta_probabilidad_validas", "a_tener_en_cuenta_validas", "motivo_sencillas", "motivo_alta_probabilidad", "motivo_a_tener_en_cuenta"]
 TZ_ET = ZoneInfo("America/New_York")
 TIMEOUT = int(os.getenv("NFL_HTTP_TIMEOUT", "12"))
@@ -568,6 +569,47 @@ def _match_id(kickoff, home, away):
     return f"NFL:{kickoff.astimezone(TZ_ET).date().isoformat()}:{away}@{home}"
 
 
+def load_calibration():
+    try:
+        with CALIBRATION_FILE.open(encoding="utf-8") as handle:
+            payload = json.load(handle)
+        return payload if isinstance(payload, dict) else {}
+    except (OSError, ValueError, TypeError):
+        return {}
+
+
+def calibrate_probability(probability, category, line, yes_outcome, calibration=None, min_samples=100):
+    """Apply a walk-forward Platt calibrator only to market scopes with enough real historical observations."""
+    p = valid_probability(probability)
+    if p is None:
+        return None, None, "calibración insuficiente"
+    calibration = calibration if calibration is not None else load_calibration()
+    if category == "winner":
+        scope = "winner"
+    elif category == "spread" and line not in (None, "") and abs(float(line) + 3.5) < 1e-8 and yes_outcome == "spread_cover":
+        scope = "spread_-3.5"
+    elif category == "total" and line not in (None, "") and abs(float(line) - 44.5) < 1e-8 and yes_outcome == "over_gt":
+        scope = "total_over_44.5"
+    else:
+        return None, None, "calibración insuficiente"
+    entry = (calibration.get("markets") or {}).get(scope) or {}
+    try:
+        n = int(entry.get("n_train", 0))
+        a, b = float(entry["intercept"]), float(entry["slope"])
+    except (KeyError, TypeError, ValueError):
+        return None, None, "calibración insuficiente"
+    if n < min_samples or not math.isfinite(a) or not math.isfinite(b):
+        return None, None, "calibración insuficiente"
+    clipped = min(max(p, 1e-6), 1 - 1e-6)
+    logit = math.log(clipped / (1 - clipped))
+    z = max(-35.0, min(35.0, a + b * logit))
+    calibrated = 1 / (1 + math.exp(-z))
+    if valid_probability(calibrated) is None:
+        return None, None, "calibración insuficiente"
+    version = str(entry.get("version") or f"platt_{scope}_n{n}")
+    return float(calibrated), version, "aplicada"
+
+
 def _edge_number(candidate):
     try:
         value = float(candidate.get("Ventaja (edge)", candidate.get("edge", "")))
@@ -643,7 +685,15 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
             if valid_probability(p_yes) is None:
                 rejected.append({"match_id": match_id, "local": home, "visita": away, "event_ticker": event.get("event_ticker", ""), "ticker": ticker, "categoria": kind, "motivo": reason})
                 continue
-            for side, p in (("YES", p_yes), ("NO", 1 - p_yes)):
+            yes_outcome = _yes_outcome(market, kind)
+            p_yes_cal, calibration_version, calibration_status = calibrate_probability(
+                p_yes, kind, line, yes_outcome, calibration=calibration
+            )
+            p_yes_used = p_yes_cal if p_yes_cal is not None else p_yes
+            for side, p_original, p in (
+                ("YES", p_yes, p_yes_used),
+                ("NO", 1 - p_yes, 1 - p_yes_used),
+            ):
                 price = _price(market, side)
                 edge = p - price if price is not None else None
                 description, yes_outcome, description_team = _description(market, kind, home, away, side, line)
@@ -659,8 +709,8 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
                     "mercado": market.get("yes_sub_title") or market.get("title") or ticker,
                     "line": line if line is not None else "", "lado": side, "seleccion": side,
                     "equipo_yes": yes_team or description_team, "tipo_salida": yes_outcome, "descripcion": description,
-                    "bloque": "", "probabilidad_original": f"{p:.8f}", "probabilidad_calibrada": "",
-                    "version_calibracion": "calibración insuficiente", "probabilidad_modelo": f"{p:.8f}",
+                    "bloque": "", "probabilidad_original": f"{p_original:.8f}", "probabilidad_calibrada": f"{p:.8f}" if p_yes_cal is not None else "",
+                    "version_calibracion": calibration_version or "calibración insuficiente", "probabilidad_modelo": f"{p:.8f}",
                     "precio_captura": f"{price:.6f}" if price is not None else "",
                     "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
                     "edge": f"{edge:.6f}" if edge is not None else "",
