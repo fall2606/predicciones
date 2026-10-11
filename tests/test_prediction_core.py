@@ -153,4 +153,42 @@ class CoreTests(unittest.TestCase):
    catalog.assert_not_called()
 
 
+
+ def test_single_candidates_filter_trivial_price_edge_and_rank_by_edge(self):
+  rows=[
+   {"Ticker":"KXGOALS-TOTAL-OVER05","Apuesta sencilla":"Más de 0.5 goles","Categoría resumen":"Goles totales","Probabilidad del modelo":"97%","Precio de compra":"96%","Ventaja (edge)":0.01,"line":"0.5"},
+   {"Ticker":"KXGOALS-TOTAL-OVER25","Apuesta sencilla":"Más de 2.5 goles","Categoría resumen":"Goles totales","Probabilidad del modelo":"72%","Precio de compra":"60%","Ventaja (edge)":0.12,"line":"2.5"},
+   {"Ticker":"KXCORNERS-TOTAL-OVER85","Apuesta sencilla":"Más de 8.5 córners","Categoría resumen":"Corners totales","Probabilidad del modelo":"70%","Precio de compra":"55%","Ventaja (edge)":0.15,"line":"8.5"},
+   {"Ticker":"KXBTTS-YES","Apuesta sencilla":"Ambos equipos marcan","Categoría resumen":"Ambos marcan","Probabilidad del modelo":"74%","Precio de compra":"50%","Ventaja (edge)":0.24},
+   {"Ticker":"KXGOALS-TOTAL-OVER35","Apuesta sencilla":"Más de 3.5 goles","Categoría resumen":"Goles totales","Probabilidad del modelo":"60%","Precio de compra":"45%","Ventaja (edge)":0.15,"line":"3.5"},
+   {"Ticker":"KXPRICE-HIGH","Apuesta sencilla":"Gana local","Categoría resumen":"Resultado","Probabilidad del modelo":"95%","Precio de compra":"91%","Ventaja (edge)":0.04},
+  ]
+  selected=core.rank_single_candidates(rows)
+  tickers=[x["Ticker"] for x in selected]
+  self.assertNotIn("KXGOALS-TOTAL-OVER05",tickers)
+  self.assertNotIn("KXPRICE-HIGH",tickers)
+  self.assertEqual(tickers[0],"KXBTTS-YES")
+  self.assertEqual(tickers.count("KXGOALS-TOTAL-OVER25")+tickers.count("KXGOALS-TOTAL-OVER35"),1)
+  self.assertEqual(selected[0]["Revisión"],"REVISAR")
+
+ def test_single_candidates_reject_missing_price_and_negative_edge(self):
+  rows=[
+   {"Ticker":"KX-NOPRICE","Apuesta sencilla":"Ambos marcan","Categoría resumen":"Ambos marcan","Probabilidad del modelo":"70%","Precio de compra":"—","Ventaja (edge)":0.1},
+   {"Ticker":"KX-NEGATIVE","Apuesta sencilla":"Ambos marcan","Categoría resumen":"Ambos marcan","Probabilidad del modelo":"60%","Precio de compra":"65%","Ventaja (edge)":-0.05},
+  ]
+  self.assertEqual(core.rank_single_candidates(rows),[])
+
+ def test_combo_block_excludes_prices_above_90_cents(self):
+  rows=[
+   {"Ticker":"KXGAME-EXPENSIVE","Apuesta":"Gana local","Probabilidad del modelo":"97%","Precio de compra":"96%","Ventaja (edge)":0.01},
+   {"Ticker":"KXBTTS-AFFORDABLE","Apuesta":"Ambos equipos marcan","Probabilidad del modelo":"85%","Precio de compra":"80%","Ventaja (edge)":0.05},
+  ]
+  high,value=core.rank_market_candidates(rows,min_probability=0.65)
+  high_tickers=[x["Ticker"] for x in high]
+  value_tickers=[x["Ticker"] for x in value]
+  self.assertNotIn("KXGAME-EXPENSIVE",high_tickers)
+  self.assertIn("KXBTTS-AFFORDABLE",high_tickers)
+  self.assertIn("KXGAME-EXPENSIVE",value_tickers)
+
+
 if __name__=="__main__": unittest.main()
