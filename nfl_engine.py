@@ -29,8 +29,7 @@ def normalize_name(value: object) -> str:
 
 def discover_nfl_catalog(include_closed: bool = False) -> dict:
     """Return all currently listed NFL series and nested markets from Kalshi API."""
-    series = sports_series()
-    nfl_series = [s for s in series if str(s.get("ticker", "")).upper().startswith(NFL_PREFIX)]
+    nfl_series = sports_series((NFL_PREFIX,))
     if not nfl_series:
         raise RuntimeError("La API pública de Kalshi no devolvió series KXNFL; no se inventa catálogo.")
     statuses = ("open", "closed", "settled") if include_closed else ("open",)
