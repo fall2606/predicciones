@@ -50,6 +50,52 @@ class NFLModelTests(unittest.TestCase):
         event = {"markets": [{"close_time": "2026-10-12T00:15:00Z"}]}
         self.assertEqual(nfl_engine._event_start(event), "2026-10-12T00:15:00Z")
 
+
+    def test_build_candidates_uses_espn_kickoff_not_kalshi_expiration(self):
+        kickoff = datetime.now(timezone.utc) + timedelta(days=2)
+        nfl_engine.SCHEDULES[tuple(sorted(("buffalo bills", "miami dolphins")))] = kickoff.isoformat()
+        event = {
+            "event_ticker": "KXNFLGAME-EVENT",
+            "title": "BUF Bills vs MIA Dolphins: Game Winner",
+            "markets": [{
+                "ticker": "KXNFLGAME-MONEYLINE",
+                "title": "BUF Bills to win",
+                "yes_sub_title": "BUF Bills to win",
+                "status": "open",
+                "close_time": (kickoff + timedelta(days=2)).isoformat(),
+                "expected_expiration_time": (kickoff + timedelta(hours=3)).isoformat(),
+                "yes_ask_dollars": "0.55",
+                "no_ask_dollars": "0.47",
+            }],
+        }
+        candidates = nfl_engine.build_candidates([event], self.stats)
+        self.assertTrue(candidates)
+        self.assertEqual(candidates[0]["fecha"], kickoff.isoformat())
+
+    def test_reconcile_exclusions_quarantines_old_period_contracts(self):
+        import csv
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as folder:
+            pred_path = Path(folder) / "pred.csv"
+            excluded_path = Path(folder) / "excluded.csv"
+            kickoff = datetime.now(timezone.utc) - timedelta(hours=1)
+            row = {
+                "prediction_id": "old-period|market|YES",
+                "event_ticker": "KXNFL1HSPREAD-EVENT",
+                "ticker": "KXNFL2QSPREAD-MARKET",
+                "local": "BUF Bills", "visita": "MIA Dolphins",
+                "capturado_en": (kickoff - timedelta(minutes=10)).isoformat(),
+            }
+            with pred_path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=list(row))
+                writer.writeheader()
+                writer.writerow(row)
+            with patch.object(nfl_engine, "PRED_FILE", pred_path), patch.object(nfl_engine, "EXCLUDED_FILE", excluded_path):
+                excluded = nfl_engine.reconcile_exclusions(self.stats)
+            self.assertIn(row["prediction_id"], excluded)
+            self.assertTrue(excluded_path.exists())
+
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
         self.assertIsNotNone(projected)
