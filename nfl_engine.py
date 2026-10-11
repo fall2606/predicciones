@@ -154,18 +154,33 @@ def _price(market, side):
             pass
     return None
 
+def _parse_datetime(value):
+    try:
+        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
+
+def _scheduled_kickoff(home, away, stats):
+    h, a = _match_team(home, stats), _match_team(away, stats)
+    if not h or not a:
+        return None
+    value = SCHEDULES.get(tuple(sorted((h, a))))
+    return _parse_datetime(value) if value else None
+
 def _event_start(event):
     for field in ("start_time", "strike_date", "start_date"):
         value = event.get(field)
         if value:
             return str(value)
-    # Kalshi game events may omit kickoff on the event object; market close_time is
-    # the conservative fallback because it normally closes at kickoff, unlike settlement time.
+    # For grouping only: expected_expiration_time is usually shared by all markets
+    # for the same game. It is NOT used as the actual kickoff.
     for market in event.get("markets") or []:
-        value = market.get("close_time")
+        value = market.get("expected_expiration_time")
         if value:
             return str(value)
     return ""
+
 
 def merge_game_events(events):
     """Merge per-market Kalshi events into one fixture, retaining every real market ticker."""
@@ -177,7 +192,7 @@ def merge_game_events(events):
         teams = re.split(r"\s+(?:vs\.?|versus|@|at)\s+", fixture, maxsplit=1, flags=re.I)
         if len(teams) != 2:
             continue
-        key = (_norm(fixture), start)
+        key = (_norm(fixture), start[:10])
         if key not in grouped:
             event["title"] = fixture
             event["markets"] = []
@@ -200,11 +215,9 @@ def build_candidates(events, stats):
         if len(parts) != 2:
             continue
         home, away = parts[0].strip(), parts[1].strip()
-        start = _event_start(event)
-        try:
-            kickoff = datetime.fromisoformat(start.replace("Z", "+00:00"))
-            if kickoff.tzinfo is None: kickoff = kickoff.replace(tzinfo=timezone.utc)
-        except ValueError:
+        start = event.get("start_time") or event.get("strike_date") or event.get("start_date")
+        kickoff = _parse_datetime(start) if start else _scheduled_kickoff(home, away, stats)
+        if kickoff is None:
             continue
         if kickoff <= now or kickoff > now + timedelta(days=14):
             continue
