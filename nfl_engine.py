@@ -106,6 +106,13 @@ def _market_probability(market, home, away, home_score, away_score):
     full_text = " ".join(x for x in (title, str(market.get("title") or "")) if x)
     ticker = str(market.get("ticker") or "").upper()
     text = (full_text + " " + ticker).lower()
+    # This model uses full-game score projections; period/quarter contracts need their own model.
+    if any(term in text for term in ("1st half", "first half", "2nd half", "second half",
+                                     "1st quarter", "2nd quarter", "3rd quarter", "4th quarter",
+                                     "1h spread", "2h spread", "quarter spread")):
+        return None, ""
+    if re.search(r"KXNFL(?:1H|2H|Q1|Q2|Q3|Q4)", ticker):
+        return None, ""
     margin = home_score - away_score
     total = home_score + away_score
     # Winner/team markets: only match explicit team name, avoid interpreting arbitrary player props.
