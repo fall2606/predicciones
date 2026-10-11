@@ -7,6 +7,7 @@ Special markets (corners, cards, player props, first goal, half-time) fall back 
 from __future__ import annotations
 
 import ast
+import os
 import re
 import unicodedata
 from datetime import datetime, timedelta, timezone
@@ -75,6 +76,67 @@ def _scoreboard(league, day):
     return events
 
 
+
+_FD_CACHE = {}
+
+
+def _football_data_match(row):
+    """Use the documented football-data.org free API when CLAVE is available.
+
+    One cached season request serves all predictions in that competition/season,
+    avoiding one HTTP request per prediction and preserving the regulation-time score.
+    """
+    token = os.getenv("CLAVE")
+    match_id = str(row.get("match_id") or "").strip()
+    kickoff = _parse_date(row.get("fecha"))
+    if not token or not match_id.isdigit() or kickoff is None:
+        return None
+    ticker = str(row.get("ticker") or "").upper()
+    key_text = str(row.get("clave_interna") or "").upper()
+    competition = "PD" if ticker.startswith("KXLALIGA") or "KXLALIGA" in key_text else (
+        "CL" if ticker.startswith("KXUCL") or "KXUCL" in key_text else ""
+    )
+    if not competition:
+        return None
+    season = kickoff.year if kickoff.month >= 7 else kickoff.year - 1
+    cache_key = (competition, season)
+    if cache_key not in _FD_CACHE:
+        try:
+            response = _SESSION.get(
+                f"https://api.football-data.org/v4/competitions/{competition}/matches",
+                headers={"X-Auth-Token": token},
+                params={"season": season, "limit": 500},
+                timeout=_TIMEOUT,
+            )
+            response.raise_for_status()
+            matches = (response.json() or {}).get("matches") or []
+            _FD_CACHE[cache_key] = {str(item.get("id")): item for item in matches if item.get("id") is not None}
+        except (requests.RequestException, ValueError, TypeError):
+            _FD_CACHE[cache_key] = {}
+    item = _FD_CACHE[cache_key].get(match_id)
+    if not item:
+        return None
+    status = str(item.get("status") or "").upper()
+    score = item.get("score") or {}
+    full = score.get("fullTime") or {}
+    home, away = full.get("home"), full.get("away")
+    if home is None or away is None:
+        return {
+            "confidence": 1.0, "event_id": match_id, "status": status,
+            "completed": False, "status_detail": "football-data.org: " + status,
+            "local_score": None, "away_score": None, "league": competition,
+            "event_name": "",
+        }
+    return {
+        "confidence": 1.0, "event_id": match_id,
+        "status": "STATUS_FINAL" if status == "FINISHED" else status,
+        "completed": status == "FINISHED",
+        "status_detail": "Marcador reglamentario de football-data.org: " + status,
+        "local_score": int(home), "away_score": int(away),
+        "league": competition, "event_name": "",
+    }
+
+
 def find_match(row):
     """Return a confidently matched scoreboard event, or None rather than guessing."""
     ticker = str(row.get("ticker") or "").upper()
@@ -141,7 +203,15 @@ def find_match(row):
 
 def settle_from_score(row):
     """Resolve only full-time game result, full-time goals, BTTS, and team-goal totals."""
-    match = find_match(row)
+    # Prefer the documented, match-ID-based score source; use ESPN's public
+    # scoreboard only when the official API/token is unavailable or has no match.
+    match = _football_data_match(row)
+    if not match or not match.get("completed"):
+        espn_match = find_match(row)
+        if espn_match and espn_match.get("completed"):
+            match = espn_match
+        elif match is None:
+            match = espn_match
     if not match:
         return None
     status = match["status"]
