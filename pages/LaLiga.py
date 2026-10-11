@@ -88,8 +88,7 @@ ids_con_captura = (
 if corners is None:
     st.info("Kalshi puede ofrecer mercados de corners; sin estadísticas históricas suficientes, se mostrarán sus contratos pero el modelo no les asignará probabilidad.")
 
-inicio, fin = hoy, hoy + timedelta(days=2)
-inicio_resultados = hoy - timedelta(days=7)
+inicio, fin = hoy - timedelta(days=2), hoy + timedelta(days=3)
 seleccionables = []
 partidos_disponibles = {str(m["id"]): m for m in modelo[9]}
 partidos_disponibles.update({str(m["id"]): m for m in partidos})
@@ -105,8 +104,9 @@ for partido in partidos_disponibles.values():
     estado = partido.get("status")
     proximo = inicio <= fecha_local <= fin and estado in {"SCHEDULED", "TIMED"}
     finalizado_revisable = (
-        estado in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
-        and (inicio_resultados <= fecha_local <= hoy or str(partido.get("id")) in ids_con_captura)
+        inicio <= fecha_local <= hoy
+        and estado in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
+        and str(partido.get("id")) in ids_con_captura
     )
     if proximo or finalizado_revisable:
         seleccionables.append(partido)
@@ -137,7 +137,7 @@ for m in seleccionables:
     opciones[etiqueta] = m
 
 st.caption(
-    f"Próximos: hoy {inicio:%d/%m} y dos días más · finalizados: últimos 7 días y todos los que tengan captura guardada · hora de Chicago"
+    f"Ventana visible: {inicio:%d/%m}–{fin:%d/%m} (2 días anteriores, hoy y 3 siguientes) · los partidos pasados solo aparecen si tienen predicción guardada · hora de Chicago"
 )
 pendientes = [m for m in seleccionables if m["status"] in {"SCHEDULED", "TIMED"}]
 indice = 0
