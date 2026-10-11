@@ -203,8 +203,8 @@ st.markdown(
 st.markdown("### Resumen sencillo del partido")
 if resumen_archivado:
     st.caption("Se muestra la última captura guardada antes del inicio; las anteriores permanecen inmutables y se pueden comparar abajo.")
-elif partido["status"] == "FINISHED":
-    st.caption("Este partido terminó antes de que se activara el archivo; no hay una predicción previa guardada.")
+elif partido_cerrado:
+    st.caption("No hay una captura previa guardada para este encuentro cerrado; no se inventa una predicción retrospectiva.")
 else:
     st.caption("Estimación en vivo. La captura automática se guarda cada dos horas; la hora de la última captura se muestra cuando esté disponible.")
 if resumen_sencillo_kalshi:
@@ -212,7 +212,7 @@ if resumen_sencillo_kalshi:
         with st.container(border=True):
             st.markdown(f"**{jugada['Tipo']}:** {jugada['Jugada sencilla']}")
             st.write(f"Probabilidad modelo: **{jugada['Probabilidad modelo']}**")
-            if partido["status"] == "FINISHED":
+            if partido_cerrado:
                 resultado_tarjeta = str(jugada.get("Resultado", "Pendiente de resultado"))
                 if "Se cumplió" in resultado_tarjeta or resultado_tarjeta == "WIN":
                     st.success("WIN · Se cumplió")
@@ -236,8 +236,8 @@ if resumen_sencillo_kalshi:
         with st.expander(f"Comparar todas las capturas guardadas ({len(historial_partido)})"):
             st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
 else:
-    if partido["status"] == "FINISHED":
-        st.info("No hay una captura previa de este partido en el historial; no se inventa una comparación retrospectiva.")
+    if partido_cerrado:
+        st.info("No hay una captura previa de este encuentro cerrado; no se inventa una comparación retrospectiva.")
     else:
         st.info("No encontré mercados modelables de Kalshi para resumir este partido.")
 
@@ -247,7 +247,7 @@ st.caption("Ranking del catálogo real de Kalshi. Se omiten contratos sin ticker
 alta_vista, valor_vista = rank_market_candidates(
     todas_kalshi, min_probability=float(os.getenv("PROBABILIDAD_MINIMA_COMBO", "0.65"))
 )
-if partido["status"] == "FINISHED":
+if partido_cerrado:
     _archivo_partido = predicciones_guardadas[predicciones_guardadas["match_id"].astype(str) == str(partido["id"])].copy() if not predicciones_guardadas.empty else pd.DataFrame()
     _mask_alta = _archivo_partido["bloque"].astype(str).eq("ALTA_PROBABILIDAD") if not _archivo_partido.empty and "bloque" in _archivo_partido.columns else pd.Series(False, index=_archivo_partido.index)
     if not _archivo_partido.empty and "categoria" in _archivo_partido.columns:
@@ -271,7 +271,7 @@ else:
 
 st.markdown("### 10 a tener en cuenta · ordenadas por edge")
 st.caption("Sólo se incluyen contratos con precio y ventaja calculable. La ventaja es probabilidad del modelo menos precio implícito; no se inventan precios cuando Kalshi no cotiza.")
-if partido["status"] == "FINISHED":
+if partido_cerrado:
     _archivo_valor = predicciones_guardadas[predicciones_guardadas["match_id"].astype(str) == str(partido["id"])].copy() if not predicciones_guardadas.empty else pd.DataFrame()
     _mask_valor = _archivo_valor["bloque"].astype(str).eq("A_TENER_EN_CUENTA") if not _archivo_valor.empty and "bloque" in _archivo_valor.columns else pd.Series(False, index=_archivo_valor.index)
     if not _archivo_valor.empty and "categoria" in _archivo_valor.columns:
@@ -301,7 +301,7 @@ with st.expander(f"Aprendizaje y rendimiento histórico ({cantidad_rendimiento} 
     else:
         st.info("El historial empezará a mostrarse después de guardar pronósticos previos y recibir sus resultados.")
 
-if partido["status"] == "FINISHED":
+if partido_cerrado:
     st.info("Las cotizaciones y oportunidades actuales se muestran sólo para partidos próximos; arriba queda la captura histórica inmutable.")
 else:
     st.markdown("### Apuestas con margen neto estimado")
