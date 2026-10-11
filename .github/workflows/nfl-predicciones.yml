@@ -38,6 +38,8 @@ jobs:
         run: python -m py_compile nfl_engine.py liquidar_nfl.py pages/NFL.py tests/test_nfl_engine.py
       - name: Ejecutar pruebas NFL
         run: python -m unittest discover -s tests -p "test_nfl_engine.py" -v
+      - name: Confirmar versión NFL en ejecución
+        run: echo "Validación NFL: modelo, ledger inmutable y liquidación oficial"
       - name: Capturar mercados NFL abiertos
         id: capture
         continue-on-error: true
