@@ -104,12 +104,20 @@ def main():
                     pbase = float(str(ptxt).rstrip("%")) / 100
                 except (TypeError, ValueError):
                     continue
+                tipo_calibracion = f"{bloque} · {candidato.get('Categoría resumen', 'Kalshi')}"
+                calibrado = calibrar_resumen([{
+                    "Tipo": tipo_calibracion,
+                    "Probabilidad base": pbase,
+                    "Probabilidad modelo": f"{pbase:.1%}",
+                    "Precio de compra": candidato.get("Precio de compra", "—"),
+                }], predicciones, resultados)[0]
+                p_calibrada = float(str(calibrado.get("Probabilidad modelo", f"{pbase:.1%}")).rstrip("%")) / 100
                 resultado_actual.append({
                     "Tipo": candidato.get("Categoría resumen", "Kalshi"),
                     "Jugada sencilla": candidato.get("Apuesta sencilla") or candidato.get("Apuesta", ""),
                     "Probabilidad base": pbase,
-                    "Probabilidad modelo": f"{pbase:.1%}",
-                    "Calibración": "",
+                    "Probabilidad modelo": f"{p_calibrada:.1%}",
+                    "Calibración": calibrado.get("Calibración", "Sin calibrar"),
                     "Precio ahora": candidato.get("Precio de compra", "—"),
                     "Disponibilidad": candidato.get("Disponibilidad", ""),
                     "Ticker": candidato.get("Ticker", ""),
