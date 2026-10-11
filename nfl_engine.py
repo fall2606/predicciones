@@ -303,7 +303,8 @@ def predict_game(model, home, away, kickoff=None):
     margin_values, margin_probs = _normal_pmf(margin_mean, 13.5, -45, 45, key_numbers=(-14, -10, -7, -6, -3, 0, 3, 6, 7, 10, 14))
     total_values, total_probs = _normal_pmf(total_mean, 13.0, 0, 100, key_numbers=(3, 7, 10, 14, 17, 20, 21, 24, 27, 28, 31, 34, 35, 38, 41, 42, 45, 48, 49, 52, 55))
     return {
-        "margin_mean": margin_mean, "total_mean": total_mean,\n        "rest_difference_days": rest_difference, "rest_adjustment_points": rest_adjustment,
+        "margin_mean": margin_mean, "total_mean": total_mean,
+        "rest_difference_days": rest_difference, "rest_adjustment_points": rest_adjustment,
         "home_points_mean": home_mean, "away_points_mean": away_mean,
         "home_win": float(margin_probs[margin_values > 0].sum() + 0.5 * margin_probs[margin_values == 0].sum()),
         "away_win": float(margin_probs[margin_values < 0].sum() + 0.5 * margin_probs[margin_values == 0].sum()),
