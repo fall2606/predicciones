@@ -1,5 +1,9 @@
 """Live phase-1 smoke test: print a real NFL event and its Kalshi market catalog."""
 import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from nfl_engine import discover_nfl_catalog, example_catalog
 
 catalog = discover_nfl_catalog()
