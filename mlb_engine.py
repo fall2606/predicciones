@@ -764,7 +764,14 @@ def main():
                 edge = float(row["edge"]) if row.get("edge") not in (None, "") else None
             except (TypeError, ValueError, OverflowError):
                 edge = None
-            price = _price(row, "precio_captura")
+            try:
+                price = float(row.get("precio_captura")) if row.get("precio_captura") not in (None, "") else None
+                if price is not None and price > 1:
+                    price /= 100
+                if price is not None and not 0 <= price <= 1:
+                    price = None
+            except (TypeError, ValueError, OverflowError):
+                price = None
             candidates_for_game.append({
                 "_row": row, "_p": p, "_lado": row.get("lado", ""),
                 "Ticker": row.get("ticker", ""), "ticker": row.get("ticker", ""),
