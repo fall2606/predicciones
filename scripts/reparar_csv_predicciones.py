@@ -99,6 +99,7 @@ def repair_file(path, current_columns, legacy_columns):
     repaired_rows, schemas = [], {}
     metadata_modified = False
     removed_invalid_pregame = 0
+    removed_over_limit_pregame = 0
     for line_no, values in enumerate(data, start=2):
         if not values or (len(values) == 1 and not values[0]):
             continue
@@ -136,7 +137,55 @@ def repair_file(path, current_columns, legacy_columns):
             metadata_modified = True
         repaired_rows.append({column: row.get(column, "") for column in current_columns})
         schemas[str(len(values))] = schemas.get(str(len(values)), 0) + 1
-    changed = header != current_columns or metadata_modified or removed_invalid_pregame > 0 or any(
+    if path.name == "predicciones_mlb.csv":
+        now = datetime.now(timezone.utc)
+        groups = {}
+        for index, row in enumerate(repaired_rows):
+            match_id = str(row.get("match_id", "")).strip()
+            if not match_id:
+                continue
+            try:
+                kickoff = datetime.fromisoformat(str(row.get("fecha", "")).replace("Z", "+00:00"))
+                if kickoff.tzinfo is None:
+                    kickoff = kickoff.replace(tzinfo=timezone.utc)
+            except (TypeError, ValueError):
+                continue
+            if now >= kickoff.astimezone(timezone.utc):
+                continue
+            block = str(row.get("bloque", ""))
+            if block in {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}:
+                groups.setdefault((match_id, block), []).append((index, row))
+        limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
+        drop = set()
+        for (_, block), items in groups.items():
+            limit = limits[block]
+            if len(items) <= limit:
+                continue
+            def score(item):
+                row = item[1]
+                field = "edge" if block == "A_TENER_EN_CUENTA" else "probabilidad_modelo"
+                try:
+                    value = float(row.get(field, ""))
+                    if not math.isfinite(value):
+                        value = -math.inf
+                except (TypeError, ValueError, OverflowError):
+                    value = -math.inf
+                try:
+                    probability = float(row.get("probabilidad_modelo", ""))
+                    if not math.isfinite(probability):
+                        probability = -math.inf
+                except (TypeError, ValueError, OverflowError):
+                    probability = -math.inf
+                return (value, probability, str(row.get("capturado_en", "")))
+            keep = {index for index, _ in sorted(items, key=score, reverse=True)[:limit]}
+            for index, _ in items:
+                if index not in keep:
+                    drop.add(index)
+        if drop:
+            removed_over_limit_pregame = len(drop)
+            repaired_rows = [row for index, row in enumerate(repaired_rows) if index not in drop]
+
+    changed = header != current_columns or metadata_modified or removed_invalid_pregame > 0 or removed_over_limit_pregame > 0 or any(
         len(values) != len(header) for values in data if values
     )
     if changed:
@@ -146,7 +195,7 @@ def repair_file(path, current_columns, legacy_columns):
             writer.writeheader()
             writer.writerows(repaired_rows)
         tmp.replace(path)
-    return {"file": path.name, "rows": len(repaired_rows), "repaired": changed or removed_invalid_pregame > 0, "schemas": schemas, "removed_invalid_pregame": removed_invalid_pregame}
+    return {"file": path.name, "rows": len(repaired_rows), "repaired": changed or removed_invalid_pregame > 0, "schemas": schemas, "removed_invalid_pregame": removed_invalid_pregame, "removed_over_limit_pregame": removed_over_limit_pregame}
 
 
 def main():

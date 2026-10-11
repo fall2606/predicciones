@@ -82,6 +82,35 @@ class CSVRepairTests(unittest.TestCase):
             with path.open(newline="", encoding="utf-8") as f:
                 self.assertEqual(list(csv.DictReader(f)), [])
 
+    def test_mlb_value_block_is_capped_at_ten_before_kickoff(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "predicciones_mlb.csv"
+            kickoff = (datetime.now(timezone.utc) + timedelta(hours=8)).isoformat()
+            rows = []
+            for i in range(11):
+                rows.append({
+                    "prediction_id": f"m|KXMLBTOTAL-{i}|YES|A_TENER_EN_CUENTA",
+                    "event_ticker": f"KXMLBTOTAL-EVENT", "ticker": f"KXMLBTOTAL-{i}",
+                    "match_id": "game-1", "fecha": kickoff, "local": "A", "visita": "B",
+                    "categoria": "A_TENER_EN_CUENTA · Total", "mercado": f"Over {i}.5 runs",
+                    "line": f"{i}.5", "lado": "YES", "seleccion": "YES",
+                    "bloque": "A_TENER_EN_CUENTA", "probabilidad_modelo": "0.7",
+                    "precio_captura": "0.4", "probabilidad_implicita": "0.4",
+                    "edge": f"{i/100:.2f}", "estado_modelo": "modelado", "reglas": "",
+                    "capturado_en": datetime.now(timezone.utc).isoformat(),
+                })
+            with path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=CURRENT_MLB)
+                writer.writeheader()
+                writer.writerows(rows)
+            summary = repair_file(path, CURRENT_MLB, LEGACY_MLB)
+            with path.open(newline="", encoding="utf-8") as f:
+                saved = list(csv.DictReader(f))
+            self.assertEqual(summary["removed_over_limit_pregame"], 1)
+            self.assertEqual(len(saved), 10)
+            self.assertNotIn("m|KXMLBTOTAL-0|YES|A_TENER_EN_CUENTA", [r["prediction_id"] for r in saved])
+
 
 if __name__ == "__main__":
     unittest.main()

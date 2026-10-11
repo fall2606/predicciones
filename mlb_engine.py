@@ -464,8 +464,22 @@ def main():
                 break
 
         high, value = rank_market_candidates(candidates, min_probability=minimum_combo, high_limit=5, value_limit=10)
+        limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
+        existing_match = [item for item in existing if str(item.get("match_id", "")) == str(match_id)]
+        block_counts = {name: 0 for name in limits}
+        for item in existing_match:
+            block_name = str(item.get("bloque", "") or "")
+            if block_name not in limits:
+                category_name = str(item.get("categoria", ""))
+                block_name = next((name for name in limits if category_name.startswith(name + " · ")), "")
+            if block_name in limits:
+                block_counts[block_name] += 1
+
         for block, selected in (("SENCILLAS", singles), ("ALTA_PROBABILIDAD", high), ("A_TENER_EN_CUENTA", value)):
+            count = block_counts[block]
             for candidate in selected:
+                if count >= limits[block]:
+                    break
                 row = dict(candidate["_row"])
                 side = candidate.get("_lado") or row["lado"]
                 ticker = row["ticker"]
@@ -476,6 +490,7 @@ def main():
                     continue
                 new_rows.append(row)
                 existing_ids.add(row["prediction_id"])
+                count += 1
 
     capture_summary = append_immutable_predictions(
         PRED_FILE, PRED_COLUMNS, new_rows, probability_field="probabilidad_modelo"
