@@ -139,5 +139,18 @@ class CoreTests(unittest.TestCase):
    self.assertEqual(len(rows),1)
    self.assertEqual(rows[0]["estado"],"WIN")
    self.assertNotEqual(rows[0]["estado"],"NO_EVALUABLE")
+ def test_future_fixture_is_not_polled_before_kickoff(self):
+  with tempfile.TemporaryDirectory() as d:
+   p,r=Path(d)/"p.csv",Path(d)/"r.csv"
+   future=(datetime.now(timezone.utc)+timedelta(days=2)).isoformat()
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","match_id","lado","fecha","capturado_en","probabilidad_modelo"]); w.writeheader()
+    w.writerow({"prediction_id":"future","ticker":"KXTEST-FUTURE","match_id":"m1","lado":"YES","fecha":future,"capturado_en":datetime.now(timezone.utc).isoformat(),"probabilidad_modelo":"0.7"})
+   with patch.object(core,"kalshi_get") as fetch, patch.object(core,"_market_rows_for_series") as catalog:
+    summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado")
+   self.assertEqual(summary["pendientes_revisadas"],0)
+   fetch.assert_not_called()
+   catalog.assert_not_called()
+
 
 if __name__=="__main__": unittest.main()

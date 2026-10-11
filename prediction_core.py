@@ -236,8 +236,18 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     terminal={str(r.get(id_field,"")) for r in results
               if str(r.get(id_field,"")) in valid_prediction_ids
               and _trusted_terminal_result(r,result_columns,state_field)}
-    pending=[r for r in predictions if str(r.get(id_field,"")) in valid_prediction_ids
-             and str(r.get(id_field,"")) not in terminal]
+    now=utc_now()
+    pending=[]
+    for row in predictions:
+        pid=str(row.get(id_field,""))
+        if pid not in valid_prediction_ids or pid in terminal:
+            continue
+        kickoff=parse_datetime(row.get("fecha"))
+        # Future fixtures do not need a settlement lookup yet. Past fixtures are
+        # always retried, regardless of age, so missed schedules are recovered.
+        if kickoff is None or kickoff > now:
+            continue
+        pending.append(row)
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
     # For small backlogs, query exact tickers directly; scanning every settled market in a series is needlessly slow.
     markets=_market_rows_for_series(series) if len(pending) > 50 else {}; new=[]; skipped=0
