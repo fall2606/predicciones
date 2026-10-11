@@ -43,11 +43,13 @@ jobs:
           echo "Validación NFL: modelo, ledger inmutable y liquidación oficial"
       - name: Capturar mercados NFL abiertos
         id: capture
+        timeout-minutes: 4
         continue-on-error: true
         run: python nfl_engine.py
       - name: Liquidar resultados oficiales Kalshi NFL
         id: settle
         if: always()
+        timeout-minutes: 4
         continue-on-error: true
         run: python liquidar_nfl.py
       - name: Guardar ledger NFL sin modificar otros históricos
