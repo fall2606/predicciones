@@ -95,6 +95,8 @@ def test_generate_candidates_assigns_independent_blocks_and_keeps_side():
              "title": "Miami wins", "yes_ask_dollars": "0.30", "no_ask_dollars": "0.30"},
             {"ticker": "KXNFLGAME-26OCT18CINMIA-CIN", "series_ticker": "KXNFLGAME",
              "title": "Cincinnati wins", "yes_ask_dollars": "0.30", "no_ask_dollars": "0.30"},
+            {"ticker": "KXNFLTOTAL-26OCT18CINMIA-OVER30.5", "series_ticker": "KXNFLTOTAL",
+             "title": "Over 30.5 points", "yes_ask_dollars": "0.30", "no_ask_dollars": "0.30"},
         ],
     }
     fixtures = [{
@@ -107,7 +109,10 @@ def test_generate_candidates_assigns_independent_blocks_and_keeps_side():
     assert catalog
     assert coverage and coverage[0]["match_id"] == "NFL:2026-10-18:CIN@MIA"
     assert rows and {row["lado"] for row in rows}.issubset({"YES", "NO"})
-    assert {row["bloque"] for row in rows}.issubset({"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"})
+    assert {row["bloque"] for row in rows} == {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}
+    total_yes = [row for row in rows if row["ticker"] == "KXNFLTOTAL-26OCT18CINMIA-OVER30.5" and row["lado"] == "YES"]
+    assert {row["bloque"] for row in total_yes} == {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}
+    assert len({row["prediction_id"] for row in total_yes}) == 3
     ids = [row["prediction_id"] for row in rows]
     assert len(ids) == len(set(ids))
     assert all(row["descripcion"].startswith(("SÍ:", "NO:")) for row in rows)
@@ -139,3 +144,33 @@ def test_atomic_save_preserves_yes_no_side_and_freezes_duplicates(tmp_path):
     saved = pd.read_csv(path, dtype=str).fillna("")
     assert set(saved["lado"]) == {"YES", "NO"}
     assert len(saved) == 2
+
+
+
+def test_espn_fallback_settles_finished_winner_by_teams_and_date(monkeypatch):
+    event = {
+        "id": "espn-game-1",
+        "date": "2026-10-11T17:00:00Z",
+        "status": {"type": {"name": "STATUS_FINAL", "completed": True}},
+        "competitions": [{
+            "date": "2026-10-11T17:00:00Z",
+            "competitors": [
+                {"homeAway": "home", "team": {"abbreviation": "MIA"}, "score": "24"},
+                {"homeAway": "away", "team": {"abbreviation": "CIN"}, "score": "17"},
+            ],
+        }],
+    }
+    def fake_get(url, params=None):
+        return {"events": [event] if params and params.get("dates") == "20261011" else []}
+    monkeypatch.setattr(nfl, "_get", fake_get)
+    row = {
+        "hora_inicio": "2026-10-11T17:00:00Z", "fecha": "2026-10-11T17:00:00Z",
+        "local": "MIA", "visita": "CIN", "categoria": "winner", "equipo_yes": "MIA",
+        "tipo_salida": "winner", "lado": "YES", "ticker": "KXNFLGAME-26OCT11CINMIA-MIA",
+    }
+    settled = nfl.settle_from_espn(row)
+    assert settled and settled["state"] == "WIN"
+    row["lado"] = "NO"
+    settled_no = nfl.settle_from_espn(row)
+    assert settled_no and settled_no["state"] == "LOSS"
+    assert "24" in settled["score"] and "17" in settled["score"]
