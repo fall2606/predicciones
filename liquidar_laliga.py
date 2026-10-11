@@ -255,15 +255,25 @@ def main():
             continue
         marcador = marcador_periodos(partido)
         if marcador is None:
+            nuevos.append({
+                "prediction_id": str(fila["prediction_id"]),
+                "estado": "NO_EVALUABLE",
+                "marcador": "Partido finalizado, pero la API no entrega el marcador oficial completo",
+                "resuelto_en": datetime.now().astimezone().isoformat(),
+            })
+            resueltos.add(str(fila["prediction_id"]))
             continue
         estado = evaluar_pronostico(fila, partido, marcador, corners)
         if estado not in {"WIN", "LOSS"}:
-            continue
+            estado = "NO_EVALUABLE"
+            motivo = "Falta estadística oficial para este mercado"
+        else:
+            motivo = ""
         goles = marcador["partido"]
         nuevos.append({
             "prediction_id": str(fila["prediction_id"]),
             "estado": estado,
-            "marcador": f"{goles[0]}-{goles[1]}",
+            "marcador": f"{goles[0]}-{goles[1]}" + (f" · {motivo}" if motivo else ""),
             "resuelto_en": datetime.now().astimezone().isoformat(),
         })
         resueltos.add(str(fila["prediction_id"]))
