@@ -1,4 +1,9 @@
 import math
+import os
+import subprocess
+import sys
+import unittest
+from pathlib import Path
 from datetime import datetime, timezone
 
 import numpy as np
@@ -215,3 +220,60 @@ def test_player_prop_without_verified_player_model_is_never_generated():
     assert kind == "unsupported_player_prop"
     assert probability is None
     assert "prop" in reason.lower()
+
+
+
+class TestNflIntegrationOnPullRequest(unittest.TestCase):
+    """The existing unittest workflow executes these checks on NFL feature branches."""
+
+    def test_all_engines_import(self):
+        import champions_engine
+        import laliga_engine
+        import mlb_engine
+        import prediction_core
+        import sports_results
+        self.assertIsNotNone(champions_engine)
+        self.assertIsNotNone(laliga_engine)
+        self.assertIsNotNone(mlb_engine)
+        self.assertIsNotNone(prediction_core)
+        self.assertIsNotNone(sports_results)
+
+    def test_nfl_streamlit_page_loads_with_real_csvs(self):
+        from streamlit.testing.v1 import AppTest
+        root = Path(__file__).resolve().parents[1]
+        sys.path.insert(0, str(root))
+        os.environ["NFL_PAGE_TEST_MODE"] = "1"
+        app = AppTest.from_file(str(root / "pages" / "NFL.py"), default_timeout=60).run()
+        errors = list(app.exception)
+        self.assertEqual(errors, [], "; ".join(str(item.message) for item in errors))
+        for filename in ("predicciones_nfl.csv", "resultados_nfl.csv", "nfl_catalogo_actual.csv"):
+            self.assertTrue((root / filename).exists(), f"Falta CSV real: {filename}")
+
+    @unittest.skipUnless(
+        os.getenv("GITHUB_WORKFLOW") == "Tests de predicciones"
+        and "nfl" in os.getenv("GITHUB_HEAD_REF", "").lower(),
+        "La integración live solo corre en el workflow principal para ramas NFL.",
+    )
+    def test_nfl_walk_forward_backtest_and_calibration(self):
+        root = Path(__file__).resolve().parents[1]
+        subprocess.run(
+            [sys.executable, str(root / "scripts" / "backtest_nfl.py"), "--max-games", "500", "--force"],
+            cwd=root, check=True, timeout=300,
+        )
+        summary = pd.read_csv(root / "nfl_backtest_resumen.csv")
+        self.assertGreaterEqual(len(summary), 3)
+        self.assertIn("brier_sin_calibrar", summary.columns)
+        self.assertIn("log_loss_sin_calibrar", summary.columns)
+        self.assertTrue((root / "nfl_calibracion.json").exists())
+
+    @unittest.skipUnless(
+        os.getenv("GITHUB_WORKFLOW") == "Tests de predicciones"
+        and "nfl" in os.getenv("GITHUB_HEAD_REF", "").lower(),
+        "La integración live solo corre en el workflow principal para ramas NFL.",
+    )
+    def test_nfl_real_capture_freeze_and_historical_settlement(self):
+        root = Path(__file__).resolve().parents[1]
+        subprocess.run(
+            [sys.executable, str(root / "scripts" / "verify_nfl_cycle.py")],
+            cwd=root, check=True, timeout=480,
+        )
