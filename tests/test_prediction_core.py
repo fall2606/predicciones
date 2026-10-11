@@ -187,6 +187,24 @@ class CoreTests(unittest.TestCase):
    self.assertTrue(quarantine.exists())
    self.assertIn("bad,LOSS,Marcador,extra",quarantine.read_text(encoding="utf-8"))
 
+ def test_csv_reader_migrates_legacy_football_rows_without_losing_capture_time(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   path=Path(tmp)/"predicciones_laliga.csv"
+   current=["prediction_id","match_id","fecha","local","visita","categoria","jugada","probabilidad_base","probabilidad_calibrada","calibracion","precio","disponibilidad","ticker","mercado","line","seleccion","bloque","edge","clave_interna","capturado_en"]
+   legacy=["prediction_id","match_id","fecha","local","visita","categoria","jugada","probabilidad_base","probabilidad_calibrada","calibracion","precio","disponibilidad","ticker","clave_interna","capturado_en"]
+   old=["old-id","m1","2026-10-20T18:00:00Z","A","B","Goles totales","Más de 2.5 goles","0.7","0.7","","40%","","KXREAL-1","(('KXLALIGATOTAL', 'over', 2.5, 'over'), 'YES')","2026-10-10T12:00:00Z"]
+   with path.open("w",newline="",encoding="utf-8") as f:
+    w=csv.writer(f); w.writerow(current); w.writerow(old)
+   rows=core.read_csv_rows_resilient(path)
+   self.assertEqual(len(rows),1)
+   self.assertEqual(rows[0]["prediction_id"],"old-id")
+   self.assertEqual(rows[0]["capturado_en"],"2026-10-10T12:00:00Z")
+   self.assertEqual(rows[0]["line"],"2.5")
+   with path.open(newline="",encoding="utf-8") as f:
+    saved=list(csv.DictReader(f))
+   self.assertEqual(len(saved),1)
+   self.assertEqual(len(saved[0]),len(current))
+
  def test_single_candidates_reject_missing_price_and_negative_edge(self):
   rows=[
    {"Ticker":"KX-NOPRICE","Apuesta sencilla":"Ambos marcan","Categoría resumen":"Ambos marcan","Probabilidad del modelo":"70%","Precio de compra":"—","Ventaja (edge)":0.1},
