@@ -144,7 +144,7 @@ def build_candidates(events, stats):
     candidates = []
     now = datetime.now(timezone.utc)
     for event in events:
-        title = str(event.get("title") or "")
+        title = str(event.get("title") or "").split(":", 1)[0].strip()
         # Event title is normally "Team A vs Team B"; don't guess when names cannot be separated.
         parts = re.split(r"\s+(?:vs\.?|versus|@|at)\s+", title, maxsplit=1, flags=re.I)
         if len(parts) != 2:
