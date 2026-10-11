@@ -191,17 +191,51 @@ def append_immutable_predictions(path,columns,rows,*,probability_field,kickoff_f
     if len(rejected)>20: print(f"… y {len(rejected)-20} filas descartadas adicionales.")
     return {"accepted":len(accepted),"rejected":len(rejected)}
 def _side_from_row(row,side_field):
-    side=str(row.get(side_field,"")).upper().strip() if side_field else ""
-    if side in {"YES","NO"}: return side
+    # Prefer explicit captured selection fields; legacy SENCILLAS rows may have
+    # lost _lado when ranked, so infer only narrowly from unambiguous wording.
+    for field in (side_field, "seleccion", "selection", "lado_kalshi"):
+        side=str(row.get(field,"")).upper().strip() if field else ""
+        if side in {"YES","NO"}: return side
     raw=row.get("clave_interna")
+    parsed=None
     if raw:
         try:
             import ast
             parsed=ast.literal_eval(raw)
             if isinstance(parsed,tuple) and len(parsed)==2:
-                side=str(parsed[1]).upper()
+                side=str(parsed[1] or "").upper()
                 if side in {"YES","NO"}: return side
         except (ValueError,SyntaxError,TypeError): pass
+    # Conservative recovery for old captures where the ranked simple-bet row
+    # dropped _lado. Never guess for spreads, totals, corners, or props.
+    try:
+        import ast
+        parsed=parsed if parsed is not None else ast.literal_eval(str(raw or ""))
+        contract=parsed[0]
+        series=str(contract[0]).upper()
+        outcome=str(contract[1]).lower()
+        pick=str(row.get("jugada") or "").casefold()
+        if series.endswith("BTTS") and outcome in {"ambos","btts"}:
+            if "sin marcar" in pick or "no marcan" in pick or "no marca" in pick:
+                return "NO"
+            if "ambos" in pick and "marcan" in pick:
+                return "YES"
+        if series.endswith("GAME") and outcome in {"local","visita","empate"}:
+            local=str(row.get("local") or "").casefold().strip()
+            away=str(row.get("visita") or "").casefold().strip()
+            if outcome=="empate":
+                if "empate" in pick and not ("o " in pick or "local o" in pick or "visita o" in pick):
+                    return "YES"
+                if local and away and local in pick and away in pick and "empate" not in pick:
+                    return "NO"
+            else:
+                team=local if outcome=="local" else away
+                if team and ("gana " + team) in pick:
+                    return "YES"
+                if team and team in pick and ("local o empate" in pick or "visita o empate" in pick or "x2" in pick or "1x" in pick):
+                    return "NO"
+    except (ValueError,SyntaxError,TypeError,IndexError):
+        pass
     return None
 def _market_rows_for_series(series_tickers):
     found={}
@@ -646,6 +680,6 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         row["Probabilidad base"] = row["_single_p"]
         row["Precio de compra"] = f"{row['_single_price']:.0%}"
         row["Probabilidad del modelo"] = f"{row['_single_p']:.1%}"
-        for key in ("_single_price", "_single_edge", "_single_p", "_single_family", "_p", "_lado"):
+        for key in ("_single_price", "_single_edge", "_single_p", "_single_family", "_p"):
             row.pop(key, None)
     return selected
