@@ -120,7 +120,7 @@ jobs:
       - name: Liquidar todos los contratos NFL
         id: liquidate_nfl
         if: always()
-        timeout-minutes: 3
+        timeout-minutes: 5
         continue-on-error: true
         run: python nfl_engine.py settle
       - name: Reconciliar predicciones de partidos finalizados
