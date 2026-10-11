@@ -280,7 +280,7 @@ def _price(market, side):
 
 
 def _event_teams(event):
-    title = normalizar(event.get("title") or event.get("sub_title") or "")
+    title = normalizar(" ".join(str(event.get(k) or "") for k in ("title", "sub_title", "subtitle")))
     found = []
     for abbr, aliases in TEAM_ALIASES.items():
         if any(re.search(r"\b" + re.escape(normalizar(alias)) + r"\b", title) for alias in aliases):
