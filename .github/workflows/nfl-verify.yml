@@ -49,6 +49,18 @@ jobs:
                       rows = list(csv.DictReader(f))
                   print(f"CSV_OK {sport}/{name}: {len(rows)} registros")
           PY
+      - name: Carga real de las cuatro páginas Streamlit
+        timeout-minutes: 6
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: |
+          mkdir -p .streamlit
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          Path(".streamlit/secrets.toml").write_text("CLAVE = " + json.dumps(os.getenv("CLAVE", "")) + "\\n", encoding="utf-8")
+          PY
+          python scripts/verify_streamlit_pages.py
       - name: Pruebas de regresión NFL
         run: python -m pytest -q tests/test_nfl_engine.py
       - name: Catálogo real de Kalshi NFL
