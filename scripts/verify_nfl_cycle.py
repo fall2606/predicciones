@@ -195,7 +195,7 @@ def main():
         home, away = fixture["home"], fixture["away"]
         model_as_of = datetime.combine(game_date, datetime.min.time(), tzinfo=timezone.utc)
         historical_model = nfl.build_team_model(games, as_of=model_as_of)
-        forecast = nfl.predict_game(historical_model, home, away)
+        forecast = nfl.predict_game(historical_model, home, away, kickoff=kickoff)
         game = {"home": home, "away": away, "date": kickoff.isoformat()}
         p_yes, reason = nfl.model_market(market, series_ticker, game, forecast)
         if nfl.valid_probability(p_yes) is None:
