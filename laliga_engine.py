@@ -1046,7 +1046,7 @@ def calibrar_resumen(resumen, predicciones, resultados):
         copia["Probabilidad modelo"] = f"{ajustada:.1%}"
         precio_raw = copia.get("Precio de compra", copia.get("Precio ahora", ""))
         try:
-            precio_match = re.search(r"[-+]?\\d+(?:[.,]\\d+)?", str(precio_raw))
+            precio_match = re.search(r"[-+]?\d+(?:[.,]\d+)?", str(precio_raw))
             precio_num = float(precio_match.group(0).replace(",", ".")) if precio_match else None
             if precio_num is not None and ("%" in str(precio_raw) or precio_num > 1):
                 precio_num /= 100
