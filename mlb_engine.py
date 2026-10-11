@@ -51,7 +51,7 @@ UNMATCHED_COLUMNS = ["event_ticker", "series_ticker", "title", "start_time", "mo
 REJECTED_REPORT = ROOT / "mlb_candidatos_descartados.csv"
 REJECTED_COLUMNS = ["match_id", "local", "visita", "event_ticker", "ticker", "lado", "categoria", "probabilidad_modelo", "precio", "edge", "motivo"]
 COVERAGE_REPORT = ROOT / "mlb_cobertura_por_partido.csv"
-COVERAGE_COLUMNS = ["match_id", "fecha", "local", "visita", "contratos_modelables", "sencillas_validas", "alta_probabilidad_validas", "a_tener_en_cuenta_validas", "motivo_sencillas", "motivo_alta_probabilidad", "motivo_a_tener_en_cuenta"]
+COVERAGE_COLUMNS = ["match_id", "fecha", "local", "visita", "contratos_modelables", "sencillas_validas", "alta_probabilidad_validas", "a_tener_en_cuenta_validas", "sencillas_guardadas", "alta_probabilidad_guardadas", "a_tener_en_cuenta_guardadas", "motivo_sencillas", "motivo_alta_probabilidad", "motivo_a_tener_en_cuenta"]
 
 
 def get_json(url, params=None):
@@ -755,6 +755,30 @@ def main():
             if block in counts:
                 counts[block] += 1
         modelable = per_match_valid_contracts.get(match_id, 0)
+        candidates_for_game = []
+        for row in by_match.get(match_id, []):
+            p = valid_probability(row.get("probabilidad_modelo"))
+            if p is None:
+                continue
+            try:
+                edge = float(row["edge"]) if row.get("edge") not in (None, "") else None
+            except (TypeError, ValueError, OverflowError):
+                edge = None
+            price = _price(row, "precio_captura")
+            candidates_for_game.append({
+                "_row": row, "_p": p, "_lado": row.get("lado", ""),
+                "Ticker": row.get("ticker", ""), "ticker": row.get("ticker", ""),
+                "Apuesta": f'{row.get("mercado", "")} · {row.get("lado", "")}',
+                "Probabilidad del modelo": p, "probabilidad_modelo": p,
+                "Precio de compra": f"{price:.0%}" if price is not None else "—",
+                "precio_captura": price, "Ventaja (edge)": edge, "edge": edge,
+                "Lado Kalshi": row.get("lado", ""), "lado": row.get("lado", ""),
+                "categoria": row.get("categoria", ""),
+            })
+        valid_singles = rank_single_candidates(candidates_for_game, limit=5)
+        valid_high, valid_value = rank_market_candidates(
+            candidates_for_game, min_probability=minimum_combo, high_limit=5, value_limit=10
+        )
         rejected_for_game = [r for r in rejected_candidates if str(r.get("match_id", "")) == match_id]
         reason_pool = []
         for rejected in rejected_for_game:
@@ -774,8 +798,10 @@ def main():
         coverage_rows.append({
             "match_id": match_id, "fecha": game.get("date", ""), "local": game.get("home", ""), "visita": game.get("away", ""),
             "contratos_modelables": modelable,
-            "sencillas_validas": counts["SENCILLAS"], "alta_probabilidad_validas": counts["ALTA_PROBABILIDAD"],
-            "a_tener_en_cuenta_validas": counts["A_TENER_EN_CUENTA"],
+            "sencillas_validas": len(valid_singles), "alta_probabilidad_validas": len(valid_high),
+            "a_tener_en_cuenta_validas": len(valid_value),
+            "sencillas_guardadas": counts["SENCILLAS"], "alta_probabilidad_guardadas": counts["ALTA_PROBABILIDAD"],
+            "a_tener_en_cuenta_guardadas": counts["A_TENER_EN_CUENTA"],
             "motivo_sencillas": block_reason("SENCILLAS", counts["SENCILLAS"]),
             "motivo_alta_probabilidad": block_reason("ALTA_PROBABILIDAD", counts["ALTA_PROBABILIDAD"]),
             "motivo_a_tener_en_cuenta": block_reason("A_TENER_EN_CUENTA", counts["A_TENER_EN_CUENTA"]),
