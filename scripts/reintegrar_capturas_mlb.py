@@ -56,8 +56,6 @@ def main():
         with tmp.open("w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=merged_columns, extrasaction="ignore")
             writer.writeheader()
-            writer.writerows([{**row, **{k: v for k, v in old.items() if k not in row}}
-                              for row in existing for k in []])
             for row in existing:
                 writer.writerow({**{k: "" for k in merged_columns}, **row})
             for row in added:
