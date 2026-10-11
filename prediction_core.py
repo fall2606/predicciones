@@ -1,0 +1,224 @@
+"""Shared Kalshi capture/settlement primitives: immutable pre-kickoff writes and official settlement."""
+from __future__ import annotations
+import csv, math, os, re, time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Iterable
+import requests
+
+KALSHI_API_BASE = os.getenv("KALSHI_API_BASE", "https://api.elections.kalshi.com/trade-api/v2").rstrip("/")
+TERMINAL_STATES = {"WIN", "LOSS", "ANULADA"}
+
+def utc_now(): return datetime.now(timezone.utc)
+def parse_datetime(value):
+    if not value: return None
+    try: dt = datetime.fromisoformat(str(value).replace("Z","+00:00"))
+    except (TypeError, ValueError): return None
+    if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+def valid_probability(value):
+    try: p=float(value)
+    except (TypeError,ValueError,OverflowError): return None
+    return p if math.isfinite(p) and 0 <= p <= 1 else None
+def kalshi_get(path, params=None):
+    error=None
+    for attempt in range(4):
+        try:
+            r=requests.get(f"{KALSHI_API_BASE}/{path.lstrip('/')}",params=params or {},timeout=20)
+            r.raise_for_status(); data=r.json()
+            if not isinstance(data,dict): raise ValueError(f"JSON inesperado en {path}")
+            return data
+        except (requests.RequestException,ValueError) as exc:
+            error=exc
+            if attempt==3: break
+            time.sleep(min(2**attempt,6))
+    raise error
+def iter_kalshi_pages(path,params,collection,max_pages=100):
+    items=[]; cursor=None
+    for _ in range(max_pages):
+        query=dict(params)
+        if cursor: query["cursor"]=cursor
+        page=kalshi_get(path,query); items.extend(page.get(collection) or [])
+        cursor=page.get("cursor")
+        if not cursor: break
+    return items
+def sports_series(prefixes=()):
+    rows=iter_kalshi_pages("series",{"limit":200,"category":"Sports"},"series",30)
+    return [x for x in rows if not prefixes or str(x.get("ticker","")).startswith(tuple(prefixes))]
+def events_for_series(series_tickers: Iterable[str],statuses=("open",)):
+    events=[]; seen=set()
+    for ticker in sorted(set(series_tickers)):
+        for status in statuses:
+            try: rows=iter_kalshi_pages("events",{"limit":200,"series_ticker":ticker,"status":status,"with_nested_markets":"true"},"events",50)
+            except (requests.RequestException,ValueError,KeyError) as exc:
+                print(f"AVISO Kalshi: no se pudo leer {ticker} ({status}): {exc}"); continue
+            for event in rows:
+                key=str(event.get("event_ticker") or "")
+                if key and key not in seen: events.append(event); seen.add(key)
+    return events
+def verify_public_catalog():
+    series=sports_series()
+    if not series: raise RuntimeError("Kalshi no devolvió series deportivas.")
+    events=iter_kalshi_pages("events",{"limit":50,"status":"open","with_nested_markets":"true"},"events",2)
+    for event in events:
+        for market in event.get("markets") or []:
+            if market.get("ticker"):
+                return {"series_count_sample":len(series),"event_ticker":event.get("event_ticker"),"event_title":event.get("title"),
+                    "market_ticker":market.get("ticker"),"market_title":market.get("title") or market.get("yes_sub_title"),
+                    "market_status":market.get("status"),"yes_bid_dollars":market.get("yes_bid_dollars"),
+                    "yes_ask_dollars":market.get("yes_ask_dollars"),"no_bid_dollars":market.get("no_bid_dollars"),
+                    "no_ask_dollars":market.get("no_ask_dollars")}
+    raise RuntimeError("La API respondió, pero no devolvió ningún ticker real.")
+def read_rows(path):
+    path=Path(path)
+    if not path.exists() or not path.stat().st_size: return []
+    with path.open(newline="",encoding="utf-8-sig") as f: return list(csv.DictReader(f))
+def _write_header_if_missing(path,columns):
+    if not path.exists() or not path.stat().st_size:
+        path.parent.mkdir(parents=True,exist_ok=True)
+        with path.open("w",newline="",encoding="utf-8") as f: csv.DictWriter(f,fieldnames=columns).writeheader()
+def append_immutable_predictions(path,columns,rows,*,probability_field,kickoff_field="fecha",capture_field="capturado_en",ticker_field="ticker",id_field="prediction_id"):
+    path=Path(path); existing=read_rows(path); ids={str(r.get(id_field,"")) for r in existing}; now=utc_now()
+    accepted=[]; rejected=[]
+    for source in rows:
+        row=dict(source); pid=str(row.get(id_field,"")).strip(); ticker=str(row.get(ticker_field,"")).strip()
+        p=valid_probability(row.get(probability_field)); kickoff=parse_datetime(row.get(kickoff_field)); captured=parse_datetime(row.get(capture_field)) or now
+        reason=None
+        if not pid: reason="sin prediction_id"
+        elif pid in ids: reason="prediction_id ya guardado; no se sobrescribe"
+        elif not ticker or ticker in {"—","-","None","nan"}: reason="sin ticker real de Kalshi"
+        elif p is None: reason=f"probabilidad inválida en {probability_field}"
+        elif kickoff is None: reason="hora de inicio ausente o inválida"
+        elif captured>=kickoff or now>=kickoff: reason="partido iniciado antes de guardar"
+        if reason: rejected.append((pid or "(sin id)",reason)); continue
+        row[probability_field]=f"{p:.8f}"; accepted.append(row); ids.add(pid)
+    _write_header_if_missing(path,columns)
+    if accepted:
+        with path.open("a",newline="",encoding="utf-8") as f: csv.DictWriter(f,fieldnames=columns,extrasaction="ignore").writerows(accepted)
+    for pid,reason in rejected[:20]: print(f"CAPTURA DESCARTADA {pid}: {reason}")
+    if len(rejected)>20: print(f"… y {len(rejected)-20} filas descartadas adicionales.")
+    return {"accepted":len(accepted),"rejected":len(rejected)}
+def _side_from_row(row,side_field):
+    side=str(row.get(side_field,"")).upper().strip() if side_field else ""
+    if side in {"YES","NO"}: return side
+    raw=row.get("clave_interna")
+    if raw:
+        try:
+            import ast
+            parsed=ast.literal_eval(raw)
+            if isinstance(parsed,tuple) and len(parsed)==2:
+                side=str(parsed[1]).upper()
+                if side in {"YES","NO"}: return side
+        except (ValueError,SyntaxError,TypeError): pass
+    return None
+def _market_rows_for_series(series_tickers):
+    found={}
+    for series in sorted(set(series_tickers)):
+        try: rows=iter_kalshi_pages("markets",{"limit":200,"series_ticker":series,"status":"settled"},"markets",100)
+        except (requests.RequestException,ValueError,KeyError) as exc:
+            print(f"AVISO liquidación Kalshi {series}: {exc}"); continue
+        for market in rows:
+            ticker=str(market.get("ticker") or "")
+            if ticker: found[ticker]=market
+    return found
+def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_field="lado",ticker_field="ticker",id_field="prediction_id",state_field="estado"):
+    """Recover every old prediction; trust Kalshi's final YES/NO/void outcome."""
+    predictions_path=Path(predictions_path); results_path=Path(results_path)
+    predictions=read_rows(predictions_path); results=read_rows(results_path)
+    terminal={str(r.get(id_field,"")) for r in results if str(r.get(state_field,"")).upper() in TERMINAL_STATES}
+    pending=[r for r in predictions if str(r.get(id_field,"")) not in terminal and str(r.get(ticker_field,"")).strip() not in {"","—","-","None","nan"}]
+    series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
+    markets=_market_rows_for_series(series); new=[]; skipped=0
+    for row in pending:
+        pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip(); market=markets.get(ticker)
+        if market is None:
+            try:
+                payload=kalshi_get(f"markets/{ticker}"); market=payload.get("market") or (payload.get("markets") or [{}])[0]
+            except (requests.RequestException,ValueError,KeyError,IndexError,TypeError): skipped+=1; continue
+        result=str(market.get("result") or "").lower().strip(); status=str(market.get("status") or "").lower().strip()
+        side=_side_from_row(row,side_field)
+        if result in {"yes","no"} and side in {"YES","NO"}:
+            state="WIN" if result.upper()==side else "LOSS"; reason=f"Resultado oficial Kalshi: {result.upper()}"
+        elif result in {"void","canceled","cancelled"} or status in {"canceled","cancelled","void"}:
+            state="ANULADA"; reason=f"Contrato anulado/cancelado por Kalshi (status={status or 'sin estado'}, result={result or 'sin resultado'})"
+        else: skipped+=1; continue
+        out={id_field:pid,state_field:state,"marcador":reason,"resuelto_en":utc_now().isoformat()}
+        if "resultado_kalshi" in result_columns: out["resultado_kalshi"]=result.upper() if result else "VOID"
+        new.append(out); terminal.add(pid)
+    # The liquidator is the sole writer of result files: keep only the latest terminal
+    # state per prediction. Legacy NO_EVALUABLE rows are removed and retried until Kalshi settles.
+    latest={}
+    for row in results + new:
+        state=str(row.get(state_field,"")).upper()
+        if state not in TERMINAL_STATES:
+            continue
+        pid=str(row.get(id_field,""))
+        previous=latest.get(pid)
+        if previous is None or str(row.get("resuelto_en","")) >= str(previous.get("resuelto_en","")):
+            latest[pid]=row
+    results_path.parent.mkdir(parents=True,exist_ok=True)
+    with results_path.open("w",newline="",encoding="utf-8") as f:
+        writer=csv.DictWriter(f,fieldnames=result_columns,extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(latest.values())
+    summary={"predicciones_leidas":len(predictions),"pendientes_revisadas":len(pending),"resultados_nuevos":len(new),
+        "win":sum(r["estado"]=="WIN" for r in new),"loss":sum(r["estado"]=="LOSS" for r in new),
+        "anuladas":sum(r["estado"]=="ANULADA" for r in new),"sin_resolver_aun":skipped}
+    print("LIQUIDACIÓN KALSHI:",summary); return summary
+def _probability(row):
+    p=valid_probability(row.get("_p"))
+    if p is not None: return p
+    raw=str(row.get("Probabilidad del modelo",row.get("Probabilidad modelo",row.get("Prob. modelo",""))))
+    m=re.search(r"[-+]?\d+(?:[.,]\d+)?",raw)
+    if not m: return None
+    n=float(m.group(0).replace(",","."))
+    if "%" in raw: n/=100
+    return valid_probability(n)
+def _family(ticker,label=""):
+    series=str(ticker or "").split("-",1)[0].upper()
+    text=f"{series} {label}".upper()
+    if "CORNER" in text: return "corners"
+    if any(x in text for x in ("BTTS","FTTS","FIRSTGOAL","TEAMTOTAL","TTOTAL","TOTAL","1H","2H")): return "goals_related"
+    if any(x in text for x in ("SPREAD","GAME","WIN")): return "result"
+    return series or "other"
+
+def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10):
+    candidates=[]
+    for row in rows or []:
+        ticker=str(row.get("Ticker") or row.get("ticker") or "").strip()
+        p=_probability(row)
+        if not ticker or ticker in {"—","-","None","nan"} or p is None: continue
+        item=dict(row); item["_prob"]=p
+        item["_family"]=_family(ticker,row.get("Apuesta") or row.get("Jugada sencilla") or "")
+        try:
+            edge=float(row.get("Ventaja (edge)"))
+            if not math.isfinite(edge): edge=None
+        except (TypeError,ValueError,OverflowError): edge=None
+        item["_edge"]=edge; candidates.append(item)
+    high=[]; families=set()
+    for x in sorted(candidates,key=lambda r:r["_prob"],reverse=True):
+        if x["_prob"]<min_probability or x["_family"] in families: continue
+        high.append(x); families.add(x["_family"])
+        if len(high)>=high_limit: break
+    value=[]; line_values={}; labels=set(); seen_tickers=set()
+    for x in sorted((r for r in candidates if r["_edge"] is not None),key=lambda r:(r["_edge"],r["_prob"]),reverse=True):
+        ticker=str(x.get("Ticker") or x.get("ticker") or "")
+        if ticker in seen_tickers: continue
+        seen_tickers.add(ticker)
+        label=str(x.get("Apuesta") or x.get("Jugada sencilla") or "")
+        line=re.search(r"\b\d+(?:\.\d+)?\b",label)
+        family=x["_family"]
+        if line:
+            number=float(line.group(0))
+            prior=line_values.setdefault(family,[])
+            if any(abs(number-old)<=1.0 for old in prior): continue
+            prior.append(number)
+        else:
+            signature=(family,label.casefold())
+            if signature in labels: continue
+            labels.add(signature)
+        value.append(x)
+        if len(value)>=value_limit: break
+    def clean(items):
+        return [{k:v for k,v in x.items() if k not in {"_prob","_family","_edge"}} for x in items]
+    return clean(high),clean(value)

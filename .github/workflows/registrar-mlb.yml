@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "prediction_core.py"
       - "registrar_mlb.py"
       - "mlb_engine.py"
       - ".github/workflows/registrar-mlb.yml"
@@ -15,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: guardar-historicos-mlb
+  group: predicciones-main
   cancel-in-progress: true
 
 jobs:
@@ -39,11 +40,15 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_mlb.csv resultados_mlb.csv
+          git add predicciones_mlb.csv
           if git diff --cached --quiet; then
             echo "No hay capturas ni resultados nuevos"
           else
             git commit -m "Actualizar historial inmutable MLB"
-            git pull --rebase origin main
-            git push origin main
+            for intento in 1 2 3; do
+              git pull --rebase origin main && git push origin HEAD:main && exit 0
+              git rebase --abort || true
+              sleep $((intento * 3))
+            done
+            exit 1
           fi

@@ -1,0 +1,26 @@
+name: Verificación del sistema de predicciones
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: validar-predicciones
+  cancel-in-progress: false
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependencias
+        run: python -m pip install requests pandas numpy scipy streamlit
+      - name: Pruebas automáticas
+        run: python -m unittest discover -s tests -v
+      - name: Verificar catálogo público real de Kalshi
+        run: python scripts/verificar_api_kalshi.py

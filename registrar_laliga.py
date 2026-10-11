@@ -5,6 +5,7 @@ import csv
 import os
 from datetime import datetime, timedelta, timezone
 import requests
+from prediction_core import append_immutable_predictions, rank_market_candidates
 
 from laliga_engine import (
     TZ,
@@ -51,8 +52,6 @@ def main():
     modelo = cargar_partidos_y_estadisticas(clave, temporada, anterior)
     corners = cargar_corners(codigos_corners)
     predicciones, resultados = leer_historial_fijo()
-    anexar_csv(PREDICCIONES_ARCHIVO, COLUMNAS_PRED, [])
-    anexar_csv(RESULTADOS_ARCHIVO, COLUMNAS_RESULTADO, [])
     try:
         eventos, errores_series, total_series = cargar_eventos_kalshi_laliga()
     except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
@@ -72,16 +71,53 @@ def main():
             continue
         datos = construir_prediccion_partido(partido, modelo, corners)
         fecha = datos["fecha"].date()
-        resultado_actual = preparar_top_predicciones_kalshi(
+        salida_kalshi = preparar_top_predicciones_kalshi(
             eventos, datos["local"], datos["visita"], fecha,
             datos["p_goles"], datos["i"], datos["j"],
             datos["p_corners"], datos["ci"], datos["cj"], None, None,
             datos["proporcion_primera"],
-        )[0]
-        resultado_actual = calibrar_resumen(resultado_actual, predicciones, resultados)
+        )
+        sencillas = calibrar_resumen(salida_kalshi[0], predicciones, resultados)
+        alta, valor = rank_market_candidates(
+            salida_kalshi[6], min_probability=float(os.getenv("PROBABILIDAD_MINIMA_COMBO", "0.65"))
+        )
+        resultado_actual = []
+        for fila in sencillas:
+            fila = dict(fila)
+            fila["_bloque"] = "SENCILLAS"
+            try:
+                _, lado = ast.literal_eval(fila["Clave interna"])
+            except (ValueError, SyntaxError, TypeError):
+                lado = ""
+            fila["_lado"] = lado
+            fila["edge"] = None
+            resultado_actual.append(fila)
+        for bloque, candidatas in (("ALTA_PROBABILIDAD", alta), ("A_TENER_EN_CUENTA", valor)):
+            for candidato in candidatas:
+                try:
+                    clave = candidato.get("_clave")
+                    lado = candidato.get("_lado") or candidato.get("Lado Kalshi")
+                    ptxt = candidato.get("Probabilidad del modelo", "0%")
+                    pbase = float(str(ptxt).rstrip("%")) / 100
+                except (TypeError, ValueError):
+                    continue
+                resultado_actual.append({
+                    "Tipo": candidato.get("Categoría resumen", "Kalshi"),
+                    "Jugada sencilla": candidato.get("Apuesta sencilla") or candidato.get("Apuesta", ""),
+                    "Probabilidad base": pbase,
+                    "Probabilidad modelo": f"{pbase:.1%}",
+                    "Calibración": "",
+                    "Precio ahora": candidato.get("Precio de compra", "—"),
+                    "Disponibilidad": candidato.get("Disponibilidad", ""),
+                    "Ticker": candidato.get("Ticker", ""),
+                    "Clave interna": repr((clave, lado)),
+                    "_bloque": bloque, "_lado": lado, "edge": candidato.get("Ventaja (edge)"),
+                })
+        for fila in resultado_actual:
+            fila["Tipo"] = f"{fila['_bloque']} · {fila['Tipo']}"
         match_id = str(partido["id"])
         for fila in resultado_actual:
-            prediction_id = f"{match_id}|{fila['Tipo']}|{sufijo_captura}"
+            prediction_id = f"{match_id}|{fila.get('_bloque', 'SENCILLAS')}|{fila.get('Ticker', '')}|{fila.get('_lado', '')}|{sufijo_captura}"
             if prediction_id in ids_existentes:
                 continue
             market_key, lado = ast.literal_eval(fila["Clave interna"])
@@ -104,161 +140,8 @@ def main():
             })
             ids_existentes.add(prediction_id)
 
-    anexar_csv(PREDICCIONES_ARCHIVO, COLUMNAS_PRED, nuevas)
-    if nuevas:
-        predicciones, resultados = leer_historial_fijo()
-        ids_resueltos = set(resultados["prediction_id"].astype(str)) if not resultados.empty else set()
-
-    # La API de la temporada actual puede omitir partidos ya cerrados o devolverlos
-    # con estados desfasados. El historial validado (modelo[9]) contiene los partidos
-    # finalizados con marcador; combinamos ambos por ID y damos prioridad a la respuesta
-    # actual cuando esté disponible.
-    # Partimos de la respuesta actual, pero el historial validado de partidos
-    # finalizados debe prevalecer: la API de temporada puede conservar un estado
-    # desfasado para un partido que ya tiene marcador final confirmado.
-    partidos_por_id = {str(m["id"]): m for m in modelo[0]}
-    partidos_por_id.update({str(m["id"]): m for m in modelo[9]})
-    cierres = []
-    for _, fila in predicciones.iterrows():
-        prediction_id = str(fila["prediction_id"])
-        if prediction_id in ids_resueltos:
-            continue
-        partido = partidos_por_id.get(str(fila["match_id"]))
-        if not partido or partido.get("status") not in {"FINISHED", "AWARDED"}:
-            continue
-        datos = construir_prediccion_partido(partido, modelo, corners)
-        if not datos["resultado"]:
-            cierres.append({
-                "prediction_id": prediction_id,
-                "estado": "NO_EVALUABLE",
-                "marcador": "Partido finalizado, pero la API no entrega el marcador oficial completo",
-                "resuelto_en": datetime.now(timezone.utc).isoformat(),
-            })
-            ids_resueltos.add(prediction_id)
-            continue
-        try:
-            market_key, lado = ast.literal_eval(fila["clave_interna"])
-        except (ValueError, SyntaxError, TypeError):
-            cierres.append({
-                "prediction_id": prediction_id,
-                "estado": "NO_EVALUABLE",
-                "marcador": "No se pudo interpretar la clave guardada del mercado",
-                "resuelto_en": datetime.now(timezone.utc).isoformat(),
-            })
-            ids_resueltos.add(prediction_id)
-            continue
-        serie = market_key[0]
-        if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
-            # En los mercados de primer gol, el marcador final por sí solo no
-            # identifica al primer anotador. Usamos los goles del partido y la
-            # selección guardada (jugada), que es la que ve el usuario.
-            goles = partido.get("goals") or []
-            goles_validos = [
-                g for g in goles
-                if isinstance(g, dict) and isinstance(g.get("team"), dict)
-            ]
-            goles_validos.sort(key=lambda g: (
-                int((g.get("minute") or 0)),
-                int((g.get("injuryTime") or 0)),
-            ))
-            total_goles = sum(datos["resultado"]["partido"])
-            if goles_validos:
-                primer_equipo_id = goles_validos[0]["team"].get("id")
-                if primer_equipo_id == partido.get("homeTeam", {}).get("id"):
-                    primer_gol = "local"
-                elif primer_equipo_id == partido.get("awayTeam", {}).get("id"):
-                    primer_gol = "visita"
-                else:
-                    goles = datos["resultado"]["partido"]
-                    cierres.append({
-                        "prediction_id": prediction_id,
-                        "estado": "NO_EVALUABLE",
-                        "marcador": f"{goles[0]}-{goles[1]} · La API no identifica el equipo del primer gol",
-                        "resuelto_en": datetime.now(timezone.utc).isoformat(),
-                    })
-                    ids_resueltos.add(prediction_id)
-                    continue
-            elif total_goles == 0:
-                primer_gol = "sin_goles"
-            else:
-                goles = datos["resultado"]["partido"]
-                cierres.append({
-                    "prediction_id": prediction_id,
-                    "estado": "NO_EVALUABLE",
-                    "marcador": f"{goles[0]}-{goles[1]} · Falta evento oficial del primer gol",
-                    "resuelto_en": datetime.now(timezone.utc).isoformat(),
-                })
-                ids_resueltos.add(prediction_id)
-                continue
-
-            jugada = str(fila.get("jugada", "")).strip()
-            local = datos["local"]
-            visita = datos["visita"]
-            if jugada == f"Primer gol de {local}" or jugada == f"Primer gol de {local} o sin goles":
-                acierto = primer_gol in ({"local", "sin_goles"} if "o sin goles" in jugada else {"local"})
-            elif jugada == f"Primer gol de {visita}" or jugada == f"Primer gol de {visita} o sin goles":
-                acierto = primer_gol in ({"visita", "sin_goles"} if "o sin goles" in jugada else {"visita"})
-            elif jugada == "No habrá goles":
-                acierto = primer_gol == "sin_goles"
-            elif jugada == "Habrá al menos un gol":
-                acierto = primer_gol != "sin_goles"
-            else:
-                # Compatibilidad para filas antiguas con una etiqueta inesperada.
-                acierto_yes = primer_gol == market_key[1]
-                acierto = acierto_yes if lado == "YES" else not acierto_yes
-            estado = "WIN" if acierto else "LOSS"
-        elif serie in {"KXLALIGACORNERS", "KXLALIGATCORNERS"}:
-            if datos["corners_final"] is None:
-                goles = datos["resultado"]["partido"]
-                cierres.append({
-                    "prediction_id": prediction_id,
-                    "estado": "NO_EVALUABLE",
-                    "marcador": f"{goles[0]}-{goles[1]} · Falta estadística oficial de córners",
-                    "resuelto_en": datetime.now(timezone.utc).isoformat(),
-                })
-                ids_resueltos.add(prediction_id)
-                continue
-            cuenta = (
-                sum(datos["corners_final"])
-                if serie == "KXLALIGACORNERS"
-                else datos["corners_final"][0] if market_key[1] == "local"
-                else datos["corners_final"][1]
-            )
-            linea, direccion = market_key[2], market_key[3]
-            acierto_yes = cuenta < linea if direccion == "under" else cuenta >= linea
-            acierto = acierto_yes if lado == "YES" else not acierto_yes
-            estado = "WIN" if acierto else "LOSS"
-        else:
-            marcador = resultado_del_periodo(market_key, datos["resultado"])
-            acierto_yes = evaluar_yes_goles(market_key, marcador)
-            if acierto_yes is None:
-                goles = datos["resultado"]["partido"]
-                motivo = "Falta marcador oficial del descanso" if marcador is None else "Falta estadística oficial del mercado"
-                cierres.append({
-                    "prediction_id": prediction_id,
-                    "estado": "NO_EVALUABLE",
-                    "marcador": f"{goles[0]}-{goles[1]} · {motivo}",
-                    "resuelto_en": datetime.now(timezone.utc).isoformat(),
-                })
-                ids_resueltos.add(prediction_id)
-                continue
-            estado = "WIN" if acierto else "LOSS"
-        marcador = datos["resultado"]["partido"]
-        cierres.append({
-            "prediction_id": prediction_id,
-            "estado": estado,
-            "marcador": f"{marcador[0]}-{marcador[1]}",
-            "resuelto_en": datetime.now(timezone.utc).isoformat(),
-        })
-        ids_resueltos.add(prediction_id)
-
-    anexar_csv(RESULTADOS_ARCHIVO, COLUMNAS_RESULTADO, cierres)
-    print(
-        f"Nuevas capturas: {len(nuevas)} | Resultados añadidos: {len(cierres)} | "
-        f"Series Kalshi fallidas: {len(errores_series)}/{total_series}"
-    )
-    if errores_series:
-        print("Series fallidas:", ", ".join(errores_series))
+    captura_resumen = append_immutable_predictions(PREDICCIONES_ARCHIVO, COLUMNAS_PRED, nuevas, probability_field="probabilidad_calibrada")
+    print(f"Capturas nuevas propuestas: {len(nuevas)} | aceptadas: {captura_resumen['accepted']} | descartadas: {captura_resumen['rejected']}. El capturador no escribe resultados.")
 
 
 if __name__ == "__main__":

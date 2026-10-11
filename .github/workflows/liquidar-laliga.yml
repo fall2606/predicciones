@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "prediction_core.py"
       - "liquidar_laliga.py"
       - ".github/workflows/liquidar-laliga.yml"
   schedule:
@@ -14,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: guardar-historicos
+  group: predicciones-main
   cancel-in-progress: false
 
 jobs:
@@ -49,6 +50,10 @@ jobs:
             echo "No hay resultados nuevos"
           else
             git commit -m "Liquidar pronósticos finalizados de LaLiga"
-            git pull --rebase origin main
-            git push origin main
+            for intento in 1 2 3; do
+              git pull --rebase origin main && git push origin HEAD:main && exit 0
+              git rebase --abort || true
+              sleep $((intento * 3))
+            done
+            exit 1
           fi

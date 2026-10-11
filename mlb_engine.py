@@ -10,9 +10,10 @@ import unicodedata
 import requests
 import numpy as np
 from scipy.stats import nbinom
+from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates
 
 API_MLB = "https://statsapi.mlb.com/api/v1"
-API_KALSHI = "https://external-api.kalshi.com/trade-api/v2"
+API_KALSHI = KALSHI_API_BASE
 ROOT = Path(__file__).resolve().parent
 PRED_FILE = ROOT / "predicciones_mlb.csv"
 RESULT_FILE = ROOT / "resultados_mlb.csv"
@@ -98,7 +99,7 @@ def cargar_stats(season):
         for split in block.get("splits", []):
             team, stat = split.get("team", {}), split.get("stat", {})
             n, runs = float(stat.get("gamesPlayed") or 0), float(stat.get("runs") or 0)
-            if team.get("id") and n:
+            if team.get("id") and math.isfinite(n) and math.isfinite(runs) and n > 0 and runs >= 0:
                 stats[int(team["id"])] = {"name": team.get("name", ""), "rpg": runs/n, "games": n}
     return stats
 
@@ -109,7 +110,10 @@ def modelo_partido(game, stats):
     hid, aid = (h.get("team") or {}).get("id"), (a.get("team") or {}).get("id")
     if not hid or not aid:
         return None
-    mean = float(np.mean([x["rpg"] for x in stats.values()])) if stats else 4.4
+    rates = [float(x["rpg"]) for x in stats.values() if math.isfinite(float(x.get("rpg", float("nan")))) and float(x.get("rpg", -1)) >= 0]
+    mean = float(np.mean(rates)) if rates else 4.4
+    if not math.isfinite(mean) or mean <= 0:
+        mean = 4.4
     hs, aw = stats.get(int(hid)), stats.get(int(aid))
     mh = (0.75 * hs["rpg"] + 0.25 * mean) if hs else mean
     ma = (0.75 * aw["rpg"] + 0.25 * mean) if aw else mean
@@ -255,46 +259,21 @@ def mercado_probabilidad(market, game):
 
 
 def series_mlb():
-    all_series, cursor = [], None
-    for _ in range(10):
-        params = {"limit": 200, "category": "Sports"}
-        if cursor:
-            params["cursor"] = cursor
-        page = kalshi("series", **params)
-        all_series.extend(page.get("series", []))
-        cursor = page.get("cursor")
-        if not cursor:
-            break
+    all_series = sports_series()
     selected = []
-    for s in all_series:
-        ticker = str(s.get("ticker", "")).upper()
-        name = normalizar(s.get("title") or s.get("name") or "")
-        tags = " ".join(map(str, s.get("tags") or [])).lower()
+    for item in all_series:
+        ticker = str(item.get("ticker", "")).upper()
+        name = normalizar(item.get("title") or item.get("name") or "")
+        tags = " ".join(map(str, item.get("tags") or [])).lower()
         excluded = ("FODT", "FUTURE", "DIVISION", "PLAYOFF", "CHAMPION", "PENNANT", "MVP", "AWARD", "TEAMWINS", "WORLD SERIES")
-        if (ticker.startswith(("KXMLB", "KXBASEBALL")) or ("mlb" in name and ("baseball" in tags or "sports" in tags)) or ("major league baseball" in name)) and not any(x in ticker.upper() for x in excluded):
+        if (ticker.startswith(("KXMLB", "KXBASEBALL")) or ("mlb" in name and ("baseball" in tags or "sports" in tags)) or ("major league baseball" in name)) and not any(x in ticker for x in excluded):
             selected.append(ticker)
     return sorted(set(selected))
 
 
 def eventos_mlb(series=None):
-    events = []
-    for ticker in (series if series is not None else series_mlb()):
-        cursor = None
-        for _ in range(20):
-            params = {"limit": 200, "series_ticker": ticker, "status": "open", "with_nested_markets": "true"}
-            if cursor:
-                params["cursor"] = cursor
-            try:
-                page = kalshi("events", **params)
-            except requests.RequestException as exc:
-                print(f"No se pudo leer la serie MLB {ticker}: {exc}")
-                break
-            events.extend(page.get("events", []))
-            cursor = page.get("cursor")
-            time.sleep(0.6)
-            if not cursor:
-                break
-    return events
+    """Shared paginated Kalshi event/market catalogue for the selected MLB series."""
+    return events_for_series(series if series is not None else series_mlb(), statuses=("open",))
 
 
 def encontrar_partido(event, games):
@@ -351,115 +330,125 @@ def main():
     series = series_mlb()
     events = eventos_mlb(series)
     existing = leer_csv(PRED_FILE, PRED_COLUMNS)
-    settled = leer_csv(RESULT_FILE, RESULT_COLUMNS)
     existing_ids = {x["prediction_id"] for x in existing}
-    settled_ids = {x["prediction_id"] for x in settled}
     captured = now.isoformat()
-    new_rows = []
+    by_match = {}
     event_count = 0
+
+    # Model every actual, match-specific Kalshi market that this model supports.
+    # Unmodelled contracts are deliberately excluded instead of being saved as NaN/blank picks.
     for event in events:
         markets = event.get("markets") or []
-        if not markets:
-            # Nested markets may be omitted for some event endpoints; fetch them separately.
-            ticker = event.get("event_ticker")
-            if ticker:
-                try:
-                    markets = kalshi("markets", event_ticker=ticker, limit=200).get("markets", [])
-                except requests.RequestException:
-                    markets = []
+        if not markets and event.get("event_ticker"):
+            try:
+                markets = kalshi("markets", event_ticker=event["event_ticker"], limit=200).get("markets", [])
+            except requests.RequestException:
+                markets = []
         if not markets:
             continue
         game = encontrar_partido(event, games)
-        # No capturar ni recalcular contratos de partidos ya iniciados.
-        # La fase de liquidación de abajo seguirá revisando sus resultados oficiales.
         if not game or game.get("status") != "Preview":
             continue
         event_count += 1
-        for m in markets:
-            if m.get("status") not in (None, "active", "open"):
+        for market in markets:
+            if market.get("status") not in (None, "active", "open"):
                 continue
-            ticker = str(m.get("ticker") or "")
+            ticker = str(market.get("ticker") or "")
             if not ticker:
                 continue
-            m["series_ticker"] = m.get("series_ticker") or event.get("series_ticker", "")
-            category = clasificar(m["series_ticker"], m)
-            p_yes, model_state = mercado_probabilidad(m, game) if game else (None, "partido_no_identificado")
-            yes_price = _price(m, "yes_ask_dollars", "yes_bid_dollars")
-            no_price = _price(m, "no_ask_dollars", "no_bid_dollars")
-            fecha = (game or {}).get("date") or event.get("start_time") or event.get("expected_expiration_time") or ""
-            for side, price, probability in (
-                ("YES", yes_price, p_yes),
-                ("NO", no_price, 1-p_yes if p_yes is not None else None),
-            ):
-                base_pid = f"{ticker}|{side}"
-                pid = base_pid
-                if pid in existing_ids:
-                    # Keep the original capture immutable. If it had no model probability,
-                    # append one clearly identified recalculation row rather than rewriting history.
-                    recalculated_id = f"{base_pid}|MODEL2"
-                    has_blank_original = any(
-                        row.get("prediction_id") == base_pid and not row.get("probabilidad_modelo")
-                        for row in existing
-                    )
-                    if probability is None or not has_blank_original or recalculated_id in existing_ids:
-                        continue
-                    pid = recalculated_id
-                    model_state = f"{model_state}; recalculo_modelo_v2"
-                implied = price
-                edge = probability - price if probability is not None and price is not None else None
-                new_rows.append({
-                    "prediction_id": pid, "event_ticker": event.get("event_ticker", ""),
-                    "ticker": ticker, "match_id": (game or {}).get("id", ""),
-                    "fecha": fecha, "local": (game or {}).get("home", ""),
-                    "visita": (game or {}).get("away", ""), "categoria": category,
-                    "mercado": m.get("yes_sub_title") or m.get("title") or ticker,
-                    "lado": side, "probabilidad_modelo": f"{probability:.6f}" if probability is not None else "",
+            market["series_ticker"] = market.get("series_ticker") or event.get("series_ticker", "")
+            category = clasificar(market["series_ticker"], market)
+            p_yes, model_state = mercado_probabilidad(market, game)
+            if valid_probability(p_yes) is None:
+                continue
+            yes_price = _price(market, "yes_ask_dollars")
+            no_price = _price(market, "no_ask_dollars")
+            kickoff = game.get("date") or event.get("start_time") or event.get("expected_expiration_time") or ""
+            for side, price, probability in (("YES", yes_price, p_yes), ("NO", no_price, 1-p_yes)):
+                if valid_probability(probability) is None:
+                    continue
+                edge = probability - price if price is not None else None
+                row = {
+                    "prediction_id": "",
+                    "event_ticker": event.get("event_ticker", ""),
+                    "ticker": ticker,
+                    "match_id": str(game.get("id", "")),
+                    "fecha": kickoff,
+                    "local": game.get("home", ""),
+                    "visita": game.get("away", ""),
+                    "categoria": category,
+                    "mercado": market.get("yes_sub_title") or market.get("title") or ticker,
+                    "lado": side,
+                    "probabilidad_modelo": f"{probability:.8f}",
                     "precio_captura": f"{price:.6f}" if price is not None else "",
-                    "probabilidad_implicita": f"{implied:.6f}" if implied is not None else "",
+                    "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
                     "edge": f"{edge:.6f}" if edge is not None else "",
                     "estado_modelo": model_state,
-                    "reglas": m.get("rules_primary") or m.get("rules_secondary") or "",
+                    "reglas": market.get("rules_primary") or market.get("rules_secondary") or "",
                     "capturado_en": captured,
-                })
-                existing_ids.add(pid)
+                }
+                by_match.setdefault(str(game.get("id", "")), []).append(row)
 
-    append_csv(PRED_FILE, PRED_COLUMNS, new_rows)
-    # Resolve only from Kalshi's final contract result; never rewrite an existing row.
-    existing = leer_csv(PRED_FILE, PRED_COLUMNS)
-    settled = leer_csv(RESULT_FILE, RESULT_COLUMNS)
-    settled_ids = {x["prediction_id"] for x in settled}
-    pending_tickers = {
-        row["ticker"] for row in existing
-        if row.get("prediction_id") not in settled_ids and row.get("ticker")
-    }
-    needed_series = [
-        serie for serie in series
-        if any(ticker.startswith(serie) for ticker in pending_tickers)
-    ]
-    final_results = mercados_liquidados(needed_series) if needed_series else {}
-    result_rows = []
-    for row in existing:
-        pid = row["prediction_id"]
-        if pid in settled_ids or not row.get("ticker"):
-            continue
-        result = final_results.get(row["ticker"], "")
-        if result not in {"yes", "no"}:
-            continue
-        # Only Kalshi's official final result can settle a contract; never guess.
-        won = (result == "yes") == (row["lado"] == "YES")
-        game = next((g for g in games if g["id"] == row.get("match_id")), None)
-        scoreboard = ""
-        if game and game.get("runs_home") is not None and game.get("runs_away") is not None:
-            scoreboard = f'{game["runs_away"]}-{game["runs_home"]}'
-        result_rows.append({
-            "prediction_id": pid, "estado": "WIN" if won else "LOSS",
-            "resultado_kalshi": result.upper(), "marcador": scoreboard,
-            "resuelto_en": datetime.now(timezone.utc).isoformat(),
-        })
-        settled_ids.add(pid)
-    append_csv(RESULT_FILE, RESULT_COLUMNS, result_rows)
-    print(f"Eventos MLB: {event_count} | Nuevas predicciones inmutables: {len(new_rows)} | WIN/LOSS añadidos: {len(result_rows)}")
-    print("Mercados no modelados se conservan y se liquidan con el resultado oficial de Kalshi.")
+    new_rows = []
+    minimum_combo = float(os.getenv("PROBABILIDAD_MINIMA_COMBO", "0.65"))
+    for match_id, rows in by_match.items():
+        candidates = []
+        for row in rows:
+            p = valid_probability(row.get("probabilidad_modelo"))
+            if p is None:
+                continue
+            try:
+                edge = float(row["edge"]) if row.get("edge") not in (None, "") else None
+            except (TypeError, ValueError):
+                edge = None
+            candidates.append({
+                "_row": row,
+                "_p": p,
+                "_lado": row["lado"],
+                "Ticker": row["ticker"],
+                "Apuesta": f'{row["mercado"]} · {row["lado"]}',
+                "Categoría resumen": row["categoria"],
+                "Probabilidad del modelo": f"{p:.1%}",
+                "Precio de compra": f'{float(row["precio_captura"]):.0%}' if row["precio_captura"] else "—",
+                "Ventaja (edge)": edge,
+                "Lado Kalshi": row["lado"],
+            })
+
+        # Singles preserve the conservative 62%-85% range and avoid repeated labels/categories.
+        singles, labels, category_count = [], set(), {}
+        for candidate in sorted(candidates, key=lambda x: x["_p"], reverse=True):
+            if not 0.62 <= candidate["_p"] <= 0.85:
+                continue
+            row = candidate["_row"]
+            label = str(row["mercado"]).casefold()
+            category = row["categoria"]
+            if label in labels or category_count.get(category, 0) >= 2:
+                continue
+            singles.append(candidate)
+            labels.add(label)
+            category_count[category] = category_count.get(category, 0) + 1
+            if len(singles) == 5:
+                break
+
+        high, value = rank_market_candidates(candidates, min_probability=minimum_combo, high_limit=5, value_limit=10)
+        for block, selected in (("SENCILLAS", singles), ("ALTA_PROBABILIDAD", high), ("A_TENER_EN_CUENTA", value)):
+            for candidate in selected:
+                row = dict(candidate["_row"])
+                side = candidate.get("_lado") or row["lado"]
+                ticker = row["ticker"]
+                row["prediction_id"] = f"{ticker}|{side}|{block}"
+                row["categoria"] = f"{block} · {row['categoria']}"
+                if row["prediction_id"] in existing_ids:
+                    continue
+                new_rows.append(row)
+                existing_ids.add(row["prediction_id"])
+
+    capture_summary = append_immutable_predictions(
+        PRED_FILE, PRED_COLUMNS, new_rows, probability_field="probabilidad_modelo"
+    )
+    print(f"Eventos MLB: {event_count} | capturas aceptadas: {capture_summary['accepted']} | "
+          f"descartadas: {capture_summary['rejected']}. Los resultados solo los escribe liquidar_mlb.py.")
+
 
 
 def _price(market, *keys):

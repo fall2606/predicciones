@@ -41,6 +41,8 @@ def leer_historial_mlb():
     try:
         pred = pd.read_csv(PRED_MLB, dtype=str).fillna("") if PRED_MLB.exists() else pd.DataFrame()
         res = pd.read_csv(RES_MLB, dtype=str).fillna("") if RES_MLB.exists() else pd.DataFrame()
+        if not res.empty and "resuelto_en" in res.columns:
+            res = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
         if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
             cols_res = [x for x in ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"] if x in res]
             pred = pred.merge(res[cols_res], on="prediction_id", how="left")
@@ -70,7 +72,7 @@ def cargar_stats(season):
             stat = split.get("stat", {})
             juegos = float(stat.get("gamesPlayed") or 0)
             carreras = float(stat.get("runs") or 0)
-            if equipo.get("id") and juegos > 0:
+            if equipo.get("id") and np.isfinite(juegos) and np.isfinite(carreras) and juegos > 0 and carreras >= 0:
                 equipos[int(equipo["id"])] = {
                     "nombre": equipo.get("name", "Equipo"),
                     "rpg": carreras / juegos,
@@ -161,6 +163,9 @@ def cargar_bateadores_equipo(team_id, season):
                 rbi = float(stat.get("rbi") or 0)
                 stolen_bases = float(stat.get("stolenBases") or 0)
                 avg = float(stat.get("avg") or (hits / ab if ab else 0))
+                valores = [pa, ab, hits, hr, total_bases, rbi, stolen_bases, avg]
+                if not all(np.isfinite(v) for v in valores) or any(v < 0 for v in valores):
+                    continue
                 if player.get("id") and pa >= 30:
                     rows.append({"nombre": player.get("fullName", "Bateador"), "pa": pa,
                                  "ab": ab, "hits": hits, "hr": hr, "avg": avg,
@@ -520,156 +525,59 @@ for juego in [juego]:
                 estado_abridores.append(f"{etiqueta_abridor}: sin abridor probable publicado")
         st.caption("Abridores · " + " | ".join(estado_abridores))
 
-        props_sencillas = crear_apuestas_sencillas(
-            juego, datos_abridor_local, datos_abridor_visita, temporada
-        )
-        picks = mercados(matriz_prob, (matriz_local, matriz_visita), game)
-        picks_ordenados = sorted(picks, key=lambda x: x["p"], reverse=True)
+        # Mostrar solo contratos reales capturados por el job automático de Kalshi.
+        # No se presentan mercados sintéticos que no tengan ticker real.
+        game_id_archivo = str(juego.get("gamePk", ""))
+        if not historial_mlb.empty and "match_id" in historial_mlb.columns:
+            archivadas_partido = historial_mlb[historial_mlb["match_id"].astype(str) == game_id_archivo].copy()
+        else:
+            archivadas_partido = pd.DataFrame()
+        if not archivadas_partido.empty:
+            archivadas_partido["p_num"] = pd.to_numeric(archivadas_partido.get("probabilidad_modelo", ""), errors="coerce")
+            archivadas_partido = archivadas_partido[
+                archivadas_partido["ticker"].astype(str).ne("")
+                & archivadas_partido["ticker"].astype(str).ne("—")
+                & np.isfinite(archivadas_partido["p_num"])
+                & archivadas_partido["p_num"].between(0, 1)
+            ].copy()
 
-        # Unificar mercados de partido y props; descartar NaN/inf antes de ordenar o formatear.
-        candidatas_todas = []
+        def mostrar_bloque_mlb(codigo, titulo, columnas):
+            st.markdown(f"### {titulo}")
+            if archivadas_partido.empty or "categoria" not in archivadas_partido.columns:
+                st.info("No hay capturas de contratos modelables guardadas para este partido todavía.")
+                return
+            bloque = archivadas_partido[
+                archivadas_partido["categoria"].astype(str).str.startswith(codigo + " · ")
+            ].copy()
+            if bloque.empty:
+                st.info("Este bloque no tiene selecciones que superen sus filtros; no se rellenan con mercados inventados.")
+                return
+            bloque["Resultado"] = bloque.get("estado", pd.Series("", index=bloque.index)).replace("", "PENDIENTE").fillna("PENDIENTE")
+            for col in columnas:
+                if col not in bloque.columns:
+                    bloque[col] = ""
+            vista = bloque[columnas].copy()
+            if "Resultado" in vista.columns:
+                vista = vista.rename(columns={"Resultado": "Resultado"})
+                estilo = vista.style.map(
+                    lambda v: "background-color: #d4edda; color: #155724; font-weight: bold" if v == "WIN" else
+                    "background-color: #f8d7da; color: #721c24; font-weight: bold" if v == "LOSS" else
+                    "background-color: #e2e3e5; color: #383d41; font-weight: bold" if v == "ANULADA" else "",
+                    subset=["Resultado"],
+                )
+                st.dataframe(estilo, use_container_width=True, hide_index=True)
+            else:
+                st.dataframe(vista, use_container_width=True, hide_index=True)
 
-        def probabilidad_valida(valor):
-            try:
-                p = float(valor)
-            except (TypeError, ValueError, OverflowError):
-                return None
-            if not np.isfinite(p) or p < 0.0 or p > 1.0:
-                return None
-            return p
-
-        for x in picks:
-            p_valida = probabilidad_valida(x.get("p"))
-            if p_valida is None:
-                continue
-            candidatas_todas.append({
-                "tipo": x["grupo"],
-                "jugada": x["mercado"],
-                "p": p_valida,
-                "dato": "Distribución estimada de carreras del partido",
-                "nota": "Proyección estadística; comprobar la línea real y el precio",
-                "acierto": x["acierto"],
-            })
-        for x in props_sencillas:
-            p_valida = probabilidad_valida(x.get("Probabilidad estimada"))
-            if p_valida is None:
-                continue
-            candidatas_todas.append({
-                "tipo": x["Tipo"],
-                "jugada": x["Jugada sencilla"],
-                "p": p_valida,
-                "dato": x["Dato base"],
-                "nota": x["Nota"],
-                "acierto": None,
-            })
-
-        # Hasta cinco sencillas, priorizando probabilidad y evitando repetir el mismo mercado.
-        # No se rellenan artificialmente si no hay cinco opciones que superen el umbral.
-        candidatas_sencillas = [
-            x for x in candidatas_todas
-            if 0.62 <= x["p"] <= 0.85
-        ]
-        sencillas = []
-        grupos_usados = {}
-        jugadas_usadas = set()
-        for x in sorted(candidatas_sencillas, key=lambda y: y["p"], reverse=True):
-            clave_jugada = x["jugada"].strip().casefold()
-            if clave_jugada in jugadas_usadas:
-                continue
-            # Permite más mercados por partido, sin dejar que una sola categoría ocupe toda la lista.
-            if grupos_usados.get(x["tipo"], 0) >= 2:
-                continue
-            sencillas.append(x)
-            jugadas_usadas.add(clave_jugada)
-            grupos_usados[x["tipo"]] = grupos_usados.get(x["tipo"], 0) + 1
-            if len(sencillas) == 5:
-                break
-
-        st.markdown("### Resumen sencillo · hasta 5 selecciones")
-        st.caption("Se combinan mercados de partido y props individuales. Se muestran las mejores opciones entre 62% y 85%; si hay menos de cinco que cumplan el filtro, no se rellenan con opciones débiles.")
+        columnas_bloque = ["categoria", "mercado", "lado", "probabilidad_modelo", "precio_captura", "edge", "ticker", "Resultado"]
+        mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
+        mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
+        mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)
         if game["status"] != "Preview":
-            st.info("Partido iniciado o finalizado: las proyecciones nuevas quedan bloqueadas para no cambiar las predicciones tras el inicio. Consulta abajo las capturas originales y su resultado.")
-        elif sencillas:
-            for x in sencillas:
-                with st.container(border=True):
-                    st.markdown(f"**{x['jugada']}**")
-                    st.caption(x["tipo"])
-                    st.write(f"Probabilidad estimada: **{x['p']:.1%}**")
-                    st.caption("Resultado: pendiente hasta que termine el partido")
-                    st.caption(f"{x['dato']} · {x['nota']}")
+            st.caption("Partido iniciado o terminado: solo se muestran capturas originales anteriores al inicio. La liquidación procede del resultado oficial del contrato en Kalshi.")
         else:
-            st.info("No hay cinco selecciones sencillas que pasen el filtro del modelo para este partido. No se inventan probabilidades para completar la lista.")
-
-        # Antes del inicio se muestran proyecciones actuales. Tras comenzar el juego,
-        # mostrar sólo capturas inmutables guardadas antes del primer lanzamiento.
-        top_diez = []
-        if game["status"] == "Preview":
-            jugadas_tabla = set()
-            for x in sorted(candidatas_todas, key=lambda y: y["p"], reverse=True):
-                clave_jugada = x["jugada"].strip().casefold()
-                if clave_jugada in jugadas_tabla:
-                    continue
-                jugadas_tabla.add(clave_jugada)
-                top_diez.append({
-                    "Tipo de apuesta": x["tipo"],
-                    "Mercado / selección": x["jugada"],
-                    "Probabilidad estimada": f"{x['p']:.1%}",
-                    "Resultado": "PENDIENTE",
-                    "Dato base": x["dato"],
-                    "Nota": x["nota"],
-                })
-                if len(top_diez) == 10:
-                    break
-        else:
-            game_id_archivo = str(juego.get("gamePk", ""))
-            if not historial_mlb.empty and "match_id" in historial_mlb.columns:
-                archivadas = historial_mlb[historial_mlb["match_id"].astype(str) == game_id_archivo].copy()
-                if not archivadas.empty:
-                    archivadas["p_num"] = pd.to_numeric(archivadas.get("probabilidad_modelo", ""), errors="coerce")
-                    archivadas = archivadas.sort_values("capturado_en", ascending=False).drop_duplicates(
-                        ["mercado", "lado"], keep="last"
-                    )
-                    for _, fila_archivada in archivadas.iterrows():
-                        try:
-                            p_txt = f"{float(fila_archivada.get('probabilidad_modelo')):.1%}"
-                        except (TypeError, ValueError):
-                            p_txt = "Sin modelo específico"
-                        estado = str(fila_archivada.get("estado", "")).upper()
-                        top_diez.append({
-                            "Tipo de apuesta": fila_archivada.get("categoria", "MLB"),
-                            "Mercado / selección": f"{fila_archivada.get('mercado', '')} · {fila_archivada.get('lado', '')}",
-                            "Probabilidad estimada": p_txt,
-                            "Resultado": estado if estado in {"WIN", "LOSS"} else "PENDIENTE",
-                            "Dato base": fila_archivada.get("ticker", ""),
-                            "Nota": "Captura original inmutable; no se recalcula tras el inicio",
-                        })
-                        if len(top_diez) == 10:
-                            break
-
-        st.markdown("### Las 10 opciones más probables · todos los mercados MLB")
-        st.caption("Antes del inicio muestra las proyecciones actuales. Desde que empieza el partido sólo se muestran capturas originales archivadas antes del primer lanzamiento; no se recalculan retrospectivamente. Las props individuales siguen pendientes si no existe un resultado oficial verificable.")
-        if top_diez:
-            tabla_top = pd.DataFrame(top_diez)
-            if game["status"] != "Preview":
-                wins = int((tabla_top["Resultado"] == "WIN").sum())
-                losses = int((tabla_top["Resultado"] == "LOSS").sum())
-                c1, c2, c3 = st.columns(3)
-                c1.metric("WIN", wins)
-                c2.metric("LOSS", losses)
-                c3.metric("Pendientes", len(tabla_top) - wins - losses)
-            estilo_top = tabla_top.style.map(
-                lambda v: "background-color: #d4edda; color: #155724; font-weight: bold"
-                if v == "WIN" else
-                "background-color: #f8d7da; color: #721c24; font-weight: bold"
-                if v == "LOSS" else "",
-                subset=["Resultado"],
-            )
-            st.dataframe(estilo_top, use_container_width=True, hide_index=True)
-        elif game["status"] != "Preview":
-            st.info("No hay capturas previas archivadas para este partido; no se inventan predicciones retrospectivas.")
-        else:
-            st.info("Todavía no hay mercados con una estimación disponible para este partido.")
-
+            st.caption("Las capturas se guardan automáticamente antes del primer lanzamiento. Si aún no aparecen, espera la siguiente ejecución de captura; no se inventan tickers ni líneas.")
+        
         # Mostrar únicamente el historial/los contratos que corresponden al partido elegido.
         game_id = str(juego.get("gamePk", ""))
         if not historial_mlb.empty and "match_id" in historial_mlb.columns:

@@ -12,11 +12,12 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
+from prediction_core import KALSHI_API_BASE, sports_series, events_for_series
 from scipy.stats import nbinom, poisson
 
 
 API_FD = "https://api.football-data.org/v4"
-API_KALSHI = "https://external-api.kalshi.com/trade-api/v2"
+API_KALSHI = KALSHI_API_BASE
 K = 6
 HALF_LIFE_DAYS = 120
 N_CORNERS = 40
@@ -157,45 +158,13 @@ def _pedir_kalshi(path, **params):
 
 @st.cache_data(ttl=180, show_spinner=False)
 def cargar_eventos_kalshi_laliga():
-    """Trae eventos abiertos de todas las series cuyo ticker corresponde a LaLiga."""
-    respuesta = _pedir_kalshi("series", limit=200, category="Sports")
-    series = sorted({
-        s["ticker"] for s in respuesta.get("series", [])
-        if s.get("ticker", "").startswith("KXLALIGA")
-        and "soccer" in [str(tag).lower() for tag in (s.get("tags") or [])]
-    })
+    """Obtiene series y eventos abiertos de Kalshi con paginación compartida."""
+    series = [x for x in sports_series(("KXLALIGA",))
+              if "soccer" in [str(tag).lower() for tag in (x.get("tags") or [])]]
     if not series:
         raise ValueError("Kalshi no devolvió series de fútbol de LaLiga.")
-
-    def traer_serie(ticker):
-        eventos = []
-        cursor = None
-        paginas = 0
-        while cursor is not None or paginas == 0:
-            params = {"limit": 200, "series_ticker": ticker, "status": "open",
-                      "with_nested_markets": "true"}
-            if cursor:
-                params["cursor"] = cursor
-            pagina = _pedir_kalshi("events", **params)
-            eventos.extend(pagina.get("events", []))
-            cursor = pagina.get("cursor")
-            paginas += 1
-            if not cursor or paginas >= 50:
-                break
-        return ticker, eventos
-
-    eventos, errores = [], []
-    with ThreadPoolExecutor(max_workers=3) as pool:
-        tareas = {pool.submit(traer_serie, ticker): ticker for ticker in series}
-        for tarea in as_completed(tareas):
-            ticker = tareas[tarea]
-            try:
-                _, lote = tarea.result()
-                eventos.extend(lote)
-            except requests.RequestException:
-                errores.append(ticker)
-    return eventos, errores, len(series)
-
+    eventos = events_for_series([x["ticker"] for x in series], statuses=("open",))
+    return eventos, [], len(series)
 
 def fecha_ticker_kalshi(evento):
     match = re.search(r"-(\d{2})([A-Z]{3})(\d{2})", evento.get("event_ticker", "").upper())
@@ -649,6 +618,9 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
             continue
         dominio, condicion_yes, probabilidad_yes = estimacion
         mercado = ofertas_actuales.get(clave)
+        # Solo contratos reales de este partido; no se inventan tickers ni lineas.
+        if not mercado or not mercado.get("ticker"):
+            continue
         for lado_apuesta in ("YES", "NO"):
             probabilidad = probabilidad_yes if lado_apuesta == "YES" else 1 - probabilidad_yes
             condicion = condicion_yes if lado_apuesta == "YES" else 1 - np.asarray(condicion_yes, dtype=float)
@@ -727,7 +699,8 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 "Precio de compra": f"{precio:.0%}" if precio is not None else "—",
                 "Precio máx. para margen objetivo": f"${precio_objetivo:.2f}" if precio_objetivo else "—",
                 "Disponibilidad": estado,
-                "Ticker": mercado.get("ticker", "") if mercado else "—",
+                "Ticker": mercado.get("ticker", ""),
+                "Ventaja (edge)": round(probabilidad - precio, 6) if precio is not None else None,
                 "Resultado": resultado_texto,
                 "_clave": clave,
                 "_lado": lado_apuesta,
@@ -1039,6 +1012,8 @@ def leer_historial_fijo():
         resultados = pd.read_csv(RESULTADOS_ARCHIVO, dtype={"prediction_id": str})
     except (FileNotFoundError, pd.errors.EmptyDataError):
         resultados = pd.DataFrame(columns=columnas_res)
+    if not resultados.empty and "resuelto_en" in resultados.columns:
+        resultados = resultados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
     return predicciones, resultados
 
 

@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from difflib import get_close_matches
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -14,6 +15,7 @@ from scipy.stats import nbinom, poisson
 
 
 from laliga_engine import *
+from prediction_core import rank_market_candidates
 
 st.set_page_config(page_title="LaLiga · predicciones", page_icon="⚽", layout="wide")
 st.title("🇪🇸 LaLiga · mercados y probabilidades de Kalshi")
@@ -166,6 +168,8 @@ if resumen_sencillo_kalshi:
                     st.success("WIN · Se cumplió")
                 elif "No se cumplió" in resultado_tarjeta:
                     st.error("LOSS · No se cumplió")
+                elif "ANULADA" in resultado_tarjeta:
+                    st.info("ANULADA · Contrato anulado por Kalshi")
                 elif "NO EVALUABLE" in resultado_tarjeta:
                     st.warning(resultado_tarjeta)
                 elif "Pendiente" in resultado_tarjeta:
@@ -186,6 +190,46 @@ else:
         st.info("No hay una captura previa de este partido en el historial; no se inventa una comparación retrospectiva.")
     else:
         st.info("No encontré mercados modelables de Kalshi para resumir este partido.")
+
+
+st.markdown("### 5 de alta probabilidad para posibles combos")
+st.caption("Ranking del catálogo real de Kalshi. Se omiten contratos sin ticker o sin probabilidad válida y se evita combinar familias de mercados correlacionadas; si no hay cinco independientes, no se rellena artificialmente.")
+alta_vista, valor_vista = rank_market_candidates(
+    todas_kalshi, min_probability=float(os.getenv("PROBABILIDAD_MINIMA_COMBO", "0.65"))
+)
+if partido["status"] == "FINISHED":
+    _archivo_partido = predicciones_guardadas[predicciones_guardadas["match_id"].astype(str) == str(partido["id"])].copy() if not predicciones_guardadas.empty else pd.DataFrame()
+    _archivo_partido = _archivo_partido[_archivo_partido["categoria"].astype(str).str.startswith("ALTA_PROBABILIDAD · ")] if not _archivo_partido.empty and "categoria" in _archivo_partido.columns else pd.DataFrame()
+    if not _archivo_partido.empty:
+        _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
+        _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
+        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("PENDIENTE")
+        st.dataframe(_archivo_partido[["categoria", "jugada", "probabilidad_calibrada", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
+    else:
+        st.info("No hay capturas prepartido guardadas en el bloque de alta probabilidad para este encuentro.")
+elif alta_vista:
+    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker"] if c in alta_vista[0]]
+    st.dataframe(pd.DataFrame(alta_vista)[_cols], use_container_width=True, hide_index=True)
+else:
+    st.info("No hay cinco selecciones independientes que superen el umbral configurable.")
+
+st.markdown("### 10 a tener en cuenta · ordenadas por edge")
+st.caption("Sólo se incluyen contratos con precio y ventaja calculable. La ventaja es probabilidad del modelo menos precio implícito; no se inventan precios cuando Kalshi no cotiza.")
+if partido["status"] == "FINISHED":
+    _archivo_valor = predicciones_guardadas[predicciones_guardadas["match_id"].astype(str) == str(partido["id"])].copy() if not predicciones_guardadas.empty else pd.DataFrame()
+    _archivo_valor = _archivo_valor[_archivo_valor["categoria"].astype(str).str.startswith("A_TENER_EN_CUENTA · ")] if not _archivo_valor.empty and "categoria" in _archivo_valor.columns else pd.DataFrame()
+    if not _archivo_valor.empty:
+        _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
+        _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
+        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("PENDIENTE")
+        st.dataframe(_archivo_valor[["categoria", "jugada", "probabilidad_calibrada", "precio", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
+    else:
+        st.info("No hay capturas prepartido guardadas en el bloque de valor para este encuentro.")
+elif valor_vista:
+    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker"] if c in valor_vista[0]]
+    st.dataframe(pd.DataFrame(valor_vista)[_cols], use_container_width=True, hide_index=True)
+else:
+    st.info("No hay contratos con precio y edge calculable que entren en este bloque.")
 
 tabla_rendimiento, cantidad_rendimiento = metricas_historial(predicciones_guardadas, resultados_guardados)
 with st.expander(f"Aprendizaje y rendimiento histórico ({cantidad_rendimiento} resultados evaluables)"):

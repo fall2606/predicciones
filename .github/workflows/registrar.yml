@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: guardar-historicos
+  group: predicciones-main
   cancel-in-progress: false
 
 jobs:
@@ -30,5 +30,9 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git add predicciones.csv
           git commit -m "Actualizar historial" || echo "Sin cambios"
-          git pull --rebase
-          git push
+          for intento in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep $((intento * 3))
+          done
+          exit 1
