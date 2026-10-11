@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 
 import nfl_engine
@@ -10,6 +11,24 @@ class NFLModelTests(unittest.TestCase):
             "buffalo bills": {"scored": 28.0, "allowed": 18.0, "games": 5},
             "miami dolphins": {"scored": 21.0, "allowed": 25.0, "games": 5},
         }
+
+
+    def test_team_stats_queries_current_nfl_season_instead_of_invalid_date_range(self):
+        payload = {"events": [{
+            "competitions": [{
+                "status": {"type": {"completed": True}},
+                "competitors": [
+                    {"homeAway": "home", "score": "27", "team": {"displayName": "Buffalo Bills"}},
+                    {"homeAway": "away", "score": "20", "team": {"displayName": "Miami Dolphins"}},
+                ],
+            }]
+        }]}
+        with patch.object(nfl_engine, "_json", return_value=payload) as mocked:
+            stats = nfl_engine._team_stats()
+        self.assertIn("buffalo bills", stats)
+        self.assertEqual(stats["buffalo bills"]["scored"], 27.0)
+        self.assertEqual(mocked.call_args.args[0], nfl_engine.ESPN)
+        self.assertIn("seasontype", mocked.call_args.args[1])
 
     def test_projected_score_uses_nfl_team_scoring_and_defense(self):
         projected = nfl_engine.projected_score("BUF Bills", "MIA Dolphins", self.stats)
