@@ -537,6 +537,46 @@ def main():
             print("SENCILLAS SIN CANDIDATAS · {} · {} vs {}: {}".format(match_id, rows[0].get("local", ""), rows[0].get("visita", ""), reasons or {"sin candidatos modelables": len(candidates)}))
 
         high, value = rank_market_candidates(candidates, min_probability=minimum_combo, high_limit=5, value_limit=10)
+        def candidate_key(candidate):
+            raw = candidate.get("_row") if isinstance(candidate.get("_row"), dict) else candidate
+            return (str(raw.get("ticker") or candidate.get("Ticker") or ""),
+                    str(candidate.get("_lado") or raw.get("lado") or ""))
+        selected_keys = {
+            candidate_key(candidate)
+            for block_rows in (singles, high, value)
+            for candidate in block_rows
+        }
+        for candidate in candidates:
+            key = candidate_key(candidate)
+            if key in selected_keys:
+                continue
+            raw = candidate.get("_row", {})
+            reasons = []
+            simple_reasons = single_candidate_rejection_reasons([candidate])
+            reasons.extend(name for name, count in simple_reasons.items()
+                           if count and name != "candidata que sí cumple")
+            p = valid_probability(candidate.get("_p"))
+            price = _price(raw, "precio_captura")
+            edge = candidate.get("Ventaja (edge)")
+            try:
+                edge = float(edge) if edge not in (None, "") else None
+            except (TypeError, ValueError):
+                edge = None
+            if p is not None and p < minimum_combo:
+                reasons.append("probabilidad inferior al umbral de alta probabilidad")
+            if price is None:
+                reasons.append("sin precio disponible para el bloque de valor")
+            elif edge is None:
+                reasons.append("sin edge calculable para el bloque de valor")
+            if not reasons or "candidata que sí cumple" in simple_reasons:
+                reasons.append("excluida por diversificación de familia/equipo o límite del bloque")
+            print("CANDIDATO MLB DESCARTADO · match_id={} · ticker={} · lado={} · motivo={}".format(
+                match_id, key[0], key[1], "; ".join(dict.fromkeys(reasons))
+            ))
+        print("BLOQUES MLB DISPONIBLES · match_id={} · {} vs {} · sencillas_validas={} · alta_probabilidad_validas={} · a_tener_en_cuenta_validas={}".format(
+            match_id, rows[0].get("local", ""), rows[0].get("visita", ""),
+            len(singles), len(high), len(value)
+        ))
         limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
         existing_match = [item for item in existing if str(item.get("match_id", "")) == str(match_id)]
         block_counts = {name: 0 for name in limits}
