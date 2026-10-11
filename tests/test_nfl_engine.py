@@ -74,6 +74,8 @@ def test_kalshi_event_date_uses_et_date_and_espn_fixture_for_exact_kickoff():
         "title": "CIN Bengals vs MIA Dolphins",
         "sub_title": "CIN vs MIA (Oct 11)",
     }
+    event["expected_expiration_time"] = "2026-10-12T00:00:00Z"
+    event["close_time"] = "2026-10-12T00:00:00Z"
     assert nfl._kickoff(event) is None
     assert str(nfl._event_date(event)) == "2026-10-11"
     fixtures = [{
