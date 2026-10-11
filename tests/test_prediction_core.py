@@ -78,7 +78,7 @@ class CoreTests(unittest.TestCase):
    with patch.object(core,"_market_rows_for_series",return_value={}) as fetch:
     summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","resultado_kalshi","marcador","resuelto_en"],side_field="lado")
    self.assertEqual(summary["pendientes_revisadas"],0)
-   fetch.assert_called_once_with(set())
+   fetch.assert_not_called()
    with r.open(encoding="utf-8") as f: self.assertEqual(list(csv.DictReader(f)),[])
 
 
