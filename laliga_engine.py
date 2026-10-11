@@ -1110,6 +1110,7 @@ def historial_guardado(match_id, predicciones, resultados):
         {
             "WIN": "✅ WIN · Se cumplió",
             "LOSS": "❌ LOSS · No se cumplió",
+            "ANULADA": "ANULADA",
             "UNKNOWN": "Sin dato",
             "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
         }
