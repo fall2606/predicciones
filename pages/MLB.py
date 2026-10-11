@@ -134,6 +134,32 @@ def etiqueta_mercado_primera_entrada(row):
     return f"{side}: resultado de la 1.ª entrada ({code})"
 
 
+def _over_pendiente_de_calibracion(row):
+    texto = " ".join(str(row.get(k, "")) for k in ("categoria", "mercado", "ticker")).casefold()
+    es_over_total = ("over" in texto or "more than" in texto or "más de" in texto or "mas de" in texto) and ("total" in texto or "carrera" in texto or "run" in texto)
+    if not es_over_total:
+        return ""
+    try:
+        edge = float(row.get("edge", row.get("Ventaja (edge)", "")))
+        if abs(edge) > 1:
+            edge /= 100
+    except (TypeError, ValueError, OverflowError):
+        return ""
+    if edge < 0.20:
+        return ""
+    categoria = str(row.get("categoria", "")).strip()
+    muestra = pd.DataFrame()
+    if not historial_mlb.empty and "estado" in historial_mlb.columns:
+        muestra = historial_mlb[
+            historial_mlb["estado"].astype(str).str.upper().isin(["WIN", "LOSS"])
+        ].copy()
+        if categoria and "categoria" in muestra.columns:
+            muestra = muestra[muestra["categoria"].astype(str).eq(categoria)]
+    if len(muestra) < 30:
+        return "REVISAR"
+    return ""
+
+
 def _tabla_con_resultado(df, columna="Resultado"):
     """WIN/LOSS/ANULADA y estados pendientes con el mismo código visual."""
     if not isinstance(df, pd.DataFrame) or columna not in df.columns:
@@ -768,8 +794,8 @@ for juego in [juego]:
                             edge_txt = "—"
                         st.write(f"Probabilidad del modelo: **{prob_txt}**")
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
-                        if pick.get("Revisión") == "REVISAR":
-                            st.warning("REVISAR · ventaja superior a 20 puntos; comprobar precio y modelo.")
+                        if pick.get("Revisión") == "REVISAR" or _over_pendiente_de_calibracion(pick) == "REVISAR":
+                            st.warning("REVISAR · ventaja alta en un mercado Over sin muestra de calibración suficiente; no se ha aplicado corrección arbitraria.")
                         estado = str(pick.get("Resultado", pick.get("estado", unresolved_label)) or unresolved_label).upper()
                         if estado == "WIN":
                             st.success("WIN")
@@ -781,6 +807,7 @@ for juego in [juego]:
                             st.warning("PENDIENTE")
                         st.caption(f"Ticker: {pick.get('ticker', '—')}")
                 return
+            bloque["Revisión"] = bloque.apply(_over_pendiente_de_calibracion, axis=1)
             for col in columnas:
                 if col not in bloque.columns:
                     bloque[col] = ""
@@ -793,7 +820,7 @@ for juego in [juego]:
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
-        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "precio_captura", "disponibilidad", "edge", "ticker", "Resultado"]
+        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "precio_captura", "disponibilidad", "edge", "Revisión", "ticker", "Resultado"]
         mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
         mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
         mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)
