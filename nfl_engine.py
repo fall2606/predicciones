@@ -177,7 +177,7 @@ def _parse_datetime(value):
     return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
 
 def _ticker_date(value):
-    match = re.search(r"-(\\d{2}[A-Z]{3}\\d{2})", str(value or "").upper())
+    match = re.search(r"-(\d{2}[A-Z]{3}\d{2})", str(value or "").upper())
     if not match:
         return None
     try:
