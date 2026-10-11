@@ -85,11 +85,6 @@ jobs:
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python registrar_champions.py
-      - name: Backtest y calibración NFL (usa caché diaria)
-        id: backtest_nfl
-        timeout-minutes: 3
-        continue-on-error: true
-        run: python scripts/backtest_nfl.py --max-games 500
       - name: Capturar NFL antes del partido
         id: capture_nfl
         timeout-minutes: 3
@@ -130,6 +125,11 @@ jobs:
         timeout-minutes: 5
         continue-on-error: true
         run: python nfl_engine.py settle
+      - name: Backtest y calibración NFL (usa caché diaria)
+        id: backtest_nfl
+        timeout-minutes: 3
+        continue-on-error: true
+        run: python scripts/backtest_nfl.py --max-games 500
       - name: Reconciliar predicciones de partidos finalizados
         id: audit_reconciliation
         if: always()
