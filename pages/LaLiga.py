@@ -112,6 +112,14 @@ try:
     st.caption("Última liquidación: " + (latest_settlement.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest_settlement) else "sin liquidaciones registradas"))
     if len(started_without_result):
         st.error(f"ALERTA: {len(started_without_result)} predicciones de partidos terminados siguen sin resultado registrado.")
+        try:
+            _pend_path = os.path.join(os.path.dirname(__file__), "..", "reconciliacion_pendientes.csv")
+            _pendientes_ui = pd.read_csv(_pend_path, dtype=str).fillna("")
+            _pendientes_ui = _pendientes_ui[_pendientes_ui.get("deporte", pd.Series(dtype=str)).eq("LaLiga")]
+            for _, _fila_pendiente in _pendientes_ui.head(5).iterrows():
+                st.warning(f"Sin liquidar · {_fila_pendiente.get('prediction_id', '')} · motivo: {_fila_pendiente.get('motivo', 'sin diagnóstico')}")
+        except (OSError, ValueError, KeyError, pd.errors.ParserError):
+            st.warning("Motivo detallado aún no disponible; el workflow debe generar reconciliacion_pendientes.csv.")
     else:
         st.success("Liquidación: no se detectan predicciones pendientes en partidos terminados incluidos en el calendario cargado.")
 except (ValueError, TypeError, KeyError) as exc:
