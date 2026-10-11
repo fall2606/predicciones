@@ -40,6 +40,7 @@ jobs:
         continue-on-error: true
         env:
           CLAVE: ${{ secrets.CLAVE }}
+          KALSHI_SETTLEMENT_GRACE_HOURS: ${{ vars.KALSHI_SETTLEMENT_GRACE_HOURS || '72' }}
         run: python scripts/auditar_reconciliacion.py
 
       - name: Guardar sólo filas nuevas

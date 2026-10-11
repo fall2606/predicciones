@@ -190,6 +190,12 @@ def _row_report(name, row, latest, match_states, kind):
         base.update(motivo="sin ticker (histórico)", clasificacion="HISTORICO_SIN_CONTRATO")
         return base
 
+    # Existing season/futures markets in old MLB captures are not game predictions.
+    # Preserve them in the audit, but don't mislabel them as unfinished games.
+    if not match_id and kickoff is None:
+        base.update(motivo="partido no encontrado", clasificacion="HISTORICO_NO_PARTIDO")
+        return base
+
     # When the official fixture is not in the feed and the scheduled start is well
     # in the past, report the missing fixture rather than silently omitting it.
     if (not match_id and grace_expired) or (not official_state and grace_expired):

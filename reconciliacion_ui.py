@@ -27,12 +27,13 @@ def mostrar_reconciliacion(deporte):
     current = report[report["deporte"].astype(str).eq(deporte)].copy()
     pending = current[current["cuenta_alerta"].astype(str).str.upper().eq("SI")].copy()
     historic = current[current["clasificacion"].astype(str).eq("HISTORICO_SIN_CONTRATO")].copy()
+    historic_nonmatch = current[current["clasificacion"].astype(str).eq("HISTORICO_NO_PARTIDO")].copy()
     resolved = current[current["clasificacion"].astype(str).eq("LIQUIDADA")]
     st.caption(
         f"{deporte}: {len(current)} predicciones auditadas · "
         f"{len(resolved)} con resultado terminal registrado · "
         f"{len(historic)} históricos sin contrato de Kalshi · "
-        f"plazo de liquidación Kalshi configurable en el workflow."
+        f"{len(historic_nonmatch)} históricos sin partido asociado."
     )
 
     if pending.empty:
@@ -57,4 +58,13 @@ def mostrar_reconciliacion(deporte):
     if not historic.empty:
         with st.expander(f"Histórico sin contrato de Kalshi ({len(historic)}; conservado, no cuenta como pendiente activo)", expanded=False):
             cols = [c for c in ["prediction_id", "match_id", "fecha", "local", "visita", "bloque", "ticker", "motivo"] if c in historic.columns]
-            st.dataframe(historic[cols], use_container_width=True, hide_index=True)
+            st.dataframe(historic[cols].head(100), use_container_width=True, hide_index=True)
+            if len(historic) > 100:
+                st.caption(f"Se muestran 100 de {len(historic)} filas; el CSV de reconciliación conserva todas.")
+
+    if not historic_nonmatch.empty:
+        with st.expander(f"Histórico sin partido asociado ({len(historic_nonmatch)}; por ejemplo, mercados de temporada)", expanded=False):
+            cols = [c for c in ["prediction_id", "match_id", "fecha", "local", "visita", "bloque", "ticker", "motivo"] if c in historic_nonmatch.columns]
+            st.dataframe(historic_nonmatch[cols].head(100), use_container_width=True, hide_index=True)
+            if len(historic_nonmatch) > 100:
+                st.caption(f"Se muestran 100 de {len(historic_nonmatch)} filas; el CSV de reconciliación conserva todas.")

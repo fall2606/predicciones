@@ -86,6 +86,15 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(latest_results(data)["p"]["estado"], "WIN")
 
 
+    def test_seasonal_market_without_fixture_is_archived_not_counted_as_pending(self):
+        row = {"prediction_id":"futures-1","match_id":"","fecha":"",
+               "ticker":"KXCITYMLBEXPAND-27AUG01SLC-Y"}
+        result = _row_report("MLB", row, {}, {}, "mlb")
+        self.assertEqual(result["motivo"], "partido no encontrado")
+        self.assertEqual(result["clasificacion"], "HISTORICO_NO_PARTIDO")
+        self.assertEqual(result["cuenta_alerta"], "NO")
+
+
 
 if __name__ == "__main__":
     unittest.main()
