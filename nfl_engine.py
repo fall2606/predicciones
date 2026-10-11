@@ -651,9 +651,17 @@ def calibrate_probability(probability, category, line, yes_outcome, calibration=
         scope = "spread_-3.5"
     elif category == "total" and line not in (None, "") and abs(float(line) - 44.5) < 1e-8 and yes_outcome == "over_gt":
         scope = "total_over_44.5"
+    elif category == "team_total" and line not in (None, "") and abs(float(line) - 21.5) < 1e-8 and yes_outcome == "over_gt":
+        scope = "team_total_home_over_21.5"
     else:
         return None, None, "calibración insuficiente"
     entry = (calibration.get("markets") or {}).get(scope) or {}
+    if not entry:
+        evaluation = (calibration.get("evaluations") or {}).get(scope) or {}
+        if evaluation.get("status") == "no_improvement":
+            return None, None, "calibración no aplicada: no mejora Brier y log loss fuera de muestra"
+        if evaluation.get("status") == "not_enabled":
+            return None, None, "calibración no habilitada para este scope"
     try:
         n = int(entry.get("n_train", 0))
         a, b = float(entry["intercept"]), float(entry["slope"])
@@ -772,7 +780,7 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
                     "line": line if line is not None else "", "lado": side, "seleccion": side,
                     "equipo_yes": yes_team or description_team, "tipo_salida": yes_outcome, "descripcion": description,
                     "bloque": "", "probabilidad_original": f"{p_original:.8f}", "probabilidad_calibrada": f"{p:.8f}" if p_yes_cal is not None else "",
-                    "version_calibracion": calibration_version or "calibración insuficiente", "probabilidad_modelo": f"{p:.8f}",
+                    "version_calibracion": calibration_version or calibration_status, "probabilidad_modelo": f"{p:.8f}",
                     "precio_captura": f"{price:.6f}" if price is not None else "",
                     "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
                     "edge": f"{edge:.6f}" if edge is not None else "",
