@@ -205,6 +205,44 @@ def merge_game_events(events):
                 known.add(ticker)
     return list(grouped.values())
 
+def _read_rows(path):
+    import csv
+    path = Path(path)
+    if not path.exists() or not path.stat().st_size:
+        return []
+    with path.open(newline="", encoding="utf-8-sig") as f:
+        return list(csv.DictReader(f))
+
+def reconcile_exclusions(stats):
+    """Append-only quarantine for historical captures made at/after real kickoff."""
+    existing_rows = _read_rows(EXCLUDED_FILE)
+    excluded = {str(row.get("prediction_id") or "") for row in existing_rows}
+    new_rows = []
+    for row in _read_rows(PRED_FILE):
+        pid = str(row.get("prediction_id") or "").strip()
+        if not pid or pid in excluded:
+            continue
+        kickoff = _scheduled_kickoff(row.get("local"), row.get("visita"), stats)
+        captured = _parse_datetime(row.get("capturado_en"))
+        if kickoff is None or captured is None or captured < kickoff:
+            continue
+        new_rows.append({
+            "prediction_id": pid,
+            "motivo": "Captura registrada a la hora del inicio real o después; excluida de resultados y calibración prepartido",
+            "kickoff_real": kickoff.isoformat(),
+            "detectado_en": datetime.now(timezone.utc).isoformat(),
+        })
+        excluded.add(pid)
+    import csv
+    if not EXCLUDED_FILE.exists() or not EXCLUDED_FILE.stat().st_size:
+        with EXCLUDED_FILE.open("w", newline="", encoding="utf-8") as f:
+            csv.DictWriter(f, fieldnames=EXCLUDED_COLUMNS).writeheader()
+    if new_rows:
+        with EXCLUDED_FILE.open("a", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=EXCLUDED_COLUMNS, extrasaction="ignore")
+            writer.writerows(new_rows)
+    return excluded
+
 def build_candidates(events, stats):
     candidates = []
     now = datetime.now(timezone.utc)
@@ -260,7 +298,8 @@ def main():
     raw_events = events_for_series([x["ticker"] for x in series], statuses=("open",))
     events = merge_game_events(raw_events)
     stats = _team_stats()
-    print(f"NFL: equipos con estadísticas recientes={len(stats)}")
+    excluded_ids = reconcile_exclusions(stats)
+    print(f"NFL: equipos con estadísticas recientes={len(stats)}; capturas históricas excluidas={len(excluded_ids)}")
     print("NFL: muestra de eventos:", [(e.get("title"), e.get("start_time"), e.get("strike_date"), e.get("start_date"), len(e.get("markets") or [])) for e in events[:3]])
     if events and events[0].get("markets"):
         sample_market = events[0]["markets"][0]
@@ -285,14 +324,18 @@ def main():
         # Calibrate YES and NO independently; they are complementary contracts.
         category = f'{row["categoria"]} · {row["lado"]}'
         row["categoria"] = category
-        calibrated, note = calibrate_probability(row["probabilidad_modelo"], category, PRED_FILE, RESULT_FILE)
+        calibrated, note = calibrate_probability(
+            row["probabilidad_modelo"], category, PRED_FILE, RESULT_FILE,
+            exclude_prediction_ids=excluded_ids,
+        )
         row["probabilidad_calibrada"] = calibrated
         row["calibracion"] = note
         price = row["precio_captura"]
         row["edge"] = calibrated-price if price is not None else None
         row["bloque"] = ""
         row["capturado_en"] = captured
-        row["prediction_id"] = f'{row["event_ticker"]}|{row["ticker"]}|{row["lado"]}'
+        base_id = f'{row["event_ticker"]}|{row["ticker"]}|{row["lado"]}'
+        row["prediction_id"] = base_id + "|validado_prepartido" if base_id in excluded_ids else base_id
         if row["prediction_id"] not in existing:
             rows.append(row)
     priced = [r for r in rows if r.get("precio_captura") is not None]
