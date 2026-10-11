@@ -62,18 +62,26 @@ def reconcile(name, pred_name, result_name, kind, competition):
     }
     finished_predictions = [
         p for p in pred
-        if str(p.get("match_id", "")) in done and str(p.get("prediction_id", "")).strip()
+        if str(p.get("match_id", "")) in done
+        and str(p.get("prediction_id", "")).strip()
+        and str(p.get("ticker", "")).strip() not in {"", "—", "-", "None", "nan"}
     ]
+    theoretical_without_contract = sum(
+        1 for p in pred
+        if str(p.get("match_id", "")) in done
+        and str(p.get("ticker", "")).strip() in {"", "—", "-", "None", "nan"}
+    )
     pending = [p for p in finished_predictions
                if str(p.get("prediction_id", "")) not in terminal_ids]
     registered = len(finished_predictions) - len(pending)
     print(f"CONSULTA {name}: SELECT prediction_id FROM {pred_name} "
           f"WHERE match_id IN (partidos_oficiales_finalizados) "
+          f"AND ticker NOT IN ('', '—', '-', 'None', 'nan') "
           f"AND prediction_id NOT IN (SELECT prediction_id FROM {result_name} "
           f"WHERE estado IN ('WIN','LOSS','ANULADA'));")
     print(f"RECONCILIACIÓN {name}: predicciones_partido_terminado={len(finished_predictions)} "
           f"| resultados_terminales_asociados={registered} | diferencia={len(pending)} "
-          f"| pendientes={len(pending)}")
+          f"| pendientes={len(pending)} | teóricas_sin_ticker_excluidas={theoretical_without_contract}")
     if pending:
         for row in pending[:30]:
             print(f"PENDIENTE {name} · {row.get('prediction_id')} · match_id={row.get('match_id')} · ticker={row.get('ticker','')}")
