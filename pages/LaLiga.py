@@ -166,8 +166,10 @@ if resumen_sencillo_kalshi:
                     st.success("WIN · Se cumplió")
                 elif "No se cumplió" in resultado_tarjeta:
                     st.error("LOSS · No se cumplió")
+                elif "NO EVALUABLE" in resultado_tarjeta:
+                    st.warning(resultado_tarjeta)
                 elif "Pendiente" in resultado_tarjeta:
-                    st.info("PENDIENTE · Esperando datos definitivos")
+                    st.info("PENDIENTE · El sistema volverá a comprobarlo automáticamente")
                 else:
                     st.warning(resultado_tarjeta)
             st.caption(f"Kalshi: {jugada['Precio ahora']} · {jugada['Disponibilidad']} · Ticker: {jugada.get('Ticker', '—')}")
