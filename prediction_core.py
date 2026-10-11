@@ -317,7 +317,10 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
         ticker=str(row.get("Ticker") or row.get("ticker") or "").strip()
         p=_probability(row)
         if not ticker or ticker in {"—","-","None","nan"} or p is None: continue
-        item=dict(row); item["_prob"]=p
+        price=_candidate_price(row)
+        # A very short-priced contract adds little to a combo even when model confidence is high.
+        if price is None or price > float(os.getenv("COMBO_PRECIO_MAX", "0.90")): continue
+        item=dict(row); item["_prob"]=p; item["_price"]=price
         item["_family"]=_family(ticker,row.get("Apuesta") or row.get("Jugada sencilla") or "")
         try:
             edge=float(row.get("Ventaja (edge)"))
@@ -349,12 +352,12 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
         value.append(x)
         if len(value)>=value_limit: break
     def clean(items):
-        return [{k:v for k,v in x.items() if k not in {"_prob","_family","_edge"}} for x in items]
+        return [{k:v for k,v in x.items() if k not in {"_prob","_family","_edge","_price"}} for x in items]
     return clean(high),clean(value)
 
 
 def _candidate_price(row):
-    for key in ("Precio de compra", "precio_captura", "precio", "price", "Precio Kalshi"):
+    for key in ("Precio de compra", "Precio ahora", "Precio Kalshi", "precio_captura", "precio", "price"):
         raw = row.get(key)
         if raw in (None, "", "—", "-"):
             continue
