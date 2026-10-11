@@ -68,12 +68,14 @@ jobs:
         run: python mlb_engine.py
       - name: Capturar LaLiga antes del partido
         id: capture_laliga
+        timeout-minutes: 2
         continue-on-error: true
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python registrar_laliga.py
       - name: Capturar Champions antes del partido
         id: capture_champions
+        timeout-minutes: 2
         continue-on-error: true
         env:
           CLAVE: ${{ secrets.CLAVE }}
