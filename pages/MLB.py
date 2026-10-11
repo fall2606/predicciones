@@ -668,6 +668,8 @@ for juego in [juego]:
                             edge_txt = "—"
                         st.write(f"Probabilidad del modelo: **{prob_txt}**")
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
+                        if pick.get("Revisión") == "REVISAR":
+                            st.warning("REVISAR · ventaja superior a 20 puntos; comprobar precio y modelo.")
                         estado = str(pick.get("Resultado", pick.get("estado", "PENDIENTE")) or "PENDIENTE").upper()
                         if estado == "WIN":
                             st.success("WIN")
