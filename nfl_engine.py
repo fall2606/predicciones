@@ -653,6 +653,7 @@ def _reason_for_empty(block, candidates):
 
 def generate_candidates(events, model, now=None, upcoming_games=None):
     now = parse_dt(now) if now else datetime.now(timezone.utc)
+    calibration = load_calibration()
     raw_by_match, rejected, catalog, match_info = {}, [], [], {}
     upcoming_games = upcoming_games if upcoming_games is not None else load_upcoming_games(now=now)
     for event in events:
