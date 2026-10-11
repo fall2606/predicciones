@@ -103,17 +103,18 @@ def _team_in_market(title, home, away):
 
 def _market_probability(market, home, away, home_score, away_score):
     title = str(market.get("yes_sub_title") or market.get("title") or "")
+    full_text = " ".join(x for x in (title, str(market.get("title") or "")) if x)
     ticker = str(market.get("ticker") or "").upper()
-    text = (title + " " + ticker).lower()
+    text = (full_text + " " + ticker).lower()
     margin = home_score - away_score
     total = home_score + away_score
     # Winner/team markets: only match explicit team name, avoid interpreting arbitrary player props.
     if any(x in text for x in ("winner", "win", "moneyline", "to beat", "victory", "game")):
-        team = _team_in_market(title, home, away)
+        team = _team_in_market(full_text, home, away)
         if team:
             p_home = _normal_cdf(margin, 0, 13.5)
             return p_home if team == home else 1-p_home, "Ganador del partido"
-    line_match = re.search(r"(?<![a-z])([+-]?\d+(?:\.\d+)?)", title)
+    line_match = re.search(r"(?<![a-z])([+-]?\d+(?:\.\d+)?)", full_text)
     if line_match:
         line = float(line_match.group(1))
         if "total" in text or "over" in text or "under" in text:
