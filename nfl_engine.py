@@ -778,6 +778,42 @@ def _write_report(path, columns, rows):
     tmp.replace(path)
 
 
+def read_csv_tolerant(path, expected_columns=None):
+    """Read a CSV without taking the page down; quarantine malformed-width rows separately."""
+    path = Path(path)
+    if not path.exists() or path.stat().st_size == 0:
+        return []
+    bad_rows = []
+    parsed = []
+    try:
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            reader = csv.reader(handle, strict=True)
+            header = next(reader, [])
+            if not header:
+                return []
+            for row in reader:
+                line_number = reader.line_num
+                if len(row) != len(header):
+                    bad_rows.append({
+                        "linea": line_number, "motivo": f"esperadas {len(header)} columnas, recibidas {len(row)}",
+                        "contenido": repr(row),
+                    })
+                    continue
+                parsed.append(dict(zip(header, row)))
+    except (OSError, csv.Error, UnicodeError) as exc:
+        bad_rows.append({"linea": getattr(locals().get("reader"), "line_num", ""), "motivo": str(exc), "contenido": "fila no legible"})
+    if bad_rows:
+        bad_path = path.with_name(path.stem + "_filas_malas.csv")
+        _write_report(bad_path, ["linea", "motivo", "contenido"], bad_rows)
+    if expected_columns:
+        for row in parsed:
+            for column in expected_columns:
+                row.setdefault(column, "")
+            if "schema_version" in expected_columns and not row.get("schema_version"):
+                row["schema_version"] = "0" if "schema_version" not in header else SCHEMA_VERSION
+    return parsed
+
+
 def capture():
     """Bounded live capture; called by the shared scheduled pipeline."""
     started = time.monotonic()
