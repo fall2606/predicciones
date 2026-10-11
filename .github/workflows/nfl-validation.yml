@@ -1,0 +1,35 @@
+name: Validación NFL (rama y PR)
+on:
+  push:
+    branches: ["feature/nfl-kalshi"]
+  pull_request:
+    branches: [main]
+    paths:
+      - "nfl_engine.py"
+      - "tests/test_nfl_engine.py"
+      - "scripts/verify_nfl_catalog.py"
+      - ".github/workflows/nfl-validation.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: predicciones-main
+  cancel-in-progress: false
+jobs:
+  nfl-phase1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependencias
+        run: python -m pip install requests pandas numpy scipy streamlit
+      - name: Compilar módulo NFL
+        run: python -m py_compile nfl_engine.py tests/test_nfl_engine.py scripts/verify_nfl_catalog.py
+      - name: Ejecutar regresiones del modelo NFL
+        run: python -m unittest tests/test_nfl_engine.py -v
+      - name: Descubrir catálogo NFL real de Kalshi
+        timeout-minutes: 3
+        run: python scripts/verify_nfl_catalog.py
