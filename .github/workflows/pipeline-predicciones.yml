@@ -7,6 +7,7 @@ on:
       - "mlb_engine.py"
       - "mlb_math.py"
       - "scripts/reparar_csv_predicciones.py"
+      - "scripts/reintegrar_capturas_mlb.py"
       - "registrar_laliga.py"
       - "registrar_champions.py"
       - "liquidar_mlb.py"
@@ -46,9 +47,10 @@ jobs:
       - name: Reparar esquema mixto de historiales existentes
         run: python scripts/reparar_csv_predicciones.py
       - name: Comprobar sintaxis de todo el sistema
-        run: python -m compileall -q prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
+        run: python -m compileall -q prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
       - name: Capturar MLB antes del partido
         id: capture_mlb
+        timeout-minutes: 3
         continue-on-error: true
         run: python mlb_engine.py
       - name: Capturar LaLiga antes del partido
@@ -63,6 +65,11 @@ jobs:
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python registrar_champions.py
+      - name: Reintegrar capturas MLB históricas recuperadas
+        id: restore_mlb
+        if: always()
+        continue-on-error: true
+        run: python scripts/reintegrar_capturas_mlb.py
       - name: Liquidar todos los contratos MLB
         id: liquidate_mlb
         if: always()
@@ -85,7 +92,7 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_mlb.csv resultados_mlb.csv predicciones_laliga.csv resultados_laliga.csv predicciones_champions.csv resultados_champions.csv
+          git add predicciones_mlb.csv resultados_mlb.csv predicciones_laliga.csv resultados_laliga.csv predicciones_champions.csv resultados_champions.csv scripts/reintegrar_capturas_mlb.py
           if git diff --cached --quiet; then
             echo "No hay filas nuevas; los historiales permanecen sin cambios"
             exit 0
@@ -104,12 +111,13 @@ jobs:
           CAPTURE_MLB: ${{ steps.capture_mlb.outcome }}
           CAPTURE_LALIGA: ${{ steps.capture_laliga.outcome }}
           CAPTURE_CHAMPIONS: ${{ steps.capture_champions.outcome }}
+          RESTORE_MLB: ${{ steps.restore_mlb.outcome }}
           LIQUIDATE_MLB: ${{ steps.liquidate_mlb.outcome }}
           LIQUIDATE_LALIGA: ${{ steps.liquidate_laliga.outcome }}
           LIQUIDATE_CHAMPIONS: ${{ steps.liquidate_champions.outcome }}
           COMMIT_RESULTS: ${{ steps.commit_results.outcome }}
         run: |
-          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
+          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$RESTORE_MLB" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
             if [ "$result" != "success" ]; then
               echo "::error::Una tarea del pipeline falló: $result"
               exit 1
