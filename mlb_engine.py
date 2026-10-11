@@ -388,7 +388,7 @@ def motivo_evento_sin_partido(event, games):
     ticker = str(event.get("event_ticker") or "").upper()
     series = normalizar(event.get("series_ticker") or "")
     if any(token in series or token in title for token in
-           ("player", "strikeout", "homerun", "home run", "total bases", "pitcher", "mvp", "award", "division", "series winner", "champion")):
+           ("player", "strikeout", "homerun", "home run", "total bases", "pitcher", "mvp", "award", "division", "series winner", "champion", "kxmlbhr", "kxmlbtb", "kxmlbrbi", "kxmlbsb", "kxmlbouts", "kxmlber", "kxmlbwalk")):
         return "mercado_no_partido/prop"
     matched = sum(
         any(_team_matches_event(team, ticker, title) for team in (game["home"], game["away"]))
