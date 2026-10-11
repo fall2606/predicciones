@@ -11,6 +11,7 @@ SPORTS = {
     "LaLiga": ("predicciones_laliga.csv", "resultados_laliga.csv", "football", "PD"),
     "Champions": ("predicciones_champions.csv", "resultados_champions.csv", "football", "CL"),
     "MLB": ("predicciones_mlb.csv", "resultados_mlb.csv", "mlb", ""),
+    "NFL": ("predicciones_nfl.csv", "resultados_nfl.csv", "nfl", ""),
 }
 TERMINAL = {"WIN", "LOSS", "ANULADA"}
 PLACEHOLDER_TICKERS = {"", "—", "-", "NONE", "NAN"}
@@ -85,6 +86,56 @@ def finished_matches(kind, competition, predictions):
             if game.get("gamePk") is not None:
                 status = game.get("status", {}) or {}
                 states[str(game["gamePk"])] = text(status.get("detailedState") or status.get("abstractGameState")).upper()
+        return states
+
+    if kind == "nfl":
+        # ESPN's public NFL scoreboard is the independent schedule/status source.
+        dates = [parse_dt(r.get("fecha")) for r in predictions]
+        dates = [d.astimezone(__import__("zoneinfo").ZoneInfo("America/New_York")).date() for d in dates if d]
+        if not dates:
+            dates = [now.date()]
+        start, end = min(dates) - timedelta(days=3), max(dates) + timedelta(days=3)
+        response = SESSION.get(
+            "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+            params={"dates": f"{start:%Y%m%d}-{end:%Y%m%d}", "limit": 1000}, timeout=25,
+        )
+        response.raise_for_status()
+        events = response.json().get("events", []) or []
+        code_aliases = {"LA": "LAR", "JAC": "JAX", "OAK": "LV", "WFT": "WAS", "WSH": "WAS"}
+        fixtures = []
+        for event in events:
+            competitions = event.get("competitions") or []
+            if not competitions:
+                continue
+            comp = competitions[0]
+            teams = {}
+            for competitor in comp.get("competitors") or []:
+                side = text(competitor.get("homeAway")).lower()
+                code = text((competitor.get("team") or {}).get("abbreviation")).upper()
+                code = code_aliases.get(code, code)
+                if side in {"home", "away"}:
+                    teams[side] = code
+            kickoff = parse_dt(comp.get("date") or event.get("date"))
+            if kickoff and teams.get("home") and teams.get("away"):
+                status = (event.get("status") or {}).get("type") or {}
+                fixtures.append({
+                    "home": teams["home"], "away": teams["away"],
+                    "date": kickoff.astimezone(__import__("zoneinfo").ZoneInfo("America/New_York")).date(),
+                    "status": text(status.get("name") or status.get("description")).upper(),
+                })
+        for row in predictions:
+            kickoff = parse_dt(row.get("fecha"))
+            home = code_aliases.get(text(row.get("local")).upper(), text(row.get("local")).upper())
+            away = code_aliases.get(text(row.get("visita")).upper(), text(row.get("visita")).upper())
+            if not kickoff or not home or not away:
+                continue
+            target_date = kickoff.astimezone(__import__("zoneinfo").ZoneInfo("America/New_York")).date()
+            matches = [
+                g for g in fixtures if g["home"] == home and g["away"] == away
+                and abs((g["date"] - target_date).days) <= 3
+            ]
+            if len(matches) == 1:
+                states[text(row.get("match_id"))] = matches[0]["status"]
         return states
 
     token = os.getenv("CLAVE")
@@ -165,8 +216,8 @@ def _row_report(name, row, latest, match_states, kind):
     now = datetime.now(timezone.utc)
     elapsed = round((now - kickoff).total_seconds() / 3600, 2) if kickoff else ""
     official_state = match_states.get(match_id, "")
-    cancelled_states = {"POSTPONED", "CANCELLED", "CANCELED", "SUSPENDED", "SUSPENDED"}
-    final_states = {"FINISHED", "AWARDED", "FINAL", "COMPLETED"}
+    cancelled_states = {"POSTPONED", "CANCELLED", "CANCELED", "SUSPENDED", "STATUS_CANCELED", "STATUS_CANCELLED", "STATUS_POSTPONED", "STATUS_SUSPENDED"}
+    final_states = {"FINISHED", "AWARDED", "FINAL", "COMPLETED", "STATUS_FINAL", "STATUS_FINAL_OT", "STATUS_FINAL_2OT"}
     is_final = official_state in final_states
     is_cancelled = official_state in cancelled_states
     grace_expired = bool(kickoff and now - kickoff >= timedelta(hours=GRACE_HOURS))
@@ -335,7 +386,9 @@ def main():
     # it has written the evidence, so the UI never falls back to a stale/missing report.
     if errors:
         raise SystemExit(2)
-    # Unresolved markets are reported in the CSV/UI; a successfully generated report is a successful audit job.
+    if total_pending:
+        raise SystemExit(3)
+    # A red workflow means there are unresolved predictions on finished games; the CSV is already written.
 
 
 if __name__ == "__main__":
