@@ -31,7 +31,7 @@ def _category(value):
 
 
 def calibrate_probability(probability, category, predictions_path, results_path,
-                          min_samples=30, neighborhood=0.10, prior_strength=20):
+                          min_samples=30, neighborhood=0.10, prior_strength=20, exclude_prediction_ids=None):
     """Return (calibrated_probability, explanation); fallback is always original p.
 
     Only settled WIN/LOSS outcomes from earlier captured forecasts are used.
@@ -46,8 +46,12 @@ def calibrate_probability(probability, category, predictions_path, results_path,
                for r in _read(results_path)}
     target = _category(category)
     observations = []
+    excluded = {str(x).strip() for x in (exclude_prediction_ids or ())}
     for row in predictions:
-        state = results.get(str(row.get("prediction_id", "")).strip(), "")
+        prediction_id = str(row.get("prediction_id", "")).strip()
+        if prediction_id in excluded:
+            continue
+        state = results.get(prediction_id, "")
         if state not in TERMINAL or _category(row.get("categoria")) != target:
             continue
         old_p = _prob(row.get("probabilidad_modelo", row.get("probabilidad_calibrada", row.get("probabilidad_base"))))
