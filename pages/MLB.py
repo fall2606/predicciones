@@ -491,7 +491,8 @@ for juego_resumen in partidos:
         "Partido": f"{away_name} @ {home_name}",
         "Marcador estimado (local-visita)": f"{media_home:.1f} - {media_away:.1f}",
         "Favorito": favorito,
-        "Prob. de victoria": f"{p_favorito:.0%}",
+        f"Gana {home_name}": f"{p_home:.0%}",
+        f"Gana {away_name}": f"{p_away:.0%}",
         "Más de 8.5 carreras": f"{probabilidades['over_8_5']:.0%}",
     })
 
