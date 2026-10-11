@@ -272,7 +272,7 @@ if resumen_sencillo_kalshi:
             elif resultado_tarjeta == "LOSS" or "NO SE CUMPLIÓ" in resultado_tarjeta:
                 st.error("LOSS")
             else:
-                st.caption("PENDIENTE")
+                st.caption("PENDIENTE" if not partido_cerrado else "sin datos para liquidar · mercado sin fuente compatible")
             st.caption(f"Ticker: {jugada.get('Ticker', '—')}")
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
