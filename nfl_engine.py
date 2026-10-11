@@ -257,11 +257,12 @@ def _read_rows(path):
 def reconcile_exclusions(stats):
     """Append-only quarantine for historical captures made at/after real kickoff."""
     existing_rows = _read_rows(EXCLUDED_FILE)
-    excluded = {str(row.get("prediction_id") or "") for row in existing_rows}
+    existing_by_id = {str(row.get("prediction_id") or "").strip(): row for row in existing_rows}
+    excluded = set(existing_by_id)
     new_rows = []
     for row in _read_rows(PRED_FILE):
         pid = str(row.get("prediction_id") or "").strip()
-        if not pid or pid in excluded:
+        if not pid:
             continue
         event_ticker = str(row.get("event_ticker") or "").upper()
         market_ticker = str(row.get("ticker") or "").upper()
@@ -274,12 +275,18 @@ def reconcile_exclusions(stats):
             continue
         reason = ("Contrato de periodo/cuarto no cubierto por el modelo NFL" if period_contract else
                   "Captura registrada a la hora del inicio real o después; excluida de calibración prepartido")
-        new_rows.append({
+        kickoff_value = kickoff.isoformat() if kickoff else ""
+        previous = existing_by_id.get(pid)
+        if previous and previous.get("kickoff_real", "") == kickoff_value and previous.get("motivo", "") == reason:
+            continue
+        record = {
             "prediction_id": pid,
             "motivo": reason,
-            "kickoff_real": kickoff.isoformat() if kickoff else "",
+            "kickoff_real": kickoff_value,
             "detectado_en": datetime.now(timezone.utc).isoformat(),
-        })
+        }
+        new_rows.append(record)
+        existing_by_id[pid] = record
         excluded.add(pid)
     import csv
     if not EXCLUDED_FILE.exists() or not EXCLUDED_FILE.stat().st_size:
