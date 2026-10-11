@@ -782,7 +782,7 @@ def main():
                 "Lado Kalshi": row.get("lado", ""), "lado": row.get("lado", ""),
                 "categoria": row.get("categoria", ""),
             })
-        valid_singles = rank_single_candidates(candidates_for_game, limit=5)
+        valid_singles = rank_single_candidates(candidates_for_game, limit=10)
         valid_high, valid_value = rank_market_candidates(
             candidates_for_game, min_probability=minimum_combo, high_limit=5, value_limit=10
         )
