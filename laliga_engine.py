@@ -1053,6 +1053,24 @@ def calibrar_resumen(resumen, predicciones, resultados):
     return salida
 
 
+def _resultado_visible(estado, ticker):
+    """Never show legacy rows without a real Kalshi contract as indefinitely pending."""
+    value = str(estado or "").strip().upper()
+    labels = {
+        "WIN": "✅ WIN · Se cumplió",
+        "LOSS": "❌ LOSS · No se cumplió",
+        "ANULADA": "ANULADA",
+        "UNKNOWN": "Sin dato",
+        "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
+    }
+    if value in labels:
+        return labels[value]
+    ticker_txt = str(ticker or "").strip().upper()
+    if ticker_txt in {"", "—", "-", "NONE", "NAN"}:
+        return "⚠️ NO EVALUABLE · Sin ticker real de Kalshi"
+    return "Pendiente de liquidación automática"
+
+
 def resumen_guardado(match_id, predicciones, resultados):
     """Return the immutable pre-match summary joined with its separately appended result."""
     if predicciones.empty:
@@ -1080,13 +1098,7 @@ def resumen_guardado(match_id, predicciones, resultados):
             "Jugada sencilla": fila["jugada"],
             "Probabilidad modelo": f"{p:.1%}",
             "Calibración": fila.get("calibracion", "Sin dato"),
-            "Resultado": {
-                "WIN": "✅ WIN · Se cumplió",
-                "LOSS": "❌ LOSS · No se cumplió",
-                "ANULADA": "ANULADA",
-                "UNKNOWN": "Sin dato",
-                "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
-            }.get(estados.get(fila["prediction_id"]), "Pendiente de liquidación automática"),
+            "Resultado": _resultado_visible(estados.get(fila["prediction_id"]), fila.get("ticker", "")),
             "Precio ahora": fila.get("precio", "—"),
             "Precio de compra": fila.get("precio", "—"),
             "Ventaja (edge)": edge_guardado,
@@ -1106,15 +1118,10 @@ def historial_guardado(match_id, predicciones, resultados):
     if filas.empty:
         return pd.DataFrame()
     estados = resultados.set_index("prediction_id")["estado"].to_dict() if not resultados.empty else {}
-    filas["Resultado"] = filas["prediction_id"].map(estados).map(
-        {
-            "WIN": "✅ WIN · Se cumplió",
-            "LOSS": "❌ LOSS · No se cumplió",
-            "ANULADA": "ANULADA",
-            "UNKNOWN": "Sin dato",
-            "NO_EVALUABLE": "⚠️ NO EVALUABLE · Falta dato oficial",
-        }
-    ).fillna("Pendiente de liquidación automática")
+    filas["Resultado"] = [
+        _resultado_visible(estados.get(row["prediction_id"]), row.get("ticker", ""))
+        for _, row in filas.iterrows()
+    ]
     filas["Captura (Chicago)"] = pd.to_datetime(filas["capturado_en"], utc=True).dt.tz_convert(TZ).dt.strftime("%d/%m %H:%M")
     filas["Probabilidad base"] = pd.to_numeric(filas["probabilidad_base"], errors="coerce").map(lambda x: f"{x:.1%}")
     filas["Probabilidad guardada"] = pd.to_numeric(filas["probabilidad_calibrada"], errors="coerce").map(lambda x: f"{x:.1%}")
