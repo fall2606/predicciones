@@ -218,7 +218,7 @@ def _trusted_terminal_result(row,result_columns,state_field="estado"):
     if state not in TERMINAL_STATES:
         return False
     marker=str(row.get("marcador",""))
-    if marker.startswith("Marcador ESPN independiente:"):
+    if marker.startswith("Marcador independiente ("):
         return "resultado_kalshi" not in result_columns
     if "resultado_kalshi" in result_columns:
         return str(row.get("resultado_kalshi","")).upper() in {"YES","NO","VOID"}
