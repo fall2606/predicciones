@@ -57,6 +57,24 @@ def leer_historial_mlb():
 
 historial_mlb = leer_historial_mlb()
 
+ 
+def _tabla_con_resultado(df, columna="Resultado"):
+    """WIN/LOSS/ANULADA y estados pendientes con el mismo código visual."""
+    if not isinstance(df, pd.DataFrame) or columna not in df.columns:
+        return df
+    def _color(valor):
+        texto = str(valor or "").strip().upper()
+        if texto == "WIN":
+            return "background-color: #d4edda; color: #155724; font-weight: bold"
+        if texto == "LOSS":
+            return "background-color: #f8d7da; color: #721c24; font-weight: bold"
+        if "ANULADA" in texto or "VOID" in texto:
+            return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
+        if "PENDIENTE" in texto or "NO_EVALUABLE" in texto:
+            return "background-color: #fff3cd; color: #856404; font-weight: bold"
+        return ""
+    return df.style.map(_color, subset=[columna])
+
 def get_json(path, params):
     response = requests.get(f"{API}/{path}", params=params, timeout=TIMEOUT)
     response.raise_for_status()
@@ -540,9 +558,10 @@ for juego in [juego]:
             if archivadas_partido.empty or "categoria" not in archivadas_partido.columns:
                 st.info("No hay capturas de contratos modelables guardadas para este partido todavía.")
                 return
-            bloque = archivadas_partido[
-                archivadas_partido["categoria"].astype(str).str.startswith(codigo + " · ")
-            ].copy()
+            _mask_bloque = archivadas_partido["bloque"].astype(str).eq(codigo) if "bloque" in archivadas_partido.columns else pd.Series(False, index=archivadas_partido.index)
+            if "categoria" in archivadas_partido.columns:
+                _mask_bloque = _mask_bloque | archivadas_partido["categoria"].astype(str).str.startswith(codigo + " · ")
+            bloque = archivadas_partido[_mask_bloque].copy()
             if bloque.empty:
                 st.info("Este bloque no tiene selecciones que superen sus filtros; no se rellenan con mercados inventados.")
                 return
@@ -553,13 +572,7 @@ for juego in [juego]:
             vista = bloque[columnas].copy()
             if "Resultado" in vista.columns:
                 vista = vista.rename(columns={"Resultado": "Resultado"})
-                estilo = vista.style.map(
-                    lambda v: "background-color: #d4edda; color: #155724; font-weight: bold" if v == "WIN" else
-                    "background-color: #f8d7da; color: #721c24; font-weight: bold" if v == "LOSS" else
-                    "background-color: #e2e3e5; color: #383d41; font-weight: bold" if v == "ANULADA" else "",
-                    subset=["Resultado"],
-                )
-                st.dataframe(estilo, use_container_width=True, hide_index=True)
+                st.dataframe(_tabla_con_resultado(vista), use_container_width=True, hide_index=True)
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
@@ -601,14 +614,7 @@ for juego in [juego]:
                     historial_mostrar["Resultado"] = historial_mostrar["Resultado"].replace({
                         "": "PENDIENTE", "WIN": "WIN", "LOSS": "LOSS"
                     }).fillna("PENDIENTE")
-                    estilo = historial_mostrar.style.map(
-                        lambda v: "background-color: #d4edda; color: #155724; font-weight: bold"
-                        if v == "WIN" else
-                        "background-color: #f8d7da; color: #721c24; font-weight: bold"
-                        if v == "LOSS" else "",
-                        subset=["Resultado"],
-                    )
-                    st.dataframe(estilo, use_container_width=True, hide_index=True)
+                    st.dataframe(_tabla_con_resultado(historial_mostrar), use_container_width=True, hide_index=True)
                 else:
                     st.dataframe(historial_mostrar, use_container_width=True, hide_index=True)
                 st.caption("Las capturas originales no se modifican. Si un contrato antiguo no tenía probabilidad y ahora puede modelarse, se añade una fila separada de recálculo v2. Las props que requieren estadísticas individuales siguen sin probabilidad hasta implementar un modelo específico. WIN/LOSS procede de la liquidación oficial de Kalshi.")

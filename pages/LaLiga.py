@@ -17,6 +17,24 @@ from scipy.stats import nbinom, poisson
 from laliga_engine import *
 from prediction_core import rank_market_candidates
 
+ 
+def _tabla_con_resultado(df, columna="Resultado"):
+    """Presenta resultados de forma consistente en el historial y en los tres bloques."""
+    if not isinstance(df, pd.DataFrame) or columna not in df.columns:
+        return df
+    def _color(valor):
+        texto = str(valor or "").strip().upper()
+        if texto == "WIN" or "SE CUMPLIÓ" in texto:
+            return "background-color: #d4edda; color: #155724; font-weight: bold"
+        if texto == "LOSS" or "NO SE CUMPLIÓ" in texto:
+            return "background-color: #f8d7da; color: #721c24; font-weight: bold"
+        if "ANULADA" in texto or "VOID" in texto:
+            return "background-color: #e2e3e5; color: #383d41; font-weight: bold"
+        if "PENDIENTE" in texto or "NO EVALUABLE" in texto:
+            return "background-color: #fff3cd; color: #856404; font-weight: bold"
+        return ""
+    return df.style.map(_color, subset=[columna])
+
 st.set_page_config(page_title="LaLiga · predicciones", page_icon="⚽", layout="wide")
 st.title("🇪🇸 LaLiga · mercados y probabilidades de Kalshi")
 st.caption(
@@ -184,7 +202,7 @@ if resumen_sencillo_kalshi:
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
         with st.expander(f"Comparar todas las capturas guardadas ({len(historial_partido)})"):
-            st.dataframe(historial_partido, use_container_width=True, hide_index=True)
+            st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
 else:
     if partido["status"] == "FINISHED":
         st.info("No hay una captura previa de este partido en el historial; no se inventa una comparación retrospectiva.")
@@ -199,7 +217,10 @@ alta_vista, valor_vista = rank_market_candidates(
 )
 if partido["status"] == "FINISHED":
     _archivo_partido = predicciones_guardadas[predicciones_guardadas["match_id"].astype(str) == str(partido["id"])].copy() if not predicciones_guardadas.empty else pd.DataFrame()
-    _archivo_partido = _archivo_partido[_archivo_partido["categoria"].astype(str).str.startswith("ALTA_PROBABILIDAD · ")] if not _archivo_partido.empty and "categoria" in _archivo_partido.columns else pd.DataFrame()
+    _mask_alta = _archivo_partido["bloque"].astype(str).eq("ALTA_PROBABILIDAD") if not _archivo_partido.empty and "bloque" in _archivo_partido.columns else pd.Series(False, index=_archivo_partido.index)
+    if not _archivo_partido.empty and "categoria" in _archivo_partido.columns:
+        _mask_alta = _mask_alta | _archivo_partido["categoria"].astype(str).str.startswith("ALTA_PROBABILIDAD · ")
+    _archivo_partido = _archivo_partido[_mask_alta].copy() if not _archivo_partido.empty else pd.DataFrame()
     if not _archivo_partido.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
@@ -207,7 +228,7 @@ if partido["status"] == "FINISHED":
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
             if _col not in _archivo_partido.columns:
                 _archivo_partido[_col] = ""
-        st.dataframe(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
+        st.dataframe(_tabla_con_resultado(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
     else:
         st.info("No hay capturas prepartido guardadas en el bloque de alta probabilidad para este encuentro.")
 elif alta_vista:
@@ -220,7 +241,10 @@ st.markdown("### 10 a tener en cuenta · ordenadas por edge")
 st.caption("Sólo se incluyen contratos con precio y ventaja calculable. La ventaja es probabilidad del modelo menos precio implícito; no se inventan precios cuando Kalshi no cotiza.")
 if partido["status"] == "FINISHED":
     _archivo_valor = predicciones_guardadas[predicciones_guardadas["match_id"].astype(str) == str(partido["id"])].copy() if not predicciones_guardadas.empty else pd.DataFrame()
-    _archivo_valor = _archivo_valor[_archivo_valor["categoria"].astype(str).str.startswith("A_TENER_EN_CUENTA · ")] if not _archivo_valor.empty and "categoria" in _archivo_valor.columns else pd.DataFrame()
+    _mask_valor = _archivo_valor["bloque"].astype(str).eq("A_TENER_EN_CUENTA") if not _archivo_valor.empty and "bloque" in _archivo_valor.columns else pd.Series(False, index=_archivo_valor.index)
+    if not _archivo_valor.empty and "categoria" in _archivo_valor.columns:
+        _mask_valor = _mask_valor | _archivo_valor["categoria"].astype(str).str.startswith("A_TENER_EN_CUENTA · ")
+    _archivo_valor = _archivo_valor[_mask_valor].copy() if not _archivo_valor.empty else pd.DataFrame()
     if not _archivo_valor.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
@@ -228,7 +252,7 @@ if partido["status"] == "FINISHED":
         for _col in ["bloque", "mercado", "line", "seleccion", "edge"]:
             if _col not in _archivo_valor.columns:
                 _archivo_valor[_col] = ""
-        st.dataframe(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
+        st.dataframe(_tabla_con_resultado(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
     else:
         st.info("No hay capturas prepartido guardadas en el bloque de valor para este encuentro.")
 elif valor_vista:
