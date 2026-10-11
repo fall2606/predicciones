@@ -78,7 +78,8 @@ except (ValueError, KeyError, TypeError) as exc:
     st.stop()
 
 corners = None
-predicciones_guardadas, resultados_guardados = leer_historial_fijo()\nmostrar_actualizacion_archivos([("Predicciones", PREDICCIONES_ARCHIVO), ("Resultados", RESULTADOS_ARCHIVO), ("Reconciliación", os.path.join(os.path.dirname(os.path.dirname(__file__)), "reconciliacion_pendientes.csv"))])
+predicciones_guardadas, resultados_guardados = leer_historial_fijo()
+mostrar_actualizacion_archivos([("Predicciones", PREDICCIONES_ARCHIVO), ("Resultados", RESULTADOS_ARCHIVO), ("Reconciliación", os.path.join(os.path.dirname(os.path.dirname(__file__)), "reconciliacion_pendientes.csv"))])
 ids_con_captura = (
     set(predicciones_guardadas["match_id"].astype(str))
     if not predicciones_guardadas.empty else set()
@@ -233,7 +234,8 @@ if partido_final and resultado is not None:
     )
     st.caption("Las capturas y los resultados se guardan por separado; se muestra el último pronóstico archivado antes del inicio, sin reescribir los anteriores.")
 st.markdown(
-    f"**Forma reciente · últimos 8 partidos de Champions antes del encuentro**  \n"
+    f"**Forma reciente · últimos 8 partidos de Champions antes del encuentro**  
+"
     f"{local}: {resumen_forma(local, modelo_objetivo, fecha_objetivo)}  ·  "
     f"{visita}: {resumen_forma(visita, modelo_objetivo, fecha_objetivo)}"
 )
