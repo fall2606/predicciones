@@ -234,8 +234,7 @@ if partido_final and resultado is not None:
     )
     st.caption("Las capturas y los resultados se guardan por separado; se muestra el último pronóstico archivado antes del inicio, sin reescribir los anteriores.")
 st.markdown(
-    f"**Forma reciente · últimos 8 partidos de Champions antes del encuentro**  
-"
+    f"**Forma reciente · últimos 8 partidos de Champions antes del encuentro**  \n"
     f"{local}: {resumen_forma(local, modelo_objetivo, fecha_objetivo)}  ·  "
     f"{visita}: {resumen_forma(visita, modelo_objetivo, fecha_objetivo)}"
 )
