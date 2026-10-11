@@ -147,6 +147,50 @@ def etiqueta_mercado_primera_entrada(row):
     return f"{side}: resultado de la 1.ª entrada ({code})"
 
 
+def etiqueta_mercado_entradas_parciales(row):
+    """Describe explicitly the period and outcome for partial-inning Kalshi contracts."""
+    event_ticker = str(row.get("event_ticker") or row.get("Evento") or "").upper()
+    ticker = str(row.get("ticker") or row.get("Ticker") or "").upper()
+    series = event_ticker or ticker
+    # Kalshi KXMLBF3/BF5/BF7 are game outcomes after the first 3/5/7 innings.
+    match = re.search(r"KXMLBF(3|5|7)(?:SPREAD|TOTAL)?-", series)
+    if not match:
+        return None
+    innings = int(match.group(1))
+    period = f"al terminar las primeras {innings} entradas"
+    category = f"Primeras {innings} entradas (F{innings})"
+    if "SPREAD" in series or "SPREAD" in ticker:
+        category += " · hándicap de carreras"
+    elif "TOTAL" in series or "TOTAL" in ticker:
+        category += " · total de carreras"
+    else:
+        category += " · ganador parcial"
+    if "SPREAD" in series or "SPREAD" in ticker or "TOTAL" in series or "TOTAL" in ticker:
+        return {"categoria": category, "frase": None}
+
+    code = ticker.rsplit("-", 1)[-1]
+    side = str(row.get("lado") or row.get("seleccion") or row.get("Lado Kalshi") or "").upper()
+    if side not in {"YES", "NO"}:
+        side = "YES"
+    code_to_name = {
+        "ARI": "Arizona", "ATL": "Atlanta", "BAL": "Baltimore", "BOS": "Boston",
+        "CHC": "Chicago Cubs", "CWS": "Chicago White Sox", "CIN": "Cincinnati",
+        "CLE": "Cleveland", "COL": "Colorado", "DET": "Detroit", "HOU": "Houston",
+        "KC": "Kansas City", "LAA": "LA Angels", "LAD": "LA Dodgers", "MIA": "Miami",
+        "MIL": "Milwaukee", "MIN": "Minnesota", "NYM": "NY Mets", "NYY": "NY Yankees",
+        "ATH": "Athletics", "PHI": "Philadelphia", "PIT": "Pittsburgh", "SD": "San Diego",
+        "SF": "San Francisco", "SEA": "Seattle", "STL": "St. Louis", "TB": "Tampa Bay",
+        "TEX": "Texas", "TOR": "Toronto", "WSH": "Washington",
+    }
+    team = code_to_name.get(code)
+    if not team:
+        return {"categoria": category, "frase": None}
+    if side == "YES":
+        phrase = f"SÍ: {team} va ganando {period}"
+    else:
+        phrase = f"NO: {team} no va ganando {period} (puede ir perdiendo o estar empatado)"
+    return {"categoria": category, "frase": phrase}
+
 def _over_pendiente_de_calibracion(row):
     texto = " ".join(str(row.get(k, "")) for k in ("categoria", "mercado", "ticker")).casefold()
     es_over_total = ("over" in texto or "more than" in texto or "más de" in texto or "mas de" in texto) and ("total" in texto or "carrera" in texto or "run" in texto)
@@ -823,9 +867,14 @@ for juego in [juego]:
                                 if total_linea:
                                     verbo = "más de" if total_linea.group(1).lower() in {"over", "more than"} else "menos de"
                                     frase = f"{verbo} {total_linea.group(2)} carreras en el partido"
-                        if categoria == "Entradas parciales":
-                            categoria = "Primeras 5 entradas (F5)" if re.search(r"first\s*(?:5|five)", mercado, re.I) else "Entradas parciales"
-                        if "BINNINGWIN" in str(pick.get("ticker", "")).upper():
+                        parcial = etiqueta_mercado_entradas_parciales(pick)
+                        if parcial:
+                            categoria = parcial["categoria"]
+                            if parcial["frase"]:
+                                frase = parcial["frase"]
+                        elif categoria == "Entradas parciales":
+                            categoria = "Entradas parciales · periodo no identificado"
+                        if "BINNINGWIN" in str(pick.get("ticker", "")).upper() or (parcial and parcial["frase"]):
                             st.markdown(f"**{frase}**")
                         else:
                             prefijo = "SÍ" if lado == "YES" else "NO"
@@ -853,6 +902,28 @@ for juego in [juego]:
                         except (TypeError, ValueError):
                             edge_txt = "—"
                         st.write(f"Probabilidad del modelo: **{prob_txt}**")
+                        ticker_contexto = str(pick.get("event_ticker") or pick.get("ticker") or "").upper()
+                        parcial_contexto = re.search(r"KXMLBF(3|5|7)", ticker_contexto)
+                        if parcial_contexto:
+                            n_entradas = int(parcial_contexto.group(1))
+                            contexto = (f"El mercado se decide al terminar las primeras {n_entradas} entradas; "
+                                        f"no es el ganador final. Proyección del partido completo: "
+                                        f"{game['away']} {mu_a:.1f} – {game['home']} {mu_h:.1f} carreras.")
+                        elif "TOTAL" in ticker_contexto or "RUNS" in ticker_contexto:
+                            contexto = (f"Proyección del partido: {game['away']} {mu_a:.1f} – {game['home']} {mu_h:.1f} "
+                                        f"carreras ({mu_a + mu_h:.1f} combinadas); la línea del contrato debe compararse con esa media.")
+                        elif "GAME" in ticker_contexto:
+                            contexto = (f"Proyección del marcador: {game['away']} {mu_a:.1f} – {game['home']} {mu_h:.1f} carreras. "
+                                        "La ventaja es una estimación del modelo, no una garantía.")
+                        else:
+                            contexto = (f"Contexto disponible del modelo: proyección {game['away']} {mu_a:.1f} – "
+                                        f"{game['home']} {mu_h:.1f} carreras. No hay datos específicos suficientes "
+                                        "en esta tarjeta para afirmar una ventaja individual adicional.")
+                        if forma_v and forma_l:
+                            contexto += (f" Forma reciente: {game['away']} anota/permite {forma_v['anotadas']:.1f}/"
+                                         f"{forma_v['permitidas']:.1f} por juego; {game['home']} "
+                                         f"{forma_l['anotadas']:.1f}/{forma_l['permitidas']:.1f}.")
+                        st.caption("Fundamento disponible: " + contexto)
                         st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
                         _ticker_card = str(pick.get("ticker") or pick.get("Ticker") or "")
                         _lado_card = str(pick.get("lado") or pick.get("Lado Kalshi") or "")
