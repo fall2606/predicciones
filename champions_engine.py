@@ -979,7 +979,9 @@ def calibrar_resumen(resumen, predicciones, resultados):
         unidos = predicciones.merge(resultados, on="prediction_id", how="inner")
         unidos = unidos[unidos["estado"].isin(["WIN", "LOSS"])]
         if not unidos.empty:
-            unidos = unidos.sort_values("capturado_en").drop_duplicates(["match_id", "categoria"], keep="last")
+            claves = [col for col in ("match_id", "categoria", "ticker", "clave_interna", "jugada") if col in unidos.columns]
+            if claves:
+                unidos = unidos.sort_values("capturado_en").drop_duplicates(claves, keep="last")
         for _, fila in unidos.iterrows():
             try:
                 p = float(fila["probabilidad_base"])
@@ -991,8 +993,23 @@ def calibrar_resumen(resumen, predicciones, resultados):
     salida = []
     for fila in resumen:
         copia = dict(fila)
-        base = float(copia.get("Probabilidad base", copia.get("_p", 0.0)))
-        datos = observados.get(str(copia.get("Tipo", "")), [])
+        # Los mercados completos pueden usar nombres de campo distintos al resumen.
+        # Nunca convertir una probabilidad ausente en 0% por defecto.
+        raw_base = copia.get("Probabilidad base", copia.get("_p"))
+        if raw_base in (None, ""):
+            raw_base = copia.get("Probabilidad del modelo", copia.get("Prob. modelo", copia.get("probabilidad_modelo")))
+        try:
+            match_base = re.search(r"[-+]?\d+(?:[.,]\d+)?", str(raw_base))
+            base = float(match_base.group(0).replace(",", ".")) if match_base else None
+            if base is not None and ("%" in str(raw_base) or base > 1):
+                base /= 100
+        except (TypeError, ValueError, OverflowError):
+            base = None
+        if base is None or not 0 <= base <= 1:
+            salida.append(copia)
+            continue
+        categoria_calibracion = str(copia.get("Tipo", copia.get("categoria", copia.get("Categoría resumen", ""))))
+        datos = observados.get(categoria_calibracion, [])
         cercanos = [(p, acierto) for p, acierto in datos if abs(p - base) <= 0.10]
         ajustada = base
         # Avoid fitting a noisy category until a useful out-of-sample sample exists.
