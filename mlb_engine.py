@@ -170,7 +170,7 @@ def clasificar(serie, market):
         return "Props de jugador"
     if any(x in text for x in ("first inning", "1st inning", "yrfi", "nrfi")) or "firstinning" in s:
         return "1.ª entrada / YRFI-NRFI"
-    if any(x in text for x in ("first 5", "first five", "first 3", "first three", "first 7", "first seven")) or any(x in s for x in ("first5", "first3", "first7")):
+    if any(x in text for x in ("first 5", "first five", "first 3", "first three", "first 7", "first seven", "f5 ", "f5 total")) or any(x in s for x in ("first5", "first3", "first7", "f5total", "kxmlbf5")):
         return "Entradas parciales"
     # A generic inning total is not a full-game total; this model has no per-inning score distribution.
     if "inning" in s or "inning" in text:
@@ -529,6 +529,8 @@ def main():
 
         # Singles: price cap, positive edge, trivial-line exclusion and family diversification.
         singles = rank_single_candidates(candidates, limit=5)
+        rejection_summary = single_candidate_rejection_reasons(candidates)
+        print("CANDIDATOS MLB · match_id={} · {} vs {} · sencillas_rechazo_agregado={}".format(match_id, rows[0].get("local", ""), rows[0].get("visita", ""), rejection_summary))
         if not singles:
             reasons = single_candidate_rejection_reasons(candidates)
             print("SENCILLAS SIN CANDIDATAS · {} · {} vs {}: {}".format(match_id, rows[0].get("local", ""), rows[0].get("visita", ""), reasons or {"sin candidatos modelables": len(candidates)}))
