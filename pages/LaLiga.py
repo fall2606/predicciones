@@ -276,7 +276,7 @@ if partido_cerrado:
     if not _archivo_partido.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
-        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
+        _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"))
         _archivo_partido.loc[_archivo_partido["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
             if _col not in _archivo_partido.columns:
@@ -286,7 +286,7 @@ if partido_cerrado:
         st.info("No hay capturas prepartido guardadas en el bloque de alta probabilidad para este encuentro.")
 elif alta_vista:
     _alta_df = pd.DataFrame(alta_vista).copy()
-    _alta_df["Resultado"] = "SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"
+    _alta_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
     _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _alta_df.columns]
     st.dataframe(_tabla_con_resultado(_alta_df[_cols]), use_container_width=True, hide_index=True)
 else:
@@ -303,7 +303,7 @@ if partido_cerrado:
     if not _archivo_valor.empty:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
-        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
+        _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"))
         _archivo_valor.loc[_archivo_valor["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge"]:
             if _col not in _archivo_valor.columns:
@@ -313,7 +313,7 @@ if partido_cerrado:
         st.info("No hay capturas prepartido guardadas en el bloque de valor para este encuentro.")
 elif valor_vista:
     _valor_df = pd.DataFrame(valor_vista).copy()
-    _valor_df["Resultado"] = "SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"
+    _valor_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
     _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _valor_df.columns]
     st.dataframe(_tabla_con_resultado(_valor_df[_cols]), use_container_width=True, hide_index=True)
 else:
