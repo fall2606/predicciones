@@ -97,6 +97,35 @@ except (requests.RequestException, ValueError, TypeError, KeyError) as exc:
     st.warning(f"No se pudo verificar el estado de liquidación MLB en StatsAPI: {exc}")
 
  
+def etiqueta_mercado_primera_entrada(row):
+    """Human-readable outcome for KXMLBINNINGWIN contracts; retain the side's meaning."""
+    ticker = str(row.get("ticker", "")).upper()
+    if "BINNINGWIN" not in ticker:
+        return str(row.get("mercado") or row.get("seleccion") or "Contrato Kalshi")
+    code = ticker.rsplit("-", 1)[-1]
+    side = str(row.get("lado") or row.get("seleccion") or "YES").upper()
+    if code == "TIE":
+        return ("SÍ: habrá empate al terminar la 1.ª entrada"
+                if side == "YES" else "NO: no habrá empate al terminar la 1.ª entrada")
+    code_to_name = {
+        "ARI": "los Diamondbacks", "ATL": "los Braves", "BAL": "los Orioles",
+        "BOS": "los Red Sox", "CHC": "los Cubs", "CWS": "los White Sox",
+        "CIN": "los Reds", "CLE": "los Guardians", "COL": "los Rockies",
+        "DET": "los Tigers", "HOU": "los Astros", "KC": "los Royals",
+        "LAA": "los Angels", "LAD": "los Dodgers", "MIA": "los Marlins",
+        "MIL": "los Brewers", "MIN": "los Twins", "NYM": "los Mets",
+        "NYY": "los Yankees", "ATH": "los Athletics", "PHI": "los Phillies",
+        "PIT": "los Pirates", "SD": "los Padres", "SF": "los Giants",
+        "SEA": "los Mariners", "STL": "los Cardinals", "TB": "los Rays",
+        "TEX": "los Rangers", "TOR": "los Blue Jays", "WSH": "los Nationals",
+    }
+    team = code_to_name.get(code)
+    if team:
+        return (f"SÍ: {team} ganan la 1.ª entrada" if side == "YES"
+                else f"NO: {team} no ganan la 1.ª entrada")
+    return f"{side}: resultado de la 1.ª entrada ({code})"
+
+
 def _tabla_con_resultado(df, columna="Resultado"):
     """WIN/LOSS/ANULADA y estados pendientes con el mismo código visual."""
     if not isinstance(df, pd.DataFrame) or columna not in df.columns:
@@ -689,7 +718,7 @@ for juego in [juego]:
                         categoria = re.sub(r"^SENCILLAS\s*·\s*", "", categoria).strip() or "Mercado MLB"
                         mercado = str(pick.get("mercado") or pick.get("seleccion") or "Contrato Kalshi")
                         lado = str(pick.get("lado") or pick.get("seleccion") or "YES").upper()
-                        frase = mercado
+                        frase = etiqueta_mercado_primera_entrada(pick) if "BINNINGWIN" in str(pick.get("ticker", "")).upper() else mercado
                         if categoria == "Total de carreras":
                             mas = re.search(r"(?:\+|or more|or higher|at least)\s*$", mercado, re.I)
                             linea_mas = re.search(r"([0-9]+(?:\.[0-9]+)?)\s*(?:\+|or more|or higher|at least)", mercado, re.I)
@@ -745,6 +774,9 @@ for juego in [juego]:
                 if col not in bloque.columns:
                     bloque[col] = ""
             vista = bloque[columnas].copy()
+            if "mercado" in vista.columns and "ticker" in bloque.columns:
+                etiquetas = bloque.apply(etiqueta_mercado_primera_entrada, axis=1)
+                vista["mercado"] = etiquetas.values
             if "Resultado" in vista.columns:
                 st.dataframe(_tabla_con_resultado(vista), use_container_width=True, hide_index=True)
             else:
