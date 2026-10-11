@@ -21,6 +21,7 @@ from laliga_engine import (
     resultado_del_periodo,
     resultado_corners,
     leer_historial_fijo,
+    partido_bloqueado,
 )
 
 COLUMNAS_PRED = [
@@ -72,6 +73,10 @@ def main():
         if partido.get("status") not in {"SCHEDULED", "TIMED"}:
             continue
         inicio = datetime.fromisoformat(partido["utcDate"].replace("Z", "+00:00"))
+        # No crear capturas nuevas dentro de la ventana T-30.
+        # Las capturas previas permanecen en el ledger append-only.
+        if partido_bloqueado(partido, ahora):
+            continue
         if not (ahora < inicio.astimezone(TZ) <= limite):
             continue
         datos = construir_prediccion_partido(partido, modelo, corners)
