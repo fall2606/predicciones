@@ -614,10 +614,17 @@ if __name__ == "__main__":
     else:
         series, events = load_kalshi_catalog()
         example = next(({
-            "event_ticker": e.get("event_ticker"), "title": e.get("title") or e.get("sub_title"),
-            "markets": [{"ticker": m.get("ticker"), "title": m.get("title") or m.get("yes_sub_title"),
-                         "yes_ask_dollars": m.get("yes_ask_dollars"), "no_ask_dollars": m.get("no_ask_dollars")}
-                        for m in (e.get("markets") or [])[:12]]
+            "event_ticker": e.get("event_ticker"),
+            "title": e.get("title") or e.get("sub_title"),
+            "markets": [
+                {
+                    "ticker": m.get("ticker"),
+                    "title": m.get("title") or m.get("yes_sub_title"),
+                    "yes_ask_dollars": m.get("yes_ask_dollars"),
+                    "no_ask_dollars": m.get("no_ask_dollars"),
+                }
+                for m in (e.get("markets") or [])[:12]
+            ],
         } for e in events if e.get("markets")), None)
         if not example:
             raise RuntimeError("La API de Kalshi no devolvió ningún evento NFL abierto con mercados anidados; no hay ejemplo real que validar.")
@@ -625,12 +632,4 @@ if __name__ == "__main__":
             "series": [{"ticker": x.get("ticker"), "title": x.get("title")} for x in series],
             "open_event_count": len(events),
             "example_event": example,
-        }, indent=2))
-            "series": [{"ticker": x.get("ticker"), "title": x.get("title")} for x in series],
-            "example_event": next(({
-                "event_ticker": e.get("event_ticker"), "title": e.get("title"),
-                "markets": [{"ticker": m.get("ticker"), "title": m.get("title") or m.get("yes_sub_title"),
-                             "yes_ask_dollars": m.get("yes_ask_dollars"), "no_ask_dollars": m.get("no_ask_dollars")}
-                            for m in (e.get("markets") or [])[:12]]
-            } for e in events if e.get("markets")), None),
         }, indent=2))
