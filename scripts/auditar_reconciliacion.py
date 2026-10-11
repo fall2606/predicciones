@@ -86,16 +86,25 @@ def finished_matches(kind, competition, predictions):
     token = os.getenv("CLAVE")
     if not token:
         raise RuntimeError("falta secreto CLAVE; no se puede comprobar el calendario oficial")
-    response = SESSION.get(
-        f"https://api.football-data.org/v4/competitions/{competition}/matches",
-        headers={"X-Auth-Token": token},
-        params={"dateFrom": "2020-01-01", "dateTo": (now.date() + timedelta(days=1)).isoformat(), "limit": 500},
-        timeout=15,
-    )
-    response.raise_for_status()
-    for match in response.json().get("matches", []):
-        if match.get("id") is not None:
-            states[str(match["id"])] = text(match.get("status")).upper()
+    # Query one season at a time; football-data rejects multi-year date ranges on some plans.
+    seasons = set()
+    for row in predictions:
+        kickoff = parse_dt(row.get("fecha"))
+        if kickoff:
+            local_year = kickoff.year if kickoff.month >= 7 else kickoff.year - 1
+            seasons.add(local_year)
+    if not seasons:
+        now = datetime.now(timezone.utc)
+        seasons.add(now.year if now.month >= 7 else now.year - 1)
+    for season in sorted(seasons):
+        response = SESSION.get(
+            "https://api.football-data.org/v4/competitions/" + competition + "/matches",
+            headers={"X-Auth-Token": token}, params={"season": season, "limit": 500}, timeout=15,
+        )
+        response.raise_for_status()
+        for match in response.json().get("matches", []):
+            if match.get("id") is not None:
+                states[str(match["id"])] = text(match.get("status")).upper()
     return states
 
 
@@ -250,17 +259,25 @@ def main():
             # that could not be checked, even if no official calendar could be fetched.
             pred_rows = rows(ROOT / SPORTS[name][0])
             for row in pred_rows:
+                kickoff = parse_dt(row.get("fecha"))
+                old_enough = bool(kickoff and datetime.now(timezone.utc) - kickoff >= timedelta(hours=GRACE_HOURS))
+                ticker = text(row.get("ticker"))
+                historical = ticker.upper() in PLACEHOLDER_TICKERS
+                alert = old_enough and not historical
                 all_rows.append({
                     "deporte": name, "prediction_id": text(row.get("prediction_id")),
                     "match_id": text(row.get("match_id")), "fecha": text(row.get("fecha")),
                     "local": text(row.get("local")), "visita": text(row.get("visita")),
-                    "bloque": text(row.get("bloque")), "ticker": text(row.get("ticker")),
+                    "bloque": text(row.get("bloque")), "ticker": ticker,
                     "estado_registrado": "", "estado_partido": "NO_VERIFICADO",
-                    "estado_kalshi": "", "resultado_kalshi": "", "motivo": "estado desconocido",
-                    "clasificacion": "PENDIENTE_ACTIVA", "cuenta_alerta": "SI",
-                    "horas_desde_inicio": "", "resuelto_en": "",
+                    "estado_kalshi": "", "resultado_kalshi": "",
+                    "motivo": "sin ticker (histórico)" if historical else "estado desconocido",
+                    "clasificacion": "HISTORICO_SIN_CONTRATO" if historical else ("PENDIENTE_ACTIVA" if alert else "NO_VERIFICADO"),
+                    "cuenta_alerta": "SI" if alert else "NO",
+                    "horas_desde_inicio": round((datetime.now(timezone.utc)-kickoff).total_seconds()/3600, 2) if kickoff else "",
+                    "resuelto_en": "",
                 })
-                total_pending += 1
+                total_pending += int(alert)
 
     # Always create the report, even with zero rows or if one sport's provider failed.
     with PENDING_REPORT.open("w", newline="", encoding="utf-8") as f:

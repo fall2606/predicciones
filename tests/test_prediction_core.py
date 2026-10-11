@@ -66,7 +66,7 @@ class CoreTests(unittest.TestCase):
    self.assertEqual(rows[0]["marcador"],"Resultado oficial Kalshi: NO")
 
 
- def test_legacy_mlb_rows_without_match_or_probability_are_excluded(self):
+ def test_legacy_mlb_rows_without_match_or_probability_keep_existing_terminal_result(self):
   with tempfile.TemporaryDirectory() as d:
    p,r=Path(d)/"p.csv",Path(d)/"r.csv"
    with p.open("w",newline="",encoding="utf-8") as f:
@@ -79,7 +79,10 @@ class CoreTests(unittest.TestCase):
     summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","resultado_kalshi","marcador","resuelto_en"],side_field="lado")
    self.assertEqual(summary["pendientes_revisadas"],0)
    fetch.assert_not_called()
-   with r.open(encoding="utf-8") as f: self.assertEqual(list(csv.DictReader(f)),[])
+   with r.open(encoding="utf-8") as f:
+    rows=list(csv.DictReader(f))
+   self.assertEqual(len(rows),1)
+   self.assertEqual(rows[0]["estado"],"WIN")
 
 
  def test_line_extraction_and_csv_schema_migration(self):
