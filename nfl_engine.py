@@ -239,6 +239,7 @@ def main():
                          "ALTA_PROBABILIDAD" if row["prediction_id"] in high_ids else
                          "A_TENER_EN_CUENTA" if row["prediction_id"] in value_ids else "DETALLE")
     append_immutable_predictions(PRED_FILE, PRED_COLUMNS, rows, probability_field="probabilidad_modelo")
+    print(f"NFL: títulos de eventos de muestra={[event.get('title', '') for event in events[:5]]}")
     print(f"NFL: eventos abiertos={len(events)}, candidatos modelados={len(candidates)}, capturas nuevas={len(rows)}")
 
 if __name__ == "__main__":
