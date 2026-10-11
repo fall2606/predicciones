@@ -221,7 +221,7 @@ def _trusted_terminal_result(row,result_columns,state_field="estado"):
     marker=str(row.get("marcador",""))
     return marker.startswith("Resultado oficial Kalshi:") or marker.startswith("Contrato anulado/cancelado por Kalshi")
 
-def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_field="lado",ticker_field="ticker",id_field="prediction_id",state_field="estado"):
+def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_field="lado",ticker_field="ticker",id_field="prediction_id",state_field="estado",cancelled_match_ids=()):
     """Recover every old prediction; trust Kalshi's final YES/NO/void outcome."""
     predictions_path=Path(predictions_path); results_path=Path(results_path)
     predictions=read_rows(predictions_path); results=read_rows(results_path)
@@ -237,10 +237,23 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
               if str(r.get(id_field,"")) in valid_prediction_ids
               and _trusted_terminal_result(r,result_columns,state_field)}
     now=utc_now()
+    cancelled_match_ids={str(value) for value in (cancelled_match_ids or ())}
     pending=[]
+    new=[]
+    skipped=0
     for row in predictions:
         pid=str(row.get(id_field,""))
         if pid not in valid_prediction_ids or pid in terminal:
+            continue
+        match_id=str(row.get("match_id","")).strip()
+        if match_id and match_id in cancelled_match_ids:
+            out={id_field:pid,state_field:"ANULADA",
+                 "marcador":"Contrato anulado/cancelado por fuente oficial: partido aplazado o cancelado",
+                 "resuelto_en":utc_now().isoformat()}
+            if "resultado_kalshi" in result_columns:
+                out["resultado_kalshi"]="VOID"
+            new.append(out)
+            terminal.add(pid)
             continue
         kickoff=parse_datetime(row.get("fecha"))
         # Future fixtures do not need a settlement lookup yet. Past fixtures are
@@ -250,7 +263,7 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
         pending.append(row)
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
     # For small backlogs, query exact tickers directly; scanning every settled market in a series is needlessly slow.
-    markets=_market_rows_for_series(series) if len(pending) > 50 else {}; new=[]; skipped=0
+    markets=_market_rows_for_series(series) if len(pending) > 50 else {}
     for row in pending:
         pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip(); market=markets.get(ticker)
         if market is None:
