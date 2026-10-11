@@ -189,19 +189,22 @@ def _tabla_con_resultado(df, columna="Resultado"):
         return ""
     return df.style.map(_color, subset=[columna])
 
-def motivo_sin_sencillas(match_id):
+def motivo_cobertura_bloque(match_id, codigo):
+    columnas = {
+        "SENCILLAS": "motivo_sencillas",
+        "ALTA_PROBABILIDAD": "motivo_alta_probabilidad",
+        "A_TENER_EN_CUENTA": "motivo_a_tener_en_cuenta",
+    }
     try:
         cobertura = pd.read_csv(ROOT / "mlb_cobertura_por_partido.csv", dtype=str).fillna("")
         fila = cobertura[cobertura["match_id"].astype(str).eq(str(match_id))]
         if not fila.empty:
-            motivo = str(fila.iloc[0].get("motivo_si_vacio", "")).strip()
+            motivo = str(fila.iloc[0].get(columnas.get(codigo, ""), "")).strip()
             if motivo:
                 return motivo
     except (OSError, ValueError, KeyError, pd.errors.ParserError):
         pass
-    return "no hay capturas guardadas; comprobar emparejamiento de Kalshi y filtros de precio/probabilidad"
-
-
+    return "sin capturas elegibles registradas; comprobar emparejamiento y filtros del bloque"
 def get_json(path, params):
     response = requests.get(f"{API}/{path}", params=params, timeout=TIMEOUT)
     response.raise_for_status()
@@ -733,24 +736,14 @@ for juego in [juego]:
         def mostrar_bloque_mlb(codigo, titulo, columnas):
             st.markdown(f"### {titulo}")
             if archivadas_partido.empty or "categoria" not in archivadas_partido.columns:
-                if codigo == "SENCILLAS":
-                    st.info("No hay contratos reales modelables archivados para este partido. Motivo: " + motivo_sin_sencillas(game_id_archivo) + ".")
-                else:
-                    st.info(f"No hay capturas de contratos archivadas para {codigo} en este partido.")
+                st.info(f"No hay contratos archivados para {codigo} en este partido. Motivo: {motivo_cobertura_bloque(game_id_archivo, codigo)}.")
                 return
             _mask_bloque = archivadas_partido["bloque"].astype(str).eq(codigo) if "bloque" in archivadas_partido.columns else pd.Series(False, index=archivadas_partido.index)
             if "categoria" in archivadas_partido.columns:
                 _mask_bloque = _mask_bloque | archivadas_partido["categoria"].astype(str).str.startswith(codigo + " · ")
             bloque = archivadas_partido[_mask_bloque].copy()
             if bloque.empty:
-                if codigo == "SENCILLAS":
-                    st.info(
-                        "No hay Sencillas archivadas para este partido: una línea solo se guarda si tiene ticker y probabilidad válidos, "
-                        "precio Kalshi ≤ 88¢, ventaja ≥ 5 puntos porcentuales y no es una línea trivial. "
-                        "Motivo de cobertura: " + motivo_sin_sencillas(game_id_archivo) + "."
-                    )
-                else:
-                    st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados.")
+                st.info(f"No hay selecciones archivadas en {codigo}; no se rellenan con mercados inventados. Motivo: {motivo_cobertura_bloque(game_id_archivo, codigo)}.")
                 return
             game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
             detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
