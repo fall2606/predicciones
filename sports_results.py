@@ -119,13 +119,18 @@ def _football_data_match(row):
     status = str(item.get("status") or "").upper()
     score = item.get("score") or {}
     full = score.get("fullTime") or {}
+    half = score.get("halfTime") or {}
     home, away = full.get("home"), full.get("away")
+    half_home, half_away = half.get("home"), half.get("away")
+    half_home = int(half_home) if half_home is not None else None
+    half_away = int(half_away) if half_away is not None else None
     if home is None or away is None:
         return {
             "confidence": 1.0, "event_id": match_id, "status": status,
             "completed": False, "status_detail": "football-data.org: " + status,
-            "local_score": None, "away_score": None, "league": competition,
-            "event_name": "", "source": "football-data.org",
+            "local_score": None, "away_score": None,
+            "half_local_score": half_home, "half_away_score": half_away,
+            "league": competition, "event_name": "", "source": "football-data.org",
         }
     return {
         "confidence": 1.0, "event_id": match_id,
@@ -133,6 +138,7 @@ def _football_data_match(row):
         "completed": status == "FINISHED",
         "status_detail": "Marcador reglamentario de football-data.org: " + status,
         "local_score": int(home), "away_score": int(away),
+        "half_local_score": half_home, "half_away_score": half_away,
         "league": competition, "event_name": "", "source": "football-data.org",
     }
 
@@ -173,9 +179,21 @@ def find_match(row):
                 continue
             # A reversed home/away mapping is accepted only when both teams still match well.
             if direct >= reverse:
-                local_score, away_score = home.get("score"), away_team.get("score")
+                local_comp, away_comp = home, away_team
             else:
-                local_score, away_score = away_team.get("score"), home.get("score")
+                local_comp, away_comp = away_team, home
+            local_score, away_score = local_comp.get("score"), away_comp.get("score")
+            def first_period_score(competitor):
+                lines = competitor.get("linescores") or []
+                if not isinstance(lines, list) or not lines:
+                    return None
+                value = lines[0].get("value") if isinstance(lines[0], dict) else lines[0]
+                try:
+                    return int(float(value))
+                except (ValueError, TypeError):
+                    return None
+            half_local_score = first_period_score(local_comp)
+            half_away_score = first_period_score(away_comp)
             status = (event.get("status") or {}).get("type") or {}
             candidates.append({
                 "confidence": score, "event_id": str(event.get("id") or ""),
@@ -183,6 +201,7 @@ def find_match(row):
                 "completed": bool(status.get("completed")),
                 "status_detail": str(status.get("detail") or status.get("description") or ""),
                 "local_score": local_score, "away_score": away_score,
+                "half_local_score": half_local_score, "half_away_score": half_away_score,
                 "league": league, "event_name": str(event.get("name") or ""), "source": "ESPN",
             })
     if not candidates:
@@ -238,9 +257,19 @@ def settle_from_score(row):
         line = contract[2]
         home, away = match["local_score"], match["away_score"]
         total = home + away
+        period_label = ""
+        shown_home, shown_away = home, away
+        half_home = match.get("half_local_score")
+        half_away = match.get("half_away_score")
         proposition = None
         if series.endswith("GAME") and outcome in {"local", "visita", "empate"}:
             proposition = home > away if outcome == "local" else away > home if outcome == "visita" else home == away
+        elif series.endswith("1HBTTS") and outcome in {"ambos", "btts"}:
+            if half_home is None or half_away is None:
+                return None
+            proposition = half_home > 0 and half_away > 0
+            period_label = "1.ª parte"
+            shown_home, shown_away = half_home, half_away
         elif series.endswith("BTTS") and outcome in {"ambos", "btts"}:
             proposition = home > 0 and away > 0
         elif series.endswith("TEAMTOTAL") and outcome in {"local", "visita", "home", "away"} and line is not None:
@@ -249,7 +278,27 @@ def settle_from_score(row):
             proposition = team_score > threshold
             if team_score == threshold:
                 return None
-        elif series.endswith("TOTAL") and outcome in {"over", "under"} and line is not None:
+        elif series.endswith("1HTOTAL") and outcome in {"over", "under"} and line is not None:
+            if half_home is None or half_away is None:
+                return None
+            shown_home, shown_away = half_home, half_away
+            total = half_home + half_away
+            threshold = float(line)
+            proposition = total > threshold if outcome == "over" else total < threshold
+            period_label = "1.ª parte"
+            if total == threshold:
+                return None
+        elif series.endswith("2HTOTAL") and outcome in {"over", "under"} and line is not None:
+            if half_home is None or half_away is None:
+                return None
+            shown_home, shown_away = home - half_home, away - half_away
+            total = shown_home + shown_away
+            threshold = float(line)
+            proposition = total > threshold if outcome == "over" else total < threshold
+            period_label = "2.ª parte"
+            if total == threshold:
+                return None
+        elif series.endswith("TOTAL") and "1H" not in series and "2H" not in series and outcome in {"over", "under"} and line is not None:
             threshold = float(line)
             proposition = total > threshold if outcome == "over" else total < threshold
             if total == threshold:
@@ -259,9 +308,10 @@ def settle_from_score(row):
             return None
         won = proposition if str(yes_no).upper() == "YES" else not proposition
         state = "WIN" if won else "LOSS"
+        label = f", {period_label}" if period_label else ""
         return {
             "match": match, "state": state,
-            "reason": f"Marcador independiente ({match.get('source', 'ESPN')}): {home}-{away} (mercado {series}, selección {yes_no})",
+            "reason": f"Marcador independiente ({match.get('source', 'ESPN')}{label}): {shown_home}-{shown_away} (mercado {series}, selección {yes_no})",
         }
     except (ValueError, TypeError, SyntaxError, IndexError):
         return None
