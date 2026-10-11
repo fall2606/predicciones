@@ -1,5 +1,21 @@
 name: Pipeline automático de predicciones
 on:
+  push:
+    branches: [main]
+    paths:
+      - "prediction_core.py"
+      - "mlb_engine.py"
+      - "registrar_laliga.py"
+      - "registrar_champions.py"
+      - "liquidar_mlb.py"
+      - "liquidar_laliga.py"
+      - "liquidar_champions.py"
+      - "laliga_engine.py"
+      - "champions_engine.py"
+      - "pages/MLB.py"
+      - "pages/LaLiga.py"
+      - "pages/Champions.py"
+      - ".github/workflows/pipeline-predicciones.yml"
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
@@ -23,6 +39,8 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencias compartidas
         run: python -m pip install requests pandas numpy scipy streamlit
+      - name: Comprobar sintaxis de todo el sistema
+        run: python -m compileall -q prediction_core.py mlb_engine.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
       - name: Capturar MLB antes del partido
         run: python mlb_engine.py
       - name: Capturar LaLiga antes del partido
