@@ -188,6 +188,11 @@ def main():
     series = sports_series(("KXNFL",))
     if not series:
         raise RuntimeError("No se encontró ninguna serie NFL KXNFL en el catálogo público de Kalshi.")
+    # Skip player props and season futures: this model currently estimates game/team totals only.
+    relevant = [item for item in series if any(token in str(item.get("ticker", "")).upper()
+                for token in ("GAME", "SPREAD", "TOTAL", "TEAMTOTAL"))]
+    if relevant:
+        series = relevant
     events = events_for_series([x["ticker"] for x in series], statuses=("open",))
     stats = _team_stats()
     candidates = build_candidates(events, stats)
