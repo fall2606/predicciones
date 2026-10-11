@@ -646,6 +646,7 @@ if __name__ == "__main__":
         game_events = [
             e for e in events
             if "GAME" in str(e.get("series_ticker") or e.get("event_ticker") or "").upper()
+            and len(_event_teams(e)) == 2
             and (e.get("markets") or [])
         ]
         example = next(({
