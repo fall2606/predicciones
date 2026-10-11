@@ -21,6 +21,9 @@ def main():
     )
     response.raise_for_status()
     run = response.json()
+    if run.get("event") != "schedule":
+        print(f"TIMING ACTIONS: no aplica a evento={run.get('event')}; se mide solo en ejecuciones programadas.")
+        return
     created = dt(run["created_at"])
     started = dt(run.get("run_started_at") or run["created_at"])
     slot = created.replace(minute=(created.minute // 5) * 5, second=0, microsecond=0)
