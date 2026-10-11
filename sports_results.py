@@ -144,6 +144,7 @@ def _football_data_match(row):
             "status": "STATUS_FINAL" if status == "FINISHED" else status,
             "completed": status == "FINISHED",
             "status_detail": "Marcador reglamentario de football-data.org: " + status,
+            "goals": item.get("goals") or [],
             "local_score": int(home_score) if home_score is not None else None,
             "away_score": int(away_score) if away_score is not None else None,
             "half_local_score": int(half_home) if half_home is not None else None,
@@ -182,6 +183,33 @@ def _espn_summary(event_id, league):
     _SUMMARY_CACHE[key] = (time.monotonic(), payload)
     return payload
 
+
+
+def _first_scoring_team_from_goals(goals):
+    """Return the first goal's team from football-data.org, only with unambiguous official data."""
+    if not isinstance(goals, list) or not goals:
+        return None
+    ordered = []
+    for goal in goals:
+        if not isinstance(goal, dict):
+            continue
+        team = goal.get("team") or {}
+        name = team.get("name") or team.get("shortName") or team.get("tla") or ""
+        if not name:
+            continue
+        try:
+            minute = int(goal.get("minute") or 0)
+            injury = int(goal.get("injuryTime") or 0)
+        except (TypeError, ValueError):
+            continue
+        ordered.append(((minute, injury), str(name)))
+    if not ordered:
+        return None
+    ordered.sort(key=lambda item: item[0])
+    # If the feed gives two teams at the same earliest timestamp, don't guess.
+    earliest = ordered[0][0]
+    teams = {name for stamp, name in ordered if stamp == earliest}
+    return next(iter(teams)) if len(teams) == 1 else None
 
 def _summary_first_scoring_team(summary):
     """Return the first scoring team's name only when ESPN exposes an ordered scorer list."""
@@ -363,11 +391,15 @@ def settle_from_score(row):
             if total == 0:
                 proposition = False
             else:
-                espn_match = find_match(row)
-                if not espn_match or not espn_match.get("event_id"):
-                    return None
-                summary = _espn_summary(espn_match["event_id"], espn_match.get("league"))
-                first_team = _summary_first_scoring_team(summary)
+                # Prefer the official football-data.org goal events; use ESPN's ordered
+                # scoring plays only as a fallback when the official feed lacks scorer teams.
+                first_team = _first_scoring_team_from_goals(match.get("goals"))
+                if not first_team:
+                    espn_match = find_match(row)
+                    if not espn_match or not espn_match.get("event_id"):
+                        return None
+                    summary = _espn_summary(espn_match["event_id"], espn_match.get("league"))
+                    first_team = _summary_first_scoring_team(summary)
                 if not first_team:
                     return None
                 if _similar(first_team, str(row.get("local") or "")) >= 0.78:
