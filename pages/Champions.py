@@ -216,7 +216,7 @@ st.markdown(
     f"{local}: {resumen_forma(local, modelo_objetivo, fecha_objetivo)}  ·  "
     f"{visita}: {resumen_forma(visita, modelo_objetivo, fecha_objetivo)}"
 )
-st.markdown("### Resumen sencillo del partido")
+st.markdown("### 5 posibles sencillas para el partido")
 if resumen_archivado:
     st.caption("Se muestra la última captura guardada antes del inicio; las anteriores permanecen inmutables y se pueden comparar abajo.")
 elif partido_cerrado:
@@ -224,7 +224,7 @@ elif partido_cerrado:
 else:
     st.caption("Estimación en vivo. La captura automática se guarda cada dos horas; la hora de la última captura se muestra cuando esté disponible.")
 # Salvaguarda también las capturas históricas: las sencillas siempre respetan el filtro de valor.
-resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=10)
+resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=5)
 if resumen_sencillo_kalshi:
     for jugada in resumen_sencillo_kalshi:
         with st.container(border=True):
