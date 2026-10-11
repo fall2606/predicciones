@@ -1,14 +1,7 @@
 name: Liquidación automática MLB
 on:
-  push:
-    branches: [main]
-    paths:
-      - "prediction_core.py"
-      - "liquidar_mlb.py"
-      - ".github/workflows/liquidar-mlb.yml"
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
+
 permissions:
   contents: write
 concurrency:

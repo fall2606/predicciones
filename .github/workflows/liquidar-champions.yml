@@ -1,14 +1,6 @@
 name: Liquidación automática de Champions League
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "prediction_core.py"
-      - "liquidar_champions.py"
-      - ".github/workflows/liquidar-champions.yml"
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 permissions:

@@ -1,15 +1,6 @@
 name: Historial inmutable MLB
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "prediction_core.py"
-      - "registrar_mlb.py"
-      - "mlb_engine.py"
-      - ".github/workflows/registrar-mlb.yml"
-  schedule:
-    - cron: "3,18,33,48 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -17,7 +8,7 @@ permissions:
 
 concurrency:
   group: predicciones-main
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   registrar:
