@@ -363,6 +363,9 @@ def main():
     captured = now.isoformat()
     by_match = {}
     event_count = 0
+    unmatched_event_count = 0
+    unsupported_market_count = 0
+    modelable_market_count = 0
 
     # Model every actual, match-specific Kalshi market that this model supports.
     # Unmodelled contracts are deliberately excluded instead of being saved as NaN/blank picks.
@@ -376,7 +379,10 @@ def main():
         if not markets:
             continue
         game = encontrar_partido(event, games)
-        if not game or game.get("status") != "Preview":
+        if not game:
+            unmatched_event_count += 1
+            continue
+        if game.get("status") != "Preview":
             continue
         event_count += 1
         for market in markets:
@@ -389,7 +395,9 @@ def main():
             category = clasificar(market["series_ticker"], market)
             p_yes, model_state = mercado_probabilidad(market, game)
             if valid_probability(p_yes) is None:
+                unsupported_market_count += 1
                 continue
+            modelable_market_count += 1
             yes_price = _price(market, "yes_ask_dollars")
             no_price = _price(market, "no_ask_dollars")
             kickoff = game.get("date") or event.get("start_time") or event.get("expected_expiration_time") or ""
@@ -491,25 +499,4 @@ def main():
     capture_summary = append_immutable_predictions(
         PRED_FILE, PRED_COLUMNS, new_rows, probability_field="probabilidad_modelo"
     )
-    print(f"Eventos MLB: {event_count} | capturas aceptadas: {capture_summary['accepted']} | "
-          f"descartadas: {capture_summary['rejected']}. Los resultados solo los escribe liquidar_mlb.py.")
-
-
-
-def _price(market, *keys):
-    for key in keys:
-        value = market.get(key)
-        try:
-            if value not in (None, ""):
-                p = float(value)
-                if p > 1:
-                    p /= 100
-                if 0 < p < 1:
-                    return p
-        except (ValueError, TypeError):
-            pass
-    return None
-
-
-if __name__ == "__main__":
-    main()
+    print("Eventos MLB emparejados: {} | eventos sin partido StatsAPI coincidente: {} | contratos sin modelo específico/datos finitos: {} | contratos modelables: {} | capturas aceptadas: {} | descartadas: {}. Los resultados solo los escribe liquidar_mlb.py.".format(event_count, unmatched_event_count, unsupported_market_count, modelable_market_count, capture_summary["accepted"], capture_summary["rejected"]))
