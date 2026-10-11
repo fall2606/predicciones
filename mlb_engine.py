@@ -1,5 +1,6 @@
 """MLB/Kalshi forecasts and append-only prediction settlement ledger."""
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 import csv
 import math
@@ -387,42 +388,88 @@ def _team_matches_event(name, event_ticker, title):
 def motivo_evento_sin_partido(event, games):
     title = normalizar(event.get("title") or event.get("sub_title") or "")
     ticker = str(event.get("event_ticker") or "").upper()
-    series = normalizar(event.get("series_ticker") or "")
-    if any(token in series or token in title for token in
-           ("player", "strikeout", "homerun", "home run", "total bases", "pitcher", "mvp", "award", "division", "series winner", "champion", "kxmlbhr", "kxmlbtb", "kxmlbrbi", "kxmlbsb", "kxmlbouts", "kxmlber", "kxmlbwalk")):
-        return "mercado_no_partido/prop"
+    series_raw = str(event.get("series_ticker") or "").upper()
+    series = normalizar(series_raw)
+    if series_raw.startswith("KXMLBBGAME"):
+        return "no_es_MLB/otra_competicion (serie KXMLBBGAME)"
+    # MLB futures, awards, player props, and debut-date markets are not single-game markets.
+    non_game_prefixes = (
+        "KXMLB-", "KXMLBAL-", "KXMLBNL-", "KXMLBALCY", "KXMLBNLCY",
+        "KXMLBALMOTY", "KXMLBNLMOTY", "KXMLBALRELOTY", "KXMLBNLRELOTY",
+        "KXMLBALROTY", "KXMLBNLROTY", "KXMLBALCPOTY", "KXMLBNLCPOTY",
+        "KXMLBALHAARON", "KXMLBNLHAARON", "KXMLBGG", "KXMLBDEBUT",
+        "KXMLBCHAMPLEAGUE", "KXMLBHR", "KXMLBTB", "KXMLBRBI",
+        "KXMLBSB", "KXMLBOUTS", "KXMLBER", "KXMLBERA", "KXMLBWALK",
+        "KXMLBPLAYER", "KXCOACHOUTMLBDATE",
+    )
+    if series_raw.startswith(non_game_prefixes) or any(token in title for token in
+        ("cy young", "manager of the year", "rookie of the year", "comeback player", "hank aaron", "gold glove", "debut date", "next team", "champion")):
+        return "mercado_no_partido/futuro_premio_o_prop"
     matched = sum(
         any(_team_matches_event(team, ticker, title) for team in (game["home"], game["away"]))
         for game in games
     )
     if matched:
-        return "equipo_identificado_sin_emparejamiento_unico_o_fecha"
-    if any(token in series or token in title for token in ("game", "moneyline", "spread", "runline", "total")):
+        return "equipos_identificados_pero_fecha_o_hora_ambigua"
+    if any(token in series or token in title for token in ("game", "moneyline", "spread", "runline", "total", "inning", "f5")):
         return "aparenta_mercado_de_partido_pero_no_hay_alias_suficiente"
     return "evento_no_identificado/otro"
+
+
+def _event_datetime(event):
+    ticker = str(event.get("event_ticker") or "").upper()
+    # Kalshi baseball tickers encode scheduled Eastern time, e.g. 26OCT112000.
+    match = re.search(r"-(\d{2})(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(\d{2})(\d{4})", ticker)
+    if match:
+        try:
+            local = datetime.strptime("".join(match.groups()), "%y%b%d%H%M").replace(tzinfo=ZoneInfo("America/New_York"))
+            return local.astimezone(timezone.utc)
+        except ValueError:
+            pass
+    for field in ("start_time", "expected_expiration_time", "strike_date"):
+        raw = str(event.get(field) or "")
+        if not raw:
+            continue
+        try:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc)
+        except ValueError:
+            try:
+                return datetime.fromisoformat(raw[:10]).replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
+    return None
 
 
 def encontrar_partido(event, games):
     title = normalizar(event.get("title") or event.get("sub_title") or "")
     event_ticker = str(event.get("event_ticker") or "").upper()
-    event_date = str(event.get("strike_date") or event.get("expected_expiration_time") or event.get("start_time") or "")[:10]
+    event_dt = _event_datetime(event)
     ranked = []
     for game in games:
         score = int(_team_matches_event(game["home"], event_ticker, title)) + int(_team_matches_event(game["away"], event_ticker, title))
         if score != 2:
             continue
         try:
-            delta = abs((datetime.fromisoformat(game["date"].replace("Z", "+00:00")).date()
-                         - datetime.fromisoformat(event_date).date()).days) if event_date else 0
-        except ValueError:
-            delta = 0
-        if event_date and delta > 1:
+            game_dt = datetime.fromisoformat(game["date"].replace("Z", "+00:00"))
+            if game_dt.tzinfo is None:
+                game_dt = game_dt.replace(tzinfo=timezone.utc)
+            game_dt = game_dt.astimezone(timezone.utc)
+        except (ValueError, TypeError):
             continue
-        ranked.append((delta, game))
+        if event_dt:
+            delta_seconds = abs((game_dt - event_dt).total_seconds())
+            if delta_seconds > 12 * 3600:
+                continue
+            ranked.append((delta_seconds, game))
+        else:
+            ranked.append((0.0, game))
     ranked.sort(key=lambda item: item[0])
     if not ranked:
         return None
-    if len(ranked) > 1 and ranked[0][0] == ranked[1][0] and ranked[0][1]["id"] != ranked[1][1]["id"]:
+    if len(ranked) > 1 and abs(ranked[0][0] - ranked[1][0]) < 60 and ranked[0][1]["id"] != ranked[1][1]["id"]:
         return None
     return ranked[0][1]
 
