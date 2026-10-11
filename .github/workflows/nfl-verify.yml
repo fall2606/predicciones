@@ -1,0 +1,56 @@
+name: Verificación NFL y regresión del proyecto
+on:
+  push:
+    branches: ["feature/nfl-kalshi-model"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: predicciones-main
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements.txt pytest
+      - name: Sintaxis de todos los módulos y páginas
+        run: python -m compileall -q .
+      - name: Importación de todos los motores
+        run: |
+          python - <<'PY'
+          import champions_engine, laliga_engine, mlb_engine, nfl_engine, prediction_core, sports_results
+          print("IMPORT_OK: champions_engine, laliga_engine, mlb_engine, nfl_engine, prediction_core, sports_results")
+          PY
+      - name: Carga de CSV reales de todas las competiciones
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          required = {
+              "LaLiga": ("predicciones_laliga.csv", "resultados_laliga.csv"),
+              "Champions": ("predicciones_champions.csv", "resultados_champions.csv"),
+              "MLB": ("predicciones_mlb.csv", "resultados_mlb.csv"),
+              "NFL": ("predicciones_nfl.csv", "resultados_nfl.csv"),
+          }
+          for sport, paths in required.items():
+              for name in paths:
+                  path = Path(name)
+                  if not path.exists():
+                      if sport == "NFL":
+                          continue
+                      raise AssertionError(f"{sport}: falta CSV existente {name}")
+                  with path.open(newline="", encoding="utf-8-sig") as f:
+                      rows = list(csv.DictReader(f))
+                  print(f"CSV_OK {sport}/{name}: {len(rows)} registros")
+          PY
+      - name: Pruebas de regresión NFL
+        run: python -m pytest -q tests/test_nfl_engine.py
