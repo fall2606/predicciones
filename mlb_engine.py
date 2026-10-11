@@ -41,7 +41,7 @@ def codigo_equipo_mlb(nombre):
 PRED_COLUMNS = [
     "prediction_id", "event_ticker", "ticker", "match_id", "fecha", "local", "visita",
     "categoria", "mercado", "line", "lado", "seleccion", "bloque", "probabilidad_modelo", "precio_captura",
-    "probabilidad_implicita", "edge", "estado_modelo", "reglas", "capturado_en",
+    "probabilidad_implicita", "edge", "estado_modelo", "reglas", "capturado_en", "disponibilidad",
 ]
 RESULT_COLUMNS = ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"]
 
@@ -381,7 +381,7 @@ def main():
             continue
         event_count += 1
         for market in markets:
-            if market.get("status") not in (None, "active", "open"):
+            if market.get("status") not in (None, "active", "open", "unopened"):
                 continue
             ticker = str(market.get("ticker") or "")
             if not ticker:
@@ -414,6 +414,7 @@ def main():
                     "bloque": "",
                     "probabilidad_modelo": f"{probability:.8f}",
                     "precio_captura": f"{price:.6f}" if price is not None else "",
+                    "disponibilidad": "Disponible en Kalshi" if price is not None else "Sin precio en Kalshi",
                     "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
                     "edge": f"{edge:.6f}" if edge is not None else "",
                     "estado_modelo": model_state,

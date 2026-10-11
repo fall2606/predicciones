@@ -46,6 +46,13 @@ class MLBThreeBlocksTests(unittest.TestCase):
                 "yes_ask_dollars": "0.50",
                 "no_ask_dollars": "0.50",
             })
+        markets.append({
+            "ticker": "KXMLBTOTAL-26OCT12NYYBOS-UNOPENED",
+            "series_ticker": "KXMLBTOTAL",
+            "title": "Over 10.5 total runs",
+            "yes_sub_title": "Over 10.5 total runs",
+            "status": "unopened",
+        })
         event = {
             "event_ticker": "KXMLBGAME-26OCT12NYYBOS",
             "title": "New York Yankees vs Boston Red Sox",
@@ -55,7 +62,8 @@ class MLBThreeBlocksTests(unittest.TestCase):
 
         def ranked(rows, min_probability=0.65, high_limit=5, value_limit=10):
             ordered = sorted(rows, key=lambda row: row["_p"], reverse=True)
-            return ordered[:high_limit], ordered[:value_limit]
+            priced = [row for row in ordered if row["_row"].get("precio_captura")]
+            return ordered[:high_limit], priced[:value_limit]
 
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "predicciones_mlb.csv"
@@ -63,7 +71,7 @@ class MLBThreeBlocksTests(unittest.TestCase):
                  patch.object(mlb_engine, "partidos_proximos", return_value=([game], {})), \
                  patch.object(mlb_engine, "series_mlb", return_value=["KXMLBGAME"]), \
                  patch.object(mlb_engine, "eventos_mlb", return_value=[event]), \
-                 patch.object(mlb_engine, "mercado_probabilidad", return_value=(0.72, "modelado")), \
+                 patch.object(mlb_engine, "mercado_probabilidad", side_effect=lambda market, game: (0.99 if market.get("status") == "unopened" else 0.72, "modelado")), \
                  patch.object(mlb_engine, "rank_market_candidates", side_effect=ranked):
                 mlb_engine.main()
             with path.open(newline="", encoding="utf-8") as f:
@@ -78,6 +86,10 @@ class MLBThreeBlocksTests(unittest.TestCase):
         self.assertEqual(counts.get("ALTA_PROBABILIDAD"), 5)
         self.assertEqual(counts.get("A_TENER_EN_CUENTA"), 10)
         self.assertGreater(counts.get("SENCILLAS", 0), 0)
+        unpriced = [r for r in rows if r["ticker"] == "KXMLBTOTAL-26OCT12NYYBOS-UNOPENED"]
+        self.assertTrue(unpriced)
+        self.assertTrue(all(r["disponibilidad"] == "Sin precio en Kalshi" for r in unpriced))
+        self.assertTrue(all(r["precio_captura"] == "" and r["edge"] == "" for r in unpriced))
 
 
 if __name__ == "__main__":

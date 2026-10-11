@@ -27,7 +27,7 @@ CURRENT_MLB = [
     "prediction_id", "event_ticker", "ticker", "match_id", "fecha", "local", "visita",
     "categoria", "mercado", "line", "lado", "seleccion", "bloque",
     "probabilidad_modelo", "precio_captura", "probabilidad_implicita", "edge",
-    "estado_modelo", "reglas", "capturado_en",
+    "estado_modelo", "reglas", "capturado_en", "disponibilidad",
 ]
 
 
@@ -64,6 +64,9 @@ def _metadata(row):
         except (ValueError, SyntaxError, TypeError):
             side = ""
     row["seleccion"] = side if side in {"YES", "NO"} else ""
+    if ("estado_modelo" in row or "precio_captura" in row) and not str(row.get("disponibilidad", "")).strip():
+        price = str(row.get("precio_captura", "")).strip()
+        row["disponibilidad"] = "Disponible en Kalshi" if price else "Sin precio en Kalshi"
     category = str(row.get("categoria", "") or "")
     block = str(row.get("bloque", "") or "").strip()
     if block not in {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}:

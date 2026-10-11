@@ -566,7 +566,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
     plantillas, ofertas_actuales, mercados_actuales = set(), {}, []
     for evento in eventos:
         for mercado in evento.get("markets", []):
-            if mercado.get("status") not in {None, "active", "open"}:
+            if mercado.get("status") not in {None, "active", "open", "unopened"}:
                 continue
             plantilla = clave_plantilla_kalshi(evento, mercado)
             if plantilla:
