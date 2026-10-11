@@ -50,6 +50,15 @@ class FirstInningWinnerTests(unittest.TestCase):
         self.assertIsNotNone(match)
         self.assertEqual(match["id"], "early")
 
+    def test_signed_run_line_has_distinct_probabilities(self):
+        plus = {"ticker": "KXMLBRUNLINE-26OCT112000LADMIL-LAD", "series_ticker": "KXMLBRUNLINE", "title": "Los Angeles Dodgers +1.5 run line"}
+        minus = {"ticker": "KXMLBRUNLINE-26OCT112000LADMIL-LAD", "series_ticker": "KXMLBRUNLINE", "title": "Los Angeles Dodgers -1.5 run line"}
+        p_plus, _ = mercado_probabilidad(plus, self.game)
+        p_minus, _ = mercado_probabilidad(minus, self.game)
+        self.assertIsNotNone(p_plus)
+        self.assertIsNotNone(p_minus)
+        self.assertGreater(p_plus, p_minus)
+
     def test_esports_series_is_classified_as_not_mlb(self):
         event = {"event_ticker": "KXMLBBGAME-26OCT110230VAMFL", "series_ticker": "KXMLBBGAME", "title": "Team Vamos vs. Team Flash"}
         self.assertIn("no_es_MLB", motivo_evento_sin_partido(event, []))
