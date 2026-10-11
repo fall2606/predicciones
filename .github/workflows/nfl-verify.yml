@@ -10,7 +10,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -75,5 +75,6 @@ jobs:
             nfl_backtest_resumen.csv
             nfl_calibracion.json
           if-no-files-found: warn
-      - name: Catálogo real de Kalshi NFL
-        run: python nfl_engine.py catalog-smoke
+      - name: Ciclo NFL real: captura próxima, congelado y liquidación histórica
+        timeout-minutes: 8
+        run: python scripts/verify_nfl_cycle.py
