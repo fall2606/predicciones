@@ -55,7 +55,7 @@ def _team_stats(days=100):
                 an = _norm(away.get("team", {}).get("displayName") or away.get("team", {}).get("name"))
                 game_date = str(event.get("date") or "")
                 if hn and an and game_date:
-                    SCHEDULES[tuple(sorted((hn, an)))] = game_date
+                    SCHEDULES.setdefault(tuple(sorted((hn, an))), []).append(game_date)
                 if not (event.get("competitions") or [{}])[0].get("status", {}).get("type", {}).get("completed"):
                     continue
                 hs, aws = float(home["score"]), float(away["score"])
@@ -176,12 +176,33 @@ def _parse_datetime(value):
         return None
     return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
 
-def _scheduled_kickoff(home, away, stats):
+def _ticker_date(value):
+    match = re.search(r"-(\\d{2}[A-Z]{3}\\d{2})", str(value or "").upper())
+    if not match:
+        return None
+    try:
+        return datetime.strptime(match.group(1), "%y%b%d").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+def _scheduled_kickoff(home, away, stats, ticker_or_date=None):
     h, a = _match_team(home, stats), _match_team(away, stats)
     if not h or not a:
         return None
-    value = SCHEDULES.get(tuple(sorted((h, a))))
-    return _parse_datetime(value) if value else None
+    values = SCHEDULES.get(tuple(sorted((h, a))), [])
+    if isinstance(values, str):
+        values = [values]
+    candidates = [dt for dt in (_parse_datetime(value) for value in values) if dt is not None]
+    if not candidates:
+        return None
+    target = _parse_datetime(ticker_or_date) if ticker_or_date else None
+    if target is None:
+        target = _ticker_date(ticker_or_date)
+    if target is not None:
+        return min(candidates, key=lambda dt: abs((dt-target).total_seconds()))
+    now = datetime.now(timezone.utc)
+    future = [dt for dt in candidates if dt > now]
+    return min(future, key=lambda dt: dt) if future else max(candidates)
 
 def _event_start(event):
     for field in ("start_time", "strike_date", "start_date"):
@@ -246,7 +267,7 @@ def reconcile_exclusions(stats):
         market_ticker = str(row.get("ticker") or "").upper()
         period_pattern = r"KXNFL(?:1H|2H|1Q|2Q|3Q|4Q|Q1|Q2|Q3|Q4)"
         period_contract = bool(re.search(period_pattern, event_ticker) or re.search(period_pattern, market_ticker))
-        kickoff = _scheduled_kickoff(row.get("local"), row.get("visita"), stats)
+        kickoff = _scheduled_kickoff(row.get("local"), row.get("visita"), stats, row.get("event_ticker") or row.get("ticker"))
         captured = _parse_datetime(row.get("capturado_en"))
         late_capture = kickoff is not None and captured is not None and captured >= kickoff
         if not period_contract and not late_capture:
@@ -281,7 +302,7 @@ def build_candidates(events, stats):
             continue
         home, away = parts[0].strip(), parts[1].strip()
         start = event.get("start_time") or event.get("strike_date") or event.get("start_date")
-        kickoff = _parse_datetime(start) if start else _scheduled_kickoff(home, away, stats)
+        kickoff = _parse_datetime(start) if start else _scheduled_kickoff(home, away, stats, event.get("event_ticker"))
         if kickoff is None:
             continue
         if kickoff <= now or kickoff > now + timedelta(days=14):
