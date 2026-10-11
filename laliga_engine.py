@@ -993,7 +993,7 @@ def leer_historial_fijo():
     columnas_pred = [
         "prediction_id", "match_id", "fecha", "local", "visita", "categoria",
         "jugada", "probabilidad_base", "probabilidad_calibrada", "calibracion", "precio", "disponibilidad", "ticker",
-        "clave_interna", "capturado_en",
+        "mercado", "line", "seleccion", "bloque", "edge", "clave_interna", "capturado_en",
     ]
     columnas_res = ["prediction_id", "estado", "marcador", "resuelto_en"]
     predicciones = pd.DataFrame(read_csv_rows_resilient(PREDICCIONES_ARCHIVO), columns=columnas_pred)
