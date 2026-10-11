@@ -190,6 +190,9 @@ try:
         resultado_en_vivo, corners_en_vivo, datos_partido["proporcion_primera"],
     )
     resumen_sencillo_kalshi = calibrar_resumen(resumen_sencillo_kalshi, predicciones_guardadas, resultados_guardados)
+    # La misma calibración histórica debe alimentar también combos y el bloque de valor,
+    # no solamente el resumen sencillo. Conserva las probabilidades base y recalcula edge.
+    todas_kalshi = calibrar_resumen(todas_kalshi, predicciones_guardadas, resultados_guardados)
 except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = [], [], 0
     resumen_sencillo_kalshi, margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], [], [], [], [], [], 0
