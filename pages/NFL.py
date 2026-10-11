@@ -120,7 +120,12 @@ def mostrar_tarjeta(row):
         c1.metric("Probabilidad del modelo", probabilidad(row.get("probabilidad_modelo")))
         c2.metric("Precio de Kalshi", centavos(row.get("precio_captura")))
         c3.metric("Ventaja", puntos_porcentuales(row.get("edge")))
-        st.markdown(f"**Resultado:** {state}")
+        colors = {
+            "PENDIENTE": "#777777", "WIN": "#218838", "LOSS": "#c82333",
+            "ANULADA": "#6f42c1", "SIN LIQUIDAR": "#b21f2d",
+        }
+        color = colors.get(state, "#777777")
+        st.markdown(f'**Resultado:** <span style="background:{color};color:white;padding:3px 8px;border-radius:5px;font-weight:700">{state}</span>', unsafe_allow_html=True)
         st.caption(f"{categoria_legible(row.get('categoria'))} · Ticker: {row.get('ticker') or '—'}")
 
 
@@ -210,7 +215,7 @@ else:
     predicciones["resultado_mostrar"] = pd.Series(dtype=str)
 
 try:
-    calendario = cargar_calendario_nfl()
+    calendario = [] if os.getenv("NFL_PAGE_TEST_MODE") == "1" else cargar_calendario_nfl()
 except Exception as exc:
     calendario = []
     st.warning(f"No se pudo cargar el calendario NFL ahora mismo. Las predicciones guardadas siguen disponibles. Detalle: {exc}")
