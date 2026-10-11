@@ -29,6 +29,17 @@ def test_model_probabilities_are_finite_and_bounded():
     assert abs(float(pred["total_probs"].sum()) - 1) < 1e-9
 
 
+def test_rest_days_are_measured_from_prior_games_and_used_for_upcoming_kickoff():
+    model = nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z")
+    assert model["teams"]["KC"]["last_game_date"]
+    assert model["teams"]["BAL"]["last_game_date"]
+    assert math.isfinite(model["rest_effect_points_per_day"])
+    pred = nfl.predict_game(model, "KC", "BAL", kickoff="2024-10-06T17:00:00Z")
+    assert pred is not None
+    assert pred["rest_difference_days"] != 0
+    assert math.isfinite(pred["rest_adjustment_points"])
+
+
 def test_market_semantics_are_conservative():
     game = {"home": "KC", "away": "BAL"}
     pred = nfl.predict_game(nfl.build_team_model(sample_games(), as_of="2025-01-01T00:00:00Z"), "KC", "BAL")
