@@ -32,7 +32,7 @@ class CoreTests(unittest.TestCase):
      w.writerow({"prediction_id":pid,"ticker":ticker,"lado":side,"fecha":old,"capturado_en":old,"probabilidad_modelo":"0.6"})
    fake={"KXTEST-YES":{"ticker":"KXTEST-YES","status":"settled","result":"yes"},"KXTEST-NO":{"ticker":"KXTEST-NO","status":"settled","result":"yes"},"KXTEST-VOID":{"ticker":"KXTEST-VOID","status":"settled","result":"void"}}
    cols=["prediction_id","estado","marcador","resuelto_en","resultado_kalshi"]
-   with patch.object(core,"_market_rows_for_series",return_value=fake): s=core.liquidate_kalshi_ledger(p,r,cols,side_field="lado")
+   with patch.object(core,"kalshi_get",side_effect=lambda path: {"market": fake[path.split("/",1)[1]]}): s=core.liquidate_kalshi_ledger(p,r,cols,side_field="lado")
    self.assertEqual((s["win"],s["loss"],s["anuladas"]),(1,1,1))
    with r.open(encoding="utf-8") as f: rows={x["prediction_id"]:x for x in csv.DictReader(f)}
    self.assertEqual(rows["yes"]["estado"],"WIN"); self.assertEqual(rows["no"]["estado"],"LOSS"); self.assertEqual(rows["void"]["estado"],"ANULADA")
@@ -56,7 +56,7 @@ class CoreTests(unittest.TestCase):
    with r.open("w",newline="",encoding="utf-8") as f:
     w=csv.DictWriter(f,fieldnames=["prediction_id","estado","marcador","resuelto_en"]); w.writeheader()
     w.writerow({"prediction_id":"legacy","estado":"WIN","marcador":"3-0","resuelto_en":old})
-   with patch.object(core,"_market_rows_for_series",return_value={"KXTEST-REAL":{"ticker":"KXTEST-REAL","status":"settled","result":"no"}}):
+   with patch.object(core,"kalshi_get",return_value={"market":{"ticker":"KXTEST-REAL","status":"settled","result":"no"}}):
     summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado")
    self.assertEqual(summary["loss"],1)
    with r.open(encoding="utf-8") as f: rows=list(csv.DictReader(f))
@@ -131,7 +131,7 @@ class CoreTests(unittest.TestCase):
     w=csv.DictWriter(f,fieldnames=["prediction_id","estado","marcador","resuelto_en"]); w.writeheader()
     w.writerow({"prediction_id":"old","estado":"NO_EVALUABLE","marcador":"No había estadística","resuelto_en":old})
    settled={"KXTEST-VOIDLEGACY":{"ticker":"KXTEST-VOIDLEGACY","status":"settled","result":"yes"}}
-   with patch.object(core,"_market_rows_for_series",return_value=settled):
+   with patch.object(core,"kalshi_get",return_value={"market":settled["KXTEST-VOIDLEGACY"]}):
     summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado")
    with r.open(encoding="utf-8") as f: rows=list(csv.DictReader(f))
    self.assertEqual(summary["win"],1)

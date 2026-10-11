@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 import numpy as np
 
 import mlb_engine
@@ -40,6 +41,33 @@ class MLBMarketMatchingTests(unittest.TestCase):
         self.assertLessEqual(probability, 1)
         # Lower-triangle home win mass (0.1) plus half of tie mass (0.6).
         self.assertAlmostEqual(probability, 0.4)
+
+    def test_per_inning_total_is_not_misclassified_as_full_game_total(self):
+        game = {
+            "home": "Los Angeles Dodgers",
+            "away": "Milwaukee Brewers",
+            "axis": np.arange(0, 26),
+            "matrix": np.outer(np.ones(26) / 26, np.ones(26) / 26),
+        }
+        market = {
+            "ticker": "KXMLBINNINGTOTAL-26OCT112000LADMIL-2-1",
+            "series_ticker": "KXMLBINNINGTOTAL",
+            "title": "Over 1.5 runs in inning 2",
+        }
+        self.assertEqual(mlb_engine.clasificar(market["series_ticker"], market), "Entrada individual")
+        probability, reason = mlb_engine.mercado_probabilidad(market, game)
+        self.assertIsNone(probability)
+        self.assertEqual(reason, "sin_modelo_especifico")
+
+    def test_series_level_and_expansion_series_are_not_match_capture_sources(self):
+        items = [
+            {"ticker": "KXMLBGAME", "title": "MLB Game", "tags": ["sports"]},
+            {"ticker": "KXMLBSERIESGAMES", "title": "MLB Series Games", "tags": ["sports"]},
+            {"ticker": "KXMLBINNINGTOTAL", "title": "MLB inning total", "tags": ["sports"]},
+            {"ticker": "KXCITYMLBEXPAND", "title": "MLB expansion", "tags": ["sports"]},
+        ]
+        with patch.object(mlb_engine, "sports_series", return_value=items):
+            self.assertEqual(mlb_engine.series_mlb(), ["KXMLBGAME"])
 
 
 if __name__ == "__main__":

@@ -239,7 +239,8 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     pending=[r for r in predictions if str(r.get(id_field,"")) in valid_prediction_ids
              and str(r.get(id_field,"")) not in terminal]
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
-    markets=_market_rows_for_series(series); new=[]; skipped=0
+    # For small backlogs, query exact tickers directly; scanning every settled market in a series is needlessly slow.
+    markets=_market_rows_for_series(series) if len(pending) > 50 else {}; new=[]; skipped=0
     for row in pending:
         pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip(); market=markets.get(ticker)
         if market is None:

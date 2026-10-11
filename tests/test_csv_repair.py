@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from scripts.reparar_csv_predicciones import (
-    CURRENT_FOOTBALL, LEGACY_FOOTBALL, repair_file,
+    CURRENT_FOOTBALL, LEGACY_FOOTBALL, CURRENT_MLB, LEGACY_MLB, repair_file,
 )
 
 
@@ -58,6 +58,29 @@ class CSVRepairTests(unittest.TestCase):
             self.assertEqual(rows[1]["capturado_en"], new["capturado_en"])
             second = repair_file(path, CURRENT_FOOTBALL, LEGACY_FOOTBALL)
             self.assertFalse(second["repaired"])
+
+    def test_wrong_match_markets_are_removed_only_before_kickoff(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "predicciones_mlb.csv"
+            kickoff = (datetime.now(timezone.utc) + timedelta(hours=8)).isoformat()
+            row = {
+                "prediction_id": "bad-series-market", "event_ticker": "KXMLBSERIESGAMES-TEST",
+                "ticker": "KXMLBSERIESGAMES-TEST-7", "match_id": "game-1", "fecha": kickoff,
+                "local": "A", "visita": "B", "categoria": "ALTA_PROBABILIDAD · Total",
+                "mercado": "Series total games", "line": "6.5", "lado": "YES", "seleccion": "YES",
+                "bloque": "ALTA_PROBABILIDAD", "probabilidad_modelo": "0.8",
+                "precio_captura": "0.5", "probabilidad_implicita": "0.5", "edge": "0.3",
+                "estado_modelo": "modelado", "reglas": "", "capturado_en": datetime.now(timezone.utc).isoformat(),
+            }
+            with path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=CURRENT_MLB)
+                writer.writeheader()
+                writer.writerow(row)
+            summary = repair_file(path, CURRENT_MLB, LEGACY_MLB)
+            self.assertEqual(summary["removed_invalid_pregame"], 1)
+            with path.open(newline="", encoding="utf-8") as f:
+                self.assertEqual(list(csv.DictReader(f)), [])
 
 
 if __name__ == "__main__":

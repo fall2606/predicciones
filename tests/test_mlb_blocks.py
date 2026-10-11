@@ -26,7 +26,7 @@ class MLBThreeBlocksTests(unittest.TestCase):
             ("KXMLBBTTS", "Both teams score"),
             ("KXMLB1H", "First five total over 2.5"),
             ("KXMLBEXACT", "Exact score 4-3"),
-            ("KXMLBEXTRAINNING", "Extra innings"),
+            ("KXMLBTOTAL", "Over 9.5 runs alternate"),
             ("KXMLBWIN", "Boston Red Sox wins"),
             ("KXMLBRUNS", "Over 8.5 runs"),
             ("KXMLBSPREAD", "Run line -1.5"),

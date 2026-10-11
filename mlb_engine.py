@@ -173,14 +173,15 @@ def clasificar(serie, market):
         return "1.ª entrada / YRFI-NRFI"
     if any(x in text for x in ("first 5", "first five", "first 3", "first three", "first 7", "first seven")) or any(x in s for x in ("first5", "first3", "first7")):
         return "Entradas parciales"
+    # A generic inning total is not a full-game total; this model has no per-inning score distribution.
+    if "inning" in s or "inning" in text:
+        return "Entrada individual"
     if "team total" in text or "teamtotal" in s:
         return "Total por equipo"
     if "spread" in s or "run line" in text or "runline" in s:
         return "Run line / margen"
     if "total" in s or re.search(r"\b(over|under|more than|less than)\b", text):
         return "Total de carreras"
-    if "inning" in s or "inning" in text:
-        return "Entrada individual"
     if "exact" in text and ("score" in text or "runs" in text):
         return "Marcador exacto"
     if "extra inning" in text or "extra innings" in text:
@@ -288,7 +289,7 @@ def series_mlb():
         ticker = str(item.get("ticker", "")).upper()
         name = normalizar(item.get("title") or item.get("name") or "")
         tags = " ".join(map(str, item.get("tags") or [])).lower()
-        excluded = ("FODT", "FUTURE", "DIVISION", "PLAYOFF", "CHAMPION", "PENNANT", "MVP", "AWARD", "TEAMWINS", "WORLD SERIES")
+        excluded = ("FODT", "FUTURE", "DIVISION", "PLAYOFF", "CHAMPION", "PENNANT", "MVP", "AWARD", "TEAMWINS", "WORLD SERIES", "SERIES", "EXPAND", "INNINGTOTAL")
         if (ticker.startswith(("KXMLB", "KXBASEBALL")) or ("mlb" in name and ("baseball" in tags or "sports" in tags)) or ("major league baseball" in name)) and not any(x in ticker for x in excluded):
             selected.append(ticker)
     return sorted(set(selected))

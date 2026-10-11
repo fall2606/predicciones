@@ -3,6 +3,7 @@ import ast
 import csv
 import math
 import re
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -66,8 +67,10 @@ def _metadata(row):
     category = str(row.get("categoria", "") or "")
     block = str(row.get("bloque", "") or "").strip()
     if block not in {"SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA"}:
-        block = next((name for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")
-                      if category.startswith(name + " · ")), "SENCILLAS")
+        detected = next((name for name in ("SENCILLAS", "ALTA_PROBABILIDAD", "A_TENER_EN_CUENTA")
+                         if category.startswith(name + " · ")), "")
+        # Old non-game contracts (expansion/futures) are archived but are not a match block.
+        block = detected or ("SENCILLAS" if str(row.get("match_id", "")).strip() else "")
     row["bloque"] = block
     if not str(row.get("edge", "")).strip():
         p_raw = row.get("probabilidad_calibrada", row.get("probabilidad_modelo", ""))
@@ -95,6 +98,7 @@ def repair_file(path, current_columns, legacy_columns):
     data = raw_rows[1:]
     repaired_rows, schemas = [], {}
     metadata_modified = False
+    removed_invalid_pregame = 0
     for line_no, values in enumerate(data, start=2):
         if not values or (len(values) == 1 and not values[0]):
             continue
@@ -111,13 +115,28 @@ def repair_file(path, current_columns, legacy_columns):
                 f"legado={len(legacy_columns)}. Se detiene para no perder datos."
             )
         row = dict(zip(source_columns, values))
+        # Two MLB series families were incorrectly attached to a single game in the
+        # latest pregame capture. Remove only while that game's kickoff is still ahead.
+        if path.name == "predicciones_mlb.csv" and str(row.get("match_id", "")).strip():
+            ticker = str(row.get("ticker", "")).upper()
+            try:
+                kickoff = datetime.fromisoformat(str(row.get("fecha", "")).replace("Z", "+00:00"))
+                if kickoff.tzinfo is None:
+                    kickoff = kickoff.replace(tzinfo=timezone.utc)
+            except (TypeError, ValueError):
+                kickoff = None
+            if kickoff is not None and datetime.now(timezone.utc) < kickoff.astimezone(timezone.utc) and any(
+                bad in ticker for bad in ("KXMLBSERIESGAMES", "KXMLBINNINGTOTAL")
+            ):
+                removed_invalid_pregame += 1
+                continue
         before = dict(row)
         row = _metadata(row)
         if row != before:
             metadata_modified = True
         repaired_rows.append({column: row.get(column, "") for column in current_columns})
         schemas[str(len(values))] = schemas.get(str(len(values)), 0) + 1
-    changed = header != current_columns or metadata_modified or any(
+    changed = header != current_columns or metadata_modified or removed_invalid_pregame > 0 or any(
         len(values) != len(header) for values in data if values
     )
     if changed:
@@ -127,7 +146,7 @@ def repair_file(path, current_columns, legacy_columns):
             writer.writeheader()
             writer.writerows(repaired_rows)
         tmp.replace(path)
-    return {"file": path.name, "rows": len(repaired_rows), "repaired": changed, "schemas": schemas}
+    return {"file": path.name, "rows": len(repaired_rows), "repaired": changed or removed_invalid_pregame > 0, "schemas": schemas, "removed_invalid_pregame": removed_invalid_pregame}
 
 
 def main():
