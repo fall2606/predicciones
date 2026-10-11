@@ -61,6 +61,16 @@ class NFLModelTests(unittest.TestCase):
         self.assertTrue(all(0 <= row["probabilidad_modelo"] <= 1 for row in candidates))
         self.assertTrue(all(row["precio_captura"] is not None for row in candidates))
 
+
+    def test_period_market_is_skipped_when_only_full_game_model_exists(self):
+        p, category = nfl_engine._market_probability(
+            {"ticker": "KXNFL1HSPREAD-TEST", "title": "BUF Bills vs MIA Dolphins: 1st Half Spread",
+             "yes_sub_title": "BUF Bills -1.5"},
+            "Buffalo Bills", "Miami Dolphins", 27.0, 21.0,
+        )
+        self.assertIsNone(p)
+        self.assertEqual(category, "")
+
     def test_total_points_market_uses_line_and_nfl_score_projection(self):
         p, category = nfl_engine._market_probability(
             {"ticker": "KXNFLTOTAL-TEST", "title": "Over 44.5 total points"},
