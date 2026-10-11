@@ -13,6 +13,7 @@ on:
       - "scripts/reintegrar_capturas_mlb.py"
       - "scripts/auditar_reconciliacion.py"
       - "scripts/backtest_mlb.py"
+      - "scripts/medir_timing_workflow.py"
       - "tests/**"
       - "registrar_laliga.py"
       - "registrar_champions.py"
@@ -30,6 +31,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  actions: read
 concurrency:
   group: predicciones-main
   cancel-in-progress: false
@@ -50,10 +52,15 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencias compartidas
         run: python -m pip install requests pandas numpy scipy streamlit
+      - name: Medir desfase de GitHub Actions y cola
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/medir_timing_workflow.py
       - name: Reparar esquema mixto de historiales existentes
         run: python scripts/reparar_csv_predicciones.py
       - name: Comprobar sintaxis de todo el sistema
-        run: python -m compileall -q prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py scripts/backtest_mlb.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
+        run: python -m compileall -q prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py scripts/backtest_mlb.py scripts/medir_timing_workflow.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
       - name: Ejecutar pruebas unitarias y regresiones
         run: python -m unittest discover -s tests -v
       - name: Capturar MLB antes del partido
