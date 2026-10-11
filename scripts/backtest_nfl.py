@@ -112,11 +112,12 @@ def build_walk_forward(max_games=500):
 
 
 def summarize(observations):
-    summary, calibrators = [], {}
+    summary, calibrators, evaluations = [], {}, {}
     for market, items in observations.items():
         items = sorted(items, key=lambda item: item["date"])
         n = len(items)
         if n < 2:
+            evaluations[market] = {"status": "insufficient_sample", "n": n}
             summary.append({
                 "mercado": market, "n_train": 0, "n_test": n,
                 "brier_sin_calibrar": "", "log_loss_sin_calibrar": "",
@@ -142,16 +143,44 @@ def summarize(observations):
             try:
                 a_test, b_test = fit_platt(p_train, y_train)
                 p_cal_test = apply_platt(p_test, a_test, b_test)
-                # Production coefficients use all walk-forward observations after evaluation is calculated.
-                a_full, b_full = fit_platt(np.array([item["p"] for item in items]), np.array([item["y"] for item in items]))
-                if market in {"winner", "spread_-3.5", "total_over_44.5"}:
+                brier_raw = _brier(p_test, y_test)
+                loss_raw = _logloss(p_test, y_test)
+                brier_cal = _brier(p_cal_test, y_test)
+                loss_cal = _logloss(p_cal_test, y_test)
+                supported_scopes = {"winner", "spread_-3.5", "total_over_44.5", "team_total_home_over_21.5"}
+                improves = brier_cal < brier_raw and loss_cal < loss_raw
+                if market in supported_scopes and improves:
+                    # Fit production coefficients only after held-out metrics improve.
+                    a_full, b_full = fit_platt(np.array([item["p"] for item in items]), np.array([item["y"] for item in items]))
                     calibrators[market] = {
                         "intercept": a_full, "slope": b_full, "n_train": n,
                         "version": f"platt_{market}_n{n}_{datetime.now(timezone.utc).strftime('%Y%m%d')}",
                     }
-                status = f"Platt entrenado n={n}; evaluación temporal separada"
+                    evaluations[market] = {
+                        "status": "applied", "n_train": len(train), "n_test": len(test),
+                        "brier_raw": round(brier_raw, 6), "log_loss_raw": round(loss_raw, 6),
+                        "brier_calibrated": round(brier_cal, 6), "log_loss_calibrated": round(loss_cal, 6),
+                    }
+                    status = f"Platt aplicado: mejora Brier y log loss fuera de muestra (n={len(train)})"
+                elif market not in supported_scopes:
+                    evaluations[market] = {
+                        "status": "not_enabled", "n_train": len(train), "n_test": len(test),
+                        "brier_raw": round(brier_raw, 6), "log_loss_raw": round(loss_raw, 6),
+                        "brier_calibrated": round(brier_cal, 6), "log_loss_calibrated": round(loss_cal, 6),
+                    }
+                    status = "calibración no habilitada para este scope"
+                else:
+                    evaluations[market] = {
+                        "status": "no_improvement", "n_train": len(train), "n_test": len(test),
+                        "brier_raw": round(brier_raw, 6), "log_loss_raw": round(loss_raw, 6),
+                        "brier_calibrated": round(brier_cal, 6), "log_loss_calibrated": round(loss_cal, 6),
+                    }
+                    status = "calibración no aplicada: no mejora Brier y log loss fuera de muestra"
             except (RuntimeError, ValueError, FloatingPointError):
+                evaluations[market] = {"status": "fit_failed", "n_train": len(train), "n_test": len(test)}
                 status = "calibración insuficiente: ajuste no estable"
+        else:
+            evaluations[market] = {"status": "insufficient_sample", "n_train": len(train), "n_test": len(test)}
         p_mean = float(np.mean(p_test))
         y_mean = float(np.mean(y_test))
         if p_mean > y_mean + 0.02:
@@ -173,7 +202,7 @@ def summarize(observations):
             "precio_kalshi_comparable": "No disponible: el endpoint de mercados liquidados no conserva un snapshot prepartido fiable",
             "nota": "Backtest walk-forward. Spread usa línea proxy local -3.5; total usa Over 44.5; total por equipo usa local Over 21.5. No son contratos Kalshi históricos.",
         })
-    return summary, calibrators
+    return summary, calibrators, evaluations
 
 
 def main():
@@ -191,12 +220,13 @@ def main():
         except (ValueError, OSError, TypeError):
             pass
     observations = build_walk_forward(max_games=args.max_games)
-    summary, calibrators = summarize(observations)
+    summary, calibrators, evaluations = summarize(observations)
     payload = {
         "schema_version": 1, "generated_at": datetime.now(timezone.utc).isoformat(),
         "source": "nflverse games.csv (resultados históricos)",
         "minimum_sample": MIN_CALIBRATION_N,
         "markets": calibrators,
+        "evaluations": evaluations,
         "limitation": "No se encontraron snapshots prepartido de precios Kalshi en el endpoint público usado; spread/total son líneas proxy.",
     }
     tmp = CALIBRATION.with_suffix(".json.tmp")
