@@ -542,8 +542,8 @@ def mercados(prob, puntos, partido):
 
 hoy = datetime.now(ZoneInfo("America/Chicago")).date()
 temporada = hoy.year
-inicio = hoy
-fin = hoy + timedelta(days=2)
+inicio = hoy - timedelta(days=2)
+fin = hoy + timedelta(days=3)
 inicio_forma = hoy - timedelta(days=30)
 
 try:
@@ -561,15 +561,41 @@ except (ValueError, KeyError, TypeError) as exc:
     st.error(f"No pude preparar las predicciones MLB: {exc}")
     st.stop()
 
+# La ventana visible no controla ni borra el historial persistente. Los juegos pasados
+# solo aparecen si ya existe al menos una predicción archivada para su gamePk.
+ids_mlb_con_prediccion = (
+    set(historial_mlb["match_id"].astype(str))
+    if not historial_mlb.empty and "match_id" in historial_mlb.columns else set()
+)
+partidos_ventana = []
+for juego in partidos:
+    try:
+        fecha_juego_local = datetime.fromisoformat(
+            str(juego.get("gameDate", "")).replace("Z", "+00:00")
+        ).astimezone(ZoneInfo("America/Chicago")).date()
+    except (TypeError, ValueError):
+        continue
+    if not (inicio <= fecha_juego_local <= fin):
+        continue
+    estado_juego = str(juego.get("status", {}).get("abstractGameState", "")).upper()
+    game_id = str(juego.get("gamePk", ""))
+    es_final = estado_juego in {"FINAL", "COMPLETED"}
+    if fecha_juego_local < hoy and game_id not in ids_mlb_con_prediccion:
+        continue
+    if es_final and game_id not in ids_mlb_con_prediccion:
+        continue
+    partidos_ventana.append(juego)
+partidos = partidos_ventana
+
 if not partidos:
-    st.info("No hay partidos hoy ni en los próximos dos días.")
+    st.info(f"No hay partidos con predicción disponible en la ventana {inicio:%d/%m}–{fin:%d/%m}.")
     st.stop()
 
 promedio = float(np.mean([x["rpg"] for x in stats.values()]))
 eje = np.arange(0, 21)
 matriz_local, matriz_visita = np.meshgrid(eje, eje, indexing="ij")
 st.caption(
-    f"Partidos del {inicio:%d/%m} al {fin:%d/%m} · temporada {temporada} · "
+    f"Ventana visible: {inicio:%d/%m}–{fin:%d/%m} (2 días anteriores, hoy y 3 siguientes) · temporada {temporada} · "
     f"promedio {promedio:.2f} carreras/equipo · últimos 10 juegos disponibles · "
     "datos actualizados cada 15 minutos."
 )
