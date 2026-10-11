@@ -269,13 +269,18 @@ def reconcile_exclusions(stats):
         market_is_period = bool(re.search(period_pattern, market_ticker))
         kickoff = _scheduled_kickoff(row.get("local"), row.get("visita"), stats, row.get("event_ticker") or row.get("ticker"))
         captured = _parse_datetime(row.get("capturado_en"))
+        stored_kickoff = _parse_datetime(row.get("fecha"))
         late_capture = kickoff is not None and captured is not None and captured >= kickoff
-        if not market_is_period and not event_is_period and not late_capture:
+        misdated_capture = (kickoff is not None and stored_kickoff is not None
+                            and abs((stored_kickoff - kickoff).total_seconds()) > 6 * 3600)
+        if not market_is_period and not event_is_period and not late_capture and not misdated_capture:
             continue
         if market_is_period:
             reason = "Contrato de periodo/cuarto no cubierto por el modelo NFL"
         elif event_is_period:
             reason = "Captura histórica asociada a una serie de periodo; excluida por el modelo inicial incorrecto"
+        elif misdated_capture:
+            reason = "Fecha histórica difiere del kickoff real en más de 6 horas; captura inicial inválida"
         else:
             reason = "Captura registrada a la hora del inicio real o después; excluida de calibración prepartido"
         previous = existing_by_id.get(pid)
