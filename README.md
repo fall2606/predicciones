@@ -1,5 +1,15 @@
 # predicciones
 
+## Fuentes de resultados y liquidación
+
+- Kalshi sigue siendo la fuente de mercados, precios y probabilidades al generar las predicciones.
+- La liquidación intenta primero verificar con el marcador público de ESPN los mercados de fútbol que pueden derivarse con seguridad del resultado final: ganador/empate, goles totales, ambos marcan y goles por equipo.
+- El marcador de ESPN se consulta mediante un endpoint público no documentado; no tiene garantía de disponibilidad ni de esquema estable. Se limita el volumen de consultas y se exige una coincidencia suficientemente clara de ambos equipos.
+- Los mercados que requieren datos no incluidos de forma fiable en el marcador final (corners, primera/segunda parte, primer gol, tarjetas y props) siguen usando la resolución de Kalshi. Si no hay coincidencia segura, no se inventa un resultado.
+- Los partidos de Champions que el proveedor identifica como prórroga o penales se dejan a la resolución de Kalshi, porque el marcador reglamentario puede diferir del marcador final.
+- SofaScore no se usa como fuente automatizada: sus condiciones restringen la extracción y reutilización de su base de datos sin permiso explícito.
+- La liquidación de LaLiga y Champions se programa cada 10 minutos; las ejecuciones programadas pueden retrasarse. Un resultado externo solo se guarda cuando el partido aparece finalizado y la regla del mercado se puede calcular sin ambigüedad.
+
 ## Historial de LaLiga
 
 - El workflow **Historial inmutable de LaLiga** se ejecuta cada dos horas y también puede iniciarse manualmente desde **GitHub → Actions**.
