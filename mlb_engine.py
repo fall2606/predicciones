@@ -522,6 +522,8 @@ def main():
     events = eventos_mlb(series)
     existing = leer_csv(PRED_FILE, PRED_COLUMNS)
     existing_ids = {x["prediction_id"] for x in existing}
+    previous_current = leer_csv(CURRENT_REPORT, CURRENT_COLUMNS)
+    locked_match_ids = set()
     captured = now.isoformat()
     by_match = {}
     event_count = 0
@@ -556,6 +558,16 @@ def main():
                 "start_time": event.get("start_time") or event.get("expected_expiration_time") or event.get("strike_date") or "",
                 "motivo": reason,
             })
+            continue
+        # Lock MLB forecasts 30 minutes before scheduled first pitch.
+        try:
+            kickoff_dt = datetime.fromisoformat(str(game.get("date", "")).replace("Z", "+00:00"))
+            if kickoff_dt.tzinfo is None:
+                kickoff_dt = kickoff_dt.replace(tzinfo=timezone.utc)
+        except (TypeError, ValueError):
+            kickoff_dt = None
+        if kickoff_dt is not None and kickoff_dt <= now + timedelta(minutes=30):
+            locked_match_ids.add(str(game.get("id", "")))
             continue
         if game.get("status") != "Preview":
             continue
@@ -748,6 +760,7 @@ def main():
         writer.writerows(rejected_candidates)
     print(f"INFORME DE CANDIDATOS DESCARTADOS: {REJECTED_REPORT.name} · filas={len(rejected_candidates)}")
     current_candidates = [row for match_rows in by_match.values() for row in match_rows]
+    current_candidates.extend(row for row in previous_current if str(row.get("match_id", "")) in locked_match_ids)
     with CURRENT_REPORT.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CURRENT_COLUMNS)
         writer.writeheader()
