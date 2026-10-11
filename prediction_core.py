@@ -475,8 +475,9 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
             break
     for row in selected:
         row["Ventaja (edge)"] = round(row["_single_edge"], 6)
+        row["Probabilidad base"] = row["_single_p"]
         row["Precio de compra"] = f"{row['_single_price']:.0%}"
         row["Probabilidad del modelo"] = f"{row['_single_p']:.1%}"
-        for key in ("_single_price", "_single_edge", "_single_p", "_single_family", "_p", "_row", "_lado"):
+        for key in ("_single_price", "_single_edge", "_single_p", "_single_family", "_p", "_lado"):
             row.pop(key, None)
     return selected
