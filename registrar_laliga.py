@@ -124,14 +124,28 @@ def main():
         if prediction_id in ids_resueltos:
             continue
         partido = partidos_por_id.get(str(fila["match_id"]))
-        if not partido or partido.get("status") != "FINISHED":
+        if not partido or partido.get("status") not in {"FINISHED", "AWARDED"}:
             continue
         datos = construir_prediccion_partido(partido, modelo, corners)
         if not datos["resultado"]:
+            cierres.append({
+                "prediction_id": prediction_id,
+                "estado": "NO_EVALUABLE",
+                "marcador": "Partido finalizado, pero la API no entrega el marcador oficial completo",
+                "resuelto_en": datetime.now(timezone.utc).isoformat(),
+            })
+            ids_resueltos.add(prediction_id)
             continue
         try:
             market_key, lado = ast.literal_eval(fila["clave_interna"])
-        except (ValueError, SyntaxError):
+        except (ValueError, SyntaxError, TypeError):
+            cierres.append({
+                "prediction_id": prediction_id,
+                "estado": "NO_EVALUABLE",
+                "marcador": "No se pudo interpretar la clave guardada del mercado",
+                "resuelto_en": datetime.now(timezone.utc).isoformat(),
+            })
+            ids_resueltos.add(prediction_id)
             continue
         serie = market_key[0]
         if serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
@@ -159,7 +173,14 @@ def main():
             elif total_goles == 0:
                 primer_gol = "sin_goles"
             else:
-                # Hay goles, pero el proveedor no incluyó el detalle necesario.
+                goles = datos["resultado"]["partido"]
+                cierres.append({
+                    "prediction_id": prediction_id,
+                    "estado": "NO_EVALUABLE",
+                    "marcador": f"{goles[0]}-{goles[1]} · Falta evento oficial del primer gol",
+                    "resuelto_en": datetime.now(timezone.utc).isoformat(),
+                })
+                ids_resueltos.add(prediction_id)
                 continue
 
             jugada = str(fila.get("jugada", "")).strip()
@@ -180,6 +201,14 @@ def main():
             estado = "WIN" if acierto else "LOSS"
         elif serie in {"KXLALIGACORNERS", "KXLALIGATCORNERS"}:
             if datos["corners_final"] is None:
+                goles = datos["resultado"]["partido"]
+                cierres.append({
+                    "prediction_id": prediction_id,
+                    "estado": "NO_EVALUABLE",
+                    "marcador": f"{goles[0]}-{goles[1]} · Falta estadística oficial de córners",
+                    "resuelto_en": datetime.now(timezone.utc).isoformat(),
+                })
+                ids_resueltos.add(prediction_id)
                 continue
             cuenta = (
                 sum(datos["corners_final"])
@@ -195,8 +224,16 @@ def main():
             marcador = resultado_del_periodo(market_key, datos["resultado"])
             acierto_yes = evaluar_yes_goles(market_key, marcador)
             if acierto_yes is None:
+                goles = datos["resultado"]["partido"]
+                motivo = "Falta marcador oficial del descanso" if marcador is None else "Falta estadística oficial del mercado"
+                cierres.append({
+                    "prediction_id": prediction_id,
+                    "estado": "NO_EVALUABLE",
+                    "marcador": f"{goles[0]}-{goles[1]} · {motivo}",
+                    "resuelto_en": datetime.now(timezone.utc).isoformat(),
+                })
+                ids_resueltos.add(prediction_id)
                 continue
-            acierto = acierto_yes if lado == "YES" else not acierto_yes
             estado = "WIN" if acierto else "LOSS"
         marcador = datos["resultado"]["partido"]
         cierres.append({
