@@ -300,8 +300,23 @@ def _kickoff(event):
         dt = parse_dt(event.get(key))
         if dt:
             return dt
-    # Kalshi's event title/ticker time is not guessed if the API omitted a timestamp.
+    # Many Kalshi NFL game events encode only the ET calendar date in the event ticker.
+    # Do not invent a kickoff time; use the official ESPN schedule to supply the exact time.
     return None
+
+
+def _event_date(event):
+    kickoff = _kickoff(event)
+    if kickoff:
+        return kickoff.astimezone(TZ_ET).date()
+    ticker = str(event.get("event_ticker") or "").upper()
+    match = re.search(r"-(\d{2})(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(\d{2})(?:\D|$)", ticker)
+    if not match:
+        return None
+    try:
+        return datetime.strptime("".join(match.groups()), "%y%b%d").date()
+    except ValueError:
+        return None
 
 
 def _market_type(market, series_ticker):
@@ -449,12 +464,18 @@ def load_upcoming_games(days=21, now=None):
 def _match_catalog_event(event, event_teams, upcoming_games, event_kickoff):
     if len(event_teams) != 2:
         return None
+    event_date = _event_date(event)
     matches = []
     for game in upcoming_games:
         if set(event_teams) != {game["home"], game["away"]}:
             continue
         game_dt = parse_dt(game.get("date"))
-        if not game_dt or not event_kickoff or abs((game_dt - event_kickoff).total_seconds()) > 36 * 3600:
+        if not game_dt:
+            continue
+        if event_kickoff:
+            if abs((game_dt - event_kickoff).total_seconds()) > 36 * 3600:
+                continue
+        elif not event_date or game_dt.astimezone(TZ_ET).date() != event_date:
             continue
         matches.append(game)
     if len(matches) != 1:
@@ -473,7 +494,7 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
     for event in events:
         kickoff = _kickoff(event)
         teams = _event_teams(event)
-        if not kickoff or len(teams) != 2 or kickoff <= now:
+        if len(teams) != 2:
             continue
         fixture = _match_catalog_event(event, teams, upcoming_games, kickoff)
         if not fixture:
@@ -481,6 +502,8 @@ def generate_candidates(events, model, now=None, upcoming_games=None):
         # ESPN provides the authoritative home/away orientation; ambiguous event matches are skipped.
         home, away = fixture["home"], fixture["away"]
         kickoff = parse_dt(fixture["date"])
+        if not kickoff or kickoff <= now:
+            continue
         game = {"home": home, "away": away, "date": kickoff.isoformat(), "event_ticker": event.get("event_ticker", "")}
         prediction = predict_game(model, home, away)
         if not prediction:
