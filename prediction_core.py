@@ -479,7 +479,12 @@ def _family(ticker,label=""):
     if any(x in text for x in ("SPREAD","GAME","WIN")): return "result"
     return series or "other"
 
-def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10):
+def rank_market_candidates(
+    rows, min_probability=0.65, high_limit=5, value_limit=10, *,
+    min_edge=None, high_price_max=None, value_price_max=None,
+    high_sort_by_edge=False, exclude_trivial=False,
+):
+    """Shared market ranking; optional strict filters are opt-in for NFL/common blocks."""
     candidates=[]
     for row in rows or []:
         ticker=str(row.get("Ticker") or row.get("ticker") or "").strip()
@@ -493,15 +498,33 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
             if not math.isfinite(edge): edge=None
         except (TypeError,ValueError,OverflowError): edge=None
         item["_edge"]=edge; candidates.append(item)
+
+    def passes(x, price_max):
+        if x["_price"] is None or (price_max is not None and x["_price"] > price_max):
+            return False
+        if min_edge is not None and (x["_edge"] is None or x["_edge"] < min_edge):
+            return False
+        if exclude_trivial and _is_trivial_single(x):
+            return False
+        return True
+
     high=[]; families=set()
-    for x in sorted(candidates,key=lambda r:r["_prob"],reverse=True):
-        # Avoid near-certain prices in combo suggestions, without changing the value block.
-        if x["_price"] is None or x["_price"] > float(os.getenv("COMBO_PRECIO_MAX", "0.90")): continue
+    if high_sort_by_edge:
+        high_order=sorted(candidates,key=lambda r:(r["_edge"] if r["_edge"] is not None else -math.inf,r["_prob"]),reverse=True)
+    else:
+        high_order=sorted(candidates,key=lambda r:r["_prob"],reverse=True)
+    high_max = float(os.getenv("COMBO_PRECIO_MAX", "0.90")) if high_price_max is None else float(high_price_max)
+    for x in high_order:
+        # Preserve the historical defaults for existing sports; NFL opts into the
+        # shared edge, price, trivial-line and edge-first filters explicitly.
+        if not passes(x, high_max): continue
         if x["_prob"]<min_probability or x["_family"] in families: continue
         high.append(x); families.add(x["_family"])
         if len(high)>=high_limit: break
+
     value=[]; line_values={}; labels=set(); seen_tickers=set()
     for x in sorted((r for r in candidates if r["_edge"] is not None),key=lambda r:(r["_edge"],r["_prob"]),reverse=True):
+        if not passes(x, value_price_max): continue
         ticker=str(x.get("Ticker") or x.get("ticker") or "")
         if ticker in seen_tickers: continue
         seen_tickers.add(ticker)
