@@ -415,10 +415,14 @@ def _is_trivial_single(row):
         "Apuesta sencilla", "Apuesta", "mercado", "line", "seleccion"
     )).casefold()
     category = " ".join(str(row.get(k) or "") for k in ("categoria", "Categoría resumen")).casefold()
-    if re.search(r"(?:más de|mas de|over|at least|at least)\s*0[.,]5", label):
-        return any(word in label + " " + category for word in (
-            "gol", "goal", "carrera", "run", "corner", "córner", "total"
-        ))
+    total_market = any(word in label + " " + category for word in (
+        "gol", "goal", "carrera", "run", "corner", "córner", "total"
+    ))
+    line = str(row.get("line") or "").strip().replace(",", ".")
+    if total_market and line in {"0.5", "0.50"}:
+        return True
+    if re.search(r"(?:más de|mas de|over|at least|more than|or more)\s*0[.,]5|0[.,]5\s*(?:\+|or more|or higher)", label):
+        return total_market
     return False
 
 
