@@ -798,12 +798,132 @@ def capture():
     return {"series": series, "events": events, "catalog": catalog, "saved": saved, "rejected": rejected}
 
 
+def settle_from_espn(row):
+    """Independent fallback for supported full-game markets; refuses ambiguous fixtures/pushes."""
+    kickoff = parse_dt(row.get("hora_inicio") or row.get("fecha"))
+    home = _canonical_team_code(row.get("local"))
+    away = _canonical_team_code(row.get("visita"))
+    if not kickoff or home not in TEAM_ALIASES or away not in TEAM_ALIASES or home == away:
+        return None
+    base_date = kickoff.astimezone(TZ_ET).date()
+    matches = []
+    # Search a small window to handle official rescheduling; exact teams and unique fixture required.
+    for delta in range(-3, 4):
+        day = base_date + timedelta(days=delta)
+        try:
+            payload = _get(ESPN_SCOREBOARD_URL, {"dates": day.strftime("%Y%m%d"), "limit": 100})
+        except (requests.RequestException, ValueError):
+            continue
+        for event in payload.get("events") or []:
+            competitions = event.get("competitions") or []
+            if not competitions:
+                continue
+            comp = competitions[0]
+            teams = {}
+            for competitor in comp.get("competitors") or []:
+                side = str(competitor.get("homeAway") or "").lower()
+                code = _canonical_team_code((competitor.get("team") or {}).get("abbreviation"))
+                if side in {"home", "away"}:
+                    teams[side] = code
+            if teams.get("home") != home or teams.get("away") != away:
+                continue
+            game_dt = parse_dt(comp.get("date") or event.get("date"))
+            if not game_dt or abs((game_dt - kickoff).total_seconds()) > 96 * 3600:
+                continue
+            status = (event.get("status") or {}).get("type") or {}
+            status_name = str(status.get("name") or "").upper()
+            if status_name in {"STATUS_CANCELED", "STATUS_CANCELLED"}:
+                matches.append({"state": "ANULADA", "source": "ESPN", "reason": "partido oficialmente cancelado por ESPN", "score": ""})
+                continue
+            if not status.get("completed") and status_name not in {"STATUS_FINAL", "STATUS_FINAL_OT", "STATUS_FINAL_2OT"}:
+                continue
+            scores = {}
+            for competitor in comp.get("competitors") or []:
+                side = str(competitor.get("homeAway") or "").lower()
+                try:
+                    scores[side] = int(competitor.get("score"))
+                except (TypeError, ValueError):
+                    scores[side] = None
+            if scores.get("home") is None or scores.get("away") is None:
+                continue
+            matches.append({
+                "home_score": scores["home"], "away_score": scores["away"],
+                "score": f"{away} {scores['away']} - {home} {scores['home']}",
+                "state": "FINAL", "source": "ESPN", "reason": "marcador final ESPN (incluye prórroga cuando el marcador oficial la incluye)",
+                "date": game_dt,
+            })
+    if len(matches) != 1:
+        return None
+    game = matches[0]
+    if game["state"] == "ANULADA":
+        return {"state": "ANULADA", "source": game["source"], "reason": game["reason"], "score": ""}
+    home_score, away_score = game["home_score"], game["away_score"]
+    category = str(row.get("categoria") or "")
+    side = str(row.get("lado") or row.get("seleccion") or "").upper()
+    if side not in {"YES", "NO"}:
+        return None
+    try:
+        line = float(row.get("line"))
+    except (TypeError, ValueError):
+        line = None
+    yes_team = _canonical_team_code(row.get("equipo_yes"))
+    outcome = str(row.get("tipo_salida") or "")
+    if category == "winner":
+        if yes_team == home:
+            yes_hit = home_score > away_score
+        elif yes_team == away:
+            yes_hit = away_score > home_score
+        else:
+            return None
+        if home_score == away_score:
+            return None
+    elif category == "spread":
+        if line is None or yes_team not in {home, away}:
+            return None
+        team_margin = (home_score - away_score) if yes_team == home else (away_score - home_score)
+        if outcome == "win_by":
+            yes_hit = team_margin >= math.ceil(abs(line))
+        elif outcome == "spread_cover":
+            yes_hit = team_margin + line > 0
+            if team_margin + line == 0:
+                return None
+        else:
+            return None
+    elif category in {"total", "team_total"}:
+        if line is None:
+            return None
+        if category == "total":
+            score = home_score + away_score
+        elif yes_team == home:
+            score = home_score
+        elif yes_team == away:
+            score = away_score
+        else:
+            return None
+        if outcome == "under_le":
+            yes_hit = score <= math.floor(line)
+        elif outcome == "under_lt":
+            yes_hit = score < line
+        elif outcome == "over_ge":
+            yes_hit = score >= math.ceil(line)
+        elif outcome == "over_gt":
+            yes_hit = score > line
+        else:
+            return None
+    else:
+        return None
+    won = yes_hit if side == "YES" else not yes_hit
+    return {
+        "state": "WIN" if won else "LOSS", "source": "ESPN",
+        "reason": game["reason"], "score": game["score"],
+    }
+
+
 def settle():
     """Resolve all stored predictions from Kalshi first; conservative ESPN fallback for full-game markets."""
     import json
     import requests
     from prediction_core import kalshi_get
-    from sports_results import settle_from_score
     predictions = []
     if PRED_FILE.exists():
         with PRED_FILE.open(newline="", encoding="utf-8-sig") as handle:
@@ -838,18 +958,14 @@ def settle():
             source, reason = "Kalshi", "resultado oficial del ticker"
         else:
             # Do not guess from final score if exact contract semantics were not stored.
-            fallback = settle_from_score({
-                "fecha": row.get("fecha"), "local": row.get("local"), "visita": row.get("visita"),
-                "ticker": ticker, "mercado": row.get("mercado"), "line": row.get("line"),
-                "lado": row.get("lado"), "seleccion": row.get("seleccion"),
-                "deporte": "NFL", "competition": "NFL",
-            })
+            fallback = settle_from_espn(row)
             if not fallback or fallback.get("state") not in TERMINAL:
                 continue
-            state, source, reason = fallback["state"], "fuente independiente", fallback.get("reason", "")
+            state, source, reason = fallback["state"], fallback.get("source", "ESPN"), fallback.get("reason", "")
+            score = fallback.get("score", "")
         new_results.append({
             "schema_version": SCHEMA_VERSION, "prediction_id": pid, "estado": state,
-            "resultado_kalshi": kalshi_result, "marcador": "", "fuente": source,
+            "resultado_kalshi": kalshi_result, "marcador": locals().get("score", ""), "fuente": source,
             "motivo": reason, "resuelto_en": datetime.now(timezone.utc).isoformat(),
         })
     if new_results:
