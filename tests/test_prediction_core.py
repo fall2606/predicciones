@@ -171,6 +171,17 @@ class CoreTests(unittest.TestCase):
   self.assertEqual(tickers.count("KXGOALS-TOTAL-OVER25")+tickers.count("KXGOALS-TOTAL-OVER35"),1)
   self.assertEqual(selected[0]["Revisión"],"REVISAR")
 
+ def test_csv_reader_quarantines_bad_row_and_keeps_good_history(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   path=Path(tmp)/"resultados.csv"
+   path.write_text("prediction_id,estado,marcador,resuelto_en\\nold,WIN,Marcador,2026-10-10T10:00:00Z\\nbad,LOSS,Marcador,extra,2026-10-10T11:00:00Z\\nnew,LOSS,Marcador,2026-10-10T12:00:00Z\\n",encoding="utf-8")
+   rows=core.read_csv_rows_resilient(path)
+   self.assertEqual([row["prediction_id"] for row in rows],["old","new"])
+   self.assertIn("bad,LOSS,Marcador,extra",path.read_text(encoding="utf-8"))
+   quarantine=path.with_suffix(path.suffix+".malformed_rows.csv")
+   self.assertTrue(quarantine.exists())
+   self.assertIn("bad,LOSS,Marcador,extra",quarantine.read_text(encoding="utf-8"))
+
  def test_single_candidates_reject_missing_price_and_negative_edge(self):
   rows=[
    {"Ticker":"KX-NOPRICE","Apuesta sencilla":"Ambos marcan","Categoría resumen":"Ambos marcan","Probabilidad del modelo":"70%","Precio de compra":"—","Ventaja (edge)":0.1},
