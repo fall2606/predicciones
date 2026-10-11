@@ -40,9 +40,18 @@ def main():
 
     existing_ids = {str(row.get("prediction_id", "")).strip() for row in existing}
     added = []
+    corrected = 0
+    existing_by_id = {str(row.get("prediction_id", "")).strip(): row for row in existing}
     for pid in sorted(REQUIRED_IDS):
         if pid in existing_ids:
-            print(f"REINTEGRACIÓN MLB: ya existe {pid}; se conserva la fila operativa.")
+            live = existing_by_id[pid]
+            original_capture = str(recovered_by_id[pid].get("capturado_en", "")).strip()
+            if str(live.get("capturado_en", "")).strip() != original_capture:
+                live["capturado_en"] = original_capture
+                corrected += 1
+                print(f"REINTEGRACIÓN MLB: corregida hora original de {pid}; capturado_en={original_capture}")
+            else:
+                print(f"REINTEGRACIÓN MLB: verificada {pid}; capturado_en original={original_capture}")
             continue
         row = recovered_by_id[pid]
         if not row.get("capturado_en") or not row.get("ticker") or not row.get("fecha"):
@@ -50,7 +59,7 @@ def main():
         added.append({key: row.get(key, "") for key in COLUMNS})
         print(f"REINTEGRACIÓN MLB: restaurada {pid}; capturado_en={row['capturado_en']}")
 
-    if added:
+    if added or corrected:
         merged_columns = COLUMNS + [name for name in old_columns if name not in COLUMNS]
         tmp = PRED.with_name(PRED.name + ".tmp")
         with tmp.open("w", newline="", encoding="utf-8") as f:
@@ -61,7 +70,7 @@ def main():
             for row in added:
                 writer.writerow({**{k: "" for k in merged_columns}, **row})
         tmp.replace(PRED)
-    print(f"REINTEGRACIÓN MLB: añadidas={len(added)}; filas_operativas={len(existing) + len(added)}")
+    print(f"REINTEGRACIÓN MLB: añadidas={len(added)}; horas_originales_corregidas={corrected}; filas_operativas={len(existing) + len(added)}")
 
 
 if __name__ == "__main__":
