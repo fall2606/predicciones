@@ -66,20 +66,19 @@ def apply_platt(probabilities, intercept, slope):
 
 
 def build_walk_forward(max_games=500):
-    games = nfl._nflverse_games().sort_values("gameday").reset_index(drop=True)
-    if max_games > 0:
-        games = games.tail(max_games).reset_index(drop=True)
+    all_games = nfl._nflverse_games().sort_values("gameday").reset_index(drop=True)
+    games = all_games.tail(max_games).reset_index(drop=True) if max_games > 0 else all_games
     observations = {"winner": [], "spread_-3.5": [], "total_over_44.5": [], "team_total_home_over_21.5": []}
     for index, row in games.iterrows():
         kickoff = pd.Timestamp(row["gameday"])
-        prior = games[games["gameday"] < kickoff]
+        prior = all_games[all_games["gameday"] < kickoff]
         if len(prior) < 100:
             continue
         home = nfl._canonical_team_code(row["home_team"])
         away = nfl._canonical_team_code(row["away_team"])
         if home not in nfl.TEAM_ALIASES or away not in nfl.TEAM_ALIASES:
             continue
-        model = nfl.build_team_model(games, as_of=kickoff.to_pydatetime())
+        model = nfl.build_team_model(all_games, as_of=kickoff.to_pydatetime())
         if model["teams"][home]["sample"] < 4 or model["teams"][away]["sample"] < 4:
             continue
         forecast = nfl.predict_game(model, home, away)
