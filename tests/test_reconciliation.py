@@ -37,7 +37,7 @@ class ReconciliationStatusTests(unittest.TestCase):
     def test_kalshi_settled_but_result_not_registered_is_alerted(self, market):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
         market.return_value = {"kind":"ok","status":"settled","result":"yes"}
-        row = {"prediction_id":"p1","match_id":"m1","fecha":past,"ticker":"KXTEST-1","local":"A","visita":"B","bloque":"SENCILLAS"}
+        row = {"prediction_id":"p1","match_id":"m1","fecha":past,"ticker":"KXTEST-1","local":"A","visita":"B","bloque":"SENCILLAS","seleccion":"YES"}
         result = _row_report("LaLiga", row, {}, {"m1":"FINISHED"}, "football")
         self.assertEqual(result["motivo"], "resultado de Kalshi disponible pero no registrado")
         self.assertEqual(result["cuenta_alerta"], "SI")
