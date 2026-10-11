@@ -228,11 +228,14 @@ if partido["status"] == "FINISHED":
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
         _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("PENDIENTE")
-        st.dataframe(_archivo_partido[["categoria", "jugada", "probabilidad_calibrada", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
+        for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
+            if _col not in _archivo_partido.columns:
+                _archivo_partido[_col] = ""
+        st.dataframe(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
     else:
         st.info("No hay capturas prepartido guardadas en el bloque de alta probabilidad para este encuentro.")
 elif alta_vista:
-    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker"] if c in alta_vista[0]]
+    _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker"] if c in alta_vista[0]]
     st.dataframe(pd.DataFrame(alta_vista)[_cols], use_container_width=True, hide_index=True)
 else:
     st.info("No hay cinco selecciones independientes que superen el umbral configurable.")
@@ -246,7 +249,10 @@ if partido["status"] == "FINISHED":
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_valor = _archivo_valor.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
         _archivo_valor["Resultado"] = _archivo_valor["estado"].fillna("PENDIENTE")
-        st.dataframe(_archivo_valor[["categoria", "jugada", "probabilidad_calibrada", "precio", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
+        for _col in ["bloque", "mercado", "line", "seleccion", "edge"]:
+            if _col not in _archivo_valor.columns:
+                _archivo_valor[_col] = ""
+        st.dataframe(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]], use_container_width=True, hide_index=True)
     else:
         st.info("No hay capturas prepartido guardadas en el bloque de valor para este encuentro.")
 elif valor_vista:

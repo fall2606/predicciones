@@ -10,7 +10,7 @@ import unicodedata
 import requests
 import numpy as np
 from scipy.stats import nbinom
-from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates
+from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates, extract_line
 
 API_MLB = "https://statsapi.mlb.com/api/v1"
 API_KALSHI = KALSHI_API_BASE
@@ -22,7 +22,7 @@ TIMEOUT = 15
 
 PRED_COLUMNS = [
     "prediction_id", "event_ticker", "ticker", "match_id", "fecha", "local", "visita",
-    "categoria", "mercado", "lado", "probabilidad_modelo", "precio_captura",
+    "categoria", "mercado", "line", "lado", "seleccion", "bloque", "probabilidad_modelo", "precio_captura",
     "probabilidad_implicita", "edge", "estado_modelo", "reglas", "capturado_en",
 ]
 RESULT_COLUMNS = ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"]
@@ -378,7 +378,10 @@ def main():
                     "visita": game.get("away", ""),
                     "categoria": category,
                     "mercado": market.get("yes_sub_title") or market.get("title") or ticker,
+                    "line": extract_line(market.get("yes_sub_title") or market.get("title") or ""),
                     "lado": side,
+                    "seleccion": side,
+                    "bloque": "",
                     "probabilidad_modelo": f"{probability:.8f}",
                     "precio_captura": f"{price:.6f}" if price is not None else "",
                     "probabilidad_implicita": f"{price:.6f}" if price is not None else "",
@@ -438,6 +441,7 @@ def main():
                 ticker = row["ticker"]
                 row["prediction_id"] = f"{ticker}|{side}|{block}"
                 row["categoria"] = f"{block} · {row['categoria']}"
+                row["bloque"] = block
                 if row["prediction_id"] in existing_ids:
                     continue
                 new_rows.append(row)

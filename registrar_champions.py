@@ -5,7 +5,7 @@ import csv
 import os
 from datetime import datetime, timedelta, timezone
 import requests
-from prediction_core import append_immutable_predictions, rank_market_candidates
+from prediction_core import append_immutable_predictions, rank_market_candidates, extract_line
 
 from champions_engine import (
     TZ,
@@ -24,7 +24,7 @@ from champions_engine import (
 COLUMNAS_PRED = [
     "prediction_id", "match_id", "fecha", "local", "visita", "categoria", "jugada",
     "probabilidad_base", "probabilidad_calibrada", "calibracion", "precio", "disponibilidad", "ticker",
-    "clave_interna", "capturado_en",
+    "mercado", "line", "seleccion", "bloque", "edge", "clave_interna", "capturado_en",
 ]
 COLUMNAS_RESULTADO = ["prediction_id", "estado", "marcador", "resuelto_en"]
 
@@ -150,6 +150,11 @@ def main():
                 "precio": fila["Precio ahora"],
                 "disponibilidad": fila["Disponibilidad"],
                 "ticker": fila.get("Ticker", "—"),
+                "mercado": str(fila.get("Jugada sencilla", "")),
+                "line": extract_line(fila.get("Jugada sencilla", "")),
+                "seleccion": lado,
+                "bloque": bloque,
+                "edge": "" if fila.get("edge") is None else f"{float(fila.get('edge')):.6f}",
                 "clave_interna": repr((market_key, lado)),
                 "capturado_en": captura.isoformat(),
             })

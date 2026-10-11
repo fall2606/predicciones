@@ -16,6 +16,23 @@ def parse_datetime(value):
     except (TypeError, ValueError): return None
     if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
     return dt.astimezone(timezone.utc)
+def extract_line(value):
+    """Extract a line only when the market label explicitly states one."""
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    match = re.search(r"(?i)(?:over|under|more than|less than|más de|menos de|handicap|spread|total|at least|at most)[^\d+-]*([+-]?\d+(?:[.,]\d+)?)", text)
+    if match:
+        return match.group(1).replace(",", ".")
+    match = re.search(r"(?<!\w)([+-]?\d+(?:[.,]\d+)?)\s*\+", text)
+    if match:
+        return match.group(1).replace(",", ".") + "+"
+    match = re.search(r"(?<!\w)[+-]?\d+[.,]\d+(?!\w)", text)
+    if match:
+        return match.group(0).replace(",", ".")
+    return ""
+
+
 def valid_probability(value):
     try: p=float(value)
     except (TypeError,ValueError,OverflowError): return None
@@ -104,6 +121,30 @@ def _write_header_if_missing(path,columns):
     if not path.exists() or not path.stat().st_size:
         path.parent.mkdir(parents=True,exist_ok=True)
         with path.open("w",newline="",encoding="utf-8") as f: csv.DictWriter(f,fieldnames=columns).writeheader()
+def ensure_csv_schema(path, columns):
+    """Migrate a CSV header without changing any stored prediction values."""
+    path = Path(path)
+    columns = list(columns)
+    if not path.exists() or path.stat().st_size == 0:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", newline="", encoding="utf-8") as f:
+            csv.DictWriter(f, fieldnames=columns).writeheader()
+        return columns
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        old_columns = list(reader.fieldnames or [])
+        rows = list(reader)
+    merged = columns + [name for name in old_columns if name not in columns]
+    if old_columns != merged:
+        tmp = path.with_name(path.name + ".tmp")
+        with tmp.open("w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=merged, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+        tmp.replace(path)
+    return merged
+
+
 def append_immutable_predictions(path,columns,rows,*,probability_field,kickoff_field="fecha",capture_field="capturado_en",ticker_field="ticker",id_field="prediction_id"):
     path=Path(path); existing=read_rows(path); ids={str(r.get(id_field,"")) for r in existing}; now=utc_now()
     accepted=[]; rejected=[]

@@ -573,7 +573,7 @@ for juego in [juego]:
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
-        columnas_bloque = ["categoria", "mercado", "lado", "probabilidad_modelo", "precio_captura", "edge", "ticker", "Resultado"]
+        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "precio_captura", "edge", "ticker", "Resultado"]
         mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
         mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
         mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)

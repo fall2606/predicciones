@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-from prediction_core import KALSHI_API_BASE, sports_series, events_for_series
+from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line
 from scipy.stats import nbinom, poisson
 
 
@@ -714,6 +714,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 "Precio máx. para margen objetivo": f"${precio_objetivo:.2f}" if precio_objetivo else "—",
                 "Disponibilidad": estado,
                 "Ticker": mercado.get("ticker", ""),
+                "line": extract_line(mercado.get("yes_sub_title") or mercado.get("title") or ""),
                 "Ventaja (edge)": round(probabilidad - precio, 6) if precio is not None else None,
                 "Resultado": resultado_texto,
                 "_clave": clave,

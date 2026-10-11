@@ -78,4 +78,24 @@ class CoreTests(unittest.TestCase):
    fetch.assert_called_once_with(set())
    with r.open(encoding="utf-8") as f: self.assertEqual(list(csv.DictReader(f)),[])
 
+
+ def test_line_extraction_and_csv_schema_migration(self):
+  self.assertEqual(core.extract_line("Over 2.5 goals"),"2.5")
+  self.assertEqual(core.extract_line("Handicap +1.5"),"+1.5")
+  self.assertEqual(core.extract_line("3+ corners"),"3+")
+  self.assertEqual(core.extract_line("Los Angeles D wins"),"")
+  with tempfile.TemporaryDirectory() as d:
+   path=Path(d)/"pred.csv"
+   with path.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","fecha","capturado_en","p"]); w.writeheader()
+    w.writerow({"prediction_id":"original","ticker":"KXREAL-1","fecha":"2026-10-01T00:00:00+00:00","capturado_en":"2026-09-30T00:00:00+00:00","p":"0.75"})
+   columns=["prediction_id","ticker","fecha","capturado_en","p","mercado","line","seleccion","bloque","edge"]
+   merged=core.ensure_csv_schema(path,columns)
+   with path.open(encoding="utf-8") as f:
+    reader=csv.DictReader(f); rows=list(reader); header=reader.fieldnames
+   self.assertEqual(header,columns)
+   self.assertEqual(rows[0]["prediction_id"],"original")
+   self.assertEqual(rows[0]["p"],"0.75")
+   self.assertEqual(rows[0]["line"],"")
+
 if __name__=="__main__": unittest.main()
