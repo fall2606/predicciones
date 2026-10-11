@@ -10,6 +10,7 @@ import ast
 import os
 import re
 import unicodedata
+import time
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 
@@ -66,13 +67,15 @@ def _parse_date(value):
 
 def _scoreboard(league, day):
     key = (league, day)
-    if key in _CACHE:
-        return _CACHE[key]
+    cached = _CACHE.get(key)
+    if cached and time.monotonic() - cached[0] < 180:
+        return cached[1]
+    _CACHE.pop(key, None)
     url = f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard"
     response = _SESSION.get(url, params={"dates": day, "limit": 100}, timeout=_TIMEOUT)
     response.raise_for_status()
     events = (response.json() or {}).get("events") or []
-    _CACHE[key] = events
+    _CACHE[key] = (time.monotonic(), events)
     return events
 
 
@@ -95,7 +98,11 @@ def _football_data_match(row):
         return None
     season = kickoff.year if kickoff.month >= 7 else kickoff.year - 1
     cache_key = (competition, season)
-    if cache_key not in _FD_CACHE:
+    cached = _FD_CACHE.get(cache_key)
+    if cached and time.monotonic() - cached[0] < 180:
+        matches = cached[1]
+    else:
+        _FD_CACHE.pop(cache_key, None)
         try:
             response = _SESSION.get(
                 f"https://api.football-data.org/v4/competitions/{competition}/matches",
@@ -104,14 +111,15 @@ def _football_data_match(row):
                 timeout=_TIMEOUT,
             )
             response.raise_for_status()
-            _FD_CACHE[cache_key] = (response.json() or {}).get("matches") or []
+            matches = (response.json() or {}).get("matches") or []
         except (requests.RequestException, ValueError, TypeError):
-            _FD_CACHE[cache_key] = []
+            matches = []
+        _FD_CACHE[cache_key] = (time.monotonic(), matches)
     local, away = str(row.get("local") or ""), str(row.get("visita") or "")
     if not local or not away:
         return None
     candidates = []
-    for item in _FD_CACHE[cache_key]:
+    for item in matches:
         home_team = (item.get("homeTeam") or {}).get("name") or (item.get("homeTeam") or {}).get("shortName") or ""
         away_team = (item.get("awayTeam") or {}).get("name") or (item.get("awayTeam") or {}).get("shortName") or ""
         match_date = _parse_date(item.get("utcDate"))
