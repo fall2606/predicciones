@@ -199,7 +199,17 @@ def main():
         print("No hay pronósticos guardados para liquidar.")
         return
 
-    resueltos = set(resultados["prediction_id"].astype(str)) if not resultados.empty else set()
+    # WIN/LOSS son cierres definitivos. NO_EVALUABLE se vuelve a comprobar en
+    # cada ciclo para corregirlo si la fuente oficial publica después el dato faltante.
+    estados_actuales = (
+        resultados.drop_duplicates("prediction_id", keep="last")
+        .set_index("prediction_id")["estado"].to_dict()
+        if not resultados.empty else {}
+    )
+    resueltos = {
+        str(prediction_id) for prediction_id, estado in estados_actuales.items()
+        if estado in {"WIN", "LOSS"}
+    }
     pendientes = predicciones[~predicciones["prediction_id"].astype(str).isin(resueltos)]
     if pendientes.empty:
         print("No quedan pronósticos pendientes.")
@@ -255,13 +265,14 @@ def main():
             continue
         marcador = marcador_periodos(partido)
         if marcador is None:
-            nuevos.append({
-                "prediction_id": str(fila["prediction_id"]),
-                "estado": "NO_EVALUABLE",
-                "marcador": "Partido finalizado, pero la API no entrega el marcador oficial completo",
-                "resuelto_en": datetime.now().astimezone().isoformat(),
-            })
-            resueltos.add(str(fila["prediction_id"]))
+            prediction_id = str(fila["prediction_id"])
+            if estados_actuales.get(prediction_id) != "NO_EVALUABLE":
+                nuevos.append({
+                    "prediction_id": prediction_id,
+                    "estado": "NO_EVALUABLE",
+                    "marcador": "Partido finalizado, pero la API no entrega el marcador oficial completo",
+                    "resuelto_en": datetime.now().astimezone().isoformat(),
+                })
             continue
         estado = evaluar_pronostico(fila, partido, marcador, corners)
         if estado not in {"WIN", "LOSS"}:
@@ -269,9 +280,14 @@ def main():
             motivo = "Falta estadística oficial para este mercado"
         else:
             motivo = ""
+        prediction_id = str(fila["prediction_id"])
+        # Evitar duplicar NO_EVALUABLE cada cinco minutos, pero sí anexar WIN/LOSS
+        # cuando la estadística que faltaba ya esté disponible.
+        if estado == "NO_EVALUABLE" and estados_actuales.get(prediction_id) == "NO_EVALUABLE":
+            continue
         goles = marcador["partido"]
         nuevos.append({
-            "prediction_id": str(fila["prediction_id"]),
+            "prediction_id": prediction_id,
             "estado": estado,
             "marcador": f"{goles[0]}-{goles[1]}" + (f" · {motivo}" if motivo else ""),
             "resuelto_en": datetime.now().astimezone().isoformat(),
