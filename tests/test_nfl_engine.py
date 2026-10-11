@@ -148,6 +148,7 @@ def test_atomic_save_preserves_yes_no_side_and_freezes_duplicates(tmp_path):
 
 
 def test_espn_fallback_settles_finished_winner_by_teams_and_date(monkeypatch):
+    nfl.ESPN_SCOREBOARD_CACHE.clear()
     event = {
         "id": "espn-game-1",
         "date": "2026-10-11T17:00:00Z",
