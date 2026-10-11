@@ -98,6 +98,8 @@ else:
                         "Ticker": subset.get("ticker", ""),
                     })
                     st.dataframe(display.head(limit), use_container_width=True, hide_index=True)
+                    if block != "DETALLE" and len(subset) < limit:
+                        st.caption(f"{len(subset)} de {limit} disponibles; no se completan cupos con selecciones que no superan los filtros del modelo.")
     with st.expander("Historial completo de predicciones NFL (incluye capturas excluidas)", expanded=False):
         st.dataframe(pred, use_container_width=True, hide_index=True)
 if not current.empty:
