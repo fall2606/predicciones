@@ -178,7 +178,10 @@ def clasificar(serie, market):
             or any(x in text for x in ("home run", "total bases", "strikeout", "hits", "rbis", "walks", "outs recorded", "earned runs", "stolen bases"))):
         return "Props de jugador"
     if "inningwin" in s or "first inning winner" in text or "win the first inning" in text:
-        return "Ganador de la 1.ª entrada"
+        ticker = str(market.get("ticker") or market.get("market_ticker") or "").upper()
+        inning_match = re.search(r"-(\d+)-(?:TIE|[A-Z]{2,3})$", ticker)
+        inning_number = int(inning_match.group(1)) if inning_match else 1
+        return f"Ganador de la {inning_number}.ª entrada"
     if any(x in text for x in ("first inning", "1st inning", "yrfi", "nrfi")) or "firstinning" in s:
         return "1.ª entrada / YRFI-NRFI"
     if any(x in text for x in ("first 5", "first five", "first 3", "first three", "first 7", "first seven", "f5 ", "f5 total")) or any(x in s for x in ("first5", "first3", "first7", "f5total", "kxmlbf5")):
@@ -216,6 +219,10 @@ def mercado_probabilidad(market, game):
     # KXMLBINNINGWIN is a distinct first-inning outcome market. Model the
     # first inning itself; do not reuse the full-game moneyline probability.
     if "BINNINGWIN" in ticker.upper() or "BINNINGWIN" in str(market.get("series_ticker", "")).upper():
+        inning_match = re.search(r"-(\d+)-(?:TIE|[A-Z]{2,3})$", ticker)
+        inning_number = int(inning_match.group(1)) if inning_match else 1
+        if inning_number != 1:
+            return None, "sin_modelo_especifico: solo se modela la 1.ª entrada"
         inning_axis = np.arange(0, 8)
         shape = 1 / 0.12
         def inning_pmf(mu):
