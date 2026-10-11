@@ -50,6 +50,8 @@ UNMATCHED_REPORT = ROOT / "mlb_eventos_sin_emparejar.csv"
 UNMATCHED_COLUMNS = ["event_ticker", "series_ticker", "title", "start_time", "motivo"]
 REJECTED_REPORT = ROOT / "mlb_candidatos_descartados.csv"
 REJECTED_COLUMNS = ["match_id", "local", "visita", "event_ticker", "ticker", "lado", "categoria", "probabilidad_modelo", "precio", "edge", "motivo"]
+CURRENT_REPORT = ROOT / "mlb_probabilidades_actuales.csv"
+CURRENT_COLUMNS = ["match_id", "local", "visita", "event_ticker", "ticker", "lado", "categoria", "probabilidad_modelo", "precio_captura", "edge", "prediction_id"]
 COVERAGE_REPORT = ROOT / "mlb_cobertura_por_partido.csv"
 COVERAGE_COLUMNS = ["match_id", "fecha", "local", "visita", "contratos_modelables", "sencillas_validas", "alta_probabilidad_validas", "a_tener_en_cuenta_validas", "sencillas_guardadas", "alta_probabilidad_guardadas", "a_tener_en_cuenta_guardadas", "motivo_sencillas", "motivo_alta_probabilidad", "motivo_a_tener_en_cuenta"]
 
@@ -739,6 +741,12 @@ def main():
         writer.writeheader()
         writer.writerows(rejected_candidates)
     print(f"INFORME DE CANDIDATOS DESCARTADOS: {REJECTED_REPORT.name} · filas={len(rejected_candidates)}")
+    current_candidates = [row for match_rows in by_match.values() for row in match_rows]
+    with CURRENT_REPORT.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CURRENT_COLUMNS)
+        writer.writeheader()
+        writer.writerows({key: row.get(key, "") for key in CURRENT_COLUMNS} for row in current_candidates)
+    print(f"PROBABILIDADES MLB ACTUALES: {CURRENT_REPORT.name} · filas={len(current_candidates)}")
     coverage_rows = []
     captured_rows = existing + new_rows
     for game in games:
