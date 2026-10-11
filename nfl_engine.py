@@ -352,12 +352,14 @@ def _event_teams(event):
 
 
 def _kickoff(event):
-    for key in ("start_time", "expected_expiration_time", "strike_date", "close_time"):
+    # Only fields explicitly representing kickoff are accepted. Kalshi expiration,
+    # strike and close times are contract timestamps, not necessarily game start.
+    for key in ("start_time", "event_start_time", "game_start_time"):
         dt = parse_dt(event.get(key))
         if dt:
             return dt
     # Many Kalshi NFL game events encode only the ET calendar date in the event ticker.
-    # Do not invent a kickoff time; use the official ESPN schedule to supply the exact time.
+    # The exact kickoff is then supplied by the official ESPN schedule after team/date matching.
     return None
 
 
