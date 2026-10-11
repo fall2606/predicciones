@@ -148,6 +148,29 @@ def _price(market, side):
             pass
     return None
 
+def merge_game_events(events):
+    """Merge per-market Kalshi events into one fixture, retaining every real market ticker."""
+    grouped = {}
+    for source in events or []:
+        event = dict(source)
+        fixture = str(event.get("title") or "").split(":", 1)[0].strip()
+        start = str(event.get("start_time") or event.get("strike_date") or "")
+        teams = re.split(r"\s+(?:vs\.?|versus|@|at)\s+", fixture, maxsplit=1, flags=re.I)
+        if len(teams) != 2:
+            continue
+        key = (_norm(fixture), start)
+        if key not in grouped:
+            event["title"] = fixture
+            event["markets"] = []
+            grouped[key] = event
+        known = {str(m.get("ticker") or "") for m in grouped[key]["markets"]}
+        for market in source.get("markets") or []:
+            ticker = str(market.get("ticker") or "")
+            if ticker and ticker not in known:
+                grouped[key]["markets"].append(market)
+                known.add(ticker)
+    return list(grouped.values())
+
 def build_candidates(events, stats):
     candidates = []
     now = datetime.now(timezone.utc)
@@ -202,7 +225,8 @@ def main():
                 for token in ("GAME", "SPREAD", "TOTAL", "TEAMTOTAL"))]
     if relevant:
         series = relevant
-    events = events_for_series([x["ticker"] for x in series], statuses=("open",))
+    raw_events = events_for_series([x["ticker"] for x in series], statuses=("open",))
+    events = merge_game_events(raw_events)
     stats = _team_stats()
     print(f"NFL: equipos con estadísticas recientes={len(stats)}")
     print("NFL: muestra de eventos:", [(e.get("title"), e.get("start_time"), e.get("strike_date"), len(e.get("markets") or [])) for e in events[:3]])
@@ -254,7 +278,7 @@ def main():
                          "ALTA_PROBABILIDAD" if row["prediction_id"] in high_ids else
                          "A_TENER_EN_CUENTA" if row["prediction_id"] in value_ids else "DETALLE")
     append_immutable_predictions(PRED_FILE, PRED_COLUMNS, rows, probability_field="probabilidad_modelo")
-    print(f"NFL: títulos de eventos de muestra={[event.get('title', '') for event in events[:5]]}")
+    print(f"NFL: eventos brutos={len(raw_events)}, partidos agrupados={len(events)}")
     print(f"NFL: eventos abiertos={len(events)}, candidatos modelados={len(candidates)}, capturas nuevas={len(rows)}")
 
 if __name__ == "__main__":
