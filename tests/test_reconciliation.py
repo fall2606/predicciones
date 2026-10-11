@@ -67,6 +67,14 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(result["motivo"], "estado desconocido")
         self.assertEqual(result["cuenta_alerta"], "SI")
 
+    def test_audit_uses_shared_safe_side_recovery_for_legacy_team_corners(self):
+        from scripts.auditar_reconciliacion import captured_side
+        row = {"ticker":"KXLALIGATCORNERS-26OCT11RBBOSA-RBB6",
+               "local":"Real Betis","visita":"Osasuna",
+               "jugada":"0–5 corners de Real Betis","seleccion":"",
+               "clave_interna":"(('KXLALIGATCORNERS', 'local', 6.0, 'over'), None)"}
+        self.assertEqual(captured_side(row), "NO")
+
     @patch("scripts.auditar_reconciliacion.kalshi_market")
     def test_settled_market_with_missing_captured_side_is_not_guessed(self, market):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
