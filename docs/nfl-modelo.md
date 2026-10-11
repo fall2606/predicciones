@@ -37,7 +37,7 @@ No se fabrican tickers, líneas, precios ni probabilidades. Los títulos y las r
 - Orden por ventaja, ventaja mínima configurable (5 puntos), tope de compra de 88¢ en Sencillas y 90¢ en alta probabilidad, diversificación por familia y protección contra correlaciones.
 - No hay cupos fijos por tipo de mercado. Cada selección guardada en cada bloque tiene prediction_id distinto.
 - Una ventaja superior a 20 puntos porcentuales queda marcada **REVISAR**; no se resta ventaja manualmente.
-- El backtest walk-forward calcula Brier score y log loss por tipo y compara con un baseline 50/50. La calibración Platt exige muestra mínima (100 por mercado en la configuración actual); si no se alcanza, se muestra **«calibración insuficiente»**.
+- El backtest walk-forward calcula Brier score y log loss por tipo y compara con un baseline 50/50. La calibración Platt exige muestra mínima (100 por mercado en la configuración actual) y solo se activa si mejora **ambas** métricas en una partición temporal reservada; si la muestra es insuficiente, se muestra **«calibración insuficiente»**, y si no mejora, se mantiene la probabilidad original con el motivo explícito.
 - **Limitación de datos:** el endpoint público consultado no conserva snapshots prepartido fiables de los precios de contratos NFL ya liquidados. Por eso el backtest histórico usa líneas proxy claramente etiquetadas y no afirma que sean precios históricos de Kalshi. La comparación con el precio real de Kalshi se activa cuando se disponga de snapshots prepartido guardados por el propio proyecto.
 
 ## Integridad del historial
