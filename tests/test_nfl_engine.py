@@ -4,7 +4,7 @@ import subprocess
 import sys
 import unittest
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import numpy as np
 import pandas as pd
@@ -276,4 +276,22 @@ class TestNflIntegrationOnPullRequest(unittest.TestCase):
         subprocess.run(
             [sys.executable, str(root / "scripts" / "verify_nfl_cycle.py")],
             cwd=root, check=True, timeout=480,
+        )
+
+
+    @unittest.skipUnless(
+        "nfl" in os.getenv("GITHUB_HEAD_REF", "").lower(),
+        "La liquidación posterior al partido solo corre en ramas NFL.",
+    )
+    def test_live_nfl_capture_fixture_settles_after_final(self):
+        root = Path(__file__).resolve().parents[1]
+        fixture = root / "tests" / "fixtures" / "nfl_live_capture_2026-10-11.csv"
+        rows = nfl.read_csv_tolerant(fixture, expected_columns=nfl.PRED_COLUMNS)
+        kickoffs = [nfl.parse_dt(row.get("hora_inicio")) for row in rows]
+        kickoff = max(value for value in kickoffs if value is not None)
+        if datetime.now(timezone.utc) < kickoff + timedelta(hours=4):
+            self.skipTest(f"El partido real capturado antes del inicio aún no ha completado su ventana de liquidación: {kickoff.isoformat()}")
+        subprocess.run(
+            [sys.executable, str(root / "scripts" / "verify_nfl_live_settlement.py")],
+            cwd=root, check=True, timeout=180,
         )
