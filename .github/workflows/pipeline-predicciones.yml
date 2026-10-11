@@ -97,11 +97,15 @@ jobs:
         id: liquidate_laliga
         if: always()
         continue-on-error: true
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
         run: python liquidar_laliga.py
       - name: Liquidar todos los contratos Champions
         id: liquidate_champions
         if: always()
         continue-on-error: true
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
         run: python liquidar_champions.py
       - name: Reconciliar predicciones de partidos finalizados
         id: audit_reconciliation
