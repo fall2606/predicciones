@@ -66,6 +66,7 @@ jobs:
             nfl_backtest_resumen.csv
             nfl_calibracion.json
             nfl_catalogo_actual.csv
+            nfl_catalogo_verificacion.csv
             nfl_candidatos_descartados.csv
             nfl_cobertura_por_partido.csv
           if-no-files-found: warn
