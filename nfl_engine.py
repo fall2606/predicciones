@@ -395,7 +395,7 @@ def _rank_nfl_game(rows):
     )
     value = choose(
         lambda r: float(r["edge"]) >= 0.02,
-        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 3, singles | combos,
+        10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 4, singles | combos,
     )
     return singles, combos, value
 
