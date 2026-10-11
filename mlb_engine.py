@@ -10,7 +10,8 @@ import unicodedata
 import requests
 import numpy as np
 from scipy.stats import nbinom
-from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates, rank_single_candidates, extract_line
+from prediction_core import KALSHI_API_BASE, append_immutable_predictions, valid_probability, sports_series, events_for_series, rank_market_candidates, rank_single_candidates, extract_line, single_candidate_rejection_reasons
+from mlb_math import score_probability_matrix
 
 API_MLB = "https://statsapi.mlb.com/api/v1"
 API_KALSHI = KALSHI_API_BASE
@@ -137,12 +138,10 @@ def modelo_partido(game, stats):
     ma = (0.75 * aw["rpg"] + 0.25 * mean) if aw else mean
     mh, ma = max(1.8, mh * 1.03), max(1.8, ma * 0.98)
     axis = np.arange(0, 26)
-    def pmf(mu):
-        dispersion = 0.12
-        n = 1 / dispersion
-        return nbinom.pmf(axis, n, n/(n+mu))
-    matrix = np.outer(pmf(mh), pmf(ma))
-    matrix /= matrix.sum()
+    # Root cause of historical NaN%: extreme-but-finite API rates can underflow every
+    # PMF value on the truncated 0..25 axis, making matrix.sum()==0 before normalization.
+    # Use the shared bounded-mean/fallback normalizer instead of dividing by zero.
+    matrix = score_probability_matrix(axis, mh, ma)
     return {
         "id": str(game.get("gamePk", "")),
         "home": h.get("team", {}).get("name", "Local"),
@@ -450,6 +449,9 @@ def main():
 
         # Singles: price cap, positive edge, trivial-line exclusion and family diversification.
         singles = rank_single_candidates(candidates, limit=5)
+        if not singles:
+            reasons = single_candidate_rejection_reasons(candidates)
+            print(f\"SENCILLAS SIN CANDIDATAS · {match_id} · {rows[0].get('local', '')} vs {rows[0].get('visita', '')}: {reasons or {'sin candidatos modelables': len(candidates)}}\")
 
         high, value = rank_market_candidates(candidates, min_probability=minimum_combo, high_limit=5, value_limit=10)
         limits = {"SENCILLAS": 5, "ALTA_PROBABILIDAD": 5, "A_TENER_EN_CUENTA": 10}
