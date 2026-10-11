@@ -112,10 +112,10 @@ def discover_nfl_series():
     found = []
     include_terms = (
         "GAME", "SPREAD", "TOTAL", "TEAMTOTAL", "PLAYER", "PASSYDS", "RUSHYDS",
-        "RECYDS", "RECEPTIONS", "TOUCHDOWN", "1H", "2H", "1Q", "2Q", "3Q", "4Q",
+        "RECYDS", "RECEPTIONS", "TOUCHDOWN", "TDPROT", "1H", "2H", "1Q", "2Q", "3Q", "4Q",
         "HALF", "QUARTER",
     )
-    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT", "TRADE", "CAREER", "DIVISIONWINS", "LASTTOWIN", "TDPROT")
+    exclude_terms = ("SUPERBOWL", "CHAMPION", "MVP", "PLAYOFFS", "SEASON", "COACH", "AWARD", "DRAFT", "TRADE", "CAREER", "DIVISIONWINS", "LASTTOWIN")
     for item in rows:
         ticker = str(item.get("ticker") or "").upper()
         title = normalizar(item.get("title") or item.get("name") or "")
@@ -130,13 +130,13 @@ def discover_nfl_series():
     unique = {str(row.get("ticker") or ""): row for row in found if row.get("ticker")}
     return list(unique.values())
 
-def load_kalshi_catalog(status="open", max_pages=2):
+def load_kalshi_catalog(status="open", max_pages=10):
     series = discover_nfl_series()
     if not series:
         raise RuntimeError("La API pública de Kalshi no devolvió series identificables como NFL.")
     events = []
     # Upcoming match markets are open; avoid the much slower initialized/futures archive.
-    # Two pages per series keep the live capture bounded.
+    # Paginate each series until exhausted (up to ten pages) so player props are not silently omitted.
     for item in series:
         try:
             rows = iter_kalshi_pages(
