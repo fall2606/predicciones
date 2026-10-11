@@ -156,7 +156,8 @@ def modelo_partido(game, stats):
 def partidos_proximos():
     now = datetime.now(timezone.utc)
     start = now.date() - timedelta(days=1)
-    end = now.date() + timedelta(days=3)
+    # Kalshi publica contratos abiertos más allá de los próximos tres días; cargar dos semanas evita falsos no-emparejamientos por horizonte.
+    end = now.date() + timedelta(days=14)
     stats = cargar_stats(now.year)
     games = cargar_calendario(start.isoformat(), end.isoformat())
     return [m for g in games if (m := modelo_partido(g, stats))], stats
