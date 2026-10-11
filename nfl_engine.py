@@ -184,7 +184,9 @@ def main():
     captured = datetime.now(timezone.utc).isoformat()
     rows = []
     for row in candidates:
-        category = row["categoria"]
+        # Calibrate YES and NO independently; they are complementary contracts.
+        category = f'{row["categoria"]} · {row["lado"]}'
+        row["categoria"] = category
         calibrated, note = calibrate_probability(row["probabilidad_modelo"], category, PRED_FILE, RESULT_FILE)
         row["probabilidad_calibrada"] = calibrated
         row["calibracion"] = note
