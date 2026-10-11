@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+from prediction_core import _side_from_row
 
 ROOT = Path(__file__).resolve().parent.parent
 SPORTS = {
@@ -136,22 +137,8 @@ def kalshi_market(ticker):
 
 
 def captured_side(row):
-    for key in ("lado", "seleccion"):
-        side = text(row.get(key)).upper()
-        if side in {"YES", "NO"}:
-            return side
-    raw = text(row.get("clave_interna"))
-    if raw:
-        try:
-            import ast
-            parsed = ast.literal_eval(raw)
-            if isinstance(parsed, tuple) and len(parsed) == 2:
-                side = text(parsed[1]).upper()
-                if side in {"YES", "NO"}:
-                    return side
-        except (ValueError, SyntaxError, TypeError):
-            pass
-    return None
+    """Use the same conservative YES/NO recovery as the liquidator."""
+    return _side_from_row(row, "lado")
 
 
 def _row_report(name, row, latest, match_states, kind):

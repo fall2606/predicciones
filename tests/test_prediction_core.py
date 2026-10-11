@@ -28,6 +28,14 @@ class CoreTests(unittest.TestCase):
   self.assertEqual(core._side_from_row(game,"lado"),"YES")
   self.assertEqual(core._side_from_row(btts,"lado"),"NO")
   self.assertIsNone(core._side_from_row(spread,"lado"))
+
+ def test_legacy_team_corners_side_is_inferred_only_from_exact_range_and_strike(self):
+  row={"ticker":"KXLALIGATCORNERS-26OCT11RBBOSA-RBB6","local":"Real Betis","visita":"Osasuna",
+       "jugada":"0–5 corners de Real Betis","line":"6+","seleccion":"",
+       "clave_interna":"(('KXLALIGATCORNERS', 'local', 6.0, 'over'), None)"}
+  self.assertEqual(core._side_from_row(row,"lado"),"NO")
+  ambiguous={**row,"jugada":"Corners de Real Betis","clave_interna":"(('KXLALIGATCORNERS', 'local', 6.0, 'over'), None)"}
+  self.assertIsNone(core._side_from_row(ambiguous,"lado"))
  def test_freeze_and_probability_gate(self):
   now=datetime.now(timezone.utc)
   with tempfile.TemporaryDirectory() as d:

@@ -214,12 +214,28 @@ def _side_from_row(row,side_field):
         contract=parsed[0]
         series=str(contract[0]).upper()
         outcome=str(contract[1]).lower()
+        line=contract[2] if len(contract) > 2 else None
         pick=str(row.get("jugada") or "").casefold()
         if series.endswith("BTTS") and outcome in {"ambos","btts"}:
             if "sin marcar" in pick or "no marcan" in pick or "no marca" in pick:
                 return "NO"
             if "ambos" in pick and "marcan" in pick:
                 return "YES"
+        # Recover a legacy team/total-corners side only when the saved Spanish
+        # range and the exact Kalshi strike prove the binary side unambiguously.
+        # Example: Kalshi ticker RBB6 means Real Betis 6+ corners; "0–5 corners"
+        # is therefore NO. Do not infer from probability or from team names alone.
+        if "CORNERS" in series and line is not None and "corner" in pick:
+            try:
+                strike = float(line)
+                low_range = re.search(r"(?:^|\s)0\s*[–—-]\s*(\d+)", pick)
+                high_range = re.search(r"(\d+)\s*[+]", pick)
+                if low_range and abs(strike - (int(low_range.group(1)) + 1)) < 1e-9:
+                    return "NO"
+                if high_range and abs(strike - int(high_range.group(1))) < 1e-9:
+                    return "YES"
+            except (TypeError, ValueError):
+                pass
         if series.endswith("GAME") and outcome in {"local","visita","empate"}:
             local=str(row.get("local") or "").casefold().strip()
             away=str(row.get("visita") or "").casefold().strip()
