@@ -335,9 +335,9 @@ elif valor_vista:
     _valor_df = pd.DataFrame(valor_vista).copy()
     _valor_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE")
     _ticker_col = "Ticker" if "Ticker" in _valor_df.columns else ("ticker" if "ticker" in _valor_df.columns else None)
-    if _ticker_col:
+    if _ticker_col and estado_partido not in {"CANCELLED", "CANCELED", "POSTPONED"}:
         _sin_ticker = _valor_df[_ticker_col].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
-        _valor_df.loc[_sin_ticker & (not partido_cerrado), "Resultado"] = "NO EVALUABLE · SIN TICKER REAL DE KALSHI"
+        _valor_df.loc[_sin_ticker, "Resultado"] = "NO EVALUABLE · SIN TICKER REAL DE KALSHI"
     _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _valor_df.columns]
     st.dataframe(_tabla_con_resultado(_valor_df[_cols]), use_container_width=True, hide_index=True)
 else:
