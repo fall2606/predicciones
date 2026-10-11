@@ -200,6 +200,8 @@ if resumen_sencillo_kalshi:
             except (TypeError, ValueError):
                 edge_txt = "No disponible"
             st.write(f"Ventaja: **{edge_txt}**")
+            if jugada.get("Revisión") == "REVISAR":
+                st.warning("REVISAR · ventaja superior a 20 puntos; comprobar precio y modelo.")
             resultado_tarjeta = str(jugada.get("Resultado", "PENDIENTE")).upper()
             if "ANULADA" in resultado_tarjeta or "VOID" in resultado_tarjeta:
                 st.info("ANULADA")
