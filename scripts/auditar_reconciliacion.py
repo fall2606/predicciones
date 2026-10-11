@@ -27,7 +27,7 @@ def finished_ids(kind, competition):
     if kind == "mlb":
         response = requests.get(
             "https://statsapi.mlb.com/api/v1/schedule",
-            params={"sportId": 1, "startDate": (now.date() - timedelta(days=14)).isoformat(),
+            params={"sportId": 1, "startDate": (now.date() - timedelta(days=180)).isoformat(),
                     "endDate": now.date().isoformat(), "gameTypes": "R,F,D,L,W"},
             timeout=8,
         )
