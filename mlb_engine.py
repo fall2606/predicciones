@@ -515,6 +515,18 @@ def mercados_liquidados(series):
     return finales
 
 
+def partido_bloqueado(game, now=None):
+    """True from 30 minutes before kickoff onward; malformed dates fail closed."""
+    now = now or datetime.now(timezone.utc)
+    try:
+        kickoff = datetime.fromisoformat(str(game.get("date", "")).replace("Z", "+00:00"))
+        if kickoff.tzinfo is None:
+            kickoff = kickoff.replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return True
+    return kickoff <= now + timedelta(minutes=30)
+
+
 def main():
     now = datetime.now(timezone.utc)
     games, _ = partidos_proximos()
@@ -560,13 +572,7 @@ def main():
             })
             continue
         # Lock MLB forecasts 30 minutes before scheduled first pitch.
-        try:
-            kickoff_dt = datetime.fromisoformat(str(game.get("date", "")).replace("Z", "+00:00"))
-            if kickoff_dt.tzinfo is None:
-                kickoff_dt = kickoff_dt.replace(tzinfo=timezone.utc)
-        except (TypeError, ValueError):
-            kickoff_dt = None
-        if kickoff_dt is not None and kickoff_dt <= now + timedelta(minutes=30):
+        if partido_bloqueado(game, now):
             locked_match_ids.add(str(game.get("id", "")))
             continue
         if game.get("status") != "Preview":
