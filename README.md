@@ -24,3 +24,12 @@
 - El workflow **Historial inmutable de Champions League** archiva pronósticos previos cada dos horas y puede iniciarse manualmente en GitHub Actions.
 - Los resultados de los contratos de partido usan el marcador reglamentario de 90 minutos; prórroga y penales quedan fuera, de acuerdo con la resolución de los mercados de fútbol de Kalshi.
 - El archivo de Champions se mantiene separado del de LaLiga. Por ahora football-data.org no aporta aquí corners históricos de Champions, así que se muestran contratos sin inventar sus probabilidades.
+
+
+## NFL
+
+- La página **NFL** utiliza un motor específico de fútbol americano, con proyecciones de puntos a partir de los resultados recientes de ESPN y mercados reales de Kalshi. Si no encuentra una muestra suficiente de ambos equipos, no inventa la proyección.
+- `nfl_engine.py` captura antes del inicio y conserva las capturas originales en `predicciones_nfl.csv`; las probabilidades recalibradas se guardan separadas de la probabilidad original.
+- `liquidar_nfl.py` consulta la resolución oficial de Kalshi y escribe WIN/LOSS/ANULADA en `resultados_nfl.csv`. Los contratos sin resolver permanecen pendientes y no entran en calibración.
+- El workflow **NFL - capturar, liquidar y recalibrar** se ejecuta cada 15 minutos y también admite ejecución manual. Los bloques de 5 sencillas, 5 para combos y 10 a tener en cuenta solo muestran selecciones que superan los filtros del modelo; si no hay suficientes, la página lo indica.
+- La calibración se separa por lado YES/NO y categoría, y exige al menos 30 casos resueltos comparables antes de ajustar probabilidades.
