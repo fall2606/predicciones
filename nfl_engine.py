@@ -30,33 +30,34 @@ def _norm(s):
     return re.sub(r"[^a-z0-9]+", " ", str(s or "").lower()).strip()
 
 def _team_stats(days=100):
+    # One ESPN date-range request retrieves all completed games in the rolling window.
     now = datetime.now(timezone.utc)
+    start = (now - timedelta(days=days)).strftime("%Y%m%d")
+    end = now.strftime("%Y%m%d")
+    try:
+        data = _json(ESPN, {"dates": f"{start}-{end}", "limit": 1000})
+    except (requests.RequestException, ValueError, TypeError):
+        return {}
     scores = {}
-    for offset in range(0, days, 7):
-        day = (now - timedelta(days=offset)).strftime("%Y%m%d")
-        try:
-            data = _json(ESPN, {"dates": day, "limit": 100})
-        except (requests.RequestException, ValueError, TypeError):
+    for event in data.get("events", []):
+        comp = (event.get("competitions") or [{}])[0]
+        if not comp.get("status", {}).get("type", {}).get("completed"):
             continue
-        for event in data.get("events", []):
-            comp = (event.get("competitions") or [{}])[0]
-            if not comp.get("status", {}).get("type", {}).get("completed"):
-                continue
-            competitors = comp.get("competitors") or []
-            if len(competitors) != 2:
-                continue
-            try:
-                home = next(x for x in competitors if x.get("homeAway") == "home")
-                away = next(x for x in competitors if x.get("homeAway") == "away")
-                hs, aws = float(home["score"]), float(away["score"])
-                hn = _norm(home.get("team", {}).get("displayName"))
-                an = _norm(away.get("team", {}).get("displayName"))
-            except (StopIteration, KeyError, TypeError, ValueError):
-                continue
-            if not hn or not an:
-                continue
-            scores.setdefault(hn, []).append((hs, aws))
-            scores.setdefault(an, []).append((aws, hs))
+        competitors = comp.get("competitors") or []
+        if len(competitors) != 2:
+            continue
+        try:
+            home = next(x for x in competitors if x.get("homeAway") == "home")
+            away = next(x for x in competitors if x.get("homeAway") == "away")
+            hs, aws = float(home["score"]), float(away["score"])
+            hn = _norm(home.get("team", {}).get("displayName"))
+            an = _norm(away.get("team", {}).get("displayName"))
+        except (StopIteration, KeyError, TypeError, ValueError):
+            continue
+        if not hn or not an:
+            continue
+        scores.setdefault(hn, []).append((hs, aws))
+        scores.setdefault(an, []).append((aws, hs))
     return {team: {"scored": mean(x[0] for x in rows[-8:]),
                    "allowed": mean(x[1] for x in rows[-8:]), "games": len(rows)}
             for team, rows in scores.items()}
@@ -212,7 +213,7 @@ def main():
         row["bloque"] = ("SENCILLAS" if row["prediction_id"] in single_ids else
                          "ALTA_PROBABILIDAD" if row["prediction_id"] in high_ids else
                          "A_TENER_EN_CUENTA" if row["prediction_id"] in value_ids else "DETALLE")
-    append_immutable_predictions(PRED_FILE, PRED_COLUMNS, rows)
+    append_immutable_predictions(PRED_FILE, PRED_COLUMNS, rows, probability_field="probabilidad_modelo")
     print(f"NFL: eventos abiertos={len(events)}, candidatos modelados={len(candidates)}, capturas nuevas={len(rows)}")
 
 if __name__ == "__main__":
