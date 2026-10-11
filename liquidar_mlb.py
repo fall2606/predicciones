@@ -29,7 +29,7 @@ def postponed_match_ids():
     for game in games:
         status = game.get("status", {})
         detailed = str(status.get("detailedState", "")).casefold()
-        if game.get("gamePk") is not None and detailed in {"postponed", "cancelled", "canceled"}:
+        if game.get("gamePk") is not None and detailed in {"postponed", "cancelled", "canceled", "suspended"}:
             cancelled.add(str(game["gamePk"]))
     return cancelled
 

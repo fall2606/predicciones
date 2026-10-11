@@ -226,12 +226,12 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     predictions_path=Path(predictions_path); results_path=Path(results_path)
     predictions=read_rows(predictions_path); results=read_rows(results_path)
     has_match_id=any("match_id" in r for r in predictions)
+    # Settlement identity is the prediction ID, not ticker/probability validity.
+    # Historical rows without a Kalshi ticker remain in the prediction file and are
+    # classified by the reconciler; they must not disappear from audit counts.
     valid_prediction_ids={
         str(row.get(id_field,"")) for row in predictions
         if str(row.get(id_field,"")).strip()
-        and str(row.get(ticker_field,"")).strip() not in {"","—","-","None","nan"}
-        and valid_probability(row.get("probabilidad_calibrada",row.get("probabilidad_modelo"))) is not None
-        and (not has_match_id or str(row.get("match_id","")).strip())
     }
     terminal={str(r.get(id_field,"")) for r in results
               if str(r.get(id_field,"")) in valid_prediction_ids
@@ -255,6 +255,11 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
             new.append(out)
             terminal.add(pid)
             continue
+        ticker_value=str(row.get(ticker_field,"")).strip()
+        if ticker_value.upper() in {"","—","-","NONE","NAN"}:
+            # Historical predictions without a Kalshi contract stay archived and are
+            # reported separately; there is no contract that can be settled.
+            continue
         kickoff=parse_datetime(row.get("fecha"))
         # Future fixtures do not need a settlement lookup yet. Past fixtures are
         # always retried, regardless of age, so missed schedules are recovered.
@@ -264,17 +269,22 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
     series={str(r[ticker_field]).split("-",1)[0] for r in pending if r.get(ticker_field)}
     # For small backlogs, query exact tickers directly; scanning every settled market in a series is needlessly slow.
     markets=_market_rows_for_series(series) if len(pending) > 50 else {}
+    exact_market_cache={}
     for row in pending:
         pid=str(row.get(id_field,"")); ticker=str(row.get(ticker_field,"")).strip(); market=markets.get(ticker)
         if market is None:
-            # Avoid thousands of per-ticker calls during backlog recovery. Once the
-            # series catalogue is mostly resolved, retry individual missing tickers.
-            if len(pending) > 50:
+            # Always retry exact tickers, including old backlogs. Cache each ticker
+            # so predictions in separate blocks do not cause duplicate API calls.
+            if ticker not in exact_market_cache:
+                try:
+                    payload=kalshi_get(f"markets/{ticker}")
+                    exact_market_cache[ticker]=payload.get("market") or (payload.get("markets") or [{}])[0]
+                except (requests.RequestException,ValueError,KeyError,IndexError,TypeError):
+                    exact_market_cache[ticker]=None
+            market=exact_market_cache[ticker]
+            if market is None:
                 skipped += 1
                 continue
-            try:
-                payload=kalshi_get(f"markets/{ticker}"); market=payload.get("market") or (payload.get("markets") or [{}])[0]
-            except (requests.RequestException,ValueError,KeyError,IndexError,TypeError): skipped+=1; continue
         result=str(market.get("result") or "").lower().strip(); status=str(market.get("status") or "").lower().strip()
         side=_side_from_row(row,side_field)
         if result in {"yes","no"} and side in {"YES","NO"}:

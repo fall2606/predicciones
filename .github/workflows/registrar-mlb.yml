@@ -29,11 +29,17 @@ jobs:
         run: python scripts/reparar_csv_predicciones.py
       - name: Capturar predicciones y liquidar contratos
         run: python registrar_mlb.py
+      - name: Generar reconciliación de todas las competiciones
+        if: always()
+        continue-on-error: true
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: python scripts/auditar_reconciliacion.py
       - name: Guardar únicamente filas nuevas
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_mlb.csv
+          git add predicciones_mlb.csv reconciliacion_pendientes.csv
           if git diff --cached --quiet; then
             echo "No hay capturas ni resultados nuevos"
           else

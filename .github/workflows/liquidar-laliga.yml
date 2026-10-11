@@ -35,12 +35,18 @@ jobs:
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python liquidar_laliga.py
+      - name: Generar reconciliación de todas las competiciones
+        if: always()
+        continue-on-error: true
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: python scripts/auditar_reconciliacion.py
 
       - name: Guardar resultados sin modificar pronósticos
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_laliga.csv resultados_laliga.csv
+          git add predicciones_laliga.csv resultados_laliga.csv reconciliacion_pendientes.csv
           if git diff --cached --quiet; then
             echo "No hay resultados nuevos"
           else

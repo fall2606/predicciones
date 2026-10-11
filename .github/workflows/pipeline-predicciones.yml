@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - "prediction_core.py"
+      - "reconciliacion_ui.py"
       - "mlb_engine.py"
       - "mlb_math.py"
       - "scripts/reparar_csv_predicciones.py"
@@ -57,7 +58,7 @@ jobs:
       - name: Reparar esquema mixto de historiales existentes
         run: python scripts/reparar_csv_predicciones.py
       - name: Comprobar sintaxis de todo el sistema
-        run: python -m compileall -q prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py scripts/backtest_mlb.py scripts/medir_timing_workflow.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
+        run: python -m compileall -q reconciliacion_ui.py prediction_core.py mlb_engine.py mlb_math.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py scripts/backtest_mlb.py scripts/medir_timing_workflow.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py pages/MLB.py pages/LaLiga.py pages/Champions.py
       - name: Ejecutar pruebas unitarias y regresiones
         run: python -m unittest discover -s tests -v
       - name: Capturar MLB antes del partido

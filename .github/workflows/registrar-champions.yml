@@ -35,12 +35,18 @@ jobs:
         env:
           CLAVE: ${{ secrets.CLAVE }}
         run: python registrar_champions.py
+      - name: Generar reconciliación de todas las competiciones
+        if: always()
+        continue-on-error: true
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+        run: python scripts/auditar_reconciliacion.py
 
       - name: Guardar sólo filas nuevas
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_champions.csv
+          git add predicciones_champions.csv reconciliacion_pendientes.csv
           if git diff --cached --quiet; then
             echo "No hay capturas ni resultados nuevos"
           else

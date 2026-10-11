@@ -16,6 +16,7 @@ from scipy.stats import nbinom, poisson
 
 from champions_engine import *
 from prediction_core import rank_market_candidates, rank_single_candidates
+from reconciliacion_ui import mostrar_reconciliacion
 
  
 def _tabla_con_resultado(df, columna="Resultado"):
@@ -81,53 +82,7 @@ seleccionables = []
 partidos_disponibles = {str(m["id"]): m for m in modelo[9]}
 partidos_disponibles.update({str(m["id"]): m for m in partidos})
 
-# Reconciliación visible: última liquidación y predicciones de partidos terminados sin resultado.
-try:
-    terminal_states = {"WIN", "LOSS", "ANULADA"}
-    if not resultados_guardados.empty and "estado" in resultados_guardados.columns:
-        terminal_result_ids = set(
-            resultados_guardados.loc[
-                resultados_guardados["estado"].astype(str).str.upper().isin(terminal_states),
-                "prediction_id"
-            ].astype(str)
-        )
-        latest_settlement = (
-            pd.to_datetime(resultados_guardados["resuelto_en"], errors="coerce", utc=True).max()
-            if "resuelto_en" in resultados_guardados.columns else pd.NaT
-        )
-    else:
-        terminal_result_ids = set()
-        latest_settlement = pd.NaT
-    final_match_ids = {
-        str(m.get("id")) for m in partidos_disponibles.values()
-        if str(m.get("status", "")).upper() in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED"}
-    }
-    if not predicciones_guardadas.empty and {"prediction_id", "match_id"}.issubset(predicciones_guardadas.columns):
-        started_without_result = predicciones_guardadas[
-            predicciones_guardadas["match_id"].astype(str).isin(final_match_ids)
-            & ~predicciones_guardadas["prediction_id"].astype(str).isin(terminal_result_ids)
-        ]
-    else:
-        started_without_result = pd.DataFrame()
-    st.caption("Última liquidación: " + (latest_settlement.strftime("%Y-%m-%d %H:%M UTC") if pd.notna(latest_settlement) else "sin liquidaciones registradas"))
-    if pd.isna(latest_settlement):
-        st.warning("No hay liquidaciones registradas; no se puede confirmar la frescura del proceso hasta que se resuelva el primer contrato.")
-    elif datetime.now(ZoneInfo("UTC")) - latest_settlement.to_pydatetime() > timedelta(hours=12):
-        st.warning("La última liquidación tiene más de 12 horas. Comprueba el workflow y los contratos terminados recientes.")
-    if len(started_without_result):
-        st.error(f"ALERTA: {len(started_without_result)} predicciones de partidos terminados siguen sin resultado registrado.")
-        try:
-            _pend_path = os.path.join(os.path.dirname(__file__), "..", "reconciliacion_pendientes.csv")
-            _pendientes_ui = pd.read_csv(_pend_path, dtype=str).fillna("")
-            _pendientes_ui = _pendientes_ui[_pendientes_ui.get("deporte", pd.Series(dtype=str)).eq("Champions")]
-            for _, _fila_pendiente in _pendientes_ui.head(5).iterrows():
-                st.warning(f"Sin liquidar · {_fila_pendiente.get('prediction_id', '')} · motivo: {_fila_pendiente.get('motivo', 'sin diagnóstico')}")
-        except (OSError, ValueError, KeyError, pd.errors.ParserError):
-            st.warning("Motivo detallado aún no disponible; el workflow debe generar reconciliacion_pendientes.csv.")
-    else:
-        st.success("Liquidación: no se detectan predicciones pendientes en partidos terminados incluidos en el calendario cargado.")
-except (ValueError, TypeError, KeyError) as exc:
-    st.warning(f"No se pudo completar la reconciliación visible: {exc}")
+mostrar_reconciliacion("Champions")
 
 proximos_disponibles = []
 for partido in partidos_disponibles.values():
