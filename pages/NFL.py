@@ -39,6 +39,16 @@ if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_
 
 excluded_df = read_csv(EXCLUDED)
 excluded_ids = set(excluded_df["prediction_id"].astype(str)) if not excluded_df.empty and "prediction_id" in excluded_df else set()
+if not current.empty and "prediction_id" in current and not pred.empty and "prediction_id" in pred:
+    result_fields = [field for field in ("prediction_id", "estado") if field in pred.columns]
+    result_lookup = pred[result_fields].drop_duplicates("prediction_id", keep="last")
+    current = current.merge(result_lookup, on="prediction_id", how="left", suffixes=("", "_historial"))
+    if "estado_historial" in current:
+        current["estado"] = current["estado_historial"].where(
+            current["estado_historial"].astype(str).str.strip().ne(""), current.get("estado", "")
+        )
+        current.drop(columns=["estado_historial"], inplace=True)
+valid_current = current[~current["prediction_id"].astype(str).isin(excluded_ids)].copy() if not current.empty and "prediction_id" in current else pd.DataFrame()
 mostrar_actualizacion_archivos([
     ("Predicciones NFL", PRED), ("Resultados NFL", RES),
     ("Probabilidades actuales NFL", CURRENT), ("Capturas NFL excluidas", EXCLUDED),
@@ -63,9 +73,11 @@ else:
         c3.metric("LOSS", int((state == "LOSS").sum()))
         c4.metric("Pendientes", int((~state.isin(["WIN", "LOSS", "ANULADA"])).sum()))
         st.subheader("Selecciones por partido")
-        games = sorted(valid_pred["match_id"].dropna().astype(str).unique()) if "match_id" in valid_pred else []
+        games = sorted(valid_current["match_id"].dropna().astype(str).unique()) if not valid_current.empty and "match_id" in valid_current else []
+        if not games:
+            st.info("No hay mercados prepartido válidos para recomendar en este momento.")
         for game_id in games:
-            group = valid_pred[valid_pred["match_id"].astype(str) == game_id].copy()
+            group = valid_current[valid_current["match_id"].astype(str) == game_id].copy()
             game_name = f"{group.iloc[0].get('local','')} vs {group.iloc[0].get('visita','')}"
             with st.expander(game_name + " · " + str(group.iloc[0].get("fecha",""))[:10], expanded=True):
                 for block, label, limit in (("SENCILLAS","5 posibles sencillas",5),("ALTA_PROBABILIDAD","5 selecciones para combos",5),("A_TENER_EN_CUENTA","10 a tener en cuenta",10),("DETALLE","Otros mercados modelados",1000)):
