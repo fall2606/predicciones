@@ -1046,7 +1046,8 @@ def calibrar_resumen(resumen, predicciones, resultados):
         if base is None or not 0 <= base <= 1:
             salida.append(copia)
             continue
-        categoria_calibracion = re.sub(r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\s*[·|:-]\s*", "", str(copia.get("Tipo", copia.get("categoria", copia.get("Categoría resumen", ""))), flags=re.I).strip().casefold()
+        categoria_raw = str(copia.get("Tipo", copia.get("categoria", copia.get("Categoría resumen", ""))))
+        categoria_calibracion = re.sub(r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\\s*[·|:-]\\s*", "", categoria_raw, flags=re.I).strip().casefold()
         datos = observados.get(categoria_calibracion, [])
         cercanos = [(p, acierto) for p, acierto in datos if abs(p - base) <= 0.10]
         ajustada = base
