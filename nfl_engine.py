@@ -30,34 +30,35 @@ def _norm(s):
     return re.sub(r"[^a-z0-9]+", " ", str(s or "").lower()).strip()
 
 def _team_stats(days=100):
-    # One ESPN date-range request retrieves all completed games in the rolling window.
+    # ESPN's NFL scoreboard accepts a season/year filter more reliably than arbitrary date ranges.
     now = datetime.now(timezone.utc)
-    start = (now - timedelta(days=days)).strftime("%Y%m%d")
-    end = now.strftime("%Y%m%d")
-    try:
-        data = _json(ESPN, {"dates": f"{start}-{end}", "limit": 1000})
-    except (requests.RequestException, ValueError, TypeError):
-        return {}
+    season_year = now.year if now.month >= 8 else now.year - 1
     scores = {}
-    for event in data.get("events", []):
-        comp = (event.get("competitions") or [{}])[0]
-        if not comp.get("status", {}).get("type", {}).get("completed"):
-            continue
-        competitors = comp.get("competitors") or []
-        if len(competitors) != 2:
-            continue
+    season_types = [2, 3] if now.month in (1, 2) else [2]
+    for season_type in season_types:
         try:
-            home = next(x for x in competitors if x.get("homeAway") == "home")
-            away = next(x for x in competitors if x.get("homeAway") == "away")
-            hs, aws = float(home["score"]), float(away["score"])
-            hn = _norm(home.get("team", {}).get("displayName"))
-            an = _norm(away.get("team", {}).get("displayName"))
-        except (StopIteration, KeyError, TypeError, ValueError):
+            data = _json(ESPN, {"dates": str(season_year), "seasontype": season_type, "limit": 1000})
+        except (requests.RequestException, ValueError, TypeError):
             continue
-        if not hn or not an:
-            continue
-        scores.setdefault(hn, []).append((hs, aws))
-        scores.setdefault(an, []).append((aws, hs))
+        for event in data.get("events", []):
+            comp = (event.get("competitions") or [{}])[0]
+            if not comp.get("status", {}).get("type", {}).get("completed"):
+                continue
+            competitors = comp.get("competitors") or []
+            if len(competitors) != 2:
+                continue
+            try:
+                home = next(x for x in competitors if x.get("homeAway") == "home")
+                away = next(x for x in competitors if x.get("homeAway") == "away")
+                hs, aws = float(home["score"]), float(away["score"])
+                hn = _norm(home.get("team", {}).get("displayName") or home.get("team", {}).get("name"))
+                an = _norm(away.get("team", {}).get("displayName") or away.get("team", {}).get("name"))
+            except (StopIteration, KeyError, TypeError, ValueError):
+                continue
+            if not hn or not an:
+                continue
+            scores.setdefault(hn, []).append((hs, aws))
+            scores.setdefault(an, []).append((aws, hs))
     return {team: {"scored": mean(x[0] for x in rows[-8:]),
                    "allowed": mean(x[1] for x in rows[-8:]), "games": len(rows)}
             for team, rows in scores.items()}
