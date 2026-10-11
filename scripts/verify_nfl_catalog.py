@@ -83,7 +83,8 @@ print(json.dumps({
     "sample_match_date_et": key[0],
     "sample_teams": list(key[1]),
     "sample_event_count_across_series": len(grouped),
-    "sample_market_count": len(catalog),\n    "catalog_csv": str(catalog_csv),
+    "sample_market_count": len(catalog),
+    "catalog_csv": str(catalog_csv),
     "market_families_found": dict(counts),
     "complete_match_catalog": catalog,
 }, ensure_ascii=False, indent=2))
