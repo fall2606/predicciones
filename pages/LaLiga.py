@@ -19,6 +19,14 @@ from prediction_core import rank_market_candidates, rank_single_candidates
 from reconciliacion_ui import mostrar_reconciliacion
 
  
+def _con_resultado_pendiente(filas, estado_partido):
+    """Añade Resultado a cualquier tabla de pronósticos sin fingir una liquidación."""
+    df = filas.copy() if isinstance(filas, pd.DataFrame) else pd.DataFrame(filas)
+    if "Resultado" not in df.columns:
+        df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else "PENDIENTE"
+    return df
+
+
 def _tabla_con_resultado(df, columna="Resultado"):
     """Presenta resultados de forma consistente en el historial y en los tres bloques."""
     if not isinstance(df, pd.DataFrame) or columna not in df.columns:
@@ -280,6 +288,8 @@ if partido_cerrado:
         _res = resultados_guardados.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last") if not resultados_guardados.empty and "resuelto_en" in resultados_guardados.columns else resultados_guardados
         _archivo_partido = _archivo_partido.merge(_res[["prediction_id", "estado"]], on="prediction_id", how="left")
         _archivo_partido["Resultado"] = _archivo_partido["estado"].fillna("ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("SIN LIQUIDAR" if partido_cerrado else "PENDIENTE"))
+        _sin_ticker_alta = _archivo_partido["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
+        _archivo_partido.loc[_archivo_partido["estado"].isna() & _sin_ticker_alta, "Resultado"] = "NO EVALUABLE · SIN TICKER REAL DE KALSHI"
         _archivo_partido.loc[_archivo_partido["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
             if _col not in _archivo_partido.columns:
@@ -347,12 +357,12 @@ else:
     tab_yes_kalshi, tab_no_kalshi = st.tabs(["YES con margen", "NO con margen"])
     with tab_yes_kalshi:
         if margen_yes_kalshi:
-            st.dataframe(pd.DataFrame(margen_yes_kalshi), use_container_width=True, hide_index=True)
+            st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(margen_yes_kalshi, estado_partido)), use_container_width=True, hide_index=True)
         else:
             st.info("No hay una apuesta YES disponible ahora que supere el margen mínimo del modelo.")
     with tab_no_kalshi:
         if margen_no_kalshi:
-            st.dataframe(pd.DataFrame(margen_no_kalshi), use_container_width=True, hide_index=True)
+            st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(margen_no_kalshi, estado_partido)), use_container_width=True, hide_index=True)
         else:
             st.info("No hay una apuesta NO disponible ahora que supere el margen mínimo del modelo.")
     if not margen_yes_kalshi and not margen_no_kalshi:
@@ -363,18 +373,18 @@ else:
         yes_cand_tab, no_cand_tab = st.tabs(["Candidatos YES", "Candidatos NO"])
         with yes_cand_tab:
             if candidatos_yes_kalshi:
-                st.dataframe(pd.DataFrame(candidatos_yes_kalshi), use_container_width=True, hide_index=True)
+                st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(candidatos_yes_kalshi, estado_partido)), use_container_width=True, hide_index=True)
             else:
                 st.info("No hay cotizaciones YES que pueda comparar para este partido.")
         with no_cand_tab:
             if candidatos_no_kalshi:
-                st.dataframe(pd.DataFrame(candidatos_no_kalshi), use_container_width=True, hide_index=True)
+                st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(candidatos_no_kalshi, estado_partido)), use_container_width=True, hide_index=True)
             else:
                 st.info("No hay cotizaciones NO que pueda comparar para este partido.")
 
     with st.expander("Ver las 10 opciones más probables aunque no tengan margen"):
         if top_kalshi:
-            st.dataframe(pd.DataFrame(top_kalshi), use_container_width=True, hide_index=True)
+            st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(top_kalshi, estado_partido)), use_container_width=True, hide_index=True)
         else:
             st.info("No encontré tipos y líneas activos de Kalshi en LaLiga con estimación suficiente para este partido.")
 st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
