@@ -214,6 +214,7 @@ def _side_from_row(row,side_field):
         contract=parsed[0]
         series=str(contract[0]).upper()
         outcome=str(contract[1]).lower()
+        line=contract[2] if len(contract) > 2 else None
         pick=str(row.get("jugada") or "").casefold()
         if series.endswith("BTTS") and outcome in {"ambos","btts"}:
             if "sin marcar" in pick or "no marcan" in pick or "no marca" in pick:
