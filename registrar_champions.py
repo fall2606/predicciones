@@ -6,7 +6,7 @@ import os
 import pandas as pd
 from datetime import datetime, timedelta, timezone
 import requests
-from prediction_core import append_immutable_predictions, rank_market_candidates, extract_line
+from prediction_core import append_immutable_predictions, rank_market_candidates, extract_line, calculate_edge
 
 from champions_engine import (
     TZ,
@@ -85,6 +85,7 @@ def main():
             salida_kalshi[6], min_probability=float(os.getenv("PROBABILIDAD_MINIMA_COMBO", "0.65"))
         )
         resultado_actual = []
+        edge_minimo_sencillas = float(os.getenv("SENCILLAS_EDGE_MIN", "0.05"))
         for fila in sencillas:
             fila = dict(fila)
             fila["_bloque"] = "SENCILLAS"
@@ -93,7 +94,15 @@ def main():
             except (ValueError, SyntaxError, TypeError):
                 lado = ""
             fila["_lado"] = lado
-            fila["edge"] = None
+            # Recalculate edge from the calibrated probability and actual buy price.
+            # Never persist a recommended single when either value is unavailable.
+            try:
+                p_calibrada = float(str(fila.get("Probabilidad modelo", "")).rstrip("%")) / 100
+            except (TypeError, ValueError):
+                p_calibrada = None
+            fila["edge"] = calculate_edge(p_calibrada, fila.get("Precio de compra"))
+            if fila["edge"] is None or fila["edge"] < edge_minimo_sencillas:
+                continue
             resultado_actual.append(fila)
         for bloque, candidatas in (("ALTA_PROBABILIDAD", alta), ("A_TENER_EN_CUENTA", valor)):
             for candidato in candidatas:
@@ -112,6 +121,11 @@ def main():
                     "Precio de compra": candidato.get("Precio de compra", "—"),
                 }], predicciones, resultados)[0]
                 p_calibrada = float(str(calibrado.get("Probabilidad modelo", f"{pbase:.1%}")).rstrip("%")) / 100
+                edge_calibrado = calculate_edge(p_calibrada, candidato.get("Precio de compra"))
+                # Calibration can erase an apparent advantage; do not keep a pick
+                # when the executable price or recalculated edge is missing/negative.
+                if edge_calibrado is None or edge_calibrado < 0.02:
+                    continue
                 resultado_actual.append({
                     "Tipo": candidato.get("Categoría resumen", "Kalshi"),
                     "Jugada sencilla": candidato.get("Apuesta sencilla") or candidato.get("Apuesta", ""),
@@ -122,7 +136,7 @@ def main():
                     "Disponibilidad": candidato.get("Disponibilidad", ""),
                     "Ticker": candidato.get("Ticker", ""),
                     "Clave interna": repr((clave, lado)),
-                    "_bloque": bloque, "_lado": lado, "edge": candidato.get("Ventaja (edge)"),
+                    "_bloque": bloque, "_lado": lado, "edge": edge_calibrado,
                 })
         for fila in resultado_actual:
             fila["Tipo"] = f"{fila['_bloque']} · {fila['Tipo']}"
