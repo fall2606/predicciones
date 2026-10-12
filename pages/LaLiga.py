@@ -245,9 +245,13 @@ try:
         resultado_en_vivo, corners_en_vivo, datos_partido["proporcion_primera"],
     )
     resumen_sencillo_kalshi = calibrar_resumen(resumen_sencillo_kalshi, predicciones_guardadas, resultados_guardados)
-    # La misma calibración histórica debe alimentar también combos y el bloque de valor,
-    # no solamente el resumen sencillo. Conserva las probabilidades base y recalcula edge.
+    # Aplica la calibración de categoría antes de anclar también a las listas diagnósticas.
     todas_kalshi = calibrar_resumen(todas_kalshi, predicciones_guardadas, resultados_guardados)
+    margen_yes_kalshi = calibrar_resumen(margen_yes_kalshi, predicciones_guardadas, resultados_guardados)
+    margen_no_kalshi = calibrar_resumen(margen_no_kalshi, predicciones_guardadas, resultados_guardados)
+    candidatos_yes_kalshi = calibrar_resumen(candidatos_yes_kalshi, predicciones_guardadas, resultados_guardados)
+    candidatos_no_kalshi = calibrar_resumen(candidatos_no_kalshi, predicciones_guardadas, resultados_guardados)
+    top_kalshi = calibrar_resumen(top_kalshi, predicciones_guardadas, resultados_guardados)
 except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
     eventos_kalshi, series_kalshi_con_error, total_series_kalshi = [], [], 0
     resumen_sencillo_kalshi, margen_yes_kalshi, margen_no_kalshi, candidatos_yes_kalshi, candidatos_no_kalshi, top_kalshi, todas_kalshi, mercados_kalshi, num_plantillas_kalshi = [], [], [], [], [], [], [], [], 0
