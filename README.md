@@ -33,3 +33,12 @@
 - `liquidar_nfl.py` consulta la resolución oficial de Kalshi y escribe WIN/LOSS/ANULADA en `resultados_nfl.csv`. Los contratos sin resolver permanecen pendientes y no entran en calibración.
 - El workflow **NFL - capturar, liquidar y recalibrar** se ejecuta cada 15 minutos y también admite ejecución manual. Los bloques de 5 sencillas, 5 para combos y 10 a tener en cuenta solo muestran selecciones que superan los filtros del modelo; si no hay suficientes, la página lo indica.
 - La calibración se separa por lado YES/NO y categoría, y exige al menos 30 casos resueltos comparables antes de ajustar probabilidades.
+
+
+## Contexto deportivo gratuito
+
+- La página **Contexto deportivo** (pages/Contexto_deportivo.py) consulta Google News RSS para buscar noticias públicas por equipo o jugador, sin API key ni servicio de IA de pago.
+- Presenta titulares, enlaces, fecha publicada y posibles temas a revisar (lesiones, alineaciones, sanciones, forma, clima o cambios), con caché de 15 minutos.
+- Las etiquetas son reglas de palabras clave, no una IA que verifique hechos. Hay que abrir la fuente y confirmar que la noticia es actual y aplica al partido.
+- Este módulo es deliberadamente independiente: **no modifica probabilidades, picks ni calibración WIN/LOSS**. No se aplican ajustes automáticos sin validación retrospectiva, para evitar contaminar el modelo con noticias falsas, duplicadas o irrelevantes.
+- El RSS público puede limitarse o fallar; que no aparezcan noticias no significa que no haya bajas. Esta página no sustituye una API deportiva oficial de lesiones/alineaciones.
