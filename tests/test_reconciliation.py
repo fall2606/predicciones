@@ -158,5 +158,35 @@ class ReconciliationStatusTests(unittest.TestCase):
             self.assertIn("falta resultado deportivo verificable", result["motivo"])
 
 
+
+    @patch("scripts.auditar_reconciliacion.SESSION.get")
+    def test_nfl_scoreboard_matches_event_ticker_by_teams_and_kickoff(self, get):
+        kickoff = (datetime.now(timezone.utc) - timedelta(hours=1)).replace(microsecond=0)
+        class Response:
+            def raise_for_status(self):
+                return None
+            def json(self):
+                return {"events": [{
+                    "id": "espn-123",
+                    "name": "Buffalo Bills at Miami Dolphins",
+                    "date": kickoff.isoformat(),
+                    "status": {"type": {"name": "STATUS_FINAL"}},
+                    "competitions": [{"competitors": [
+                        {"homeAway": "away", "team": {"displayName": "Buffalo Bills"}},
+                        {"homeAway": "home", "team": {"displayName": "Miami Dolphins"}},
+                    ]}],
+                }]}
+        get.return_value = Response()
+        row = {
+            "prediction_id": "nfl-1",
+            "match_id": "KXNFLGAME-TEST",
+            "fecha": kickoff.isoformat(),
+            "local": "Buffalo Bills",
+            "visita": "Miami Dolphins",
+        }
+        states = finished_matches("nfl", "", [row])
+        self.assertEqual(states["KXNFLGAME-TEST"], "FINAL")
+
+
 if __name__ == "__main__":
     unittest.main()
