@@ -978,6 +978,11 @@ def calibrar_resumen(resumen, predicciones, resultados):
     if not predicciones.empty and not resultados.empty:
         unidos = predicciones.merge(resultados, on="prediction_id", how="inner")
         unidos = unidos[unidos["estado"].isin(["WIN", "LOSS"])]
+        # Legacy first-scorer rows were estimated from final-score shares, which is invalid.
+        # Keep them in the historical ledger, but never let them train future calibration.
+        unidos = unidos[~unidos["categoria"].astype(str).str.contains(
+            r"primer gol|first goal|primer anotador", case=False, na=False
+        )]
         if not unidos.empty:
             claves = [col for col in ("match_id", "categoria", "ticker", "clave_interna", "jugada") if col in unidos.columns]
             if claves:
