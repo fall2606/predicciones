@@ -18,7 +18,7 @@ permissions:
   contents: write
   actions: read
 concurrency:
-  group: nfl-predicciones-main-v2
+  group: predicciones-main
   cancel-in-progress: true
 jobs:
   nfl:
@@ -82,7 +82,7 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           python scripts/auditar_reconciliacion.py
-          git add reconciliacion_pendientes.csv
+          git add reconciliacion_pendientes.csv auditoria_reconciliacion_actual.csv
           if git diff --cached --quiet; then
             echo "La reconciliación ya cubre las capturas actuales"
             exit 0
