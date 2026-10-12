@@ -3,8 +3,7 @@ Champions,NO_FINALIZADA,NO,partido no finalizado,209
 LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,156
 LaLiga,LIQUIDADA,NO,resultado registrado: WIN,199
 LaLiga,NO_FINALIZADA,NO,partido no finalizado,165
-LaLiga,PENDIENTE_ACTIVA,SI,partido vencido sin ticker y sin estado oficial verificable; requiere revisar fuente,7
-LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,5
+LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,12
 MLB,HISTORICO_NO_PARTIDO,NO,partido no encontrado,3650
 MLB,LIQUIDADA,NO,resultado registrado: LOSS,17
 MLB,LIQUIDADA,NO,resultado registrado: WIN,7
@@ -15,4 +14,4 @@ NFL,HISTORICO_NO_EVALUABLE,NO,Captura histórica asociada a una serie de periodo
 NFL,HISTORICO_NO_EVALUABLE,NO,Contrato de periodo/cuarto no cubierto por el modelo NFL,426
 NFL,LIQUIDADA,NO,resultado registrado: LOSS,66
 NFL,LIQUIDADA,NO,resultado registrado: WIN,66
-NFL,NO_FINALIZADA,NO,partido no finalizado,1329
+NFL,NO_FINALIZADA,NO,partido no finalizado,1861
