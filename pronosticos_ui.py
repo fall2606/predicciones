@@ -229,11 +229,23 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
         resultado = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
         with st.container(border=True):
             st.markdown(f"**{nombre}**")
-            if gate is not None:
-                if gate.get("eligible"):
-                    st.success(f"Veredicto: APOSTAR · {gate.get('reason', '')}")
-                else:
-                    st.warning(f"Veredicto: SIN RECOMENDACIÓN · {gate.get('reason', 'no supera los requisitos de calidad')}")
+            if gate is None:
+                veredicto = "NO APOSTAR · mercado ya liquidado"
+                confianza = "No aplica"
+            elif gate.get("eligible"):
+                veredicto = "APOSTAR"
+                mejora = gate.get("brier_market", 0) - gate.get("brier_model", 0)
+                confianza = "Alta" if gate.get("n", 0) >= 200 and mejora >= 0.03 else "Media"
+            elif "no supera" in gate.get("reason", ""):
+                veredicto = "NO APOSTAR"
+                confianza = "Baja"
+            else:
+                veredicto = "SIN DATOS"
+                confianza = "No validada"
+            if gate is not None and gate.get("eligible"):
+                st.success(f"Veredicto: {veredicto}")
+            else:
+                st.warning(f"Veredicto: {veredicto} · Sin recomendación: {gate.get('reason', '') if gate else 'el resultado ya está cerrado'}")
             lado = _valor_fila(fila, ("Lado", "Lado Kalshi", "lado", "seleccion"), "")
             if lado and str(lado).upper() in {"YES", "NO"}:
                 st.caption(f"{categoria + ' · ' if categoria else ''}Lado del contrato: {str(lado).upper()}")
@@ -242,15 +254,19 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
             fundamento = _valor_fila(fila, ("Fundamento", "Dato base", "Marcador proyectado", "Nota"), "")
             if fundamento:
                 st.write(f"**Dato que apoya la estimación:** {fundamento}")
-            c1, c2, c3, c4 = st.columns(4)
+            c1, c2, c3 = st.columns(3)
             c1.metric("Probabilidad del modelo", prob)
             c2.metric("Probabilidad final", final_text)
             c3.metric("Precio de compra", precio_texto)
+            c4, c5 = st.columns(2)
             c4.metric("Ventaja vs. precio", edge)
+            c5.metric("Nivel de confianza", confianza)
             if final_num is None:
                 st.caption("No se calcula probabilidad final: falta una cotización de compra válida de Kalshi.")
+            if gate is not None:
+                st.write(f"**Por qué:** {gate.get('reason', 'no cumple la compuerta de calidad')}")
             if calibracion:
-                st.caption(f"Validación: {calibracion}")
+                st.caption(f"Calibración por mercado: {calibracion}")
             if "WIN" == resultado or resultado.startswith("WIN "):
                 st.success("Resultado: WIN")
             elif "LOSS" == resultado or resultado.startswith("LOSS "):
