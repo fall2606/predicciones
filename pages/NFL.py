@@ -1,8 +1,10 @@
 """NFL page: per-game forecasts, original snapshots, calibration and settled results."""
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import pandas as pd
 import streamlit as st
 from reconciliacion_ui import mostrar_actualizacion_archivos
+from nfl_engine import ESPN, _json as nfl_json, _team_stats, projected_score, _normal_cdf
 
 ROOT = Path(__file__).resolve().parent.parent
 PRED = ROOT / "predicciones_nfl.csv"
@@ -26,6 +28,64 @@ def read_csv(path):
 pred = read_csv(PRED)
 res = read_csv(RES)
 current = read_csv(CURRENT)
+
+# Modelo de marcador NFL independiente del catálogo de Kalshi.
+# Así se pronostican los encuentros aunque aún no existan contratos negociables.
+@st.cache_data(ttl=900, show_spinner=False)
+def cargar_pronosticos_nfl_independientes():
+    ahora = datetime.now(timezone.utc)
+    temporada_modelo = ahora.year if ahora.month >= 8 else ahora.year - 1
+    stats_modelo = _team_stats()
+    data = nfl_json(ESPN, {"dates": str(temporada_modelo), "seasontype": 2, "limit": 1000})
+    filas_modelo = []
+    for evento in data.get("events", []):
+        try:
+            comp = (evento.get("competitions") or [{}])[0]
+            estado = comp.get("status", {}).get("type", {})
+            if estado.get("completed"):
+                continue
+            fecha = datetime.fromisoformat(str(evento.get("date", "")).replace("Z", "+00:00"))
+            if fecha < ahora or fecha > ahora + timedelta(days=14):
+                continue
+            competidores = comp.get("competitors") or []
+            home = next(x for x in competidores if x.get("homeAway") == "home")
+            away = next(x for x in competidores if x.get("homeAway") == "away")
+            local = home.get("team", {}).get("displayName") or home.get("team", {}).get("name")
+            visita = away.get("team", {}).get("displayName") or away.get("team", {}).get("name")
+            marcador = projected_score(local, visita, stats_modelo)
+            if not marcador:
+                filas_modelo.append({"Fecha (UTC)": fecha.strftime("%d/%m %H:%M"), "Partido": f"{local} vs {visita}", "Estado del cálculo": "Sin muestra suficiente"})
+                continue
+            puntos_local, puntos_visita = marcador
+            p_local = _normal_cdf(puntos_local - puntos_visita, 0, 13.5)
+            p_visita = 1 - p_local
+            p_over = _normal_cdf(puntos_local + puntos_visita, 40.5, 10.5)
+            favorito, p_favorito = (local, p_local) if p_local >= p_visita else (visita, p_visita)
+            filas_modelo.append({
+                "Fecha (UTC)": fecha.strftime("%d/%m %H:%M"),
+                "Partido": f"{local} vs {visita}",
+                "Marcador esperado": f"{puntos_local:.1f} - {puntos_visita:.1f}",
+                "Gana local": f"{p_local:.1%}",
+                "Gana visitante": f"{p_visita:.1%}",
+                "Más de 40.5 puntos": f"{p_over:.1%}",
+                "Favorito del modelo": f"{favorito} ({p_favorito:.1%})",
+                "Estado del cálculo": "Probabilidad base",
+            })
+        except (StopIteration, KeyError, TypeError, ValueError, requests.RequestException):
+            continue
+    return filas_modelo
+
+st.subheader("Pronósticos NFL independientes de Kalshi")
+st.caption("Cálculo estadístico de puntos esperados a partir de resultados recientes de ESPN. Se muestran probabilidades base, sin afirmar que estén calibradas; la ausencia de un mercado de Kalshi no elimina el pronóstico.")
+try:
+    _filas_nfl_modelo = cargar_pronosticos_nfl_independientes()
+    if _filas_nfl_modelo:
+        st.dataframe(pd.DataFrame(_filas_nfl_modelo), use_container_width=True, hide_index=True)
+    else:
+        st.info("ESPN no devolvió partidos futuros modelables en los próximos 14 días.")
+except (requests.RequestException, ValueError, KeyError, TypeError) as _exc:
+    st.warning(f"No pude calcular el pronóstico NFL independiente ahora: {type(_exc).__name__}. Los mercados e historiales de Kalshi siguen disponibles abajo.")
+
 if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
     results = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
     pred = pred.merge(results, on="prediction_id", how="left", suffixes=("", "_resultado"))
