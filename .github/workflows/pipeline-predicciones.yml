@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - "prediction_core.py"
+      - "sports_results.py"
       - "reconciliacion_ui.py"
       - "mlb_engine.py"
       - "mlb_math.py"
@@ -62,7 +63,7 @@ jobs:
       - name: Reparar esquema mixto de historiales existentes
         run: python scripts/reparar_csv_predicciones.py
       - name: Comprobar sintaxis de todo el sistema
-        run: python -m compileall -q app.py sports_context_reasoner.py reconciliacion_ui.py prediction_core.py mlb_engine.py mlb_math.py nfl_engine.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py scripts/backtest_mlb.py scripts/medir_timing_workflow.py scripts/auditar_reconciliacion.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py laliga_engine.py champions_engine.py pages/MLB.py pages/NFL.py pages/LaLiga.py pages/Champions.py pages/Contexto_deportivo.py
+        run: python -m compileall -q app.py sports_context_reasoner.py sports_results.py reconciliacion_ui.py prediction_core.py mlb_engine.py mlb_math.py nfl_engine.py scripts/reparar_csv_predicciones.py scripts/reintegrar_capturas_mlb.py scripts/backtest_mlb.py scripts/medir_timing_workflow.py scripts/auditar_reconciliacion.py registrar_laliga.py registrar_champions.py liquidar_mlb.py liquidar_laliga.py liquidar_champions.py laliga_engine.py champions_engine.py pages/MLB.py pages/NFL.py pages/LaLiga.py pages/Champions.py pages/Contexto_deportivo.py
       - name: Ejecutar pruebas unitarias y regresiones
         run: python -m unittest discover -s tests -v
       - name: Capturar MLB antes del partido
