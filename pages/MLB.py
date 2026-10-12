@@ -51,12 +51,17 @@ def leer_historial_mlb():
     try:
         pred = pd.read_csv(PRED_MLB, dtype=str).fillna("") if PRED_MLB.exists() else pd.DataFrame()
         res = pd.read_csv(RES_MLB, dtype=str).fillna("") if RES_MLB.exists() else pd.DataFrame()
-        if not pred.empty and "probabilidad_modelo" in pred.columns:
-            p = pd.to_numeric(pred["probabilidad_modelo"], errors="coerce")
+        if not pred.empty:
+            p_cal = pd.to_numeric(pred["probabilidad_calibrada"], errors="coerce") if "probabilidad_calibrada" in pred.columns else pd.Series(np.nan, index=pred.index)
+            p_base = pd.to_numeric(pred["probabilidad_modelo"], errors="coerce") if "probabilidad_modelo" in pred.columns else pd.Series(np.nan, index=pred.index)
+            pred["_probabilidad_evaluacion"] = p_cal.where(p_cal.notna(), p_base)
+            p = pred["_probabilidad_evaluacion"]
             pred = pred[np.isfinite(p) & p.between(0, 1)].copy()
         if not res.empty and "resuelto_en" in res.columns:
             res = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
         if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
+            if "estado" in pred.columns:
+                pred = pred.rename(columns={"estado": "estado_captura"})
             cols_res = [x for x in ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"] if x in res]
             pred = pred.merge(res[cols_res], on="prediction_id", how="left")
         return pred
@@ -72,23 +77,33 @@ if not historial_mlb.empty and "estado" in historial_mlb.columns:
     _win_mlb = int((_estados_mlb == "WIN").sum())
     _loss_mlb = int((_estados_mlb == "LOSS").sum())
     _settled_mlb = historial_mlb[_estados_mlb.isin(["WIN", "LOSS"])].copy()
-    _p_mlb = pd.to_numeric(_settled_mlb.get("probabilidad_modelo", pd.Series(dtype=float)), errors="coerce")
+    _p_mlb = pd.to_numeric(_settled_mlb.get("_probabilidad_evaluacion", _settled_mlb.get("probabilidad_calibrada", _settled_mlb.get("probabilidad_modelo", pd.Series(dtype=float)))), errors="coerce")
     _valid_p_mlb = _p_mlb.between(0, 1)
     _brier_mlb = None
+    _y_mlb = pd.Series(dtype=float)
     if _valid_p_mlb.any():
         _y_mlb = _settled_mlb.loc[_valid_p_mlb, "estado"].astype(str).str.upper().eq("WIN").astype(float)
         _brier_mlb = float(((_p_mlb.loc[_valid_p_mlb] - _y_mlb) ** 2).mean())
     _n_settled_mlb = _win_mlb + _loss_mlb
-    _hit_mlb = _win_mlb / _n_settled_mlb if _n_settled_mlb else None
+    _n_eval_mlb = int(_valid_p_mlb.sum())
+    _hit_mlb = float(_y_mlb.mean()) if _n_eval_mlb else None
+    _baseline_brier_mlb = _hit_mlb * (1 - _hit_mlb) if _hit_mlb is not None else None
     st.subheader("Evaluación histórica del modelo MLB")
     _m1, _m2, _m3, _m4, _m5, _m6 = st.columns(6)
     _m1.metric("WIN", _win_mlb)
     _m2.metric("LOSS", _loss_mlb)
-    _m3.metric("Resultados evaluados", _n_settled_mlb)
+    _m3.metric("Resultados evaluados", _n_eval_mlb)
     _m4.metric("Acierto WIN/LOSS", f"{_hit_mlb:.1%}" if _hit_mlb is not None else "—")
     _m5.metric("Brier (menor es mejor)", f"{_brier_mlb:.3f}" if _brier_mlb is not None else "—")
     _m6.metric("Pendientes", int((~_estados_mlb.isin(["WIN", "LOSS", "ANULADA"])).sum()))
-    st.caption("La tasa de acierto no sustituye la calibración. El Brier se calcula solo con probabilidades válidas y resultados WIN/LOSS liquidados; las anuladas y pendientes quedan fuera.")
+    st.caption(
+        "Se evalúa la misma probabilidad que usa el modelo para elegir mercados (calibrada si existe; si no, la base). "
+        f"El Brier se calcula solo con resultados WIN/LOSS y probabilidades válidas; referencia simple de esta muestra: "
+        f"{_baseline_brier_mlb:.3f}" if _baseline_brier_mlb is not None else
+        "Sin suficientes resultados con probabilidades válidas para comparar el Brier."
+    )
+    if _brier_mlb is not None and _baseline_brier_mlb is not None and _n_eval_mlb >= 20 and _brier_mlb >= _baseline_brier_mlb:
+        st.error("La muestra histórica actual no supera la referencia simple de Brier. No trates las selecciones como recomendaciones fiables hasta mejorar la validación.")
 try:
     candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_probabilidades_actuales.csv", dtype=str).fillna("")
 except (OSError, ValueError, pd.errors.ParserError):
