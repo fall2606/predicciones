@@ -47,7 +47,7 @@ def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col=
         if clave in liquidado.columns:
             candidato = probabilidad(liquidado[clave])
             p = p.fillna(candidato)
-    y = liquidado["estado"].astype(str).str.upper().eq("WIN").astype(float)
+    y = liquidado[columna_estado_resultado].astype(str).str.upper().eq("WIN").astype(float)
     valido = p.notna() & np.isfinite(p) & p.between(0, 1)
     p = p[valido]
     y = y[valido]
