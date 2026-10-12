@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
+from app_metadata import mostrar_metadata
 from scipy.stats import nbinom, poisson
 from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
 from prediction_core import rank_single_candidates, single_candidate_rejection_reasons, anchor_probability_to_market, probability_fraction
@@ -20,6 +21,7 @@ TIMEOUT = 20
 
 st.set_page_config(page_title="Predicciones MLB", page_icon="⚾", layout="wide")
 st.title("⚾ MLB · predicciones por partido")
+mostrar_metadata()
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
     "Solo se muestran unas pocas selecciones por partido cuando la proyección es suficientemente favorable. "
