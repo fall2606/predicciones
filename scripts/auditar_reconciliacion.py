@@ -127,7 +127,23 @@ def kalshi_market(ticker):
             f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}", timeout=8
         )
         if response.status_code == 404:
-            result = {"kind": "missing", "status": "not_found", "result": ""}
+            # Alternate public endpoint: older/delisted tickers may be omitted by
+            # /markets/{ticker} but remain retrievable through the list API.
+            fallback = SESSION.get(
+                "https://api.elections.kalshi.com/trade-api/v2/markets",
+                params={"tickers": ticker, "limit": 1000}, timeout=8
+            )
+            fallback.raise_for_status()
+            markets = (fallback.json() or {}).get("markets") or []
+            market = next((item for item in markets if text(item.get("ticker")) == ticker), {})
+            if market:
+                result = {
+                    "kind": "ok",
+                    "status": text(market.get("status")).lower(),
+                    "result": text(market.get("result")).lower(),
+                }
+            else:
+                result = {"kind": "missing", "status": "not_found", "result": ""}
         else:
             response.raise_for_status()
             market = (response.json() or {}).get("market") or {}
