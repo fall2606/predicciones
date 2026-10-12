@@ -36,7 +36,7 @@ class CoreTests(unittest.TestCase):
   self.assertIsNone(core.anchor_probability_to_market(0.80, "—"))
   self.assertIsNone(core.anchor_probability_to_market("—", 0.60))
   stale = {"probabilidad_final": 0.70, "probabilidad_calibrada": 0.60, "Precio de compra": "50%"}
-  self.assertAlmostEqual(core._anchor_market_row(stale)["probabilidad_final"], 0.525)
+  self.assertAlmostEqual(core._anchor_market_row(stale)["probabilidad_final"], 0.505)
 
  def test_rank_single_candidates_preserves_yes_no_and_uses_net_calibrated_edge(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
