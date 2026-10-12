@@ -3,10 +3,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import streamlit as st
+from app_metadata import mostrar_metadata
 
 ROOT = Path(__file__).resolve().parent.parent
 st.set_page_config(page_title="Calidad del modelo", page_icon="📊", layout="wide")
 st.title("📊 ¿Qué tan buenos son los pronósticos?")
+mostrar_metadata()
 st.write("Esta página compara las probabilidades guardadas con los resultados reales. No usa tablas: muestra las cifras que necesitas para saber si un modelo merece confianza.")
 st.warning("Importante: estas cifras son descriptivas. Para demostrar que un modelo predice bien hace falta un backtest cronológico fuera de muestra y comparar el modelo con el mercado. Una tasa de acierto alta por sí sola no basta.")
 
