@@ -26,7 +26,7 @@ class CoreTests(unittest.TestCase):
   self.assertEqual(len(selected),1)
   self.assertEqual(selected[0].get("_lado"),"YES")
   self.assertAlmostEqual(selected[0]["Ventaja (edge)"],0.19)
-  calibrated={**row,"probabilidad_calibrada":"0.60"}
+  calibrated={**row,"probabilidad_calibrada":"0.60","Precio de compra":"65%"}
   self.assertEqual(core.rank_single_candidates([calibrated]),[])
 
  def test_legacy_missing_side_is_inferred_only_for_unambiguous_game_and_btts(self):
@@ -87,7 +87,7 @@ class CoreTests(unittest.TestCase):
    {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"70%","Precio de compra":"55%","Ventaja (edge)":-0.8,"Apuesta":"4+ corners"}]
   high,value=core.rank_market_candidates(rows,0.7)
   self.assertEqual(len(high),2); self.assertEqual(len(value),3)
-  self.assertEqual(high[0]["Apuesta"],"Ambos marcan")
+  self.assertEqual(high[0]["Apuesta"],"Más de 1.5 goles")
   self.assertGreater(float(high[0]["Ventaja (edge)"]),0)
 
  def test_market_lookup_falls_back_to_ticker_filtered_list_endpoint(self):
