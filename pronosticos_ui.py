@@ -177,5 +177,5 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
                 st.warning("No hay ticker confirmado: no es un contrato ejecutable de Kalshi.")
             else:
                 st.caption(f"Contrato Kalshi: {ticker}")
-            if precio == "—":
+            if precio_raw == "—":
                 st.caption("Sin precio de compra confirmado, no se calcula una ventaja ejecutable.")
