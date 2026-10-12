@@ -220,6 +220,19 @@ def _row_report(name, row, latest, match_states, kind):
         base.update(motivo="partido no encontrado", clasificacion="HISTORICO_NO_PARTIDO")
         return base
 
+    if not ticker:
+        # Missing contracts cannot be looked up on Kalshi. For old/finished
+        # fixtures, retain an actionable alert instead of silently archiving them.
+        if is_final or is_cancelled or match_lookup_expired:
+            base.update(
+                motivo="partido terminado o vencido sin ticker; revisar liquidación por fuente deportiva",
+                clasificacion="PENDIENTE_ACTIVA",
+                cuenta_alerta="SI",
+            )
+        else:
+            base.update(motivo="sin ticker; partido aún dentro de la ventana normal", clasificacion="NO_FINALIZADA")
+        return base
+
     # Missing fixture IDs must not be silently skipped for 72 hours: after the
     # sport's normal duration, report the missing fixture; Kalshi gets its own 72h grace.
     if (not match_id or not official_state) and match_lookup_expired:
