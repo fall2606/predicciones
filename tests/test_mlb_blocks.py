@@ -85,7 +85,9 @@ class MLBThreeBlocksTests(unittest.TestCase):
             self.assertLessEqual(float(row["probabilidad_modelo"]), 1)
         self.assertEqual(counts.get("ALTA_PROBABILIDAD"), 5)
         self.assertEqual(counts.get("A_TENER_EN_CUENTA"), 10)
-        self.assertGreater(counts.get("SENCILLAS", 0), 0)
+        # At 72% model probability and 55¢ ask, the 25% market blend leaves
+        # insufficient net edge for a single; do not retain the old model-only pick.
+        self.assertEqual(counts.get("SENCILLAS", 0), 0)
         # Unpriced markets must not be stored as predictions or recommendations.
         unpriced = [r for r in rows if r["ticker"] == "KXMLBTOTAL-26OCT12NYYBOS-UNOPENED"]
         self.assertFalse(unpriced)
