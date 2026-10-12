@@ -9,6 +9,16 @@ class CoreTests(unittest.TestCase):
   for v in ("NaN","inf","-inf",-0.1,1.1,None,""): self.assertIsNone(core.valid_probability(v))
   self.assertEqual(core.valid_probability(0),0); self.assertEqual(core.valid_probability(1),1)
 
+ def test_price_parser_and_edge_are_conservative(self):
+  self.assertEqual(core.probability_fraction("57%"), 0.57)
+  self.assertEqual(core.probability_fraction("$0.57"), 0.57)
+  self.assertEqual(core.probability_fraction(0.57), 0.57)
+  self.assertIsNone(core.probability_fraction("—"))
+  self.assertIsNone(core.probability_fraction("NaN"))
+  self.assertIsNone(core.probability_fraction(0))
+  self.assertAlmostEqual(core.calculate_edge("72%", "57%"), 0.15)
+  self.assertIsNone(core.calculate_edge("72%", "—"))
+
  def test_rank_single_candidates_preserves_yes_no_for_immutable_capture(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
        "Probabilidad del modelo":"75%","Precio de compra":"50%","Ventaja (edge)":0.20,"_lado":"YES"}
