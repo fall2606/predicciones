@@ -304,12 +304,14 @@ def _row_report(name, row, latest, match_states, kind):
     elif market["status"] in {"closed", "inactive", "unlisted", "not_found"}:
         base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
     elif market["status"] in {"open", "active", "unopened", "initialized", "pending"}:
-        if grace_expired:
-            base.update(motivo=f"Kalshi aún no liquida (plazo vencido: {GRACE_HOURS} h)",
-                        clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
-        else:
-            base.update(motivo=f"Kalshi aún no liquida (dentro del plazo: {GRACE_HOURS} h)",
-                        clasificacion="EN_PLAZO")
+        # Once the fixture is officially final, the app must not hide an
+        # unresolved prediction behind Kalshi's settlement grace period.
+        suffix = f"plazo vencido: {GRACE_HOURS} h" if grace_expired else f"dentro del plazo de {GRACE_HOURS} h"
+        base.update(
+            motivo=f"partido finalizado pero Kalshi aún no liquida ({suffix}); revisar fuente alternativa",
+            clasificacion="PENDIENTE_ACTIVA",
+            cuenta_alerta="SI",
+        )
     else:
         base.update(motivo="estado desconocido", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
     return base
