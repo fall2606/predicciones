@@ -85,6 +85,26 @@ class CoreTests(unittest.TestCase):
   high,value=core.rank_market_candidates(rows,0.7)
   self.assertEqual(len(high),2); self.assertEqual(len(value),3); self.assertEqual(high[0]["Apuesta"],"Más de 1.5 goles")
 
+ def test_market_lookup_falls_back_to_ticker_filtered_list_endpoint(self):
+  with tempfile.TemporaryDirectory() as d:
+   p,r=Path(d)/"p.csv",Path(d)/"r.csv"
+   old=(datetime.now(timezone.utc)-timedelta(days=5)).isoformat()
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","lado","fecha","capturado_en","probabilidad_modelo"]); w.writeheader()
+    w.writerow({"prediction_id":"fallback","ticker":"KXTEST-FALLBACK","lado":"YES","fecha":old,"capturado_en":old,"probabilidad_modelo":"0.6"})
+   def lookup(path, params=None):
+    if path == "markets/KXTEST-FALLBACK":
+     raise core.requests.HTTPError("direct endpoint unavailable")
+    if path == "markets" and params and params.get("tickers") == "KXTEST-FALLBACK":
+     return {"markets":[{"ticker":"KXTEST-FALLBACK","status":"settled","result":"yes"}]}
+    raise AssertionError((path, params))
+   with patch.object(core,"kalshi_get",side_effect=lookup):
+    summary=core.liquidate_kalshi_ledger(p,r,["prediction_id","estado","marcador","resuelto_en"],side_field="lado")
+   self.assertEqual(summary["win"],1)
+   with r.open(encoding="utf-8") as f:
+    rows=list(csv.DictReader(f))
+   self.assertEqual(rows[0]["estado"],"WIN")
+
  def test_legacy_score_based_result_is_retried_against_kalshi(self):
   with tempfile.TemporaryDirectory() as d:
    p,r=Path(d)/"p.csv",Path(d)/"r.csv"
