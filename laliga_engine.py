@@ -1066,8 +1066,12 @@ def calibrar_resumen(resumen, predicciones, resultados):
         datos = observados.get(categoria_calibracion, [])
         cercanos = [(p, acierto) for p, acierto in datos if abs(p - base) <= 0.10]
         ajustada = base
-        # Avoid fitting a noisy category until a useful out-of-sample sample exists.
-        if len(cercanos) >= 30:
+        # Shrink category calibration toward the model probability to limit noise.
+        try:
+            min_casos_calibracion = max(5, int(os.getenv("CALIBRACION_MIN_CASOS_COMPARABLES", "15")))
+        except (TypeError, ValueError, OverflowError):
+            min_casos_calibracion = 15
+        if len(cercanos) >= min_casos_calibracion:
             ganados = sum(acierto for _, acierto in cercanos)
             ajustada = (ganados + 20 * base) / (len(cercanos) + 20)
         copia["Probabilidad base"] = base
@@ -1085,7 +1089,7 @@ def calibrar_resumen(resumen, predicciones, resultados):
         except (TypeError, ValueError, OverflowError):
             copia["Ventaja (edge)"] = None
         copia["_p"] = ajustada
-        copia["Calibración"] = f"Aprendida con {len(cercanos)} resultados" if len(cercanos) >= 30 else "Sin calibrar: faltan 30 casos comparables"
+        copia["Calibración"] = f"Aprendida con {len(cercanos)} resultados" if len(cercanos) >= min_casos_calibracion else f"Sin calibrar: faltan {min_casos_calibracion} casos comparables"
         salida.append(copia)
     return salida
 
