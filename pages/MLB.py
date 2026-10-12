@@ -10,7 +10,7 @@ import requests
 import streamlit as st
 from scipy.stats import nbinom, poisson
 from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
-from prediction_core import rank_single_candidates, single_candidate_rejection_reasons
+from prediction_core import rank_single_candidates, single_candidate_rejection_reasons, anchor_probability_to_market, probability_fraction
 from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
 from pronosticos_ui import mostrar_pronosticos_sencillos
 
@@ -918,28 +918,34 @@ for juego in [juego]:
                             st.markdown(f"**{prefijo}: {frase}**")
                         st.caption(f"Categoría: {categoria}")
                         try:
-                            prob = float(pick.get("probabilidad_modelo", 0))
-                            if prob > 1:
+                            raw_model = pick.get("probabilidad_calibrada", pick.get("probabilidad_modelo", 0))
+                            prob = float(str(raw_model).replace("%", "")) 
+                            if "%" in str(raw_model) or prob > 1:
                                 prob /= 100
                             prob_txt = f"{prob:.1%}"
                         except (TypeError, ValueError):
+                            prob = None
                             prob_txt = "—"
                         try:
-                            precio = float(pick.get("precio_captura", ""))
+                            precio = float(pick.get("precio_captura", pick.get("Precio de compra", "")))
                             if precio > 1:
                                 precio /= 100
                             precio_txt = f"{round(precio * 100)}¢"
                         except (TypeError, ValueError):
+                            precio = None
                             precio_txt = "—"
+                        p_final = probability_fraction(pick.get("probabilidad_final"))
+                        if p_final is None:
+                            p_final = anchor_probability_to_market(prob, precio)
+                        final_txt = f"{p_final:.1%}" if p_final is not None else "Sin precio válido"
                         try:
-                            edge = float(pick.get("edge", pick.get("Ventaja (edge)", "")))
-                            if abs(edge) > 1:
-                                edge /= 100
-                            edge_txt = f"{edge * 100:+.1f} puntos"
-                        except (TypeError, ValueError):
-                            edge_txt = "—"
-                        st.write(f"Probabilidad del modelo: **{prob_txt}**")
-                        st.write(f"Precio Kalshi: **{precio_txt}** · Ventaja: **{edge_txt}**")
+                            buffer_costes = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+                        except (TypeError, ValueError, OverflowError):
+                            buffer_costes = 0.01
+                        edge_txt = f"{(p_final - precio - buffer_costes) * 100:+.1f} puntos" if p_final is not None and precio is not None else "No calculable"
+                        st.write(f"Probabilidad del modelo calibrada: **{prob_txt}**")
+                        st.write(f"Probabilidad final anclada a Kalshi: **{final_txt}**")
+                        st.write(f"Precio de compra Kalshi: **{precio_txt}** · Ventaja vs. precio: **{edge_txt}**")
                         _ticker_card = str(pick.get("ticker") or pick.get("Ticker") or "")
                         _lado_card = str(pick.get("lado") or pick.get("Lado Kalshi") or "")
                         _p_actual = probabilidad_recalculada_mlb(_ticker_card, _lado_card)
