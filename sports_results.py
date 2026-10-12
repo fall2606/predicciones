@@ -139,8 +139,32 @@ def _football_data_match(row):
             home_score, away_score = away_score, home_score
             half_home, half_away = half_away, half_home
         status = str(item.get("status") or "").upper()
+        # Prefer the official fixture's ordered goal list for first-goal markets.
+        # Some API plans omit it; in that case the ESPN play-by-play fallback remains.
+        first_scoring_team = ""
+        goals = item.get("goals") or []
+        if isinstance(goals, list):
+            def goal_order(goal):
+                minute = goal.get("minute")
+                injury = goal.get("injuryTime") or 0
+                try:
+                    return (int(minute) if minute is not None else 10**6, int(injury))
+                except (TypeError, ValueError):
+                    return (10**6, 0)
+            for goal in sorted((g for g in goals if isinstance(g, dict)), key=goal_order):
+                team_obj = goal.get("team") or {}
+                goal_team = team_obj.get("name") or team_obj.get("shortName") or ""
+                if not goal_team:
+                    continue
+                if _similar(goal_team, home_team) >= 0.78:
+                    first_scoring_team = local if not reversed_teams else away
+                    break
+                if _similar(goal_team, away_team) >= 0.78:
+                    first_scoring_team = away if not reversed_teams else local
+                    break
         candidates.append({
             "confidence": confidence, "event_id": str(item.get("id") or ""),
+            "first_scoring_team": first_scoring_team,
             "status": "STATUS_FINAL" if status == "FINISHED" else status,
             "completed": status == "FINISHED",
             "status_detail": "Marcador reglamentario de football-data.org: " + status,
@@ -363,11 +387,13 @@ def settle_from_score(row):
             if total == 0:
                 proposition = False
             else:
-                espn_match = find_match(row)
-                if not espn_match or not espn_match.get("event_id"):
-                    return None
-                summary = _espn_summary(espn_match["event_id"], espn_match.get("league"))
-                first_team = _summary_first_scoring_team(summary)
+                first_team = match.get("first_scoring_team") or ""
+                if not first_team:
+                    espn_match = find_match(row)
+                    if not espn_match or not espn_match.get("event_id"):
+                        return None
+                    summary = _espn_summary(espn_match["event_id"], espn_match.get("league"))
+                    first_team = _summary_first_scoring_team(summary)
                 if not first_team:
                     return None
                 if _similar(first_team, str(row.get("local") or "")) >= 0.78:
