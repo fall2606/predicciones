@@ -36,12 +36,14 @@ def mostrar_reconciliacion(deporte):
     pending = current[current["cuenta_alerta"].astype(str).str.upper().eq("SI")].copy()
     historic = current[current["clasificacion"].astype(str).eq("HISTORICO_SIN_CONTRATO")].copy()
     historic_nonmatch = current[current["clasificacion"].astype(str).eq("HISTORICO_NO_PARTIDO")].copy()
+    non_evaluable = current[current["clasificacion"].astype(str).eq("HISTORICO_NO_EVALUABLE")].copy()
     resolved = current[current["clasificacion"].astype(str).eq("LIQUIDADA")]
     st.caption(
         f"{deporte}: {len(current)} predicciones auditadas · "
         f"{len(resolved)} con resultado terminal registrado · "
         f"{len(historic)} históricos sin contrato de Kalshi · "
-        f"{len(historic_nonmatch)} históricos sin partido asociado."
+        f"{len(historic_nonmatch)} históricos sin partido asociado · "
+        f"{len(non_evaluable)} capturas históricas no evaluables."
     )
 
     if pending.empty:
@@ -76,6 +78,14 @@ def mostrar_reconciliacion(deporte):
             st.dataframe(historic_nonmatch[cols].head(100), use_container_width=True, hide_index=True)
             if len(historic_nonmatch) > 100:
                 st.caption(f"Se muestran 100 de {len(historic_nonmatch)} filas; el CSV de reconciliación conserva todas.")
+
+
+    if not non_evaluable.empty:
+        with st.expander(f"Capturas históricas no evaluables ({len(non_evaluable)}; excluidas del cálculo de calidad)", expanded=False):
+            cols = [c for c in ["prediction_id", "match_id", "fecha", "local", "visita", "bloque", "ticker", "motivo"] if c in non_evaluable.columns]
+            st.dataframe(non_evaluable[cols].head(100), use_container_width=True, hide_index=True)
+            if len(non_evaluable) > 100:
+                st.caption(f"Se muestran 100 de {len(non_evaluable)} filas; el CSV de reconciliación conserva todas.")
 
 
 def mostrar_actualizacion_archivos(archivos):
