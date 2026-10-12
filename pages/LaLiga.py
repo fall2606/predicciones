@@ -332,7 +332,7 @@ if resumen_sencillo_kalshi:
                 _estado_historial = historial_partido["Resultado"].astype(str).str.upper()
                 _terminal_historial = _estado_historial.str.contains("WIN|LOSS|ANULADA", regex=True)
                 historial_partido.loc[~_terminal_historial, "Resultado"] = "sin datos para liquidar · mercado sin fuente compatible"
-        with st.expander(f"Comparar todas las capturas guardadas ({len(historial_partido)})"):
+        with st.expander(f"Auditoría · capturas guardadas ({len(historial_partido)})"):
             st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
 else:
     if partido_cerrado:
@@ -407,7 +407,7 @@ else:
     st.info("No hay contratos con precio y edge calculable que entren en este bloque.")
 
 tabla_rendimiento, cantidad_rendimiento = metricas_historial(predicciones_guardadas, resultados_guardados)
-with st.expander(f"Aprendizaje y rendimiento histórico ({cantidad_rendimiento} resultados evaluables)"):
+with st.expander(f"Auditoría · rendimiento histórico ({cantidad_rendimiento} resultados evaluables)"):
     if cantidad_rendimiento:
         st.dataframe(tabla_rendimiento, use_container_width=True, hide_index=True)
         st.caption("El Brier medio mide el error probabilístico; más bajo es mejor. Las filas originales nunca se reescriben.")
@@ -499,7 +499,7 @@ if not partido_final:
         with st.expander(f"Ver todas las apuestas y líneas detectadas ({len(todas_kalshi)})"):
             st.dataframe(pd.DataFrame(todas_kalshi), use_container_width=True, hide_index=True)
 
-    with st.expander("Ver contratos abiertos ahora para este partido"):
+    with st.expander("Auditoría · contratos abiertos ahora para este partido"):
         if mercados_kalshi:
             st.dataframe(pd.DataFrame(mercados_kalshi), use_container_width=True, hide_index=True)
         elif total_series_kalshi and not series_kalshi_con_error:
@@ -509,7 +509,7 @@ if not partido_final:
 
     if series_kalshi_con_error:
         st.warning(f"Kalshi no respondió para {len(series_kalshi_con_error)} de {total_series_kalshi} series de LaLiga; el listado puede estar incompleto.")
-        with st.expander("Ver series de Kalshi que fallaron"):
+        with st.expander("Auditoría · series de Kalshi que fallaron"):
             st.write(", ".join(series_kalshi_con_error))
 
     st.caption(
