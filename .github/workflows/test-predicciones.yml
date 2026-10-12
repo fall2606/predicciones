@@ -31,6 +31,7 @@ jobs:
           path: |
             auditoria_calidad_actual.csv
             auditoria_calidad_actual.json
+            auditoria_reconciliacion_actual.csv
           if-no-files-found: error
           retention-days: 30
       - name: Verificar catálogo público real de Kalshi
