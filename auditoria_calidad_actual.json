@@ -85,6 +85,9 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
+    "filas_reconciliacion": 532,
+    "prediction_ids_sin_fila_reconciliacion": 0,
+    "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 9
   },
   {
@@ -110,6 +113,9 @@
     "brier_referencia_muestra": null,
     "calibracion_intervalos": [],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
+    "filas_reconciliacion": 204,
+    "prediction_ids_sin_fila_reconciliacion": 0,
+    "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
   },
   {
@@ -174,6 +180,9 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
+    "filas_reconciliacion": 3741,
+    "prediction_ids_sin_fila_reconciliacion": 0,
+    "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 1
   },
   {
@@ -262,6 +271,9 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
+    "filas_reconciliacion": 2815,
+    "prediction_ids_sin_fila_reconciliacion": 0,
+    "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
   }
 ]
