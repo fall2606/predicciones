@@ -115,7 +115,7 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
     for fila in filas:
         nombre = _valor_fila(
             fila,
-            ("Jugada sencilla", "Apuesta", "Pronóstico", "mercado", "seleccion", "Tipo", "Categoría resumen"),
+            ("Jugada sencilla", "Apuesta", "Pronóstico", "Mercado", "Mercado Kalshi", "mercado", "seleccion", "Tipo", "Categoría resumen"),
             "Selección sin nombre",
         )
         categoria = _valor_fila(fila, ("Tipo", "Categoría resumen", "categoria", "bloque"), "")
@@ -127,10 +127,20 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
              "Probabilidad modelo", "Prob. modelo", "Prob. original", "Probabilidad estimada",
              "probabilidad_calibrada", "probabilidad_modelo"),
         ))
-        precio = _valor_fila(
+        precio_raw = _valor_fila(
             fila,
-            ("Precio de compra", "Precio Kalshi", "Precio actual", "Precio", "Precio ahora", "precio"),
+            ("Precio de compra", "Precio Kalshi", "Precio actual", "Precio captura", "Precio", "Precio ahora", "precio"),
         )
+        precio_texto = str(precio_raw)
+        if not any(token in precio_texto for token in ("$", "¢", "%")):
+            try:
+                precio_num = float(precio_texto)
+                if 0 < precio_num < 1:
+                    precio_texto = f"${precio_num:.2f} ({precio_num * 100:.0f}¢)"
+                elif 1 < precio_num <= 100:
+                    precio_texto = f"{precio_num:.0f}¢"
+            except (TypeError, ValueError):
+                pass
         edge = _ventaja_legible(_valor_fila(
             fila, ("Ventaja neta", "Ventaja neta recalculada", "Ventaja (edge)", "edge", "EV neto por contrato"),
         ))
@@ -139,11 +149,17 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
         resultado = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
         with st.container(border=True):
             st.markdown(f"**{nombre}**")
-            if categoria:
+            lado = _valor_fila(fila, ("Lado", "Lado Kalshi", "lado", "seleccion"), "")
+            if lado and str(lado).upper() in {"YES", "NO"}:
+                st.caption(f"{categoria + ' · ' if categoria else ''}Lado del contrato: {str(lado).upper()}")
+            elif categoria:
                 st.caption(str(categoria))
+            fundamento = _valor_fila(fila, ("Fundamento", "Dato base", "Marcador proyectado", "Nota"), "")
+            if fundamento:
+                st.write(f"**Dato que apoya la estimación:** {fundamento}")
             c1, c2, c3 = st.columns(3)
             c1.metric("Probabilidad del modelo", prob)
-            c2.metric("Precio del contrato", str(precio))
+            c2.metric("Precio de compra", precio_texto)
             c3.metric("Ventaja estimada", edge)
             if calibracion:
                 st.caption(f"Validación: {calibracion}")
