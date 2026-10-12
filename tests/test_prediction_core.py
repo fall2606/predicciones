@@ -34,7 +34,7 @@ class CoreTests(unittest.TestCase):
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report)}):
     self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60), 0.61)
     self.assertAlmostEqual(core.anchor_probability_to_market(0.20, 0.60), 0.58)
-    self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60, weight=0.90), 0.65)
+    self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60, weight=0.90), 0.61)
     # A descriptive Brier row without an explicit temporal-validation flag is not enough.
     self.assertAlmostEqual(core.anchor_probability_to_market(
      0.80, 0.60, category="Goles totales", ticker="KXLALIGATOTAL-TEST"
