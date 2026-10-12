@@ -530,14 +530,27 @@ def read_csv_rows_resilient(path):
 
 
 def _probability(row):
-    p=valid_probability(row.get("_p"))
-    if p is not None: return p
-    raw=str(row.get("Probabilidad del modelo",row.get("Probabilidad modelo",row.get("Prob. modelo",row.get("probabilidad_modelo","")))))
-    m=re.search(r"[-+]?\d+(?:[.,]\d+)?",raw)
-    if not m: return None
-    n=float(m.group(0).replace(",","."))
-    if "%" in raw: n/=100
-    return valid_probability(n)
+    # Use the latest calibrated estimate when present; never override it with base probability.
+    for key in ("_p", "probabilidad_calibrada", "Probabilidad calibrada",
+                "Prob. recalibrada", "Probabilidad del modelo",
+                "Probabilidad modelo", "Prob. modelo", "probabilidad_modelo"):
+        raw = row.get(key)
+        p = valid_probability(raw)
+        if p is not None:
+            return p
+        text_value = str(raw or "").strip()
+        match = re.search(r"[-+]?\d+(?:[.,]\d+)?", text_value)
+        if match:
+            try:
+                number = float(match.group(0).replace(",", "."))
+                if "%" in text_value:
+                    number /= 100
+                p = valid_probability(number)
+                if p is not None:
+                    return p
+            except (TypeError, ValueError, OverflowError):
+                pass
+    return None
 def _family(ticker,label=""):
     series=str(ticker or "").split("-",1)[0].upper()
     text=f"{series} {label}".upper()
@@ -547,48 +560,69 @@ def _family(ticker,label=""):
     return series or "other"
 
 def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10):
-    candidates=[]
-    for row in rows or []:
-        ticker=str(row.get("Ticker") or row.get("ticker") or "").strip()
-        p=_probability(row)
-        if not ticker or ticker in {"—","-","None","nan"} or p is None: continue
-        price=_candidate_price(row)
-        item=dict(row); item["_prob"]=p; item["_price"]=price
-        item["_family"]=_family(ticker,row.get("Apuesta") or row.get("Jugada sencilla") or "")
-        try:
-            edge=float(row.get("Ventaja (edge)"))
-            if not math.isfinite(edge): edge=None
-        except (TypeError,ValueError,OverflowError): edge=None
-        item["_edge"]=edge; candidates.append(item)
-    high=[]; families=set()
-    for x in sorted(candidates,key=lambda r:r["_prob"],reverse=True):
-        # Avoid near-certain prices in combo suggestions, without changing the value block.
-        if x["_price"] is None or x["_price"] > float(os.getenv("COMBO_PRECIO_MAX", "0.90")): continue
-        if x["_prob"]<min_probability or x["_family"] in families: continue
-        high.append(x); families.add(x["_family"])
-        if len(high)>=high_limit: break
-    value=[]; line_values={}; labels=set(); seen_tickers=set()
-    for x in sorted((r for r in candidates if r["_edge"] is not None),key=lambda r:(r["_edge"],r["_prob"]),reverse=True):
-        ticker=str(x.get("Ticker") or x.get("ticker") or "")
-        if ticker in seen_tickers: continue
-        seen_tickers.add(ticker)
-        label=str(x.get("Apuesta") or x.get("Jugada sencilla") or "")
-        line=re.search(r"\b\d+(?:\.\d+)?\b",label)
-        family=x["_family"]
+    """Conservative shared gate for combo/value lists; never fill weak candidates."""
+    min_edge = float(os.getenv("MERCADOS_EDGE_MIN_NETO", "0.05"))
+    cost_buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+    combo_price_max = float(os.getenv("COMBO_PRECIO_MAX", "0.90"))
+    value_price_max = float(os.getenv("VALOR_PRECIO_MAX", "0.88"))
+    max_auto_edge = float(os.getenv("MERCADOS_EDGE_MAX_AUTO", "0.20"))
+    candidates = []
+    for source in rows or []:
+        row = dict(source)
+        ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
+        p = _probability(row)
+        price = _candidate_price(row)
+        if not ticker or ticker in {"—", "-", "None", "nan"} or p is None or price is None:
+            continue
+        if p <= 0.01 or p >= 0.99:
+            continue
+        # Recompute edge from calibrated probability and executable price, not stale CSV edge.
+        edge = p - price - cost_buffer
+        if edge < min_edge or edge > max_auto_edge or _is_trivial_single(row):
+            continue
+        item = dict(row)
+        item["_prob"], item["_price"], item["_edge"] = p, price, edge
+        item["_family"] = _family(ticker, row.get("Apuesta") or row.get("Jugada sencilla") or "")
+        item["Ventaja (edge)"] = round(edge, 6)
+        if "edge" in item:
+            item["edge"] = round(edge, 6)
+        candidates.append(item)
+    high, families = [], set()
+    for item in sorted(candidates, key=lambda x: (x["_prob"], x["_edge"]), reverse=True):
+        if item["_price"] > combo_price_max or item["_prob"] < min_probability or item["_family"] in families:
+            continue
+        high.append(item)
+        families.add(item["_family"])
+        if len(high) >= high_limit:
+            break
+    value, line_values, labels, seen_tickers = [], {}, set(), set()
+    for item in sorted(candidates, key=lambda x: (x["_edge"], x["_prob"]), reverse=True):
+        if item["_price"] > value_price_max:
+            continue
+        ticker = str(item.get("Ticker") or item.get("ticker") or "")
+        if ticker in seen_tickers:
+            continue
+        label = str(item.get("Apuesta") or item.get("Jugada sencilla") or "")
+        line = re.search(r"\b\d+(?:\.\d+)?\b", label)
+        family = item["_family"]
         if line:
-            number=float(line.group(0))
-            prior=line_values.setdefault(family,[])
-            if any(abs(number-old)<=1.0 for old in prior): continue
+            number = float(line.group(0))
+            prior = line_values.setdefault(family, [])
+            if any(abs(number-old) <= 1.0 for old in prior):
+                continue
             prior.append(number)
         else:
-            signature=(family,label.casefold())
-            if signature in labels: continue
+            signature = (family, label.casefold())
+            if signature in labels:
+                continue
             labels.add(signature)
-        value.append(x)
-        if len(value)>=value_limit: break
+        seen_tickers.add(ticker)
+        value.append(item)
+        if len(value) >= value_limit:
+            break
     def clean(items):
-        return [{k:v for k,v in x.items() if k not in {"_prob","_family","_edge","_price"}} for x in items]
-    return clean(high),clean(value)
+        return [{k: v for k, v in item.items() if k not in {"_prob", "_family", "_edge", "_price"}} for item in items]
+    return clean(high), clean(value)
 
 
 def _candidate_price(row):
@@ -608,16 +642,15 @@ def _candidate_price(row):
 
 
 def _candidate_edge(row, price):
-    for key in ("Ventaja (edge)", "edge"):
-        try:
-            value = float(row.get(key))
-            if math.isfinite(value):
-                # Some legacy CSVs store edge in percentage points.
-                return value / 100 if abs(value) > 1 else value
-        except (TypeError, ValueError, OverflowError):
-            pass
+    # Recompute using calibrated probability and executable price; reserve 1 pp for costs by default.
     p = _probability(row)
-    return p - price if p is not None and price is not None else None
+    if p is None or price is None:
+        return None
+    try:
+        buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+    except (TypeError, ValueError, OverflowError):
+        buffer = 0.01
+    return p - price - buffer
 
 
 def _single_family(row):
@@ -720,7 +753,9 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         edge = _candidate_edge(row, price)
         if not ticker or ticker in {"—", "-", "None", "nan"} or p is None or price is None or edge is None:
             continue
-        if price > price_max or edge < min_edge or _is_trivial_single(row):
+        if (price > price_max or edge < min_edge or _is_trivial_single(row)
+                or p <= 0.01 or p >= 0.99 or edge > review_edge):
+            # Extreme apparent edge requires review for stale quotes/model-data errors.
             continue
         row["_single_price"] = price
         row["_single_edge"] = edge
