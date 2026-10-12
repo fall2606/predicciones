@@ -6,6 +6,7 @@ st.write("Elige un deporte. Primero verás lo que estima el modelo; los contrato
 st.warning("La calidad histórica todavía no está validada por igual en todos los deportes. Si no hay datos suficientes o una ventaja comprobable, no tomes el pronóstico como recomendación de apuesta.")
 
 st.subheader("Elige qué quieres analizar")
+st.page_link("pages/Calidad_del_modelo.py", label="📊 Ver si los modelos están acertando", icon="📊")
 c1, c2 = st.columns(2)
 with c1:
     with st.container(border=True):
