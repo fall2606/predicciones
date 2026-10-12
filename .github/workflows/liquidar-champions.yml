@@ -59,7 +59,9 @@ jobs:
           # while retrying a push. This avoids the previous "cannot pull with rebase"
           # failure and keeps results plus the pending audit in one consistent commit.
           python scripts/auditar_reconciliacion.py
-          git add predicciones_champions.csv resultados_champions.csv reconciliacion_pendientes.csv
+          # The CSV repair step may normalize histories across sports. Stage every
+          # generated prediction/result/audit output so retries never see unstaged files.
+          git add predicciones_laliga.csv predicciones_champions.csv predicciones_mlb.csv predicciones_nfl.csv resultados_laliga.csv resultados_champions.csv resultados_mlb.csv resultados_nfl.csv reconciliacion_pendientes.csv auditoria_reconciliacion_actual.csv
           if ! git diff --cached --quiet; then
             git commit -m "Liquidar y reconciliar pronósticos de Champions League"
             pushed=false
