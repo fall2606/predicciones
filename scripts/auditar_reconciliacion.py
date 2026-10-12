@@ -1,6 +1,8 @@
 """Single source of truth for terminal-prediction reconciliation across all sports."""
 import csv
 import os
+import re
+from difflib import SequenceMatcher
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import sys
@@ -18,6 +20,7 @@ SPORTS = {
     "LaLiga": ("predicciones_laliga.csv", "resultados_laliga.csv", "football", "PD"),
     "Champions": ("predicciones_champions.csv", "resultados_champions.csv", "football", "CL"),
     "MLB": ("predicciones_mlb.csv", "resultados_mlb.csv", "mlb", ""),
+    "NFL": ("predicciones_nfl.csv", "resultados_nfl.csv", "nfl", ""),
 }
 TERMINAL = {"WIN", "LOSS", "ANULADA"}
 PLACEHOLDER_TICKERS = {"", "—", "-", "NONE", "NAN"}
@@ -92,6 +95,85 @@ def finished_matches(kind, competition, predictions):
             if game.get("gamePk") is not None:
                 status = game.get("status", {}) or {}
                 states[str(game["gamePk"])] = text(status.get("detailedState") or status.get("abstractGameState")).upper()
+        return states
+
+    if kind == "nfl":
+        # NFL predictions use Kalshi event tickers as match_id, not ESPN IDs.
+        # Match by both teams and kickoff date; ambiguous matches stay unresolved.
+        predictions_by_id = {}
+        days = set()
+        for row in predictions:
+            kickoff = parse_dt(row.get("fecha"))
+            match_id = text(row.get("match_id"))
+            if kickoff and match_id:
+                predictions_by_id[match_id] = row
+                for offset in (-1, 0, 1):
+                    days.add((kickoff.date() + timedelta(days=offset)).strftime("%Y%m%d"))
+        events = []
+        for day in sorted(days):
+            try:
+                response = SESSION.get(
+                    "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+                    params={"dates": day, "limit": 100}, timeout=15,
+                )
+                response.raise_for_status()
+                events.extend((response.json() or {}).get("events") or [])
+            except (requests.RequestException, ValueError, TypeError):
+                # Missing source coverage is reported as an alert by _row_report;
+                # it must never be interpreted as a zero-pending result.
+                continue
+
+        def norm_team(value):
+            return re.sub(r"[^a-z0-9]", "", text(value).lower())
+
+        def team_score(left, right):
+            a, b = norm_team(left), norm_team(right)
+            if not a or not b:
+                return 0.0
+            if a == b:
+                return 1.0
+            if a in b or b in a:
+                return 0.90
+            return SequenceMatcher(None, a, b).ratio()
+
+        for match_id, row in predictions_by_id.items():
+            kickoff = parse_dt(row.get("fecha"))
+            local, away = text(row.get("local")), text(row.get("visita"))
+            if not kickoff or not local or not away:
+                continue
+            candidates = []
+            for event in events:
+                competition = (event.get("competitions") or [{}])[0]
+                competitors = competition.get("competitors") or []
+                teams = []
+                for competitor in competitors:
+                    team = competitor.get("team") or {}
+                    teams.append(
+                        team.get("displayName") or team.get("shortDisplayName")
+                        or team.get("name") or team.get("abbreviation") or ""
+                    )
+                if len(teams) < 2:
+                    continue
+                event_date = parse_dt(event.get("date"))
+                if event_date and abs((event_date - kickoff).total_seconds()) > 36 * 3600:
+                    continue
+                score_a = team_score(local, teams[0]) + team_score(away, teams[1])
+                score_b = team_score(local, teams[1]) + team_score(away, teams[0])
+                score = max(score_a, score_b)
+                if score >= 1.55:
+                    status = text(((event.get("status") or {}).get("type") or {}).get("name")).upper()
+                    if status in {"STATUS_FINAL", "STATUS_FINAL_OVERTIME", "STATUS_FINAL_SHOOTOUT"}:
+                        status = "FINAL"
+                    elif status in {"STATUS_CANCELED", "STATUS_CANCELLED", "STATUS_POSTPONED"}:
+                        status = "CANCELLED"
+                    elif status.startswith("STATUS_IN_PROGRESS") or status == "STATUS_HALFTIME":
+                        status = "IN_PROGRESS"
+                    elif status.startswith("STATUS_SCHEDULED") or status == "STATUS_DELAYED":
+                        status = "SCHEDULED"
+                    candidates.append((score, status))
+            candidates.sort(reverse=True)
+            if candidates and (len(candidates) == 1 or candidates[0][0] - candidates[1][0] >= 0.05):
+                states[match_id] = candidates[0][1]
         return states
 
     token = os.getenv("CLAVE")
@@ -337,10 +419,32 @@ def reconcile(name, pred_name, result_name, kind, competition):
     predictions = rows(ROOT / pred_name)
     results = rows(ROOT / result_name)
     latest = latest_results(results)
-    match_states = finished_matches(kind, competition, predictions)
+    excluded_rows = rows(ROOT / "nfl_predicciones_excluidas.csv") if name == "NFL" else []
+    excluded_by_id = {
+        text(item.get("prediction_id")): item for item in excluded_rows
+        if text(item.get("prediction_id"))
+    }
+    eligible_predictions = [
+        row for row in predictions
+        if text(row.get("prediction_id")) not in excluded_by_id
+    ]
+    match_states = finished_matches(kind, competition, eligible_predictions)
     report = []
     for row in predictions:
-        report.append(_row_report(name, row, latest, match_states, kind))
+        pid = text(row.get("prediction_id"))
+        if pid in excluded_by_id:
+            reason = text(excluded_by_id[pid].get("motivo")) or "captura histórica invalidada por control de calidad"
+            report.append({
+                "deporte": name, "prediction_id": pid, "match_id": text(row.get("match_id")),
+                "fecha": text(row.get("fecha")), "local": text(row.get("local")),
+                "visita": text(row.get("visita")), "bloque": text(row.get("bloque")),
+                "ticker": text(row.get("ticker")), "estado_registrado": text(latest.get(pid, {}).get("estado")).upper(),
+                "estado_partido": "EXCLUIDA", "estado_kalshi": "", "resultado_kalshi": "",
+                "motivo": reason, "clasificacion": "HISTORICO_NO_EVALUABLE",
+                "cuenta_alerta": "NO", "horas_desde_inicio": "", "resuelto_en": "",
+            })
+        else:
+            report.append(_row_report(name, row, latest, match_states, kind))
     pending = [r for r in report if r["cuenta_alerta"] == "SI"]
     historical = [r for r in report if r["clasificacion"] == "HISTORICO_SIN_CONTRATO"]
     by_reason = {}
