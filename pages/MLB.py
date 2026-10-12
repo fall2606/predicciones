@@ -621,9 +621,11 @@ for juego in partidos:
         continue
     if not (inicio <= fecha_juego_local <= fin):
         continue
-    estado_juego = str(juego.get("status", {}).get("abstractGameState", "")).upper()
+    estado_api = juego.get("status", {}) or {}
+    estado_juego = str(estado_api.get("abstractGameState", "")).strip().upper()
+    detalle_juego = str(estado_api.get("detailedState", "")).strip().upper()
     game_id = str(juego.get("gamePk", ""))
-    es_final = estado_juego in {"FINAL", "COMPLETED"}
+    es_final = estado_juego in {"FINAL", "COMPLETED"} or detalle_juego in {"FINAL", "COMPLETED"}
     if fecha_juego_local < hoy and game_id not in ids_mlb_con_prediccion:
         continue
     if es_final and game_id not in ids_mlb_con_prediccion:
@@ -649,8 +651,11 @@ st.caption(
 resumen_partidos = []
 ahora_utc_mlb = datetime.now(timezone.utc)
 for juego_resumen in partidos:
-    estado_resumen = str(juego_resumen.get("status", {}).get("abstractGameState", "Preview")).strip().casefold()
-    if estado_resumen in {"final", "completed", "cancelled", "canceled", "postponed"}:
+    estado_api_resumen = juego_resumen.get("status", {}) or {}
+    estado_resumen = str(estado_api_resumen.get("abstractGameState", "Preview")).strip().casefold()
+    detalle_resumen = str(estado_api_resumen.get("detailedState", "")).strip().casefold()
+    if (estado_resumen in {"final", "completed", "cancelled", "canceled", "postponed", "suspended"}
+            or detalle_resumen in {"final", "completed", "cancelled", "canceled", "postponed", "suspended"}):
         continue
     try:
         _inicio_resumen = datetime.fromisoformat(str(juego_resumen.get("gameDate", "")).replace("Z", "+00:00"))
@@ -707,9 +712,18 @@ for juego in partidos:
     local = juego.get("teams", {}).get("home", {}).get("team", {}).get("name", "Local")
     visita = juego.get("teams", {}).get("away", {}).get("team", {}).get("name", "Visita")
     hora = juego.get("gameDate", "")[:16].replace("T", " ")
-    estado = str(juego.get("status", {}).get("abstractGameState", "")).strip()
+    estado_api = juego.get("status", {}) or {}
+    estado = str(estado_api.get("abstractGameState", "")).strip()
     estado_norm = estado.casefold()
-    marcador = " · FINAL" if estado_norm in {"final", "completed"} else " · EN JUEGO" if estado_norm in {"live", "in progress"} else " · SUSPENDIDO" if estado_norm in {"suspended", "postponed"} else ""
+    detalle_norm = str(estado_api.get("detailedState", "")).strip().casefold()
+    marcador = (
+        " · FINAL" if estado_norm in {"final", "completed"} or detalle_norm in {"final", "completed"}
+        else " · EN JUEGO" if estado_norm in {"live", "in progress"}
+        else " · APLAZADO" if detalle_norm in {"postponed", "delayed"}
+        else " · CANCELADO" if detalle_norm in {"cancelled", "canceled"}
+        else " · SUSPENDIDO" if detalle_norm == "suspended"
+        else ""
+    )
     clave = f"{hora} · {visita} @ {local}{marcador}"
     opciones[clave] = juego
 
@@ -736,9 +750,18 @@ for juego in [juego]:
     away = juego.get("teams", {}).get("away", {}).get("team", {})
     if not home.get("id") or not away.get("id"):
         continue
-    status_raw = str(juego.get("status", {}).get("abstractGameState", "Preview")).strip()
+    status_api = juego.get("status", {}) or {}
+    status_raw = str(status_api.get("abstractGameState", "Preview")).strip()
     status_norm = status_raw.casefold()
-    status = "Final" if status_norm in {"final", "completed"} else "Live" if status_norm in {"live", "in progress"} else "Preview"
+    detail_norm = str(status_api.get("detailedState", "")).strip().casefold()
+    status = (
+        "Final" if status_norm in {"final", "completed"} or detail_norm in {"final", "completed"}
+        else "Live" if status_norm in {"live", "in progress"}
+        else "Cancelled" if detail_norm in {"cancelled", "canceled"}
+        else "Postponed" if detail_norm in {"postponed", "delayed"}
+        else "Suspended" if detail_norm == "suspended"
+        else "Preview"
+    )
     h_runs = juego.get("teams", {}).get("home", {}).get("score")
     a_runs = juego.get("teams", {}).get("away", {}).get("score")
     game = {
