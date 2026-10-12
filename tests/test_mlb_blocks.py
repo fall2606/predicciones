@@ -43,8 +43,8 @@ class MLBThreeBlocksTests(unittest.TestCase):
                 "title": title,
                 "yes_sub_title": title,
                 "status": "open",
-                "yes_ask_dollars": "0.50",
-                "no_ask_dollars": "0.50",
+                "yes_ask_dollars": "0.55",
+                "no_ask_dollars": "0.55",
             })
         markets.append({
             "ticker": "KXMLBTOTAL-26OCT12NYYBOS-UNOPENED",
