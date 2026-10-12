@@ -53,7 +53,8 @@ def classify(title: str, summary: str) -> str:
 @st.cache_data(ttl=900, show_spinner=False)
 def search_news(query: str) -> list[dict]:
     """Fetch a public Google News RSS query. Fail closed and preserve source URLs."""
-    url = "https://news.google.com/rss/search?q=" + quote_plus(query) + "&hl=en-US&gl=US&ceid=US:en"
+    locale = "es-ES&gl=ES&ceid=ES:es" if "noticias" in query.casefold() else "en-US&gl=US&ceid=US:en"
+    url = "https://news.google.com/rss/search?q=" + quote_plus(query) + "&hl=" + locale
     try:
         response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         response.raise_for_status()
@@ -81,7 +82,7 @@ def search_news(query: str) -> list[dict]:
     return rows
 
 with st.form("contexto_deportivo_form"):
-    sport = st.selectbox("Deporte", ["Fútbol", "MLB", "NFL", "NBA", "NHL", "Tenis", "Otro"])
+    sport = st.selectbox("Deporte", ["Fútbol", "Premier League", "LaLiga", "Champions League", "MLB", "NFL", "NBA", "NHL", "Tenis", "Otro"])
     home = st.text_input("Equipo / jugador 1", placeholder="Ej. Real Madrid")
     away = st.text_input("Equipo / jugador 2 (opcional)", placeholder="Ej. Barcelona")
     extra = st.text_input("Jugador clave o tema a comprobar (opcional)", placeholder="Ej. lesión del delantero titular")
@@ -96,6 +97,7 @@ if submitted:
         queries = []
         for name in names:
             queries.append(f'"{name}" {sport} news')
+            queries.append(f'"{name}" {sport} noticias')
         with st.spinner("Consultando fuentes públicas…"):
             for query in queries:
                 all_rows.extend(search_news(query))
