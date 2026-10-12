@@ -15,6 +15,8 @@ Revisión del código y los CSV disponibles en la rama `main` del repositorio. L
 - Tasa de acierto de las 293 filas: **56,3%**.
 - Brier calculado: **0,256** (menor es mejor).
 - Referencia simple que asigna a cada fila la tasa de acierto de la muestra: Brier aproximado **0,246**.
+- De las 293 filas resueltas, 244 tenían ticker y 49 no. Solo en las 244 con ticker: probabilidad media **71,3%**, tasa de acierto **53,3%**, Brier **0,252** frente a una referencia simple de **0,249**.
+- Las 293 filas resueltas se concentran en los días **10 y 11 de octubre de 2026**. Es una muestra corta y con mercados correlacionados del mismo partido; no debe interpretarse como evaluación definitiva.
 
 La referencia no sustituye un backtest fuera de muestra, pero el modelo no la supera en esta revisión. La interfaz no debe dar a entender que una probabilidad alta ya significa fiabilidad demostrada.
 
@@ -47,7 +49,7 @@ El módulo de noticias/contexto es independiente: muestra titulares y señales, 
 
 ### 6. Reconciliación y cobertura
 
-El archivo `reconciliacion_pendientes.csv` tiene **4.476 filas**: 317 clasificadas como liquidadas, 10 pendientes activas, 499 no finalizadas y 3.650 históricos sin partido asociado. Hay **10 alertas** explícitas: 9 filas de LaLiga terminadas sin ticker y 1 fila MLB finalizada cuya resolución de Kalshi todavía no aparecía al generar el archivo. Las 3.650 filas sin ID de partido requieren deduplicación/clasificación; no deben presentarse como partidos actuales pendientes.
+El archivo `reconciliacion_pendientes.csv` tiene **4.477 filas**: 317 clasificadas como liquidadas, 10 pendientes activas, 500 no finalizadas y 3.650 históricos sin partido asociado. Hay **10 alertas** explícitas: 9 filas de LaLiga terminadas sin ticker y 1 fila MLB finalizada cuya resolución de Kalshi todavía no aparecía al generar el archivo. Las 3.650 filas sin ID de partido requieren deduplicación/clasificación; no deben presentarse como partidos actuales pendientes.
 
 ### 7. Interfaz
 
