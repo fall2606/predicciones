@@ -33,6 +33,15 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(result["clasificacion"], "HISTORICO_SIN_CONTRATO")
         self.assertEqual(result["cuenta_alerta"], "NO")
 
+    def test_finished_prediction_without_ticker_is_not_hidden_as_historical(self):
+        past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
+        row = {"prediction_id":"no-ticker-final","match_id":"m-final","fecha":past,
+               "ticker":"—","local":"A","visita":"B"}
+        result = _row_report("LaLiga", row, {}, {"m-final":"FINISHED"}, "football")
+        self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
+        self.assertEqual(result["cuenta_alerta"], "SI")
+        self.assertIn("sin ticker", result["motivo"])
+
     @patch("scripts.auditar_reconciliacion.kalshi_market")
     def test_kalshi_settled_but_result_not_registered_is_alerted(self, market):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
