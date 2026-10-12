@@ -27,6 +27,12 @@ def mostrar_reconciliacion(deporte):
         return
 
     current = report[report["deporte"].astype(str).eq(deporte)].copy()
+    if current.empty:
+        st.error(
+            f"No se puede verificar la liquidación de {deporte}: el informe no contiene filas para este deporte. "
+            "No se declara cero pendientes sin cobertura."
+        )
+        return
     pending = current[current["cuenta_alerta"].astype(str).str.upper().eq("SI")].copy()
     historic = current[current["clasificacion"].astype(str).eq("HISTORICO_SIN_CONTRATO")].copy()
     historic_nonmatch = current[current["clasificacion"].astype(str).eq("HISTORICO_NO_PARTIDO")].copy()
