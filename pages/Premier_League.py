@@ -1,9 +1,11 @@
 import requests, pandas as pd, numpy as np, streamlit as st
+from app_metadata import mostrar_metadata
 from scipy.stats import poisson
 from football_match_utils import is_upcoming_match
 
 st.set_page_config(page_title="Premier League · pronósticos", layout="wide")
 st.title("⚽ Premier League · pronósticos del modelo")
+mostrar_metadata()
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 
 CLAVE = st.secrets["CLAVE"]
