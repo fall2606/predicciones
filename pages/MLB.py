@@ -57,11 +57,11 @@ def leer_historial_mlb():
             pred["_probabilidad_evaluacion"] = p_cal.where(p_cal.notna(), p_base)
             p = pred["_probabilidad_evaluacion"]
             pred = pred[np.isfinite(p) & p.between(0, 1)].copy()
+        if not pred.empty and "estado" in pred.columns:
+            pred = pred.rename(columns={"estado": "estado_captura"})
         if not res.empty and "resuelto_en" in res.columns:
             res = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
         if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
-            if "estado" in pred.columns:
-                pred = pred.rename(columns={"estado": "estado_captura"})
             cols_res = [x for x in ["prediction_id", "estado", "resultado_kalshi", "marcador", "resuelto_en"] if x in res]
             pred = pred.merge(res[cols_res], on="prediction_id", how="left")
         return pred
