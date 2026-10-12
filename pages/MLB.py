@@ -665,53 +665,7 @@ st.caption(
 
 # Resumen de PRÓXIMOS partidos: no incluir juegos ya iniciados ni finalizados.
 # Los partidos pasados con captura siguen disponibles en el selector histórico inferior.
-resumen_partidos = []
-ahora_utc_mlb = datetime.now(timezone.utc)
-for juego_resumen in partidos:
-    estado_api_resumen = juego_resumen.get("status", {}) or {}
-    estado_resumen = str(estado_api_resumen.get("abstractGameState", "Preview")).strip().casefold()
-    detalle_resumen = str(estado_api_resumen.get("detailedState", "")).strip().casefold()
-    if (estado_resumen in {"final", "completed", "cancelled", "canceled", "postponed", "suspended"}
-            or detalle_resumen in {"final", "completed", "cancelled", "canceled", "postponed", "suspended"}):
-        continue
-    try:
-        _inicio_resumen = datetime.fromisoformat(str(juego_resumen.get("gameDate", "")).replace("Z", "+00:00"))
-        if _inicio_resumen.tzinfo is None:
-            _inicio_resumen = _inicio_resumen.replace(tzinfo=timezone.utc)
-        if _inicio_resumen.astimezone(timezone.utc) <= ahora_utc_mlb:
-            continue
-    except (TypeError, ValueError):
-        continue
-    teams_resumen = juego_resumen.get("teams", {})
-    home_resumen = teams_resumen.get("home", {}).get("team", {})
-    away_resumen = teams_resumen.get("away", {}).get("team", {})
-    if not home_resumen.get("id") or not away_resumen.get("id"):
-        continue
-    id_home = int(home_resumen["id"])
-    id_away = int(away_resumen["id"])
-    fecha_resumen = juego_resumen.get("gameDate", "9999")
-    forma_resumen = construir_forma(juegos_forma, fecha_resumen)
-    media_home, media_away = estimar_carreras(
-        id_home, id_away, stats, forma_resumen, promedio, era_liga
-    )
-    matriz_resumen = score_probability_matrix(eje, media_home, media_away)
-    probabilidades = summarize_score_probabilities(matriz_resumen, eje)
-    home_name = home_resumen.get("name", "Local")
-    away_name = away_resumen.get("name", "Visita")
-    p_home = probabilidades["home_win"]
-    p_away = probabilidades["away_win"]
-    favorito = home_name if p_home >= p_away else away_name
-    p_favorito = max(p_home, p_away)
-    resumen_partidos.append({
-        "Fecha (UTC)": fecha_resumen[:16].replace("T", " "),
-        "Partido": f"{away_name} @ {home_name}",
-        "Marcador estimado (local-visita)": f"{media_home:.1f} - {media_away:.1f}",
-        "Favorito": favorito,
-        f"Gana {home_name}": f"{p_home:.0%}",
-        f"Gana {away_name}": f"{p_away:.0%}",
-        "Más de 8.5 carreras": f"{probabilidades['over_8_5']:.0%}",
-    })
-
+# El pronóstico de partido se calcula después de elegir un único encuentro.
 st.caption("El pronóstico estadístico se muestra para el mismo partido seleccionado abajo; no se crea un segundo selector independiente.")
 st.divider()
 
