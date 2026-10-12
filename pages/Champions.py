@@ -418,12 +418,12 @@ else:
     tab_yes_kalshi, tab_no_kalshi = st.tabs(["YES con margen", "NO con margen"])
     with tab_yes_kalshi:
         if margen_yes_kalshi:
-            st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(margen_yes_kalshi, estado_partido)), use_container_width=True, hide_index=True)
+            mostrar_tarjetas_mercado(_con_resultado_pendiente(margen_yes_kalshi, estado_partido), titulo="Contratos YES con margen neto estimado", limite=5)
         else:
             st.info("No hay una apuesta YES disponible ahora que supere el margen mínimo del modelo.")
     with tab_no_kalshi:
         if margen_no_kalshi:
-            st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(margen_no_kalshi, estado_partido)), use_container_width=True, hide_index=True)
+            mostrar_tarjetas_mercado(_con_resultado_pendiente(margen_no_kalshi, estado_partido), titulo="Contratos NO con margen neto estimado", limite=5)
         else:
             st.info("No hay una apuesta NO disponible ahora que supere el margen mínimo del modelo.")
     if not margen_yes_kalshi and not margen_no_kalshi:
@@ -434,18 +434,18 @@ else:
         yes_cand_tab, no_cand_tab = st.tabs(["Candidatos YES", "Candidatos NO"])
         with yes_cand_tab:
             if candidatos_yes_kalshi:
-                st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(candidatos_yes_kalshi, estado_partido)), use_container_width=True, hide_index=True)
+                mostrar_tarjetas_mercado(_con_resultado_pendiente(candidatos_yes_kalshi, estado_partido), titulo="Candidatos YES · no todos cumplen el margen", limite=5)
             else:
                 st.info("No hay cotizaciones YES que pueda comparar para este partido.")
         with no_cand_tab:
             if candidatos_no_kalshi:
-                st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(candidatos_no_kalshi, estado_partido)), use_container_width=True, hide_index=True)
+                mostrar_tarjetas_mercado(_con_resultado_pendiente(candidatos_no_kalshi, estado_partido), titulo="Candidatos NO · no todos cumplen el margen", limite=5)
             else:
                 st.info("No hay cotizaciones NO que pueda comparar para este partido.")
 
     with st.expander("Ver las 10 opciones más probables aunque no tengan margen"):
         if top_kalshi:
-            st.dataframe(_tabla_con_resultado(_con_resultado_pendiente(top_kalshi, estado_partido)), use_container_width=True, hide_index=True)
+            mostrar_tarjetas_mercado(_con_resultado_pendiente(top_kalshi, estado_partido), titulo="Opciones más probables, aunque pueden no tener margen", limite=10)
         else:
             st.info("No encontré tipos y líneas activos de Kalshi en Champions League con estimación suficiente para este partido.")
 st.write(f"**Marcador esperado:** {gl:.1f}–{gv:.1f} goles")
