@@ -1,5 +1,5 @@
 match_id,fecha,local,visita,contratos_modelables,sencillas_validas,alta_probabilidad_validas,a_tener_en_cuenta_validas,sencillas_guardadas,alta_probabilidad_guardadas,a_tener_en_cuenta_guardadas,motivo_sencillas,motivo_alta_probabilidad,motivo_a_tener_en_cuenta
-849812,2026-10-12T21:00:00Z,Milwaukee Brewers,Los Angeles Dodgers,34,3,1,10,8,3,10,,,
+849812,2026-10-12T21:00:00Z,Milwaukee Brewers,Los Angeles Dodgers,34,2,1,10,8,3,10,,,
 849820,2026-10-13T00:00:00Z,Tampa Bay Rays,Cleveland Guardians,34,4,1,10,10,3,10,,,
 849813,2026-10-14T00:00:00Z,Tampa Bay Rays,Cleveland Guardians,3,0,0,0,0,0,4,ninguna selección de este bloque superó filtros; descartes observados: sin_modelo_especifico | ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad,ninguna selección de este bloque superó filtros; descartes observados: sin_modelo_especifico | ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad,
 849811,2026-10-15T00:00:00Z,Los Angeles Dodgers,Milwaukee Brewers,3,1,0,2,2,1,2,,,
