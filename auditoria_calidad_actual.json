@@ -94,16 +94,16 @@
     "deporte": "Champions League",
     "archivo_predicciones": "predicciones_champions.csv",
     "archivo_resultados": "resultados_champions.csv",
-    "capturas": 204,
+    "capturas": 208,
     "filas_resultados": 0,
     "ids_resultado_terminal_en_archivo": 0,
     "capturas_con_resultado_terminal": 0,
-    "sin_resultado_terminal": 204,
+    "sin_resultado_terminal": 208,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 204
+      "SIN_RESULTADO": 208
     },
     "n_evaluable": 0,
     "tasa_acierto": null,
@@ -113,7 +113,7 @@
     "brier_referencia_muestra": null,
     "calibracion_intervalos": [],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 204,
+    "filas_reconciliacion": 208,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
@@ -189,16 +189,16 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 2815,
+    "capturas": 2901,
     "filas_resultados": 132,
     "ids_resultado_terminal_en_archivo": 132,
     "capturas_con_resultado_terminal": 132,
-    "sin_resultado_terminal": 2683,
+    "sin_resultado_terminal": 2769,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 2683,
+      "SIN_RESULTADO": 2769,
       "WIN": 66,
       "LOSS": 66
     },
@@ -271,7 +271,7 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 2815,
+    "filas_reconciliacion": 2901,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0

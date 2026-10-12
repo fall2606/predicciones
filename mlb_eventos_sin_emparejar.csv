@@ -2,13 +2,13 @@ event_ticker,series_ticker,title,start_time,motivo
 KXCOACHOUTMLBDATE-27NYY,KXCOACHOUTMLBDATE,Aaron Boone: Out by Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLB-26,KXMLB,Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop
 KXMLBAL-26,KXMLBAL,American League Champion,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALROTY-26,KXMLBALROTY,AL Rookie of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBCHAMPLEAGUE-26,KXMLBCHAMPLEAGUE,Pro Baseball Championship: Winning league,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALROTY-26,KXMLBALROTY,AL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBCHAMPLEAGUE-26,KXMLBCHAMPLEAGUE,Pro Baseball Championship Winning League,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-AMILLER,KXMLBDEBUT,Aidan Miller: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-LDEVRIES,KXMLBDEBUT,Leo De Vries: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-TWHITE,KXMLBDEBUT,Thomas White: Debut Date,,mercado_no_partido/futuro_premio_o_prop
@@ -25,7 +25,7 @@ KXMLBDEBUT-JFLORA,KXMLBDEBUT,Jackson Flora: Debut Date,,mercado_no_partido/futur
 KXMLBDEBUT-RCHOLOWSKY,KXMLBDEBUT,Roch Cholowsky: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-VLACKEY,KXMLBDEBUT,Vahn Lackey: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-GEMERSON,KXMLBDEBUT,Grady Emerson: Debut Date,,mercado_no_partido/futuro_premio_o_prop
-KXMLBEOTY-26,KXMLBEOTY,Executive of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
+KXMLBEOTY-26,KXMLBEOTY,Executive of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBFASTPITCH-26JMISIOROWSKI32,KXMLBFASTPITCH,Jacob Misiorowski: Fastest Pitch this Season,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL1B,KXMLBGG,Gold Glove: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL2B,KXMLBGG,Gold Glove: AL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
@@ -52,12 +52,12 @@ KXMLBNEXTTEAM-27FLINDOR12,KXMLBNEXTTEAM,Francisco Lindor's Next Team,,mercado_no
 KXMLBNEXTTEAM-27RACUNA,KXMLBNEXTTEAM,Ronald Acuna Jr. Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNEXTTEAM-27TSKUBAL,KXMLBNEXTTEAM,Tarik Skubal Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNL-26,KXMLBNL,National League Champion,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLCPOTY-26,KXMLBNLCPOTY,NL Comeback Player of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLCY-26,KXMLBNLCY,NL Cy Young Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLHAARON-26,KXMLBNLHAARON,NL Hank Aaron Award Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner?,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLCPOTY-26,KXMLBNLCPOTY,NL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLCY-26,KXMLBNLCY,NL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLHAARON-26,KXMLBNLHAARON,NL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEEDWIN-26,KXMLBSEEDWIN,Seed of Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop

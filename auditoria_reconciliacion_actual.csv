@@ -1,5 +1,5 @@
 deporte,clasificacion,cuenta_alerta,motivo,filas
-Champions,NO_FINALIZADA,NO,partido no finalizado,204
+Champions,NO_FINALIZADA,NO,partido no finalizado,208
 LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,128
 LaLiga,LIQUIDADA,NO,resultado registrado: WIN,165
 LaLiga,NO_FINALIZADA,NO,partido no finalizado,201
@@ -15,4 +15,4 @@ NFL,HISTORICO_NO_EVALUABLE,NO,Captura histórica asociada a una serie de periodo
 NFL,HISTORICO_NO_EVALUABLE,NO,Contrato de periodo/cuarto no cubierto por el modelo NFL,426
 NFL,LIQUIDADA,NO,resultado registrado: LOSS,66
 NFL,LIQUIDADA,NO,resultado registrado: WIN,66
-NFL,NO_FINALIZADA,NO,partido no finalizado,1243
+NFL,NO_FINALIZADA,NO,partido no finalizado,1329
