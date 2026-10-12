@@ -777,7 +777,7 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
         elif series.startswith(("KXUCL", "KXCHAMP")):
             predictions_path = predictions_path or root / "predicciones_champions.csv"
             results_path = results_path or root / "resultados_champions.csv"
-        elif series.startswith(("KXNFL", "KXNFL")):
+        elif series.startswith("KXNFL"):
             predictions_path = predictions_path or root / "predicciones_nfl.csv"
             results_path = results_path or root / "resultados_nfl.csv"
         else:
@@ -810,9 +810,9 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
             latest_results[pid] = str(result.get("estado", result.get("estado_resultado", ""))).upper().strip()
 
     def clean_category(value):
-        value = re.sub(r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\\s*[·|:-]\\s*", "", str(value or "").strip(), flags=re.I)
-        value = re.sub(r"\\s*[·|:-]\\s*(YES|NO)$", "", value, flags=re.I)
-        return re.sub(r"\\s+", " ", value).casefold()
+        value = re.sub(r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\s*[·|:-]\s*", "", str(value or "").strip(), flags=re.I)
+        value = re.sub(r"\s*[·|:-]\s*(YES|NO)$", "", value, flags=re.I)
+        return re.sub(r"\s+", " ", value).casefold()
 
     target_category = clean_category(row.get("Tipo", row.get("Categoría resumen", row.get("categoria", row.get("bloque", "")))))
     observations = []
