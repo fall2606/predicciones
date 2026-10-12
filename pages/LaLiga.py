@@ -492,7 +492,7 @@ with st.expander("Cómo calcula el algoritmo estas probabilidades"):
         "si faltan datos, usa 45%/55%. Sigue siendo una estimación aproximada porque no modela jugadas ni alineaciones por periodo."
     )
     st.markdown(
-        "**Margen:** calcula la probabilidad del modelo menos el precio de compra y una tarifa estándar estimada. "
+        "**Margen:** calcula la probabilidad final anclada al mercado (75% del precio Kalshi + 25% del modelo calibrado por defecto) menos el precio de compra y una tarifa estándar estimada. "
         "Solo recomienda oportunidades con probabilidad ≥50%, ganancia esperada ≥$0.05 y retorno neto esperado ≥10%. "
         "También muestra el precio máximo al que cada selección alcanzaría esos objetivos; si el precio actual es mayor, "
         "la marca como sin margen suficiente. Las tarifas reales pueden variar por mercado y tipo de orden."
