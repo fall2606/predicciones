@@ -39,7 +39,8 @@ def current_commit():
 
 
 def latest_data_time():
-    latest = None
+    latest_row_time = None
+    latest_file_time = None
     timestamp_fields = ("capturado_en", "resuelto_en", "actualizado_en", "updated_at", "fecha_actualizacion")
     for filename in DATA_FILES:
         path = ROOT / filename
@@ -47,7 +48,7 @@ def latest_data_time():
             continue
         try:
             file_time = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc)
-            latest = max(latest, file_time) if latest else file_time
+            latest_file_time = max(latest_file_time, file_time) if latest_file_time else file_time
             with path.open(newline="", encoding="utf-8-sig") as handle:
                 for row in csv.DictReader(handle):
                     for field in timestamp_fields:
@@ -59,11 +60,14 @@ def latest_data_time():
                             if stamp.tzinfo is None:
                                 stamp = stamp.replace(tzinfo=timezone.utc)
                             stamp = stamp.astimezone(timezone.utc)
-                            latest = max(latest, stamp) if latest else stamp
+                            latest_row_time = max(latest_row_time, stamp) if latest_row_time else stamp
                         except (TypeError, ValueError, OverflowError):
                             continue
         except (OSError, csv.Error, UnicodeError):
             continue
+    # Prefer timestamps recorded with the actual data. File mtime is only a fallback,
+    # because a deploy/checkout time is not necessarily a data-refresh time.
+    latest = latest_row_time or latest_file_time
     return latest.astimezone(TZ).strftime("%Y-%m-%d %H:%M %Z") if latest else "sin fecha disponible"
 
 
