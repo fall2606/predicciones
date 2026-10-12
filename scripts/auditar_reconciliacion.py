@@ -179,12 +179,6 @@ def _row_report(name, row, latest, match_states, kind):
         base.update(motivo=f"resultado registrado: {state}", clasificacion="LIQUIDADA")
         return base
 
-    # Explicitly preserve legacy predictions without a Kalshi contract, but never
-    # count them as active unresolved contracts.
-    if not ticker:
-        base.update(motivo="sin ticker (histórico)", clasificacion="HISTORICO_SIN_CONTRATO")
-        return base
-
     # Existing season/futures markets in old MLB captures are not game predictions.
     # Preserve them in the audit, but don't mislabel them as unfinished games.
     if not match_id and kickoff is None:
@@ -232,6 +226,18 @@ def _row_report(name, row, latest, match_states, kind):
         # Liquidators should append ANULADA. If they did not, keep a visible actionable item.
         base.update(motivo="resultado de Kalshi disponible pero no registrado",
                     clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
+        return base
+
+    # A finished fixture without a usable ticker is not "historical" if it still
+    # lacks a terminal result. The liquidator already tried independent scoreboards;
+    # if those cannot safely evaluate the exact market, expose it as an actionable
+    # unresolved prediction rather than hiding it from the pending counter.
+    if not ticker:
+        base.update(
+            motivo="partido finalizado pero sin ticker; liquidación por marcador no concluyente",
+            clasificacion="PENDIENTE_ACTIVA",
+            cuenta_alerta="SI",
+        )
         return base
 
     market = kalshi_market(ticker)
