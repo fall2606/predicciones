@@ -83,12 +83,9 @@ st.subheader("Pronósticos del modelo (no son apuestas)")
 st.caption("Si Kalshi no ofrece un contrato, el modelo puede mostrar su propia estimación. Los pronósticos y las apuestas reales se identifican por separado.")
 try:
     _filas_nfl_modelo = cargar_pronosticos_nfl_independientes()
-    if _filas_nfl_modelo:
-        mostrar_pronosticos_sencillos(_filas_nfl_modelo, "NFL", "estadístico basado en resultados recientes")
-    else:
-        st.info("ESPN no devolvió partidos futuros modelables en los próximos 14 días.")
 except (requests.RequestException, ValueError, KeyError, TypeError) as _exc:
-    st.warning(f"No pude calcular el pronóstico NFL independiente ahora: {type(_exc).__name__}. Los mercados e historiales de Kalshi siguen disponibles abajo.")
+    _filas_nfl_modelo = []
+    st.warning(f"No pude calcular el pronóstico NFL independiente ahora: {type(_exc).__name__}. Los historiales disponibles siguen accesibles en Auditoría.")
 
 if not pred.empty and not res.empty and "prediction_id" in pred and "prediction_id" in res:
     results = res.sort_values("resuelto_en").drop_duplicates("prediction_id", keep="last")
@@ -152,6 +149,11 @@ else:
         games = sorted(valid_current["match_id"].dropna().astype(str).unique()) if not valid_current.empty and "match_id" in valid_current else []
         if not games:
             st.info("No hay mercados prepartido válidos para recomendar en este momento.")
+            if _filas_nfl_modelo:
+                st.subheader("Pronóstico del partido")
+                mostrar_pronosticos_sencillos(_filas_nfl_modelo, "NFL", "estadístico basado en resultados recientes")
+            else:
+                st.caption("No hay un partido modelable disponible ahora.")
         else:
             opciones = {}
             for game_id in games:
