@@ -754,6 +754,14 @@ def _mlb_inicio_futuro(valor, ahora=None):
         return False
 
 
+def _mlb_estado(juego):
+    status_api = juego.get("status", {}) or {}
+    return (
+        str(status_api.get("abstractGameState", "")).strip().casefold(),
+        str(status_api.get("detailedState", "")).strip().casefold(),
+    )
+
+
 def _mlb_es_proximo(juego):
     abstract, detalle = _mlb_estado(juego)
     terminales = {"final", "completed", "cancelled", "canceled", "postponed", "suspended"}
