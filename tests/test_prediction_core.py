@@ -26,9 +26,9 @@ class CoreTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as tmp:
    report=Path(tmp)/"backtest.csv"
    report.write_text(
-    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi\\n"
-    "Goles totales,120,0.18,0.21\\n"
-    "Resultado,120,0.18,0.21\\n",
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi\n"
+    "Goles totales,120,0.18,0.21\n"
+    "Resultado,120,0.18,0.21\n",
     encoding="utf-8",
    )
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report)}):
