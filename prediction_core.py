@@ -52,7 +52,8 @@ def probability_fraction(value):
     if not raw or raw.casefold() in {"—", "-", "none", "nan", "n/a"}:
         return None
     is_percent = raw.endswith("%")
-    if is_percent:
+    is_cents = raw.endswith("¢")
+    if is_percent or is_cents:
         raw = raw[:-1].strip()
     raw = raw.replace("$", "").strip()
     try:
@@ -61,7 +62,7 @@ def probability_fraction(value):
         return None
     if not math.isfinite(number):
         return None
-    if is_percent or number > 1:
+    if is_percent or is_cents or number > 1:
         number /= 100
     return number if 0 < number < 1 else None
 
