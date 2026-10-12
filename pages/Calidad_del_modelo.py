@@ -56,6 +56,8 @@ def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col=
         return {"nombre": nombre, "n": 0, "total": len(pred), "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()), "estado": "Sin probabilidades y resultados compatibles"}
     tasa = float(y.mean())
     brier = float(((p - y) ** 2).mean())
+    p_segura = p.clip(1e-15, 1 - 1e-15)
+    log_loss = float((-(y * np.log(p_segura) + (1 - y) * np.log(1 - p_segura))).mean())
     accuracy = float(((p >= 0.5) == (y == 1)).mean())
     media_p = float(p.mean())
     baseline = tasa * (1 - tasa)
@@ -69,7 +71,7 @@ def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col=
     return {
         "nombre": nombre, "n": n, "total": len(pred),
         "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()),
-        "accuracy": accuracy, "brier": brier, "baseline": baseline,
+        "accuracy": accuracy, "brier": brier, "log_loss": log_loss, "baseline": baseline,
         "media_p": media_p, "tasa": tasa, "real_ticker": real_ticker,
         "estado": estado_modelo,
     }
@@ -90,7 +92,7 @@ def evaluar_premier_league():
     brier = float(((p-y)**2).mean())
     return {
         "nombre": "Premier League", "n": n, "total": len(df), "sin_resultado": int(pd.to_numeric(df["gano"], errors="coerce").isna().sum()),
-        "accuracy": float(((p>=0.5)==(y==1)).mean()), "brier": brier, "baseline": tasa*(1-tasa),
+        "accuracy": float(((p>=0.5)==(y==1)).mean()), "brier": brier, "log_loss": float((-(y*np.log(p.clip(1e-15, 1-1e-15))+(1-y)*np.log(1-p.clip(1e-15, 1-1e-15)))).mean()), "baseline": tasa*(1-tasa),
         "media_p": float(p.mean()), "tasa": tasa, "real_ticker": n,
         "estado": "No supera la referencia simple" if n >= 30 and brier >= tasa*(1-tasa) else ("Muestra insuficiente" if n < 30 else "Señal preliminar favorable; falta backtest temporal"),
     }
@@ -111,15 +113,24 @@ for fila in resultados:
         if fila["n"] == 0:
             st.info(f"No hay muestra evaluable en los archivos disponibles. Capturas en archivo: {fila['total']}.")
             continue
-        c1, c2, c3 = st.columns(3)
+        c1, c2, c3, c4 = st.columns(4)
         c1.metric("Resultados evaluados", fila["n"])
         c2.metric("Acierto", f"{fila['accuracy']:.1%}")
         c3.metric("Brier (menor es mejor)", f"{fila['brier']:.3f}")
+        c4.metric("Log-loss (menor es mejor)", f"{fila.get('log_loss', float('nan')):.3f}")
         c4, c5, c6 = st.columns(3)
         c4.metric("Probabilidad media", f"{fila['media_p']:.1%}")
         c5.metric("Acierto real", f"{fila['tasa']:.1%}")
         c6.metric("Referencia Brier", f"{fila['baseline']:.3f}")
         st.caption(f"Capturas totales: {fila['total']} · con ticker en las liquidaciones: {fila.get('real_ticker', fila['n'])} · sin resultado terminal asociado: {fila['sin_resultado']}. El contador puede incluir partidos futuros.")
+        intervalos = []
+        for inicio in np.arange(0.0, 1.0, 0.1):
+            mascara = (p >= inicio) & ((p < inicio + 0.1) | ((inicio >= 0.9) & (p <= 1.0)))
+            if mascara.any():
+                intervalos.append({"Intervalo estimado": f"{inicio:.0%}–{inicio + 0.1:.0%}", "Casos": int(mascara.sum()), "Probabilidad media": float(p[mascara].mean()), "Acierto real": float(y[mascara].mean())})
+        if intervalos:
+            st.caption("Calibración por intervalos: compara la probabilidad media con el acierto real; grupos pequeños son inestables.")
+            st.dataframe(pd.DataFrame(intervalos).style.format({"Probabilidad media": "{:.1%}", "Acierto real": "{:.1%}"}), hide_index=True, use_container_width=True)
         if fila["brier"] >= fila["baseline"]:
             st.warning("En esta muestra, el Brier no mejora una referencia que siempre predice la tasa media de acierto. No tratar los porcentajes como validados.")
         elif fila["n"] < 30:
