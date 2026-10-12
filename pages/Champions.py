@@ -268,7 +268,8 @@ st.markdown(
     f"{local}: {resumen_forma(local, modelo_objetivo, fecha_objetivo)}  ·  "
     f"{visita}: {resumen_forma(visita, modelo_objetivo, fecha_objetivo)}"
 )
-st.markdown("### 5 posibles sencillas para el partido")
+st.markdown("### Contratos reales de Kalshi · posibles apuestas")
+st.caption("Esta sección sí contiene contratos negociables de Kalshi. Si no hay contratos disponibles, usa el pronóstico del modelo de arriba; no son lo mismo.")
 if resumen_archivado:
     st.caption("Se muestra la última captura guardada antes del inicio; las anteriores permanecen inmutables y se pueden comparar abajo.")
 elif partido_cerrado:
