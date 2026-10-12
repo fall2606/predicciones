@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line, rank_single_candidates, read_csv_rows_resilient
+from prediction_core import KALSHI_API_BASE, sports_series, events_for_series, extract_line, rank_single_candidates, read_csv_rows_resilient, anchor_probability_to_market
 from sports_results import settle_from_score
 from scipy.stats import nbinom, poisson
 
@@ -583,10 +583,16 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 prob_yes_actual = estimacion_actual[2] if estimacion_actual else None
                 precio_yes_actual = cotizacion_valida(mercado.get("yes_ask_dollars"))
                 precio_no_actual = cotizacion_valida(mercado.get("no_ask_dollars"))
+                prob_no_actual = 1 - prob_yes_actual if prob_yes_actual is not None else None
+                prob_yes_final = anchor_probability_to_market(prob_yes_actual, precio_yes_actual)
+                prob_no_final = anchor_probability_to_market(prob_no_actual, precio_no_actual)
                 mercados_actuales.append({
                     "Mercado Kalshi": mercado.get("yes_sub_title") or mercado.get("title") or mercado.get("ticker"),
                     "Prob. YES modelo": f"{prob_yes_actual:.1%}" if prob_yes_actual is not None else "Sin modelo para este tipo",
+                    "Prob. YES final": f"{prob_yes_final:.1%}" if prob_yes_final is not None else "Sin precio válido",
                     "Precio YES": f"{precio_yes_actual:.0%}" if precio_yes_actual is not None else "Sin oferta",
+                    "Prob. NO modelo": f"{prob_no_actual:.1%}" if prob_no_actual is not None else "Sin modelo para este tipo",
+                    "Prob. NO final": f"{prob_no_final:.1%}" if prob_no_final is not None else "Sin precio válido",
                     "Precio NO": f"{precio_no_actual:.0%}" if precio_no_actual is not None else "Sin oferta",
                     "Reglas del contrato": mercado.get("rules_primary") or mercado.get("rules_secondary") or "Consultar en Kalshi",
                     "Ticker": mercado.get("ticker", ""),
