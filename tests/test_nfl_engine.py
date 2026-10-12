@@ -168,7 +168,7 @@ class NFLModelTests(unittest.TestCase):
             rows.append({
                 "prediction_id": f"game|ticker{i}|YES", "ticker": f"KXNFL{i}-MARKET",
                 "categoria": category + " · YES", "probabilidad_calibrada": 0.70 + i * 0.01,
-                "precio_captura": 0.50, "edge": 0.20 + i * 0.01,
+                "precio_captura": 0.60, "edge": -0.50,  # stale edge must be recomputed
             })
         singles, combos, value = nfl_engine._rank_nfl_game(rows)
         self.assertLessEqual(len(singles), 5)
