@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.auditar_calidad_pronosticos import parse_probability, score_rows, summarize_reconciliation
+from scripts.auditar_calidad_pronosticos import parse_probability, score_rows, summarize_active_pending, summarize_reconciliation
 
 
 class PredictionQualityAuditTests(unittest.TestCase):
@@ -58,6 +58,16 @@ class PredictionQualityAuditTests(unittest.TestCase):
         self.assertEqual(len(alerts), 1)
         self.assertEqual(alerts[0]["filas"], 2)
         self.assertEqual(alerts[0]["motivo"], "sin ticker")
+
+    def test_active_pending_uses_canonical_classification_not_all_missing_results(self):
+        rows = [
+            {"deporte": "LaLiga", "clasificacion": "PENDIENTE_ACTIVA", "cuenta_alerta": "SI"},
+            {"deporte": "LaLiga", "clasificacion": "NO_FINALIZADA", "cuenta_alerta": "NO"},
+            {"deporte": "MLB", "clasificacion": "HISTORICO_NO_PARTIDO", "cuenta_alerta": "NO"},
+            {"deporte": "MLB", "clasificacion": "PENDIENTE_ACTIVA", "cuenta_alerta": "NO"},
+            {"deporte": "Champions", "clasificacion": "PENDIENTE_ACTIVA", "cuenta_alerta": "SI"},
+        ]
+        self.assertEqual(summarize_active_pending(rows), {"LaLiga": 1, "Champions": 1})
 
     def test_missing_results_produce_no_fake_score(self):
         report = score_rows([{"prediction_id": "pending", "probabilidad_modelo": "0.6"}], [], ("probabilidad_modelo",))
