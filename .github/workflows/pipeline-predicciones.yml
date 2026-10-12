@@ -11,6 +11,7 @@ on:
       - "scripts/reparar_csv_predicciones.py"
       - "scripts/reintegrar_capturas_mlb.py"
       - "scripts/auditar_reconciliacion.py"
+      - "scripts/auditar_calidad_pronosticos.py"
       - "scripts/backtest_mlb.py"
       - "scripts/medir_timing_workflow.py"
       - "tests/**"
@@ -123,6 +124,11 @@ jobs:
           KALSHI_SETTLEMENT_GRACE_HOURS: ${{ vars.KALSHI_SETTLEMENT_GRACE_HOURS || '72' }}
           MATCH_LOOKUP_GRACE_HOURS: ${{ vars.MATCH_LOOKUP_GRACE_HOURS || '6' }}
         run: python scripts/auditar_reconciliacion.py
+      - name: Generar auditoría de calidad después de liquidar y reconciliar
+        id: audit_quality
+        if: always()
+        continue-on-error: true
+        run: python scripts/auditar_calidad_pronosticos.py
       - name: Guardar predicciones y resultados en un único commit
         id: commit_results
         if: always()
@@ -130,7 +136,7 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_mlb.csv resultados_mlb.csv predicciones_laliga.csv resultados_laliga.csv predicciones_champions.csv resultados_champions.csv scripts/reintegrar_capturas_mlb.py scripts/auditar_reconciliacion.py scripts/backtest_mlb.py backtest_mlb_resumen.csv reconciliacion_pendientes.csv mlb_eventos_sin_emparejar.csv mlb_candidatos_descartados.csv mlb_cobertura_por_partido.csv mlb_probabilidades_actuales.csv
+          git add predicciones_mlb.csv resultados_mlb.csv predicciones_laliga.csv resultados_laliga.csv predicciones_champions.csv resultados_champions.csv scripts/reintegrar_capturas_mlb.py scripts/auditar_reconciliacion.py scripts/backtest_mlb.py backtest_mlb_resumen.csv reconciliacion_pendientes.csv mlb_eventos_sin_emparejar.csv mlb_candidatos_descartados.csv mlb_cobertura_por_partido.csv mlb_probabilidades_actuales.csv auditoria_calidad_actual.csv auditoria_calidad_actual.json auditoria_reconciliacion_actual.csv
           if git diff --cached --quiet; then
             echo "No hay filas nuevas; los historiales permanecen sin cambios"
             exit 0
@@ -151,13 +157,14 @@ jobs:
           CAPTURE_CHAMPIONS: ${{ steps.capture_champions.outcome }}
           RESTORE_MLB: ${{ steps.restore_mlb.outcome }}
           AUDIT_RECONCILIATION: ${{ steps.audit_reconciliation.outcome }}
+          AUDIT_QUALITY: ${{ steps.audit_quality.outcome }}
           BACKTEST_MLB: ${{ steps.backtest_mlb.outcome }}
           LIQUIDATE_MLB: ${{ steps.liquidate_mlb.outcome }}
           LIQUIDATE_LALIGA: ${{ steps.liquidate_laliga.outcome }}
           LIQUIDATE_CHAMPIONS: ${{ steps.liquidate_champions.outcome }}
           COMMIT_RESULTS: ${{ steps.commit_results.outcome }}
         run: |
-          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$RESTORE_MLB" "$AUDIT_RECONCILIATION" "$BACKTEST_MLB" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
+          for result in "$CAPTURE_MLB" "$CAPTURE_LALIGA" "$CAPTURE_CHAMPIONS" "$RESTORE_MLB" "$AUDIT_RECONCILIATION" "$AUDIT_QUALITY" "$BACKTEST_MLB" "$LIQUIDATE_MLB" "$LIQUIDATE_LALIGA" "$LIQUIDATE_CHAMPIONS" "$COMMIT_RESULTS"; do
             if [ "$result" != "success" ]; then
               echo "::error::Una tarea del pipeline falló: $result"
               exit 1
