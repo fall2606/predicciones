@@ -12,6 +12,7 @@ class CoreTests(unittest.TestCase):
  def test_price_parser_and_edge_are_conservative(self):
   self.assertEqual(core.probability_fraction("57%"), 0.57)
   self.assertEqual(core.probability_fraction("$0.57"), 0.57)
+  self.assertEqual(core.probability_fraction("57¢"), 0.57)
   self.assertEqual(core.probability_fraction(0.57), 0.57)
   self.assertIsNone(core.probability_fraction("—"))
   self.assertIsNone(core.probability_fraction("NaN"))
@@ -25,6 +26,8 @@ class CoreTests(unittest.TestCase):
   self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60, weight=0.90), 0.65)
   self.assertIsNone(core.anchor_probability_to_market(0.80, "—"))
   self.assertIsNone(core.anchor_probability_to_market("—", 0.60))
+  stale = {"probabilidad_final": 0.70, "probabilidad_calibrada": 0.60, "Precio de compra": "50%"}
+  self.assertAlmostEqual(core._anchor_market_row(stale)["probabilidad_final"], 0.525)
 
  def test_rank_single_candidates_preserves_yes_no_and_uses_net_calibrated_edge(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
