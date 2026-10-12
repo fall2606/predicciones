@@ -25,7 +25,7 @@ from laliga_engine import (
 
 COLUMNAS_PRED = [
     "prediction_id", "match_id", "fecha", "local", "visita", "categoria", "jugada",
-    "probabilidad_base", "probabilidad_calibrada", "calibracion", "precio", "disponibilidad", "ticker",
+    "probabilidad_base", "probabilidad_calibrada", "probabilidad_final", "calibracion", "precio", "disponibilidad", "ticker",
     "mercado", "line", "seleccion", "bloque", "edge", "clave_interna", "capturado_en",
 ]
 COLUMNAS_RESULTADO = ["prediction_id", "estado", "marcador", "resuelto_en"]
@@ -189,6 +189,7 @@ def main():
                 "jugada": fila["Jugada sencilla"],
                 "probabilidad_base": f"{float(fila['Probabilidad base']):.6f}",
                 "probabilidad_calibrada": f"{float(fila['Probabilidad modelo'].rstrip('%')) / 100:.6f}",
+                "probabilidad_final": fila.get("probabilidad_final", ""),
                 "calibracion": fila["Calibración"],
                 "precio": fila["Precio ahora"],
                 "disponibilidad": fila["Disponibilidad"],
