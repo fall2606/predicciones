@@ -42,3 +42,5 @@
 - Las etiquetas son reglas de palabras clave, no una IA que verifique hechos. Hay que abrir la fuente y confirmar que la noticia es actual y aplica al partido.
 - Este módulo es deliberadamente independiente: **no modifica probabilidades, picks ni calibración WIN/LOSS**. No se aplican ajustes automáticos sin validación retrospectiva, para evitar contaminar el modelo con noticias falsas, duplicadas o irrelevantes.
 - El RSS público puede limitarse o fallar; que no aparezcan noticias no significa que no haya bajas. Esta página no sustituye una API deportiva oficial de lesiones/alineaciones.
+
+- El módulo `sports_context_reasoner.py` analiza antigüedad (72 horas), coincidencia de nombres, tipos de señal y posible ambigüedad. Es un motor determinista y auditable, no un LLM; nunca modifica probabilidades automáticamente. Tiene pruebas unitarias específicas.
