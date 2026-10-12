@@ -1061,7 +1061,10 @@ def calibrar_resumen(resumen, predicciones, resultados):
             ganados = sum(acierto for _, acierto in cercanos)
             ajustada = (ganados + 20 * base) / (len(cercanos) + 20)
         copia["Probabilidad base"] = base
+        copia["Probabilidad modelo original"] = f"{base:.1%}"
         copia["Probabilidad modelo"] = f"{ajustada:.1%}"
+        copia["Probabilidad del modelo"] = f"{ajustada:.1%}"
+        copia["probabilidad_calibrada"] = ajustada
         precio_raw = copia.get("Precio de compra", copia.get("Precio ahora", ""))
         try:
             precio_match = re.search(r"[-+]?\d+(?:[.,]\d+)?", str(precio_raw))
