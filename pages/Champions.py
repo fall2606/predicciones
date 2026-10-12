@@ -17,7 +17,7 @@ from scipy.stats import nbinom, poisson
 from champions_engine import *
 from prediction_core import rank_market_candidates, rank_single_candidates
 from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
-from pronosticos_ui import mostrar_pronosticos_sencillos
+from pronosticos_ui import mostrar_pronosticos_sencillos, mostrar_tarjetas_mercado
 
  
 def _con_resultado_pendiente(filas, estado_partido):
@@ -355,14 +355,14 @@ if partido_cerrado:
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio", "calibracion"]:
             if _col not in _archivo_partido.columns:
                 _archivo_partido[_col] = ""
-        st.dataframe(_tabla_con_resultado(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "calibracion", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
+        mostrar_tarjetas_mercado(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "calibracion", "ticker", "Resultado"]], titulo="Pronósticos archivados · no implica que el contrato siga disponible", limite=5)
     else:
         st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de alta probabilidad.")
 elif alta_vista:
     _alta_df = pd.DataFrame(alta_vista).copy()
     _alta_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar · mercado sin fuente compatible" if partido_cerrado else "PENDIENTE")
     _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Calibración", "Ticker", "Resultado"] if c in _alta_df.columns]
-    st.dataframe(_tabla_con_resultado(_alta_df[_cols]), use_container_width=True, hide_index=True)
+    mostrar_tarjetas_mercado(_alta_df[_cols], titulo="Contratos de Kalshi que superan los filtros", limite=5)
 else:
     st.info("No hay cinco selecciones independientes que superen el umbral configurable.")
 
@@ -384,7 +384,7 @@ if partido_cerrado:
         for _col in ["bloque", "mercado", "line", "seleccion", "edge", "calibracion"]:
             if _col not in _archivo_valor.columns:
                 _archivo_valor[_col] = ""
-        st.dataframe(_tabla_con_resultado(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "calibracion", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
+        mostrar_tarjetas_mercado(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "calibracion", "ticker", "Resultado"]], titulo="Pronósticos archivados · revisa el resultado antes de comparar", limite=10)
     else:
         st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de valor.")
 elif valor_vista:
@@ -395,7 +395,7 @@ elif valor_vista:
         _sin_ticker = _valor_df[_ticker_col].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
         _valor_df.loc[_sin_ticker, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
     _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Calibración", "Ticker", "Resultado"] if c in _valor_df.columns]
-    st.dataframe(_tabla_con_resultado(_valor_df[_cols]), use_container_width=True, hide_index=True)
+    mostrar_tarjetas_mercado(_valor_df[_cols], titulo="Contratos ordenados por ventaja estimada", limite=10)
 else:
     st.info("No hay contratos con precio y edge calculable que entren en este bloque.")
 
