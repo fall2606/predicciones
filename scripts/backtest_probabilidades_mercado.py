@@ -40,7 +40,7 @@ def probability(value):
         return None
     if is_percent or is_cents or number > 1:
         number /= 100
-    return number if 0 < number < 1 else None
+    return number if 0 <= number <= 1 else None
 
 
 def category_name(value):
@@ -105,7 +105,7 @@ def build_backtest(prediction_rows, result_rows):
         if model_p is None:
             excluded["invalid_probability"] += 1
             continue
-        if price_p is None:
+        if price_p is None or price_p <= 0 or price_p >= 1:
             excluded["invalid_price"] += 1
             continue
         item = {
