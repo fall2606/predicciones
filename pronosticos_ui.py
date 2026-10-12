@@ -61,3 +61,105 @@ def mostrar_pronosticos_sencillos(filas, deporte="deporte", origen="Modelo estad
             if not probabilidades and not principal and not favorito:
                 st.info("El modelo no devolvió probabilidades utilizables para este partido.")
             st.info("**Cómo leerlo:** estos porcentajes describen lo que estima el modelo. No indican cuánto ganarías, no comparan cuotas y no significan que debas apostar.")
+
+
+
+def _valor_fila(fila, claves, defecto="—"):
+    for clave in claves:
+        valor = fila.get(clave)
+        if valor is not None and str(valor).strip() not in {"", "nan", "None", "—", "-"}:
+            return valor
+    return defecto
+
+
+def _porcentaje_legible(valor):
+    texto = str(valor or "").strip()
+    if not texto or texto in {"—", "-", "None", "nan"}:
+        return "—"
+    if "%" in texto:
+        return texto
+    try:
+        numero = float(texto)
+        if 0 <= numero <= 1:
+            return f"{numero:.0%}"
+        if 0 <= numero <= 100:
+            return f"{numero:.1f}%"
+    except (TypeError, ValueError):
+        pass
+    return texto
+
+
+def _ventaja_legible(valor):
+    texto = str(valor or "").strip()
+    if not texto or texto in {"—", "-", "None", "nan"}:
+        return "No calculable"
+    try:
+        numero = float(texto.replace("%", "").replace("pp", "").strip())
+        if abs(numero) > 1:
+            numero /= 100
+        return f"{numero * 100:+.1f} puntos porcentuales"
+    except (TypeError, ValueError):
+        return texto
+
+
+def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
+    """Render concise, readable cards for market picks instead of dense tables."""
+    if hasattr(filas, "to_dict"):
+        filas = filas.to_dict("records")
+    filas = list(filas or [])[:limite]
+    if titulo:
+        st.caption(titulo)
+    if not filas:
+        st.info("No hay selecciones que mostrar con los filtros actuales.")
+        return
+    for fila in filas:
+        nombre = _valor_fila(
+            fila,
+            ("Jugada sencilla", "Apuesta", "Pronóstico", "mercado", "seleccion", "Tipo", "Categoría resumen"),
+            "Selección sin nombre",
+        )
+        categoria = _valor_fila(fila, ("Tipo", "Categoría resumen", "categoria", "bloque"), "")
+        if str(categoria).casefold() == str(nombre).casefold():
+            categoria = ""
+        prob = _porcentaje_legible(_valor_fila(
+            fila,
+            ("Prob. recalibrada", "Probabilidad recalculada", "Probabilidad del modelo",
+             "Probabilidad modelo", "Prob. modelo", "Prob. original", "Probabilidad estimada",
+             "probabilidad_calibrada", "probabilidad_modelo"),
+        ))
+        precio = _valor_fila(
+            fila,
+            ("Precio de compra", "Precio Kalshi", "Precio actual", "Precio", "Precio ahora", "precio"),
+        )
+        edge = _ventaja_legible(_valor_fila(
+            fila, ("Ventaja neta", "Ventaja neta recalculada", "Ventaja (edge)", "edge", "EV neto por contrato"),
+        ))
+        ticker = _valor_fila(fila, ("Ticker", "ticker"), "")
+        calibracion = _valor_fila(fila, ("Calibración", "calibracion"), "")
+        resultado = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
+        with st.container(border=True):
+            st.markdown(f"**{nombre}**")
+            if categoria:
+                st.caption(str(categoria))
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Probabilidad del modelo", prob)
+            c2.metric("Precio del contrato", str(precio))
+            c3.metric("Ventaja estimada", edge)
+            if calibracion:
+                st.caption(f"Validación: {calibracion}")
+            if "WIN" == resultado or resultado.startswith("WIN "):
+                st.success("Resultado: WIN")
+            elif "LOSS" == resultado or resultado.startswith("LOSS "):
+                st.error("Resultado: LOSS")
+            elif "ANULADA" in resultado or "VOID" in resultado:
+                st.info("Resultado: ANULADA")
+            elif "SIN DATOS" in resultado or "NO EVALUABLE" in resultado:
+                st.warning("Resultado: requiere revisión; no se inventa.")
+            else:
+                st.caption("Resultado: pendiente de confirmar")
+            if not ticker:
+                st.warning("No hay ticker confirmado: no es un contrato ejecutable de Kalshi.")
+            else:
+                st.caption(f"Contrato Kalshi: {ticker}")
+            if precio == "—":
+                st.caption("Sin precio de compra confirmado, no se calcula una ventaja ejecutable.")
