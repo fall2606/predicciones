@@ -561,7 +561,7 @@ _MARKET_BACKTEST_CACHE = {}
 def _market_has_chronological_evidence(category, ticker=None, min_samples=None):
     """Only increase the weight when the paired chronological backtest validates it."""
     try:
-        minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_BACKTEST", "100"))
+        minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_BACKTEST", "30"))
     except (TypeError, ValueError, OverflowError):
         minimum = 100
     minimum = max(1, minimum)
