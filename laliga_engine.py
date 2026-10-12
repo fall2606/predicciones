@@ -3,6 +3,7 @@ from difflib import get_close_matches
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from math import ceil, floor
 import re
+import os
 import time
 from pathlib import Path
 from unicodedata import normalize
@@ -702,7 +703,7 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 "Disponibilidad": estado,
                 "Ticker": mercado.get("ticker", ""),
                 "line": extract_line(mercado.get("yes_sub_title") or mercado.get("title") or ""),
-                "Ventaja (edge)": round(probabilidad - precio, 6) if precio is not None else None,
+                "Ventaja (edge)": round(probabilidad - precio - max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01"))), 6) if precio is not None else None,
                 "Resultado": resultado_texto,
                 "_clave": clave,
                 "_lado": lado_apuesta,
@@ -1063,7 +1064,7 @@ def calibrar_resumen(resumen, predicciones, resultados):
             precio_num = float(precio_match.group(0).replace(",", ".")) if precio_match else None
             if precio_num is not None and ("%" in str(precio_raw) or precio_num > 1):
                 precio_num /= 100
-            copia["Ventaja (edge)"] = round(ajustada - precio_num, 6) if precio_num is not None and 0 < precio_num < 1 else None
+            copia["Ventaja (edge)"] = round(ajustada - precio_num - max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01"))), 6) if precio_num is not None and 0 < precio_num < 1 else None
         except (TypeError, ValueError, OverflowError):
             copia["Ventaja (edge)"] = None
         copia["_p"] = ajustada
@@ -1115,7 +1116,7 @@ def resumen_guardado(match_id, predicciones, resultados):
             precio_num = float(precio_match.group(0).replace(",", ".")) if precio_match else None
             if precio_num is not None and ("%" in str(precio_raw) or precio_num > 1):
                 precio_num /= 100
-            edge_guardado = round(p - precio_num, 6) if precio_num is not None and 0 < precio_num < 1 else None
+            edge_guardado = round(p - precio_num - max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01"))), 6) if precio_num is not None and 0 < precio_num < 1 else None
         except (TypeError, ValueError, OverflowError):
             edge_guardado = None
         capturado = datetime.fromisoformat(str(fila.get("capturado_en", ""))).astimezone(TZ).strftime("%d/%m %H:%M hora Chicago")
