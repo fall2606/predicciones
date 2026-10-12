@@ -566,7 +566,7 @@ def _market_model_weight(category=None, ticker=None):
     base_weight = min(0.25, max(0.0, base_weight))
 
     market = re.sub(
-        r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\\s*[·|:-]\\s*",
+        r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\s*[·|:-]\s*",
         "", str(category or "").strip(), flags=re.I,
     ).casefold()
     ticker_text = str(ticker or "").strip().upper()
@@ -598,7 +598,7 @@ def anchor_probability_to_market(model_probability, market_price, weight=None, c
     try:
         weight = float(weight)
     except (TypeError, ValueError, OverflowError):
-        weight = _market_model_weight()
+        weight = _market_model_weight(category, ticker)
     if not math.isfinite(weight):
         weight = _market_model_weight()
     weight = min(0.25, max(0.0, weight))
