@@ -250,7 +250,13 @@ def _row_report(name, row, latest, match_states, kind):
             base.update(motivo="resultado de Kalshi disponible pero no registrado",
                         clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
         elif market["kind"] == "missing" or market.get("status") in {"closed", "inactive", "unlisted", "not_found"}:
-            base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
+            # A missing contract is not proof that the prediction is resolved.
+            # Keep overdue rows actionable until an independent result is recorded.
+            base.update(
+                motivo="mercado no disponible en Kalshi y partido sin estado oficial verificable; requiere reconciliación",
+                clasificacion="PENDIENTE_ACTIVA",
+                cuenta_alerta="SI",
+            )
         elif market["kind"] == "ok" and market.get("status") in {"open", "active", "unopened", "initialized", "pending"}:
             if grace_expired:
                 base.update(motivo=f"Kalshi aún no liquida (plazo vencido: {GRACE_HOURS} h)",
@@ -292,7 +298,13 @@ def _row_report(name, row, latest, match_states, kind):
     base["estado_kalshi"] = market.get("status", "")
     base["resultado_kalshi"] = market.get("result", "")
     if market["kind"] == "missing":
-        base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
+        # The game is confirmed finished, but a missing Kalshi contract does not
+        # make its outcome known. Do not hide it in a historical bucket.
+        base.update(
+            motivo="partido finalizado; mercado Kalshi no disponible y falta resultado deportivo verificable",
+            clasificacion="PENDIENTE_ACTIVA",
+            cuenta_alerta="SI",
+        )
     elif market["kind"] == "error":
         base.update(motivo="estado desconocido", clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
     elif market["result"] in {"yes", "no"} and captured_side(row) not in {"YES", "NO"}:
@@ -302,7 +314,11 @@ def _row_report(name, row, latest, match_states, kind):
         base.update(motivo="resultado de Kalshi disponible pero no registrado",
                     clasificacion="PENDIENTE_ACTIVA", cuenta_alerta="SI")
     elif market["status"] in {"closed", "inactive", "unlisted", "not_found"}:
-        base.update(motivo="mercado sin resolución en Kalshi", clasificacion="HISTORICO_SIN_CONTRATO")
+        base.update(
+            motivo="partido finalizado; mercado Kalshi cerrado sin resultado y falta resultado deportivo verificable",
+            clasificacion="PENDIENTE_ACTIVA",
+            cuenta_alerta="SI",
+        )
     elif market["status"] in {"open", "active", "unopened", "initialized", "pending"}:
         # Once the fixture is officially final, the app must not hide an
         # unresolved prediction behind Kalshi's settlement grace period.
