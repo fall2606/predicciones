@@ -190,7 +190,7 @@ else:
                     "Lado": subset.get("lado", ""),
                     "Prob. original": (pd.to_numeric(subset.get("probabilidad_modelo"), errors="coerce")*100).round(1).astype(str)+"%",
                     "Prob. recalibrada": (pd.to_numeric(subset.get("probabilidad_calibrada", subset.get("probabilidad_modelo")), errors="coerce")*100).round(1).astype(str)+"%",
-                    "Precio captura": subset.get("precio_captura", ""),
+                    "Precio de compra": subset.get("precio_captura", ""),
                     "Ventaja neta": (pd.to_numeric(subset.get("edge"), errors="coerce")*100).round(1).astype(str)+"%",
                     "Calibración": subset.get("calibracion", pd.Series("Sin dato", index=subset.index)).replace("", "Sin dato"),
                     "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
