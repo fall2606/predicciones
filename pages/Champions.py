@@ -127,7 +127,7 @@ st.subheader("Pronósticos del modelo para todos los partidos próximos")
 st.caption("Primero verás lo que estima el modelo. Los contratos reales de Kalshi aparecen por separado. Un pronóstico no es una apuesta.")
 _filas_modelo_independiente = []
 for _m in seleccionables:
-    if str(_m.get("status", "")).upper() not in {"SCHEDULED", "TIMED"}:
+    if not is_upcoming_match(_m):
         continue
     try:
         _d = construir_prediccion_partido(_m, modelo, corners)
@@ -169,17 +169,34 @@ if _filas_modelo_independiente:
 else:
     st.info("No hay partidos próximos dentro de la ventana consultada para calcular.")
 
+vista_partidos = st.radio(
+    "Vista",
+    ["Próximos", "Auditoría de partidos cerrados/pasados"],
+    horizontal=True,
+    key="vista_partidos_champions",
+)
+if vista_partidos == "Próximos":
+    partidos_en_vista = [m for m in seleccionables if is_upcoming_match(m)]
+    etiqueta_selector = "Partido próximo"
+else:
+    partidos_en_vista = [m for m in seleccionables if not is_upcoming_match(m)]
+    etiqueta_selector = "Partido cerrado/pasado · auditoría"
+if not partidos_en_vista:
+    st.info("No hay partidos en esta vista. Los partidos finalizados no se incluyen en Próximos; cambia a Auditoría para revisar capturas anteriores.")
+    st.stop()
+
 opciones = {}
 
-for m in seleccionables:
+for m in partidos_en_vista:
     local = m["homeTeam"].get("shortName") or m["homeTeam"]["name"]
     visita = m["awayTeam"].get("shortName") or m["awayTeam"]["name"]
     fecha = datetime.fromisoformat(m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
     estado_partido = str(m.get("status", "")).upper()
     estado = (
-        "✅ FINAL" if estado_partido in {"FINISHED", "AWARDED"}
+        "⏳ PRÓXIMO" if is_upcoming_match(m)
+        else "✅ FINAL" if estado_partido in {"FINISHED", "AWARDED", "FINAL", "COMPLETED"}
         else "⚠️ " + estado_partido if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
-        else "⏳ PRÓXIMO"
+        else "📁 REVISAR"
     )
     marcador = marcador_reglamentario(m)
     marcador_txt = (
@@ -194,11 +211,11 @@ st.caption(
     f"Ventana visible: {inicio:%d/%m}–{fin:%d/%m} (2 días anteriores, hoy y 3 siguientes) · "
     "los partidos pasados solo aparecen si tienen predicción guardada · hora de Chicago"
 )
-pendientes = [m for m in seleccionables if m["status"] in {"SCHEDULED", "TIMED"}]
+pendientes = [m for m in partidos_en_vista if is_upcoming_match(m)]
 indice = 0
 if pendientes:
-    indice = next(i for i, m in enumerate(seleccionables) if m is pendientes[0])
-etiqueta = st.selectbox("Partido", list(opciones), index=indice)
+    indice = next(i for i, m in enumerate(partidos_en_vista) if m is pendientes[0])
+etiqueta = st.selectbox(etiqueta_selector, list(opciones), index=indice)
 partido = opciones[etiqueta]
 estado_partido = str(partido.get("status", "")).upper()
 # El calendario de la app y el informe de liquidación pueden actualizarse en instantes
