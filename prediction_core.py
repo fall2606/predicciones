@@ -798,9 +798,11 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     model_p = _base_probability(row)
     if model_p is None:
         return {"eligible": False, "reason": "probabilidad del modelo no válida", "n": 0}
-    final_p = probability_fraction(row.get("probabilidad_final", row.get("Probabilidad final")))
-    if final_p is None:
-        final_p = anchor_probability_to_market(model_p, ask, category=row.get("Tipo", row.get("Categoría resumen", "")), ticker=ticker)
+    # Recompute from the current executable ask; never trust a stored final
+    # probability after the quote has moved.
+    final_p = anchor_probability_to_market(
+        model_p, ask, category=row.get("Tipo", row.get("Categoría resumen", "")), ticker=ticker
+    )
     if final_p is None:
         return {"eligible": False, "reason": "no se puede calcular la probabilidad final", "n": 0}
     try:
