@@ -113,6 +113,9 @@ class CoreTests(unittest.TestCase):
    invalid=core.evaluate_market_recommendation({**candidate,"Precio de compra":"—"},predictions_path=p,results_path=r,min_samples=100)
    self.assertFalse(invalid["eligible"])
    self.assertIn("ask",invalid["reason"])
+   stale=core.evaluate_market_recommendation({**candidate,"capturado_en":"2020-01-01T00:00:00Z"},predictions_path=p,results_path=r,min_samples=100)
+   self.assertFalse(stale["eligible"])
+   self.assertIn("ask desactualizado",stale["reason"])
    # Enough observations are still insufficient if the model's Brier is worse than market.
    with p.open("w",newline="",encoding="utf-8") as f:
     w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","categoria","probabilidad_calibrada","precio","match_id"]); w.writeheader()
