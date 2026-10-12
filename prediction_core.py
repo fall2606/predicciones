@@ -555,8 +555,45 @@ def _base_probability(row):
     return None
 
 
+def _market_has_chronological_evidence(category, min_samples=None):
+    """Require explicit out-of-time evidence before increasing a market's model weight.
+
+    Ordinary descriptive Brier summaries are deliberately insufficient: the report
+    must mark the market as chronologically validated, meet the configurable sample
+    minimum, and beat the contemporaneous Kalshi price on Brier score.
+    """
+    report = Path(os.getenv("BACKTEST_MERCADO_PATH", "backtest_mlb_resumen.csv"))
+    try:
+        minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_BACKTEST", "100"))
+    except (TypeError, ValueError, OverflowError):
+        minimum = 100
+    if minimum < 1:
+        minimum = 100
+    target = re.sub(r"\s+", " ", str(category or "").strip()).casefold()
+    if not target or not report.exists():
+        return False
+    try:
+        with report.open(newline="", encoding="utf-8-sig") as f:
+            rows = csv.DictReader(f)
+            for row in rows:
+                name = re.sub(r"\s+", " ", str(row.get("tipo_mercado", row.get("mercado", ""))).strip()).casefold()
+                if name != target:
+                    continue
+                try:
+                    n = int(float(row.get("n_resueltos", row.get("n", 0))))
+                    model_brier = float(row.get("brier_modelo", "nan"))
+                    market_brier = float(row.get("brier_precio_kalshi", "nan"))
+                except (TypeError, ValueError, OverflowError):
+                    return False
+                temporal = str(row.get("validacion_cronologica", "")).strip().casefold() in {"1", "true", "yes", "sí", "si", "validado"}
+                return temporal and n >= minimum and math.isfinite(model_brier) and math.isfinite(market_brier) and model_brier < market_brier
+    except (OSError, csv.Error):
+        return False
+    return False
+
+
 def _market_model_weight(category=None, ticker=None):
-    """Use 5% by default; use 25% only for LaLiga categories validated chronologically."""
+    """Default to a 5% model weight; increase only with explicit chronological evidence."""
     try:
         base_weight = float(os.getenv("PESO_MODELO_MERCADO", "0.05"))
     except (TypeError, ValueError, OverflowError):
@@ -568,17 +605,15 @@ def _market_model_weight(category=None, ticker=None):
     market = re.sub(
         r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\s*[·|:-]\s*",
         "", str(category or "").strip(), flags=re.I,
-    ).casefold()
-    ticker_text = str(ticker or "").strip().upper()
-    validated_laliga_markets = {"hándicap de goles", "goles totales"}
-    if ticker_text.startswith("KXLALIGA") and market in validated_laliga_markets:
+    )
+    if _market_has_chronological_evidence(market):
         try:
-            weight = float(os.getenv("PESO_MODELO_MERCADO_VALIDADO", "0.25"))
+            validated_weight = float(os.getenv("PESO_MODELO_MERCADO_VALIDADO", "0.25"))
         except (TypeError, ValueError, OverflowError):
-            weight = 0.25
-        if not math.isfinite(weight):
-            weight = 0.25
-        return min(0.25, max(0.0, weight))
+            validated_weight = 0.25
+        if not math.isfinite(validated_weight):
+            validated_weight = 0.25
+        return min(0.25, max(base_weight, validated_weight))
     return base_weight
 
 
