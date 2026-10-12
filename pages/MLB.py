@@ -712,15 +712,7 @@ for juego_resumen in partidos:
         "Más de 8.5 carreras": f"{probabilidades['over_8_5']:.0%}",
     })
 
-st.subheader("Pronósticos sencillos de todos los partidos")
-st.caption(
-    "El modelo estima quién tiene más posibilidades y cuántas carreras podrían anotarse. "
-    "Estos pronósticos no son apuestas ni contratos de Kalshi."
-)
-if resumen_partidos:
-    mostrar_pronosticos_sencillos(resumen_partidos, "MLB")
-else:
-    st.info("No hay partidos pendientes o en juego para resumir en este rango de fechas.")
+st.caption("El pronóstico estadístico se muestra para el mismo partido seleccionado abajo; no se crea un segundo selector independiente.")
 st.divider()
 
 partidos = sorted(partidos, key=lambda p: p.get("gameDate", ""))
@@ -837,8 +829,17 @@ for juego in [juego]:
     matriz_prob = score_probability_matrix(eje, mu_h, mu_a)
     fecha = juego.get("gameDate", "")[:16].replace("T", " ")
     marcador = f" · Final {a_runs}-{h_runs}" if status == "Final" else ""
-    with st.expander(f"{fecha} · {game['away']} @ {game['home']}{marcador}", expanded=False):
-        st.write(f"**Marcador esperado:** {mu_a:.1f}–{mu_h:.1f} carreras (visita–local)")
+    with st.expander(f"{fecha} · {game['away']} @ {game['home']}{marcador}", expanded=(status == "Preview" and vista_mlb == "Próximos / en juego")):
+        if status == "Preview":
+            st.subheader("Pronóstico del partido seleccionado")
+            st.write(f"**Marcador estimado:** {mu_a:.1f}–{mu_h:.1f} carreras (visita–local)")
+            prob_seleccionada = summarize_score_probabilities(matriz_prob, eje)
+            c_home, c_away, c_total = st.columns(3)
+            c_home.metric(f"Gana {game['home']} · modelo", f"{prob_seleccionada['home_win']:.1%}")
+            c_away.metric(f"Gana {game['away']} · modelo", f"{prob_seleccionada['away_win']:.1%}")
+            c_total.metric("Más de 8.5 carreras · modelo", f"{prob_seleccionada['over_8_5']:.1%}")
+        else:
+            st.caption("Partido iniciado/finalizado: no se presenta el cálculo actual como pronóstico previo. Consulta Auditoría para ver capturas y resultados.")
         forma_l = forma_juego.get(int(home["id"]))
         forma_v = forma_juego.get(int(away["id"]))
         if forma_l or forma_v:
@@ -1022,9 +1023,10 @@ for juego in [juego]:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
         columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Ventaja neta recalculada", "Revisión", "ticker", "Resultado"]
-        mostrar_bloque_mlb("SENCILLAS", "Contratos reales de Kalshi · posibles apuestas sencillas", columnas_bloque)
-        mostrar_bloque_mlb("ALTA_PROBABILIDAD", "Posibles combinaciones de contratos Kalshi (revisar cada línea)", columnas_bloque)
-        mostrar_bloque_mlb("A_TENER_EN_CUENTA", "Otros contratos Kalshi para revisar · ordenados por ventaja estimada", columnas_bloque)
+        with st.expander("Auditoría · mercados y capturas detalladas", expanded=False):
+            mostrar_bloque_mlb("SENCILLAS", "Contratos reales de Kalshi · posibles apuestas sencillas", columnas_bloque)
+            mostrar_bloque_mlb("ALTA_PROBABILIDAD", "Posibles combinaciones de contratos Kalshi (revisar cada línea)", columnas_bloque)
+            mostrar_bloque_mlb("A_TENER_EN_CUENTA", "Otros contratos Kalshi para revisar · ordenados por ventaja estimada", columnas_bloque)
         if game["status"] != "Preview":
             st.caption("Partido iniciado o terminado: solo se muestran capturas originales anteriores al inicio. La liquidación procede del resultado oficial del contrato en Kalshi.")
         else:
