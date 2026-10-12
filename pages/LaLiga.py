@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from difflib import get_close_matches
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from math import ceil, floor
@@ -18,6 +18,7 @@ from laliga_engine import *
 from prediction_core import rank_market_candidates, rank_single_candidates
 from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
 from pronosticos_ui import mostrar_pronosticos_sencillos, mostrar_tarjetas_mercado
+from football_match_utils import apply_reconciliation_statuses, is_upcoming_match, merge_match_sources
 
  
 def _con_resultado_pendiente(filas, estado_partido):
@@ -92,19 +93,20 @@ if corners is None:
 
 inicio, fin = hoy - timedelta(days=2), hoy + timedelta(days=3)
 seleccionables = []
-partidos_disponibles = {str(m["id"]): m for m in modelo[9]}
-partidos_disponibles.update({str(m["id"]): m for m in partidos})
+partidos_disponibles = merge_match_sources(modelo[9], partidos)
+_ruta_reconciliacion_global = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reconciliacion_pendientes.csv")
+partidos_disponibles = apply_reconciliation_statuses(partidos_disponibles, _ruta_reconciliacion_global, "LaLiga")
 
 mostrar_reconciliacion("LaLiga")
 
-for partido in partidos_disponibles.values():
+for partido in partidos_disponibles:
     fecha_txt = partido.get("utcDate")
     if not fecha_txt:
         continue
     fecha_utc = datetime.fromisoformat(fecha_txt.replace("Z", "+00:00"))
     fecha_local = fecha_utc.astimezone(TZ).date()
     estado = partido.get("status")
-    proximo = inicio <= fecha_local <= fin and estado in {"SCHEDULED", "TIMED"}
+    proximo = inicio <= fecha_local <= fin and is_upcoming_match(partido)
     finalizado_revisable = (
         inicio <= fecha_local <= hoy
         and estado in {"FINISHED", "AWARDED", "CANCELLED", "CANCELED", "POSTPONED", "SUSPENDED"}
