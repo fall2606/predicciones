@@ -812,7 +812,10 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     # The Kalshi series ticker is the canonical market-family key. Category labels
     # differ between live pages and historical CSVs, so do not silently discard
     # comparable settlements because of presentation wording.
-    observations = []
+    # One settled observation per event/series/side. Immutable legacy snapshots
+    # can contain duplicate captures; counting them repeatedly would fake the
+    # minimum sample size and overweight the same match.
+    observations_by_event = {}
     for old in predictions:
         old_ticker = str(old.get("ticker", old.get("Ticker", ""))).strip().upper()
         if not old_ticker or old_ticker.split("-", 1)[0] != series:
@@ -833,8 +836,15 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
         if p is None or price is None:
             continue
         y = 1.0 if state == "WIN" else 0.0
-        observations.append(((p-y)**2, (price-y)**2))
+        event_id = str(old.get("match_id") or old.get("event_ticker") or old.get("prediction_id") or "").strip()
+        side = str(old.get("seleccion") or old.get("lado") or "").upper().strip()
+        key = (event_id, side)
+        captured = str(old.get("capturado_en", ""))
+        prior = observations_by_event.get(key)
+        if prior is None or captured >= prior[0]:
+            observations_by_event[key] = (captured, (p-y)**2, (price-y)**2)
 
+    observations = [(item[1], item[2]) for item in observations_by_event.values()]
     n = len(observations)
     if n < minimum:
         return {"eligible": False, "reason": f"muestra insuficiente: {n}/{minimum} resultados WIN/LOSS del mismo mercado", "n": n}
