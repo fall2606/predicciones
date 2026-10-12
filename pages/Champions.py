@@ -115,7 +115,57 @@ if not seleccionables:
     st.info(f"No hay partidos en el calendario recibido ni capturas finalizadas para comparar. Ventana consultada: {inicio:%d/%m}–{fin:%d/%m} (Chicago).")
     st.stop()
 seleccionables.sort(key=lambda m: m.get("utcDate", ""))
+
+# Pronóstico independiente de Kalshi: siempre calcula el partido desde el historial
+# oficial y la distribución de goles, aunque no exista todavía ningún contrato.
+st.subheader("Pronósticos del modelo para todos los partidos próximos")
+st.caption("Estimaciones estadísticas calculadas desde resultados previos; no requieren que Kalshi haya abierto mercados. Son probabilidades base, no probabilidades calibradas ni garantía de resultado.")
+_filas_modelo_independiente = []
+for _m in seleccionables:
+    if str(_m.get("status", "")).upper() not in {"SCHEDULED", "TIMED"}:
+        continue
+    try:
+        _d = construir_prediccion_partido(_m, modelo, corners)
+        _pg, _ii, _jj = _d["p_goles"], _d["i"], _d["j"]
+        _p_local = float(_pg[_ii > _jj].sum())
+        _p_empate = float(_pg[_ii == _jj].sum())
+        _p_visita = float(_pg[_ii < _jj].sum())
+        _p_total = _ii + _jj
+        _p_mas15 = float(_pg[_p_total >= 2].sum())
+        _p_mas25 = float(_pg[_p_total >= 3].sum())
+        _p_ambos = float(_pg[(_ii > 0) & (_jj > 0)].sum())
+        _fecha_m = datetime.fromisoformat(_m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
+        _principal = max(
+            [(_p_local, f'{_d["local"]} gana'), (_p_empate, "Empate"), (_p_visita, f'{_d["visita"]} gana')],
+            key=lambda _x: _x[0],
+        )
+        _filas_modelo_independiente.append({
+            "Fecha (Chicago)": _fecha_m.strftime("%d/%m %H:%M"),
+            "Partido": f'{_d["local"]} vs {_d["visita"]}',
+            "Goles esperados": f'{_d["gl"]:.2f} - {_d["gv"]:.2f}',
+            "Gana local": f"{_p_local:.1%}",
+            "Empate": f"{_p_empate:.1%}",
+            "Gana visitante": f"{_p_visita:.1%}",
+            "Más de 1.5 goles": f"{_p_mas15:.1%}",
+            "Más de 2.5 goles": f"{_p_mas25:.1%}",
+            "Ambos marcan": f"{_p_ambos:.1%}",
+            "Resultado 1X2 más probable": f"{_principal[1]} ({_principal[0]:.1%})",
+            "Estado del cálculo": "OK",
+        })
+    except (ValueError, KeyError, TypeError, ZeroDivisionError) as _exc:
+        _fecha_m = datetime.fromisoformat(_m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
+        _filas_modelo_independiente.append({
+            "Fecha (Chicago)": _fecha_m.strftime("%d/%m %H:%M"),
+            "Partido": f'{_m.get("homeTeam", {}).get("name", "Local")} vs {_m.get("awayTeam", {}).get("name", "Visitante")}',
+            "Estado del cálculo": f"NO DISPONIBLE: {type(_exc).__name__}",
+        })
+if _filas_modelo_independiente:
+    st.dataframe(pd.DataFrame(_filas_modelo_independiente), use_container_width=True, hide_index=True)
+else:
+    st.info("No hay partidos próximos dentro de la ventana consultada para calcular.")
+
 opciones = {}
+
 for m in seleccionables:
     local = m["homeTeam"].get("shortName") or m["homeTeam"]["name"]
     visita = m["awayTeam"].get("shortName") or m["awayTeam"]["name"]
