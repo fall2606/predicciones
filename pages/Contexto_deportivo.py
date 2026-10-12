@@ -109,13 +109,24 @@ if submitted:
             st.warning("No se pudieron recuperar noticias ahora. Puede ser un fallo temporal del feed; no interpretes esto como ausencia de lesiones o novedades.")
         else:
             st.success(f"{len(rows)} noticias recuperadas. Caché de consulta: hasta 15 minutos.")
-            counts = {}
-            for row in rows:
-                for signal in row["Tipo de señal"].split(", "):
-                    counts[signal] = counts.get(signal, 0) + 1
-            if counts:
-                st.subheader("Señales para revisar")
-                st.dataframe(pd.DataFrame([{"Tema": k, "Noticias asociadas": v} for k, v in sorted(counts.items(), key=lambda x: -x[1])]), hide_index=True, use_container_width=True)
+            from sports_context_reasoner import analyze_news
+            reasoning = analyze_news(rows, entities=names)
+            st.subheader("Análisis contextual verificable")
+            status_labels = {
+                "INSUFFICIENT_DATA": "Datos insuficientes",
+                "STALE_OR_UNDATED": "Noticias antiguas o sin fecha",
+                "RELEVANCE_UNCONFIRMED": "Relevancia sin confirmar",
+                "REVIEW_REQUIRED": "Señales para revisión humana",
+            }
+            st.write(f"**Estado:** {status_labels.get(reasoning['status'], reasoning['status'])}")
+            st.write(reasoning["summary"])
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Noticias revisadas", reasoning["total"])
+            m2.metric("Recientes (máx. 72 h)", reasoning["fresh_count"])
+            m3.metric("Antiguas", reasoning["old_count"])
+            if reasoning["signal_counts"]:
+                st.dataframe(pd.DataFrame([{"Tema": k, "Noticias asociadas": v} for k, v in sorted(reasoning["signal_counts"].items(), key=lambda x: -x[1])]), hide_index=True, use_container_width=True)
+            st.warning("Decisión del sistema: no ajustar automáticamente la probabilidad. Este análisis detecta señales y datos faltantes; no verifica por sí mismo que una noticia sea cierta ni mide causalidad.")
             st.subheader("Noticias y fuentes")
             for row in rows:
                 with st.container(border=True):
