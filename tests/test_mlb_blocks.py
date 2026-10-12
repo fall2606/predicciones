@@ -86,10 +86,9 @@ class MLBThreeBlocksTests(unittest.TestCase):
         self.assertEqual(counts.get("ALTA_PROBABILIDAD"), 5)
         self.assertEqual(counts.get("A_TENER_EN_CUENTA"), 10)
         self.assertGreater(counts.get("SENCILLAS", 0), 0)
+        # Unpriced markets must not be stored as predictions or recommendations.
         unpriced = [r for r in rows if r["ticker"] == "KXMLBTOTAL-26OCT12NYYBOS-UNOPENED"]
-        self.assertTrue(unpriced)
-        self.assertTrue(all(r["disponibilidad"] == "Sin precio en Kalshi" for r in unpriced))
-        self.assertTrue(all(r["precio_captura"] == "" and r["edge"] == "" for r in unpriced))
+        self.assertFalse(unpriced)
 
 
 if __name__ == "__main__":

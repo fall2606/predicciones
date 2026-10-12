@@ -589,9 +589,11 @@ def main():
             no_price = _price(market, "no_ask_dollars")
             kickoff = game.get("date") or event.get("start_time") or event.get("expected_expiration_time") or ""
             for side, price, probability in (("YES", yes_price, p_yes), ("NO", no_price, 1-p_yes)):
-                if valid_probability(probability) is None:
+                if valid_probability(probability) is None or price is None:
+                    # A model probability without an executable entry quote is not
+                    # a tradeable recommendation and must not enter the ledger.
                     continue
-                edge = probability - price if price is not None else None
+                edge = probability - price
                 row = {
                     "prediction_id": "",
                     "event_ticker": event.get("event_ticker", ""),

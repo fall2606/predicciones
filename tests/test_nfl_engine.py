@@ -6,6 +6,29 @@ import nfl_engine
 
 
 class NFLModelTests(unittest.TestCase):
+    def test_price_uses_ask_and_never_falls_back_to_bid(self):
+        self.assertEqual(nfl_engine._price({"yes_ask_dollars": "0.57", "yes_bid_dollars": "0.53"}, "YES"), 0.57)
+        self.assertIsNone(nfl_engine._price({"yes_bid_dollars": "0.53"}, "YES"))
+        self.assertIsNone(nfl_engine._price({"no_bid_dollars": "0.41"}, "NO"))
+        self.assertEqual(nfl_engine._price({"no_ask_dollars": "42"}, "NO"), 0.42)
+
+    def test_bid_only_market_does_not_create_uncosted_candidates(self):
+        kickoff = (datetime.now(timezone.utc) + timedelta(days=2)).isoformat()
+        event = {
+            "event_ticker": "KXNFLGAME-26OCT13BUFMIA",
+            "title": "BUF Bills vs MIA Dolphins: Game Winner",
+            "start_time": kickoff,
+            "markets": [{
+                "ticker": "KXNFLGAME-26OCT13BUFMIA-BUF",
+                "title": "BUF Bills to win",
+                "yes_sub_title": "BUF Bills to win",
+                "status": "open",
+                "yes_bid_dollars": "0.60",
+                "no_bid_dollars": "0.38",
+            }],
+        }
+        self.assertEqual(nfl_engine.build_candidates([event], self.stats), [])
+
     def setUp(self):
         self.stats = {
             "buffalo bills": {"scored": 28.0, "allowed": 18.0, "games": 5},

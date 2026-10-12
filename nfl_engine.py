@@ -160,14 +160,23 @@ def _market_probability(market, home, away, home_score, away_score):
     return None, ""
 
 def _price(market, side):
-    keys = (f"{side.lower()}_ask_dollars", f"{side.lower()}_ask", f"{side.lower()}_bid_dollars", f"{side.lower()}_bid")
-    for key in keys:
+    """Return only the executable ask for the selected side, never a bid.
+
+    A bid is the price at which someone else may buy from us; using it as
+    our entry price overstates the edge and can create false recommendations.
+    """
+    side = str(side or "").lower().strip()
+    if side not in {"yes", "no"}:
+        return None
+    for key in (f"{side}_ask_dollars", f"{side}_ask"):
         value = market.get(key)
         try:
             p = float(value)
-            if p > 1: p /= 100
-            if 0 < p < 1: return p
-        except (TypeError, ValueError):
+            if p > 1:
+                p /= 100
+            if math.isfinite(p) and 0 < p < 1:
+                return p
+        except (TypeError, ValueError, OverflowError):
             pass
     return None
 
@@ -341,7 +350,10 @@ def build_candidates(events, stats):
             title_market = str(market.get("yes_sub_title") or market.get("title") or ticker)
             for side, probability in (("YES", p_yes), ("NO", 1-p_yes)):
                 price = _price(market, side)
-                edge = probability-price if price is not None else None
+                # No executable ask means no tradeable recommendation or capture.
+                if price is None:
+                    continue
+                edge = probability - price
                 candidates.append({
                     "event_ticker": str(event.get("event_ticker") or ""),
                     "ticker": ticker, "match_id": str(event.get("event_ticker") or ""),
