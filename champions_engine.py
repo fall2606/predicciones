@@ -598,8 +598,14 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 precio_yes_actual = cotizacion_valida(mercado.get("yes_ask_dollars"))
                 precio_no_actual = cotizacion_valida(mercado.get("no_ask_dollars"))
                 prob_no_actual = 1 - prob_yes_actual if prob_yes_actual is not None else None
-                prob_yes_final = anchor_probability_to_market(prob_yes_actual, precio_yes_actual)
-                prob_no_final = anchor_probability_to_market(prob_no_actual, precio_no_actual)
+                categoria_mercado = categoria_resumen_sencillo(clave) if clave else ""
+                ticker_mercado = mercado.get("ticker", "")
+                prob_yes_final = anchor_probability_to_market(
+                    prob_yes_actual, precio_yes_actual, category=categoria_mercado, ticker=ticker_mercado
+                )
+                prob_no_final = anchor_probability_to_market(
+                    prob_no_actual, precio_no_actual, category=categoria_mercado, ticker=ticker_mercado
+                )
                 mercados_actuales.append({
                     "Mercado Kalshi": mercado.get("yes_sub_title") or mercado.get("title") or mercado.get("ticker"),
                     "Prob. YES modelo": f"{prob_yes_actual:.1%}" if prob_yes_actual is not None else "Sin modelo para este tipo",
