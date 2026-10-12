@@ -271,12 +271,12 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
                 st.success("Resultado: WIN")
             elif "LOSS" == resultado or resultado.startswith("LOSS "):
                 st.error("Resultado: LOSS")
-            elif "ANULADA" in resultado or "VOID" in resultado:
+            elif any(token in resultado for token in ("ANULADA", "VOID", "CANCELLED", "POSTPONED")):
                 st.info("Resultado: ANULADA")
-            elif "SIN DATOS" in resultado or "NO EVALUABLE" in resultado:
-                st.warning("Resultado: requiere revisión; no se inventa.")
+            elif "SIN DATOS" in resultado or "NO EVALUABLE" in resultado or "SIN LIQUIDAR" in resultado:
+                st.warning("Resultado: PENDIENTE · requiere revisión de la fuente de liquidación.")
             else:
-                st.caption("Resultado: pendiente de confirmar")
+                st.caption("Resultado: PENDIENTE")
             if not ticker:
                 st.warning("No hay ticker confirmado: no es un contrato ejecutable de Kalshi.")
             else:
