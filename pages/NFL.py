@@ -191,6 +191,7 @@ else:
                     "Calibración": subset.get("calibracion", pd.Series("Sin dato", index=subset.index)).replace("", "Sin dato"),
                     "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
                     "Ticker": subset.get("ticker", ""),
+                    "Marcador proyectado": subset.get("marcador_proyectado", ""),
                 })
                 mostrar_tarjetas_mercado(display.head(limit), titulo=f"{label} · revisa probabilidad, precio y resultado", limite=limit)
                 if block != "DETALLE" and len(subset) < limit:
