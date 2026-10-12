@@ -11,6 +11,7 @@ on:
       - "probability_calibration.py"
       - "prediction_core.py"
       - "pages/NFL.py"
+      - "scripts/auditar_reconciliacion.py"
       - "tests/test_nfl_engine.py"
       - ".github/workflows/nfl-predicciones.yml"
 permissions:
@@ -67,6 +68,30 @@ jobs:
           git commit -m "Actualizar capturas y resultados NFL"
           for intento in 1 2 3; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep $((intento * 3))
+          done
+          exit 1
+      - name: Reconciliar todas las capturas después de actualizar NFL
+        if: always()
+        env:
+          CLAVE: ${{ secrets.CLAVE }}
+          KALSHI_SETTLEMENT_GRACE_HOURS: ${{ vars.KALSHI_SETTLEMENT_GRACE_HOURS || '72' }}
+          MATCH_LOOKUP_GRACE_HOURS: ${{ vars.MATCH_LOOKUP_GRACE_HOURS || '6' }}
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+          python scripts/auditar_reconciliacion.py
+          git add reconciliacion_pendientes.csv
+          if git diff --cached --quiet; then
+            echo "La reconciliación ya cubre las capturas actuales"
+            exit 0
+          fi
+          git config user.name "bot"
+          git config user.email "bot@users.noreply.github.com"
+          git commit -m "Reconciliar capturas NFL y resultados oficiales"
+          for intento in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
             git rebase --abort || true
             sleep $((intento * 3))
           done
