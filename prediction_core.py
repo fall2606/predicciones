@@ -857,7 +857,10 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
         if p is None or price is None:
             continue
         y = 1.0 if state == "WIN" else 0.0
-        event_id = str(old.get("match_id") or old.get("event_ticker") or old.get("prediction_id") or "").strip()
+        event_id = str(old.get("match_id") or old.get("event_ticker") or "").strip()
+        if not event_id:
+            # Orphan historical rows are not independent settled game observations.
+            continue
         side = str(old.get("seleccion") or old.get("lado") or "").upper().strip()
         key = (event_id, old_line, side)
         captured = str(old.get("capturado_en", ""))
