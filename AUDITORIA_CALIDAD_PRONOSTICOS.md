@@ -22,7 +22,7 @@ La referencia no sustituye un backtest fuera de muestra, pero el modelo no la su
 
 ### 2. Champions: no hay evaluación medible aún
 
-- Capturas en `predicciones_champions.csv`: **203**.
+- Capturas en `predicciones_champions.csv`: **204**.
 - Filas en `resultados_champions.csv`: **0**.
 
 Sin liquidaciones asociadas no se puede calcular la tasa de acierto ni el Brier de Champions ni afirmar que la calibración está aprendiendo de WIN/LOSS.
