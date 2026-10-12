@@ -299,16 +299,16 @@ if partido_cerrado:
         _sin_ticker_alta = _archivo_partido["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
         _archivo_partido.loc[_archivo_partido["estado"].isna() & _sin_ticker_alta, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
         _archivo_partido.loc[_archivo_partido["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
-        for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio"]:
+        for _col in ["bloque", "mercado", "line", "seleccion", "edge", "precio", "calibracion"]:
             if _col not in _archivo_partido.columns:
                 _archivo_partido[_col] = ""
-        st.dataframe(_tabla_con_resultado(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
+        st.dataframe(_tabla_con_resultado(_archivo_partido[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "calibracion", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
     else:
         st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de alta probabilidad.")
 elif alta_vista:
     _alta_df = pd.DataFrame(alta_vista).copy()
     _alta_df["Resultado"] = "ANULADA" if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"} else ("sin datos para liquidar · mercado sin fuente compatible" if partido_cerrado else "PENDIENTE")
-    _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _alta_df.columns]
+    _cols = [c for c in ["Apuesta", "line", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Calibración", "Ticker", "Resultado"] if c in _alta_df.columns]
     st.dataframe(_tabla_con_resultado(_alta_df[_cols]), use_container_width=True, hide_index=True)
 else:
     st.info("No hay cinco selecciones independientes que superen el umbral configurable.")
@@ -328,10 +328,10 @@ if partido_cerrado:
         _sin_ticker = _archivo_valor["ticker"].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
         _archivo_valor.loc[_archivo_valor["estado"].isna() & _sin_ticker, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
         _archivo_valor.loc[_archivo_valor["estado"].astype(str).str.upper().isin(["POSTPONED", "CANCELLED", "CANCELED"]), "Resultado"] = "ANULADA"
-        for _col in ["bloque", "mercado", "line", "seleccion", "edge"]:
+        for _col in ["bloque", "mercado", "line", "seleccion", "edge", "calibracion"]:
             if _col not in _archivo_valor.columns:
                 _archivo_valor[_col] = ""
-        st.dataframe(_tabla_con_resultado(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
+        st.dataframe(_tabla_con_resultado(_archivo_valor[["bloque", "mercado", "line", "seleccion", "jugada", "probabilidad_calibrada", "precio", "edge", "calibracion", "ticker", "Resultado"]]), use_container_width=True, hide_index=True)
     else:
         st.info("sin datos para liquidar · no existe captura prepartido guardada en el bloque de valor.")
 elif valor_vista:
@@ -341,7 +341,7 @@ elif valor_vista:
     if _ticker_col and estado_partido not in {"CANCELLED", "CANCELED", "POSTPONED"}:
         _sin_ticker = _valor_df[_ticker_col].astype(str).str.strip().str.upper().isin(["", "—", "-", "NONE", "NAN"])
         _valor_df.loc[_sin_ticker, "Resultado"] = "sin datos para liquidar · histórico sin contrato"
-    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Ticker", "Resultado"] if c in _valor_df.columns]
+    _cols = [c for c in ["Apuesta", "Lado Kalshi", "Probabilidad del modelo", "Precio de compra", "Ventaja (edge)", "Calibración", "Ticker", "Resultado"] if c in _valor_df.columns]
     st.dataframe(_tabla_con_resultado(_valor_df[_cols]), use_container_width=True, hide_index=True)
 else:
     st.info("No hay contratos con precio y edge calculable que entren en este bloque.")
