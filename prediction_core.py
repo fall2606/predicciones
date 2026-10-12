@@ -600,7 +600,7 @@ def anchor_probability_to_market(model_probability, market_price, weight=None, c
     except (TypeError, ValueError, OverflowError):
         weight = _market_model_weight(category, ticker)
     if not math.isfinite(weight):
-        weight = _market_model_weight()
+        weight = _market_model_weight(category, ticker)
     weight = min(0.25, max(0.0, weight))
     return min(0.995, max(0.005, price + weight * (model_p - price)))
 
