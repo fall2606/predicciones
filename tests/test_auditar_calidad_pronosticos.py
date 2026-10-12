@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.auditar_calidad_pronosticos import parse_probability, score_rows
+from scripts.auditar_calidad_pronosticos import parse_probability, score_rows, summarize_reconciliation
 
 
 class PredictionQualityAuditTests(unittest.TestCase):
@@ -46,6 +46,18 @@ class PredictionQualityAuditTests(unittest.TestCase):
         self.assertEqual(report["prediction_id_duplicados_en_capturas"], 1)
         self.assertEqual(report["ids_resultado_duplicados"], 1)
         self.assertEqual(report["tasa_acierto"], 0.0)
+
+    def test_reconciliation_audit_preserves_alert_reasons(self):
+        rows = [
+            {"deporte": "LaLiga", "clasificacion": "PENDIENTE_ACTIVA", "cuenta_alerta": "SI", "motivo": "sin ticker"},
+            {"deporte": "LaLiga", "clasificacion": "PENDIENTE_ACTIVA", "cuenta_alerta": "SI", "motivo": "sin ticker"},
+            {"deporte": "MLB", "clasificacion": "LIQUIDADA", "cuenta_alerta": "NO", "motivo": "resultado registrado: WIN"},
+        ]
+        report = summarize_reconciliation(rows)
+        alerts = [row for row in report if row["cuenta_alerta"] == "SI"]
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0]["filas"], 2)
+        self.assertEqual(alerts[0]["motivo"], "sin ticker")
 
     def test_missing_results_produce_no_fake_score(self):
         report = score_rows([{"prediction_id": "pending", "probabilidad_modelo": "0.6"}], [], ("probabilidad_modelo",))
