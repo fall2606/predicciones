@@ -52,7 +52,7 @@ st.set_page_config(page_title="LaLiga · predicciones", page_icon="⚽", layout=
 st.title("🇪🇸 LaLiga · pronósticos y mercados")
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
-    "Pronósticos de LaLiga para partidos próximos, con comparación inmutable de capturas anteriores y calibración basada en resultados."
+    "Pronósticos de LaLiga para partidos futuros, con historial inmutable. Las probabilidades se muestran como estimaciones no validadas cuando no hay muestra suficiente para calibrarlas."
 )
 if st.button("Actualizar datos ahora", key="actualizar_datos_laliga"):
     st.cache_data.clear()
