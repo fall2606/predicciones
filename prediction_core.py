@@ -380,11 +380,29 @@ def liquidate_kalshi_ledger(predictions_path,results_path,result_columns,*,side_
             # Always retry exact tickers, including old backlogs. Cache each ticker
             # so predictions in separate blocks do not cause duplicate API calls.
             if ticker not in exact_market_cache:
+                found = None
+                # Route 1: exact market endpoint.
                 try:
-                    payload=kalshi_get(f"markets/{ticker}")
-                    exact_market_cache[ticker]=payload.get("market") or (payload.get("markets") or [{}])[0]
-                except (requests.RequestException,ValueError,KeyError,IndexError,TypeError):
-                    exact_market_cache[ticker]=None
+                    payload = kalshi_get(f"markets/{ticker}")
+                    found = payload.get("market") or next(
+                        (item for item in (payload.get("markets") or [])
+                         if str(item.get("ticker") or "") == ticker), None
+                    )
+                except (requests.RequestException, ValueError, KeyError, IndexError, TypeError):
+                    pass
+                # Route 2: market-list endpoint filtered by the exact ticker. Some
+                # older/delisted contracts are absent from the direct endpoint while
+                # still discoverable through the list endpoint.
+                if not found:
+                    try:
+                        payload = kalshi_get("markets", {"tickers": ticker, "limit": 1000})
+                        found = next(
+                            (item for item in (payload.get("markets") or [])
+                             if str(item.get("ticker") or "") == ticker), None
+                        )
+                    except (requests.RequestException, ValueError, KeyError, IndexError, TypeError):
+                        pass
+                exact_market_cache[ticker] = found
             market=exact_market_cache[ticker]
             if market is None:
                 skipped += 1
