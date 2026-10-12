@@ -657,6 +657,8 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 supera_filtros = probabilidad >= 0.50 and ganancia_esperada >= 0.05 and roi_esperado >= 0.10
                 candidatos_cotizados.append({
                     "Apuesta": etiqueta_seleccion_kalshi(clave, local, visita) if lado_apuesta == "YES" else etiqueta_no_kalshi(clave, local, visita),
+                    "Tipo": categoria_resumen_sencillo(clave),
+                    "Categoría resumen": categoria_resumen_sencillo(clave),
                     "Lado": lado_apuesta,
                     "Prob. modelo": f"{probabilidad:.1%}",
                     "Precio actual": f"${precio:.2f}",
@@ -672,6 +674,8 @@ def preparar_top_predicciones_kalshi(eventos, local, visita, fecha, p_goles, i, 
                 if supera_filtros:
                     oportunidades_margen.append({
                         "Apuesta": etiqueta_seleccion_kalshi(clave, local, visita) if lado_apuesta == "YES" else etiqueta_no_kalshi(clave, local, visita),
+                        "Tipo": categoria_resumen_sencillo(clave),
+                        "Categoría resumen": categoria_resumen_sencillo(clave),
                         "Lado": lado_apuesta,
                         "Probabilidad del modelo": f"{probabilidad:.1%}",
                         "Precio Kalshi": f"${precio:.2f}",
