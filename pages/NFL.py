@@ -111,6 +111,22 @@ if not current.empty and "prediction_id" in current and not pred.empty and "pred
         )
         current.drop(columns=["estado_historial"], inplace=True)
 valid_current = current[~current["prediction_id"].astype(str).isin(excluded_ids)].copy() if not current.empty and "prediction_id" in current else pd.DataFrame()
+
+def _nfl_current_fixture_is_upcoming(row):
+    state = str(row.get("estado", "")).upper().strip()
+    if state in {"WIN", "LOSS", "ANULADA", "CANCELLED", "POSTPONED", "FINAL", "COMPLETED"}:
+        return False
+    try:
+        kickoff = datetime.fromisoformat(str(row.get("fecha", "")).replace("Z", "+00:00"))
+        if kickoff.tzinfo is None:
+            kickoff = kickoff.replace(tzinfo=timezone.utc)
+        return kickoff.astimezone(timezone.utc) > datetime.now(timezone.utc)
+    except (TypeError, ValueError, OverflowError):
+        return False
+
+if not valid_current.empty and "fecha" in valid_current:
+    valid_current = valid_current[valid_current.apply(_nfl_current_fixture_is_upcoming, axis=1)].copy()
+
 mostrar_actualizacion_archivos([
     ("Predicciones NFL", PRED), ("Resultados NFL", RES),
     ("Probabilidades actuales NFL", CURRENT), ("Capturas NFL excluidas", EXCLUDED),
