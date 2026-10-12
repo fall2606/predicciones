@@ -1,0 +1,133 @@
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import streamlit as st
+
+ROOT = Path(__file__).resolve().parent.parent
+st.set_page_config(page_title="Calidad del modelo", page_icon="📊", layout="wide")
+st.title("📊 ¿Qué tan buenos son los pronósticos?")
+st.write("Esta página compara las probabilidades guardadas con los resultados reales. No usa tablas: muestra las cifras que necesitas para saber si un modelo merece confianza.")
+st.warning("Importante: estas cifras son descriptivas. Para demostrar que un modelo predice bien hace falta un backtest cronológico fuera de muestra y comparar el modelo con el mercado. Una tasa de acierto alta por sí sola no basta.")
+
+
+def leer_csv(nombre):
+    ruta = ROOT / nombre
+    if not ruta.exists() or ruta.stat().st_size == 0:
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(ruta, dtype=str, keep_default_na=False, low_memory=False)
+    except (OSError, pd.errors.ParserError, UnicodeDecodeError):
+        return pd.DataFrame()
+
+
+def probabilidad(columna):
+    texto = columna.astype(str).str.strip().str.replace("%", "", regex=False)
+    valores = pd.to_numeric(texto, errors="coerce")
+    valores = valores.where(~texto.str.contains("%", regex=False), valores / 100)
+    valores = values_if_percent(values=valores)
+    return valores
+
+
+def values_if_percent(values):
+    # Support both 0–1 fractions and 0–100 percentage columns without guessing per row.
+    return values.where(~((values > 1) & (values <= 100)), values / 100)
+
+
+def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col="ticker"):
+    pred = leer_csv(archivo_pred)
+    res = leer_csv(archivo_res)
+    if pred.empty or res.empty or "prediction_id" not in pred or "prediction_id" not in res:
+        return {"nombre": nombre, "n": 0, "total": len(pred), "sin_resultado": len(pred), "estado": "Aún no evaluable"}
+    res = res.sort_values("resuelto_en") if "resuelto_en" in res else res
+    res = res.drop_duplicates("prediction_id", keep="last")
+    unido = pred.merge(res[["prediction_id", "estado"]], on="prediction_id", how="left", suffixes=("", "_resultado"))
+    estado = unido["estado"].astype(str).str.upper().str.strip()
+    liquidado = unido[estado.isin(["WIN", "LOSS"])].copy()
+    p = pd.Series(np.nan, index=liquidado.index, dtype=float)
+    for clave in claves_prob:
+        if clave in liquidado.columns:
+            candidato = probabilidad(liquidado[clave])
+            p = p.fillna(candidato)
+    y = liquidado["estado"].astype(str).str.upper().eq("WIN").astype(float)
+    valido = p.notna() & np.isfinite(p) & p.between(0, 1)
+    p = p[valido]
+    y = y[valido]
+    n = len(p)
+    if n == 0:
+        return {"nombre": nombre, "n": 0, "total": len(pred), "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()), "estado": "Sin probabilidades y resultados compatibles"}
+    tasa = float(y.mean())
+    brier = float(((p - y) ** 2).mean())
+    accuracy = float(((p >= 0.5) == (y == 1)).mean())
+    media_p = float(p.mean())
+    baseline = tasa * (1 - tasa)
+    real_ticker = int((liquidado.get(ticker_col, pd.Series("", index=liquidado.index)).astype(str).str.strip().replace({"—": "", "-": ""}) != "").sum()) if ticker_col in liquidado.columns else n
+    if n < 30:
+        estado_modelo = "Muestra insuficiente"
+    elif brier >= baseline:
+        estado_modelo = "No supera la referencia simple"
+    else:
+        estado_modelo = "Señal preliminar favorable; falta backtest temporal"
+    return {
+        "nombre": nombre, "n": n, "total": len(pred),
+        "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()),
+        "accuracy": accuracy, "brier": brier, "baseline": baseline,
+        "media_p": media_p, "tasa": tasa, "real_ticker": real_ticker,
+        "estado": estado_modelo,
+    }
+
+
+def evaluar_premier_league():
+    df = leer_csv("predicciones.csv")
+    if df.empty or not {"p", "gano"}.issubset(df.columns):
+        return {"nombre": "Premier League", "n": 0, "total": len(df), "sin_resultado": len(df), "estado": "Aún no evaluable"}
+    p = pd.to_numeric(df["p"], errors="coerce")
+    y = pd.to_numeric(df["gano"], errors="coerce")
+    valid = p.notna() & y.isin([0, 1]) & p.between(0, 1)
+    p, y = p[valid], y[valid]
+    n = len(p)
+    if not n:
+        return {"nombre": "Premier League", "n": 0, "total": len(df), "sin_resultado": len(df), "estado": "Sin resultados compatibles"}
+    tasa = float(y.mean())
+    brier = float(((p-y)**2).mean())
+    return {
+        "nombre": "Premier League", "n": n, "total": len(df), "sin_resultado": int(len(df)-n),
+        "accuracy": float(((p>=0.5)==(y==1)).mean()), "brier": brier, "baseline": tasa*(1-tasa),
+        "media_p": float(p.mean()), "tasa": tasa, "real_ticker": n,
+        "estado": "No supera la referencia simple" if n >= 30 and brier >= tasa*(1-tasa) else ("Muestra insuficiente" if n < 30 else "Señal preliminar favorable; falta backtest temporal"),
+    }
+
+
+resultados = [
+    evaluar_premier_league(),
+    evaluar_archivos("LaLiga", "predicciones_laliga.csv", "resultados_laliga.csv", ("probabilidad_calibrada", "probabilidad_base")),
+    evaluar_archivos("Champions League", "predicciones_champions.csv", "resultados_champions.csv", ("probabilidad_calibrada", "probabilidad_base")),
+    evaluar_archivos("MLB", "predicciones_mlb.csv", "resultados_mlb.csv", ("probabilidad_calibrada", "probabilidad_modelo")),
+    evaluar_archivos("NFL", "predicciones_nfl.csv", "resultados_nfl.csv", ("probabilidad_calibrada", "probabilidad_modelo")),
+]
+
+for fila in resultados:
+    with st.container(border=True):
+        st.subheader(fila["nombre"])
+        st.caption(fila["estado"])
+        if fila["n"] == 0:
+            st.info(f"No hay muestra evaluable en los archivos disponibles. Capturas en archivo: {fila['total']}.")
+            continue
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Resultados evaluados", fila["n"])
+        c2.metric("Acierto", f"{fila['accuracy']:.1%}")
+        c3.metric("Brier (menor es mejor)", f"{fila['brier']:.3f}")
+        c4, c5, c6 = st.columns(3)
+        c4.metric("Probabilidad media", f"{fila['media_p']:.1%}")
+        c5.metric("Acierto real", f"{fila['tasa']:.1%}")
+        c6.metric("Referencia Brier", f"{fila['baseline']:.3f}")
+        st.caption(f"Capturas totales: {fila['total']} · sin resultado terminal asociado: {fila['sin_resultado']}. El contador puede incluir partidos futuros.")
+        if fila["brier"] >= fila["baseline"]:
+            st.warning("En esta muestra, el Brier no mejora una referencia que siempre predice la tasa media de acierto. No tratar los porcentajes como validados.")
+        elif fila["n"] < 30:
+            st.warning("La muestra es demasiado pequeña para confiar en la diferencia.")
+        else:
+            st.info("Resultado preliminar: falta comprobarlo con separación temporal y contra precios de mercado.")
+
+st.divider()
+st.markdown("**Cómo leerlo:** el Brier mide el error de las probabilidades, no solo si gana la selección. Se compara aquí con una referencia sencilla de la misma muestra; esto no es un backtest independiente. Las predicciones relacionadas de un mismo partido tampoco son observaciones independientes.")
