@@ -82,7 +82,7 @@ else:
         c3.metric("LOSS", int((state == "LOSS").sum()))
         c4.metric("Pendientes", int((~state.isin(["WIN", "LOSS", "ANULADA"])).sum()))
         c5.metric("Acierto WIN/LOSS", f"{hit_rate:.1%}" if hit_rate is not None else "—")
-        c6.metric("Brier (menor es mejor)", f"{brier:.3f}" if brier is not None else "—"))
+        c6.metric("Brier (menor es mejor)", f"{brier:.3f}" if brier is not None else "—")
         st.subheader("Selecciones por partido")
         games = sorted(valid_current["match_id"].dropna().astype(str).unique()) if not valid_current.empty and "match_id" in valid_current else []
         if not games:
