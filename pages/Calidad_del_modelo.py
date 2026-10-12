@@ -28,10 +28,27 @@ def contar_pendientes_activos(nombre):
     if reconciliacion.empty or not columnas.issubset(reconciliacion.columns):
         return None
     deporte = "Champions" if nombre == "Champions League" else nombre
+    current = reconciliacion[reconciliacion["deporte"].astype(str).str.strip().eq(deporte)]
+    if current.empty or "prediction_id" not in current.columns:
+        return None
+    archivo_pred = {
+        "LaLiga": "predicciones_laliga.csv",
+        "Champions League": "predicciones_champions.csv",
+        "MLB": "predicciones_mlb.csv",
+        "NFL": "predicciones_nfl.csv",
+    }.get(nombre)
+    if not archivo_pred:
+        return None
+    pred = leer_csv(archivo_pred)
+    if pred.empty or "prediction_id" not in pred.columns:
+        return None
+    expected_ids = set(pred["prediction_id"].astype(str).str.strip()) - {""}
+    report_ids = set(current["prediction_id"].astype(str).str.strip()) - {""}
+    if not expected_ids.issubset(report_ids):
+        return None
     mascara = (
-        reconciliacion["deporte"].astype(str).str.strip().eq(deporte)
-        & reconciliacion["clasificacion"].astype(str).str.strip().str.upper().eq("PENDIENTE_ACTIVA")
-        & reconciliacion["cuenta_alerta"].astype(str).str.strip().str.upper().eq("SI")
+        current["clasificacion"].astype(str).str.strip().str.upper().eq("PENDIENTE_ACTIVA")
+        & current["cuenta_alerta"].astype(str).str.strip().str.upper().eq("SI")
     )
     return int(mascara.sum())
 
@@ -137,7 +154,9 @@ for fila in resultados:
         st.subheader(fila["nombre"])
         st.caption(fila["estado"])
         if fila["n"] == 0:
-            st.info(f"No hay muestra evaluable en los archivos disponibles. Capturas en archivo: {fila['total']}. Pendientes activos según reconciliación canónica: {contar_pendientes_activos(fila['nombre'])}. El total sin resultado puede incluir partidos no finalizados.")
+            pendientes = contar_pendientes_activos(fila["nombre"])
+            pendientes_texto = str(pendientes) if pendientes is not None else "NO VERIFICABLE (cobertura incompleta)"
+            st.info(f"No hay muestra evaluable en los archivos disponibles. Capturas en archivo: {fila['total']}. Pendientes activos según reconciliación canónica: {pendientes_texto}. El total sin resultado puede incluir partidos no finalizados.")
             continue
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Resultados evaluados", fila["n"])
