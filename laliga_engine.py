@@ -375,13 +375,12 @@ def modelar_seleccion_kalshi(clave, local, visita, p_goles, i, j, p_corners, ci,
     elif serie in {"KXLALIGABTTS", "KXLALIGA1HBTTS"}:
         condicion = (i > 0) & (j > 0)
     elif serie in {"KXLALIGAFTTS", "KXLALIGAFIRSTGOAL"}:
-        total = i + j
+        # A full-time score does not reveal which team scored first.
+        # Never use a score-share ratio as if it were a first-goal probability.
         if lado == "sin_goles":
-            condicion = total == 0
-        elif lado == "local":
-            condicion = np.divide(i, total, out=np.zeros_like(p_goles), where=total > 0)
+            condicion = (i + j) == 0
         else:
-            condicion = np.divide(j, total, out=np.zeros_like(p_goles), where=total > 0)
+            return None
     if condicion is None:
         return None
     matriz = p_corners if dominio == "corners" else matriz_goles
