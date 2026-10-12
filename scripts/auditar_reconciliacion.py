@@ -308,11 +308,24 @@ def _row_report(name, row, latest, match_states, kind):
         return base
 
     if not ticker:
-        # Missing contracts cannot be looked up on Kalshi. For old/finished
-        # fixtures, retain an actionable alert instead of silently archiving them.
-        if is_final or is_cancelled or match_lookup_expired:
+        # A confirmed final without an executable Kalshi ticker cannot be a
+        # pending Kalshi settlement forever. Keep it visible as not liquidatable
+        # unless a trustworthy sport-specific outcome was recorded separately.
+        if is_final:
             base.update(
-                motivo="partido terminado o vencido sin ticker; revisar liquidación por fuente deportiva",
+                motivo="partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado",
+                clasificacion="SIN_DATOS_PARA_LIQUIDAR",
+                cuenta_alerta="NO",
+            )
+        elif is_cancelled:
+            base.update(
+                motivo="partido cancelado/aplazado sin ticker ejecutable",
+                clasificacion="ANULADA",
+                cuenta_alerta="NO",
+            )
+        elif match_lookup_expired:
+            base.update(
+                motivo="partido vencido sin ticker y sin estado oficial verificable; requiere revisar fuente",
                 clasificacion="PENDIENTE_ACTIVA",
                 cuenta_alerta="SI",
             )
