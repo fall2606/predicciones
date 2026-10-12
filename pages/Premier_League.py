@@ -1,5 +1,6 @@
 import requests, pandas as pd, numpy as np, streamlit as st
 from app_metadata import mostrar_metadata
+from pronosticos_ui import mostrar_pronosticos_sencillos
 from scipy.stats import poisson
 from football_match_utils import is_upcoming_match
 
@@ -67,12 +68,10 @@ st.caption(f"Partidos usados para el modelo: {usados} · Temporada anterior: {'s
 if tabla.empty:
     st.info("No hay partidos próximos disponibles.")
 else:
-    for fila in tabla.to_dict("records"):
-        with st.container(border=True):
-            st.markdown(f"**{fila.get('Partido', 'Partido')}** · {fila.get('Fecha', '')}")
-            st.write(f"Marcador estimado: **{fila.get('Goles esp.', '—')}**")
-            cols = st.columns(4)
-            for col, etiqueta in zip(cols, ("Gana local %", "Empate %", "Gana visita %", "Over 2.5 %")):
-                col.metric(etiqueta.replace(" %", ""), f"{fila.get(etiqueta, '—')}%")
-            st.caption("Estimación estadística básica; no es una apuesta y aún no está validada con una muestra histórica suficiente.")
+    filas_modelo = tabla.to_dict("records")
+    for fila in filas_modelo:
+        for columna in ("Gana local %", "Empate %", "Gana visita %", "Over 2.5 %"):
+            if fila.get(columna) not in (None, ""):
+                fila[columna] = f"{fila[columna]}%"
+    mostrar_pronosticos_sencillos(filas_modelo, "Premier League", "modelo estadístico básico")
 st.warning("Modelo estadístico básico. No se recomienda apostar con este modelo hasta medir su rendimiento fuera de muestra.")
