@@ -92,7 +92,7 @@ class CoreTests(unittest.TestCase):
     for i in range(100):
      w.writerow({"prediction_id":f"p{i}","estado":"WIN","resuelto_en":f"2026-10-{(i%28)+1:02d}T00:00:00Z"})
     w.writerow({"prediction_id":"p0-duplicate","estado":"WIN","resuelto_en":"2026-10-28T00:00:00Z"})
-   candidate={"Ticker":"KXMLBGAME-CURRENT","Categoría resumen":"Ganador","Precio de compra":"55¢"}
+   candidate={"Ticker":"KXMLBGAME-CURRENT","Categoría resumen":"Ganador","Probabilidad del modelo":"90%","Precio de compra":"55¢"}
    gate=core.evaluate_market_recommendation(candidate,predictions_path=p,results_path=r,min_samples=100)
    self.assertTrue(gate["eligible"],gate)
    self.assertEqual(gate["n"],100)
