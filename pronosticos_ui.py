@@ -174,9 +174,10 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
             gates.append(None)
         else:
             gates.append(evaluate_market_recommendation(fila))
-    elegibles = sum(1 for gate in gates if gate and gate.get("eligible"))
-    if not elegibles:
-        razones = list(dict.fromkeys(gate["reason"] for gate in gates if gate and gate.get("reason")))
+    gates_activos = [gate for gate in gates if gate is not None]
+    elegibles = sum(1 for gate in gates_activos if gate.get("eligible"))
+    if gates_activos and not elegibles:
+        razones = list(dict.fromkeys(gate["reason"] for gate in gates_activos if gate.get("reason")))
         detalle = "; ".join(razones[:3]) or "faltan resultados liquidados comparables, ventaja validada o precio ask"
         st.info(f"Hoy no hay recomendaciones. Motivo(s): {detalle}.")
     for fila, gate in zip(filas, gates):
