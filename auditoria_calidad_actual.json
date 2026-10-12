@@ -94,16 +94,16 @@
     "deporte": "Champions League",
     "archivo_predicciones": "predicciones_champions.csv",
     "archivo_resultados": "resultados_champions.csv",
-    "capturas": 208,
+    "capturas": 209,
     "filas_resultados": 0,
     "ids_resultado_terminal_en_archivo": 0,
     "capturas_con_resultado_terminal": 0,
-    "sin_resultado_terminal": 208,
+    "sin_resultado_terminal": 209,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 208
+      "SIN_RESULTADO": 209
     },
     "n_evaluable": 0,
     "tasa_acierto": null,
@@ -113,7 +113,7 @@
     "brier_referencia_muestra": null,
     "calibracion_intervalos": [],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 208,
+    "filas_reconciliacion": 209,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
