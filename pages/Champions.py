@@ -17,6 +17,7 @@ from scipy.stats import nbinom, poisson
 from champions_engine import *
 from prediction_core import rank_market_candidates, rank_single_candidates
 from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
+from pronosticos_ui import mostrar_pronosticos_sencillos
 
  
 def _con_resultado_pendiente(filas, estado_partido):
@@ -47,7 +48,7 @@ def _tabla_con_resultado(df, columna="Resultado"):
     return df.style.map(_color, subset=[columna])
 
 st.set_page_config(page_title="Champions League · predicciones", page_icon="🏆", layout="wide")
-st.title("🏆 Champions League · mercados y probabilidades de Kalshi")
+st.title("🏆 Champions League · pronósticos y mercados")
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
     "Pronósticos de Champions League para partidos próximos, con comparación inmutable de capturas anteriores y calibración basada en resultados."
@@ -119,7 +120,7 @@ seleccionables.sort(key=lambda m: m.get("utcDate", ""))
 # Pronóstico independiente de Kalshi: siempre calcula el partido desde el historial
 # oficial y la distribución de goles, aunque no exista todavía ningún contrato.
 st.subheader("Pronósticos del modelo para todos los partidos próximos")
-st.caption("Estimaciones estadísticas calculadas desde resultados previos; no requieren que Kalshi haya abierto mercados. Son probabilidades base, no probabilidades calibradas ni garantía de resultado.")
+st.caption("Primero verás lo que estima el modelo. Los contratos reales de Kalshi aparecen por separado. Un pronóstico no es una apuesta.")
 _filas_modelo_independiente = []
 for _m in seleccionables:
     if str(_m.get("status", "")).upper() not in {"SCHEDULED", "TIMED"}:
@@ -160,7 +161,7 @@ for _m in seleccionables:
             "Estado del cálculo": f"NO DISPONIBLE: {type(_exc).__name__}",
         })
 if _filas_modelo_independiente:
-    st.dataframe(pd.DataFrame(_filas_modelo_independiente), use_container_width=True, hide_index=True)
+    mostrar_pronosticos_sencillos(_filas_modelo_independiente, "Champions League")
 else:
     st.info("No hay partidos próximos dentro de la ventana consultada para calcular.")
 
