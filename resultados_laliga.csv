@@ -292,3 +292,65 @@ prediction_id,estado,marcador,resuelto_en
 564705|ALTA_PROBABILIDAD|KXLALIGATOTAL-26OCT11SANVCF-1|YES,WIN,"Marcador independiente (football-data.org): 2-2 (mercado KXLALIGATOTAL, selección YES)",2026-10-11T21:12:14.988449+00:00
 564705|SENCILLAS|KXLALIGAGAME-26OCT11SANVCF-SAN|None,LOSS,Resultado oficial Kalshi: NO,2026-10-11T21:12:15.077474+00:00
 564705|ALTA_PROBABILIDAD|KXLALIGASPREAD-26OCT11SANVCF-VCF2|NO,LOSS,"Marcador independiente (football-data.org): 2-2 (mercado KXLALIGASPREAD, selección NO)",2026-10-11T21:12:15.078369+00:00
+564704|Hándicap 1.ª parte|2026101012,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 3-3 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-12T21:23:51.690452+00:00
+564704|Hándicap de goles|2026101012,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGASPREAD, selección NO)",2026-10-12T21:23:51.691249+00:00
+564704|Goles totales|2026101012,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección NO)",2026-10-12T21:23:51.691974+00:00
+564704|Corners por equipo|2026101012,LOSS,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGATCORNERS, selección YES)",2026-10-12T21:23:51.801901+00:00
+564704|Goles por equipo|2026101012,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATEAMTOTAL, selección YES)",2026-10-12T21:23:51.802931+00:00
+564704|Goles 1.ª parte|2026101012,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-12T21:23:51.803667+00:00
+564704|Ambos marcan 1.ª parte|2026101012,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-12T21:23:51.804373+00:00
+564704|Goles 2.ª parte|2026101012,LOSS,"Marcador independiente (football-data.org, 2.ª parte): 3-2 (mercado KXLALIGA2HTOTAL, selección NO)",2026-10-12T21:23:51.805082+00:00
+564704|Corners totales|2026101012,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-12T21:23:51.806231+00:00
+564704|Hándicap 1.ª parte|2026101018,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 3-3 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-12T21:23:51.809398+00:00
+564704|Hándicap de goles|2026101018,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGASPREAD, selección NO)",2026-10-12T21:23:51.810134+00:00
+564704|Goles totales|2026101018,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección NO)",2026-10-12T21:23:51.810827+00:00
+564704|Corners por equipo|2026101018,LOSS,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGATCORNERS, selección YES)",2026-10-12T21:23:51.811930+00:00
+564704|Goles por equipo|2026101018,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATEAMTOTAL, selección YES)",2026-10-12T21:23:51.812636+00:00
+564704|Goles 1.ª parte|2026101018,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-12T21:23:51.813335+00:00
+564704|Ambos marcan 1.ª parte|2026101018,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-12T21:23:51.814030+00:00
+564704|Goles 2.ª parte|2026101018,LOSS,"Marcador independiente (football-data.org, 2.ª parte): 3-2 (mercado KXLALIGA2HTOTAL, selección NO)",2026-10-12T21:23:51.814724+00:00
+564704|Corners totales|2026101018,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-12T21:23:51.815800+00:00
+564704|Primer gol|2026101021,WIN,Resultado oficial Kalshi: NO,2026-10-12T21:23:51.885858+00:00
+564704|Hándicap 1.ª parte|2026101021,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 3-3 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-12T21:23:51.886624+00:00
+564704|Hándicap de goles|2026101021,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGASPREAD, selección NO)",2026-10-12T21:23:51.887376+00:00
+564704|Goles totales|2026101021,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección NO)",2026-10-12T21:23:51.888094+00:00
+564704|Goles por equipo|2026101021,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATEAMTOTAL, selección YES)",2026-10-12T21:23:51.888804+00:00
+564704|Goles 1.ª parte|2026101021,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-12T21:23:51.889504+00:00
+564704|Ambos marcan 1.ª parte|2026101021,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-12T21:23:51.890211+00:00
+564704|Goles 2.ª parte|2026101021,LOSS,"Marcador independiente (football-data.org, 2.ª parte): 3-2 (mercado KXLALIGA2HTOTAL, selección NO)",2026-10-12T21:23:51.890919+00:00
+564704|Corners totales|2026101021,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-12T21:23:51.892078+00:00
+564704|Corners por equipo|2026101021,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGATCORNERS, selección YES)",2026-10-12T21:23:51.893197+00:00
+564704|Hándicap 1.ª parte|2026101100,LOSS,"Marcador independiente (football-data.org, 1.ª parte): 3-3 (mercado KXLALIGA1HSPREAD, selección NO)",2026-10-12T21:23:52.003313+00:00
+564704|Hándicap de goles|2026101100,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGASPREAD, selección NO)",2026-10-12T21:23:52.004078+00:00
+564704|Goles totales|2026101100,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección NO)",2026-10-12T21:23:52.004797+00:00
+564704|Goles por equipo|2026101100,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATEAMTOTAL, selección YES)",2026-10-12T21:23:52.005489+00:00
+564704|Goles 1.ª parte|2026101100,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-12T21:23:52.006196+00:00
+564704|Ambos marcan 1.ª parte|2026101100,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-12T21:23:52.006899+00:00
+564704|Goles 2.ª parte|2026101100,LOSS,"Marcador independiente (football-data.org, 2.ª parte): 3-2 (mercado KXLALIGA2HTOTAL, selección NO)",2026-10-12T21:23:52.007592+00:00
+564704|Corners totales|2026101100,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección NO)",2026-10-12T21:23:52.008734+00:00
+564704|Corners por equipo|2026101100,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGATCORNERS, selección YES)",2026-10-12T21:23:52.009833+00:00
+564704|SENCILLAS|KXLALIGAFTTS-26OCT12LEVSEV-NONE|NO|2026101102,WIN,Resultado oficial Kalshi: NO,2026-10-12T21:23:52.010546+00:00
+564704|SENCILLAS|KXLALIGATOTAL-26OCT12LEVSEV-5|NO|2026101102,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección NO)",2026-10-12T21:23:52.011245+00:00
+564704|SENCILLAS|KXLALIGA1HTOTAL-26OCT12LEVSEV-1|YES|2026101102,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-12T21:23:52.011947+00:00
+564704|SENCILLAS|KXLALIGA1HBTTS-26OCT12LEVSEV-BTTS|NO|2026101102,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HBTTS, selección NO)",2026-10-12T21:23:52.012638+00:00
+564704|SENCILLAS|KXLALIGA2HTOTAL-26OCT12LEVSEV-3|NO|2026101102,LOSS,"Marcador independiente (football-data.org, 2.ª parte): 3-2 (mercado KXLALIGA2HTOTAL, selección NO)",2026-10-12T21:23:52.013324+00:00
+564704|SENCILLAS|KXLALIGACORNERS-26OCT12LEVSEV-8|YES|2026101102,LOSS,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección YES)",2026-10-12T21:23:52.014423+00:00
+564704|SENCILLAS|KXLALIGABTTS-26OCT12LEVSEV-BTTS|YES|2026101102,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGABTTS, selección YES)",2026-10-12T21:23:52.015129+00:00
+564704|SENCILLAS|KXLALIGAGAME-26OCT12LEVSEV-LEV|YES|2026101102,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGAGAME, selección YES)",2026-10-12T21:23:52.015827+00:00
+564704|SENCILLAS|KXLALIGA1H-26OCT12LEVSEV-TIE|YES|2026101102,LOSS,Resultado oficial Kalshi: NO,2026-10-12T21:23:52.016546+00:00
+564704|SENCILLAS|KXLALIGA2H-26OCT12LEVSEV-TIE|YES|2026101102,LOSS,Resultado oficial Kalshi: NO,2026-10-12T21:23:52.017243+00:00
+564704|ALTA_PROBABILIDAD|KXLALIGAFTTS-26OCT12LEVSEV-NONE|NO|2026101102,WIN,Resultado oficial Kalshi: NO,2026-10-12T21:23:52.017937+00:00
+564704|ALTA_PROBABILIDAD|KXLALIGACORNERS-26OCT12LEVSEV-7|YES|2026101102,WIN,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección YES)",2026-10-12T21:23:52.019025+00:00
+564704|ALTA_PROBABILIDAD|KXLALIGAGAME-26OCT12LEVSEV-TIE|NO|2026101102,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGAGAME, selección NO)",2026-10-12T21:23:52.019758+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGATOTAL-26OCT12LEVSEV-3|YES|2026101102,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección YES)",2026-10-12T21:23:52.020476+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGATOTAL-26OCT12LEVSEV-5|YES|2026101102,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección YES)",2026-10-12T21:23:52.021191+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGABTTS-26OCT12LEVSEV-BTTS|YES|2026101102,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGABTTS, selección YES)",2026-10-12T21:23:52.021894+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGAGAME-26OCT12LEVSEV-LEV|YES|2026101102,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGAGAME, selección YES)",2026-10-12T21:23:52.022585+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGA1HTOTAL-26OCT12LEVSEV-1|YES|2026101102,WIN,"Marcador independiente (football-data.org, 1.ª parte): 0-1 (mercado KXLALIGA1HTOTAL, selección YES)",2026-10-12T21:23:52.023282+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGAGAME-26OCT12LEVSEV-TIE|NO|2026101102,LOSS,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGAGAME, selección NO)",2026-10-12T21:23:52.023979+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGAFTTS-26OCT12LEVSEV-NONE|NO|2026101102,WIN,Resultado oficial Kalshi: NO,2026-10-12T21:23:52.024679+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGA1H-26OCT12LEVSEV-TIE|NO|2026101102,WIN,Resultado oficial Kalshi: NO,2026-10-12T21:23:52.025363+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGAGAME-26OCT12LEVSEV-SEV|NO|2026101102,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGAGAME, selección NO)",2026-10-12T21:23:52.026059+00:00
+564704|A_TENER_EN_CUENTA|KXLALIGACORNERS-26OCT12LEVSEV-9|YES|2026101102,LOSS,"Marcador independiente (ESPN, córners): 5-2 (mercado KXLALIGACORNERS, selección YES)",2026-10-12T21:23:52.027165+00:00
+564704|ALTA_PROBABILIDAD|KXLALIGATOTAL-26OCT12LEVSEV-1|YES,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección YES)",2026-10-12T21:23:52.027870+00:00
+564704|ALTA_PROBABILIDAD|KXLALIGATOTAL-26OCT12LEVSEV-2|YES,WIN,"Marcador independiente (football-data.org): 3-3 (mercado KXLALIGATOTAL, selección YES)",2026-10-12T21:23:52.028576+00:00
