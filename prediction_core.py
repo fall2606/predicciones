@@ -795,6 +795,21 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     ask = probability_fraction(ask_raw)
     if ask is None:
         return {"eligible": False, "reason": "precio de compra (ask) no válido", "n": 0}
+    model_p = _base_probability(row)
+    if model_p is None:
+        return {"eligible": False, "reason": "probabilidad del modelo no válida", "n": 0}
+    final_p = probability_fraction(row.get("probabilidad_final", row.get("Probabilidad final")))
+    if final_p is None:
+        final_p = anchor_probability_to_market(model_p, ask, category=row.get("Tipo", row.get("Categoría resumen", "")), ticker=ticker)
+    if final_p is None:
+        return {"eligible": False, "reason": "no se puede calcular la probabilidad final", "n": 0}
+    try:
+        cost_buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+    except (TypeError, ValueError, OverflowError):
+        cost_buffer = 0.01
+    net_edge = final_p - ask - cost_buffer
+    if net_edge <= 0:
+        return {"eligible": False, "reason": f"ventaja neta no positiva ({net_edge:+.1%}) al precio ask", "n": 0}
 
     try:
         minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_RECOMENDACION", "100"))
