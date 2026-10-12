@@ -12,6 +12,7 @@ from scipy.stats import nbinom, poisson
 from mlb_math import pitcher_stats_from_api, score_probability_matrix, summarize_score_probabilities
 from prediction_core import rank_single_candidates, single_candidate_rejection_reasons
 from reconciliacion_ui import mostrar_reconciliacion, mostrar_actualizacion_archivos
+from pronosticos_ui import mostrar_pronosticos_sencillos
 
 
 API = "https://statsapi.mlb.com/api/v1"
@@ -681,14 +682,13 @@ for juego_resumen in partidos:
         "Más de 8.5 carreras": f"{probabilidades['over_8_5']:.0%}",
     })
 
-st.subheader("Predicciones rápidas de todos los partidos")
+st.subheader("Pronósticos sencillos de todos los partidos")
 st.caption(
-    "Empieza por el favorito y la probabilidad de victoria. El marcador es una estimación, "
-    "y el total indica la probabilidad de que ambos equipos sumen 9 carreras o más. "
-    "La probabilidad de victoria se calcula entre los resultados sin empate; en MLB se juegan entradas extra si hace falta."
+    "El modelo estima quién tiene más posibilidades y cuántas carreras podrían anotarse. "
+    "Estos pronósticos no son apuestas ni contratos de Kalshi."
 )
 if resumen_partidos:
-    st.dataframe(pd.DataFrame(resumen_partidos), use_container_width=True, hide_index=True)
+    mostrar_pronosticos_sencillos(resumen_partidos, "MLB")
 else:
     st.info("No hay partidos pendientes o en juego para resumir en este rango de fechas.")
 st.divider()
