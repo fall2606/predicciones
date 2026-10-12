@@ -1038,7 +1038,7 @@ for juego in [juego]:
             historial_partido = historial_mlb[historial_mlb["match_id"].astype(str) == game_id].copy()
         else:
             historial_partido = pd.DataFrame()
-        with st.expander("Historial y contratos Kalshi de este partido", expanded=False):
+        with st.expander("Auditoría · historial y contratos Kalshi de este partido", expanded=False):
             if not historial_partido.empty:
                 game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
                 detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
