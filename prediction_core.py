@@ -810,9 +810,6 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     except (TypeError, ValueError, OverflowError):
         cost_buffer = 0.01
     net_edge = final_p - ask - cost_buffer
-    if net_edge <= 0:
-        return {"eligible": False, "reason": f"ventaja neta no positiva ({net_edge:+.1%}) al precio ask", "n": 0}
-
     try:
         minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_RECOMENDACION", "100"))
     except (TypeError, ValueError, OverflowError):
@@ -871,7 +868,10 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     observations = [(item[1], item[2]) for item in observations_by_event.values()]
     n = len(observations)
     if n < minimum:
-        return {"eligible": False, "reason": f"muestra insuficiente: {n}/{minimum} resultados WIN/LOSS del mismo mercado", "n": n}
+        reason = f"muestra insuficiente: {n}/{minimum} resultados WIN/LOSS del mismo mercado"
+        if net_edge <= 0:
+            reason += f"; además, ventaja neta no positiva ({net_edge:+.1%}) al precio ask"
+        return {"eligible": False, "reason": reason, "n": n}
     brier_model = sum(x[0] for x in observations) / n
     brier_market = sum(x[1] for x in observations) / n
     if not brier_model < brier_market:
@@ -880,7 +880,13 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
             "reason": f"el modelo no supera al precio de Kalshi en Brier ({brier_model:.3f} vs {brier_market:.3f}; n={n})",
             "n": n, "brier_model": brier_model, "brier_market": brier_market,
         }
-    return {"eligible": True, "reason": f"Brier modelo {brier_model:.3f} < precio Kalshi {brier_market:.3f}; n={n}", "n": n,
+    if net_edge <= 0:
+        return {
+            "eligible": False,
+            "reason": f"ventaja neta no positiva ({net_edge:+.1%}); Brier modelo {brier_model:.3f} < precio Kalshi {brier_market:.3f}; n={n}",
+            "n": n, "brier_model": brier_model, "brier_market": brier_market,
+        }
+    return {"eligible": True, "reason": f"Brier modelo {brier_model:.3f} < precio Kalshi {brier_market:.3f}; n={n}; ventaja neta {net_edge:+.1%}", "n": n,
             "brier_model": brier_model, "brier_market": brier_market}
 
 def _candidate_edge(row, price):
