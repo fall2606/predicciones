@@ -123,53 +123,8 @@ if not seleccionables:
 
 seleccionables.sort(key=lambda m: m.get("utcDate", ""))
 
-# Pronóstico independiente de Kalshi: siempre calcula el partido desde el historial
-# oficial y la distribución de goles, aunque no exista todavía ningún contrato.
-st.subheader("Pronósticos del modelo para todos los partidos próximos")
-st.caption("Primero verás lo que estima el modelo. Los contratos reales de Kalshi aparecen por separado. Un pronóstico no es una apuesta.")
-_filas_modelo_independiente = []
-for _m in seleccionables:
-    if not is_upcoming_match(_m):
-        continue
-    try:
-        _d = construir_prediccion_partido(_m, modelo, corners)
-        _pg, _ii, _jj = _d["p_goles"], _d["i"], _d["j"]
-        _p_local = float(_pg[_ii > _jj].sum())
-        _p_empate = float(_pg[_ii == _jj].sum())
-        _p_visita = float(_pg[_ii < _jj].sum())
-        _p_total = _ii + _jj
-        _p_mas15 = float(_pg[_p_total >= 2].sum())
-        _p_mas25 = float(_pg[_p_total >= 3].sum())
-        _p_ambos = float(_pg[(_ii > 0) & (_jj > 0)].sum())
-        _fecha_m = datetime.fromisoformat(_m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
-        _principal = max(
-            [(_p_local, f'{_d["local"]} gana'), (_p_empate, "Empate"), (_p_visita, f'{_d["visita"]} gana')],
-            key=lambda _x: _x[0],
-        )
-        _filas_modelo_independiente.append({
-            "Fecha (Chicago)": _fecha_m.strftime("%d/%m %H:%M"),
-            "Partido": f'{_d["local"]} vs {_d["visita"]}',
-            "Goles esperados": f'{_d["gl"]:.2f} - {_d["gv"]:.2f}',
-            "Gana local": f"{_p_local:.1%}",
-            "Empate": f"{_p_empate:.1%}",
-            "Gana visitante": f"{_p_visita:.1%}",
-            "Más de 1.5 goles": f"{_p_mas15:.1%}",
-            "Más de 2.5 goles": f"{_p_mas25:.1%}",
-            "Ambos marcan": f"{_p_ambos:.1%}",
-            "Resultado 1X2 más probable": f"{_principal[1]} ({_principal[0]:.1%})",
-            "Estado del cálculo": "OK",
-        })
-    except (ValueError, KeyError, TypeError, ZeroDivisionError) as _exc:
-        _fecha_m = datetime.fromisoformat(_m["utcDate"].replace("Z", "+00:00")).astimezone(TZ)
-        _filas_modelo_independiente.append({
-            "Fecha (Chicago)": _fecha_m.strftime("%d/%m %H:%M"),
-            "Partido": f'{_m.get("homeTeam", {}).get("name", "Local")} vs {_m.get("awayTeam", {}).get("name", "Visitante")}',
-            "Estado del cálculo": f"NO DISPONIBLE: {type(_exc).__name__}",
-        })
-if _filas_modelo_independiente:
-    mostrar_pronosticos_sencillos(_filas_modelo_independiente, "LaLiga")
-else:
-    st.info("No hay partidos próximos dentro de la ventana consultada para calcular.")
+# El pronóstico estadístico se muestra para el partido elegido más abajo,
+# evitando un segundo selector de partido que pudiera contradecir la vista principal.
 
 vista_partidos = st.radio(
     "Vista",
@@ -250,6 +205,20 @@ fecha_objetivo, modelo_objetivo = datos_partido["fecha"], datos_partido["modelo"
 gl, gv = datos_partido["gl"], datos_partido["gv"]
 ajuste_forma_local, ajuste_forma_visita = datos_partido["ajuste_local"], datos_partido["ajuste_visita"]
 p_goles, i, j = datos_partido["p_goles"], datos_partido["i"], datos_partido["j"]
+
+if not partido_cerrado:
+    p_local_modelo = float(p_goles[i > j].sum())
+    p_empate_modelo = float(p_goles[i == j].sum())
+    p_visita_modelo = float(p_goles[i < j].sum())
+    st.subheader("Pronóstico del partido seleccionado")
+    with st.container(border=True):
+        st.markdown(f"**{local} vs {visita}**")
+        st.caption(f"Marcador medio estimado: {gl:.2f}–{gv:.2f} goles · muestra histórica del modelo: {len(modelo[0])} partidos cargados")
+        c_local, c_empate, c_visita = st.columns(3)
+        c_local.metric("Gana local · modelo", f"{p_local_modelo:.1%}")
+        c_empate.metric("Empate · modelo", f"{p_empate_modelo:.1%}")
+        c_visita.metric("Gana visitante · modelo", f"{p_visita_modelo:.1%}")
+        st.caption("Estas son probabilidades del modelo; la probabilidad final para apostar solo se calcula con un precio de compra válido de Kalshi.")
 p_corners, ci, cj = datos_partido["p_corners"], datos_partido["ci"], datos_partido["cj"]
 media_corners_local = datos_partido["media_corners_local"]
 media_corners_visita = datos_partido["media_corners_visita"]
