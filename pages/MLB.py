@@ -754,13 +754,33 @@ def _mlb_inicio_futuro(valor, ahora=None):
         return False
 
 
-indice_inicial = next(
-    (i for i, partido in enumerate(partidos)
-     if str(partido.get("status", {}).get("abstractGameState", "")).strip().casefold() not in {"final", "completed", "cancelled", "canceled", "postponed"}
-     and _mlb_inicio_futuro(partido.get("gameDate"), ahora_utc_mlb)),
-    0,
+def _mlb_es_proximo(juego):
+    abstract, detalle = _mlb_estado(juego)
+    terminales = {"final", "completed", "cancelled", "canceled", "postponed", "suspended"}
+    if abstract in terminales or detalle in terminales:
+        return False
+    if abstract in {"live", "in progress"}:
+        return True
+    return _mlb_inicio_futuro(juego.get("gameDate"), ahora_utc_mlb)
+
+vista_mlb = st.radio(
+    "Vista",
+    ["Próximos / en juego", "Auditoría de partidos finalizados"],
+    horizontal=True,
+    key="vista_partidos_mlb",
 )
-seleccion = st.selectbox("Elige un partido (solo se muestran sus predicciones)", list(opciones), index=indice_inicial)
+partidos_en_vista = (
+    [p for p in partidos if _mlb_es_proximo(p)]
+    if vista_mlb == "Próximos / en juego"
+    else [p for p in partidos if not _mlb_es_proximo(p)]
+)
+etiqueta_selector = "Partido próximo o en juego" if vista_mlb == "Próximos / en juego" else "Partido cerrado/pasado · auditoría"
+ids_en_vista = {str(p.get("gamePk") or p.get("id") or "") for p in partidos_en_vista}
+opciones = {k: v for k, v in opciones.items() if str(v.get("gamePk") or v.get("id") or "") in ids_en_vista}
+if not opciones:
+    st.info("No hay partidos en esta vista. Los finalizados solo aparecen en Auditoría, nunca en Próximos.")
+    st.stop()
+seleccion = st.selectbox(etiqueta_selector, list(opciones))
 juego = opciones[seleccion]
 for juego in [juego]:
     home = juego.get("teams", {}).get("home", {}).get("team", {})
@@ -809,7 +829,7 @@ for juego in [juego]:
     matriz_prob = score_probability_matrix(eje, mu_h, mu_a)
     fecha = juego.get("gameDate", "")[:16].replace("T", " ")
     marcador = f" · Final {a_runs}-{h_runs}" if status == "Final" else ""
-    with st.expander(f"{fecha} · {game['away']} @ {game['home']}{marcador}", expanded=status == "Preview"):
+    with st.expander(f"{fecha} · {game['away']} @ {game['home']}{marcador}", expanded=False):
         st.write(f"**Marcador esperado:** {mu_a:.1f}–{mu_h:.1f} carreras (visita–local)")
         forma_l = forma_juego.get(int(home["id"]))
         forma_v = forma_juego.get(int(away["id"]))
