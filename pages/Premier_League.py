@@ -1,5 +1,6 @@
 import requests, pandas as pd, numpy as np, streamlit as st
 from scipy.stats import poisson
+from football_match_utils import is_upcoming_match
 
 st.set_page_config(page_title="Premier League · pronósticos", layout="wide")
 st.title("⚽ Premier League · pronósticos del modelo")
@@ -14,7 +15,7 @@ def pedir(**params):
     r.raise_for_status()
     return r.json()["matches"]
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=300)
 def calcular(n):
     actual = pedir()
     todos = list(actual)
@@ -37,7 +38,7 @@ def calcular(n):
     g = t.groupby("equipo").agg(gf=("gf", "sum"), gc=("gc", "sum"), n=("gf", "count"))
     ataque = ((g["gf"] + K * prom) / (g["n"] + K)) / prom
     defensa = ((g["gc"] + K * prom) / (g["n"] + K)) / prom
-    prox = [m for m in actual if m["status"] in ("SCHEDULED", "TIMED")]
+    prox = [m for m in actual if is_upcoming_match(m)]
     prox = sorted(prox, key=lambda m: m["utcDate"])[:n]
     suma = np.add.outer(np.arange(10), np.arange(10))
     res = []
