@@ -212,6 +212,7 @@ else:
                     "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
                     "Ticker": subset.get("ticker", ""),
                     "Marcador proyectado": subset.get("marcador_proyectado", ""),
+                    "capturado_en": subset.get("capturado_en", ""),
                 })
                 mostrar_tarjetas_mercado(display.head(limit), titulo=f"{label} · revisa probabilidad, precio y resultado", limite=limit)
                 if block != "DETALLE" and len(subset) < limit:
