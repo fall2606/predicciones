@@ -52,7 +52,7 @@ st.set_page_config(page_title="Champions League · predicciones", page_icon="�
 st.title("🏆 Champions League · pronósticos y mercados")
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
-    "Pronósticos de Champions League para partidos próximos, con comparación inmutable de capturas anteriores y calibración basada en resultados."
+    "Pronósticos de Champions League para partidos futuros, con historial inmutable. Las probabilidades se muestran como estimaciones no validadas cuando no hay muestra suficiente para calibrarlas."
 )
 if st.button("Actualizar datos ahora", key="actualizar_datos_champions"):
     st.cache_data.clear()
