@@ -136,7 +136,7 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_mlb.csv resultados_mlb.csv predicciones_laliga.csv resultados_laliga.csv predicciones_champions.csv resultados_champions.csv scripts/reintegrar_capturas_mlb.py scripts/auditar_reconciliacion.py scripts/backtest_mlb.py backtest_mlb_resumen.csv reconciliacion_pendientes.csv mlb_eventos_sin_emparejar.csv mlb_candidatos_descartados.csv mlb_cobertura_por_partido.csv mlb_probabilidades_actuales.csv auditoria_calidad_actual.csv auditoria_calidad_actual.json auditoria_reconciliacion_actual.csv
+          git add predicciones_mlb.csv resultados_mlb.csv predicciones_laliga.csv resultados_laliga.csv predicciones_champions.csv resultados_champions.csv predicciones_nfl.csv resultados_nfl.csv scripts/reintegrar_capturas_mlb.py scripts/auditar_reconciliacion.py scripts/backtest_mlb.py backtest_mlb_resumen.csv reconciliacion_pendientes.csv mlb_eventos_sin_emparejar.csv mlb_candidatos_descartados.csv mlb_cobertura_por_partido.csv mlb_probabilidades_actuales.csv auditoria_calidad_actual.csv auditoria_calidad_actual.json auditoria_reconciliacion_actual.csv
           if git diff --cached --quiet; then
             echo "No hay filas nuevas; los historiales permanecen sin cambios"
             exit 0
