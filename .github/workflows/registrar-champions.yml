@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_champions.csv reconciliacion_pendientes.csv
+          git add predicciones_laliga.csv predicciones_champions.csv predicciones_mlb.csv predicciones_nfl.csv resultados_laliga.csv resultados_champions.csv resultados_mlb.csv resultados_nfl.csv reconciliacion_pendientes.csv auditoria_reconciliacion_actual.csv
           if git diff --cached --quiet; then
             echo "No hay capturas ni resultados nuevos"
           else
