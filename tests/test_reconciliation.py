@@ -25,13 +25,13 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(states["103"], "CANCELLED")
         self.assertEqual(states["104"], "SCHEDULED")
 
-    def test_missing_ticker_is_preserved_as_historical_not_alert(self):
+    def test_missing_ticker_for_finished_match_is_actionable_not_hidden_as_historical(self):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
         row = {"prediction_id":"old-1","match_id":"m1","fecha":past,"ticker":"—","local":"A","visita":"B","bloque":"SENCILLAS"}
         result = _row_report("LaLiga", row, {}, {"m1":"FINISHED"}, "football")
-        self.assertEqual(result["motivo"], "sin ticker (histórico)")
-        self.assertEqual(result["clasificacion"], "HISTORICO_SIN_CONTRATO")
-        self.assertEqual(result["cuenta_alerta"], "NO")
+        self.assertIn("sin ticker", result["motivo"])
+        self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
+        self.assertEqual(result["cuenta_alerta"], "SI")
 
     def test_finished_prediction_without_ticker_is_not_hidden_as_historical(self):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
