@@ -134,5 +134,29 @@ class ReconciliationStatusTests(unittest.TestCase):
 
 
 
+
+    @patch("scripts.auditar_reconciliacion.kalshi_market")
+    def test_missing_or_closed_kalshi_market_does_not_hide_finished_prediction(self, market):
+        past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
+        row = {
+            "prediction_id": "market-gone",
+            "match_id": "m-gone",
+            "fecha": past,
+            "ticker": "KXTEST-GONE",
+            "local": "A",
+            "visita": "B",
+            "seleccion": "YES",
+        }
+        for market_state in (
+            {"kind": "missing", "status": "not_found", "result": ""},
+            {"kind": "ok", "status": "closed", "result": ""},
+        ):
+            market.return_value = market_state
+            result = _row_report("Champions", row, {}, {"m-gone": "FINISHED"}, "football")
+            self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
+            self.assertEqual(result["cuenta_alerta"], "SI")
+            self.assertIn("falta resultado deportivo verificable", result["motivo"])
+
+
 if __name__ == "__main__":
     unittest.main()
