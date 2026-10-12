@@ -1,7 +1,8 @@
 tipo_mercado,n_resueltos,n_con_precio,brier_modelo,brier_precio_kalshi,diferencia_modelo_menos_precio,estado_calibracion
+SENCILLAS · Entradas parciales,1,1,0.275380,0.122500,0.152880,CALIBRACIÓN AÚN INSUFICIENTE
 ganador,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-primera_entrada,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+primera_entrada,3,3,0.361321,0.232867,0.128454,CALIBRACIÓN AÚN INSUFICIENTE
 props_jugador,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-run_line,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
-total_carreras,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
+run_line,4,4,0.803186,0.030925,0.772261,CALIBRACIÓN AÚN INSUFICIENTE
+total_carreras,8,8,0.169170,0.072112,0.097058,CALIBRACIÓN AÚN INSUFICIENTE
 total_equipo,0,0,,,,CALIBRACIÓN AÚN INSUFICIENTE
