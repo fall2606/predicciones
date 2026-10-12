@@ -108,6 +108,10 @@ def mostrar_pronosticos_sencillos(filas, deporte="deporte", origen="Modelo estad
                 "No presenta una comprobación automática de lesiones, alineaciones, noticias ni clima, "
                 "y no demuestra por sí sola que exista ventaja frente al precio de una apuesta."
             )
+        st.caption(
+            "Probabilidad final anclada a Kalshi: no disponible en esta tarjeta independiente, porque no contiene "
+            "un precio de compra verificable. No se sustituye ese dato por la probabilidad del modelo."
+        )
         st.info(
             "**Importante:** estos porcentajes indican lo que estima el modelo. No dicen cuánto ganarías "
             "ni significan que debas apostar. Para valorar una apuesta hacen falta precio de compra actual, "
