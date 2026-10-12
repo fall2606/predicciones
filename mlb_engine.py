@@ -593,7 +593,8 @@ def main():
                     # A model probability without an executable entry quote is not
                     # a tradeable recommendation and must not enter the ledger.
                     continue
-                edge = probability - price
+                cost_buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+                edge = probability - price - cost_buffer
                 row = {
                     "prediction_id": "",
                     "event_ticker": event.get("event_ticker", ""),
