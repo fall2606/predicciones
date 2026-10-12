@@ -22,16 +22,11 @@ def leer_csv(nombre):
 
 
 def probabilidad(columna):
-    texto = columna.astype(str).str.strip().str.replace("%", "", regex=False)
-    valores = pd.to_numeric(texto, errors="coerce")
-    valores = valores.where(~texto.str.contains("%", regex=False), valores / 100)
-    valores = values_if_percent(values=valores)
-    return valores
-
-
-def values_if_percent(values):
-    # Support both 0–1 fractions and 0–100 percentage columns without guessing per row.
-    return values.where(~((values > 1) & (values <= 100)), values / 100)
+    original = columna.astype(str).str.strip()
+    es_porcentaje = original.str.contains("%", regex=False)
+    valores = pd.to_numeric(original.str.replace("%", "", regex=False), errors="coerce")
+    # Convert only values explicitly marked as percentages. Invalid fractions > 1 stay invalid.
+    return valores.where(~es_porcentaje, valores / 100)
 
 
 def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col="ticker"):
@@ -91,7 +86,7 @@ def evaluar_premier_league():
     tasa = float(y.mean())
     brier = float(((p-y)**2).mean())
     return {
-        "nombre": "Premier League", "n": n, "total": len(df), "sin_resultado": int(len(df)-n),
+        "nombre": "Premier League", "n": n, "total": len(df), "sin_resultado": int(pd.to_numeric(df["gano"], errors="coerce").isna().sum()),
         "accuracy": float(((p>=0.5)==(y==1)).mean()), "brier": brier, "baseline": tasa*(1-tasa),
         "media_p": float(p.mean()), "tasa": tasa, "real_ticker": n,
         "estado": "No supera la referencia simple" if n >= 30 and brier >= tasa*(1-tasa) else ("Muestra insuficiente" if n < 30 else "Señal preliminar favorable; falta backtest temporal"),
@@ -121,7 +116,7 @@ for fila in resultados:
         c4.metric("Probabilidad media", f"{fila['media_p']:.1%}")
         c5.metric("Acierto real", f"{fila['tasa']:.1%}")
         c6.metric("Referencia Brier", f"{fila['baseline']:.3f}")
-        st.caption(f"Capturas totales: {fila['total']} · sin resultado terminal asociado: {fila['sin_resultado']}. El contador puede incluir partidos futuros.")
+        st.caption(f"Capturas totales: {fila['total']} · con ticker en las liquidaciones: {fila.get('real_ticker', fila['n'])} · sin resultado terminal asociado: {fila['sin_resultado']}. El contador puede incluir partidos futuros.")
         if fila["brier"] >= fila["baseline"]:
             st.warning("En esta muestra, el Brier no mejora una referencia que siempre predice la tasa media de acierto. No tratar los porcentajes como validados.")
         elif fila["n"] < 30:
