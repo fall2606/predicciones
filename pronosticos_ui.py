@@ -174,6 +174,7 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
             "Selección sin nombre",
         )
         categoria = _valor_fila(fila, ("Tipo", "Categoría resumen", "categoria", "bloque"), "")
+        ticker = _valor_fila(fila, ("Ticker", "ticker"), "")
         if str(categoria).casefold() == str(nombre).casefold():
             categoria = ""
         model_raw = _valor_fila(
@@ -190,7 +191,7 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
         final_raw = _valor_fila(fila, ("Probabilidad final", "probabilidad_final"), "")
         final_num = probability_fraction(final_raw) if final_raw else None
         if final_num is None:
-            final_num = anchor_probability_to_market(model_raw, precio_raw)
+            final_num = anchor_probability_to_market(model_raw, precio_raw, category=categoria, ticker=ticker)
         final_text = _porcentaje_legible(final_num) if final_num is not None else "Sin precio válido"
         precio_texto = str(precio_raw)
         if not any(token in precio_texto for token in ("$", "¢", "%")):
@@ -211,7 +212,6 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
             edge = _ventaja_legible(final_num - precio_num - coste)
         else:
             edge = "No calculable sin precio válido"
-        ticker = _valor_fila(fila, ("Ticker", "ticker"), "")
         calibracion = _valor_fila(fila, ("Calibración", "calibracion"), "")
         resultado = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
         with st.container(border=True):
