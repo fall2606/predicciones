@@ -137,7 +137,7 @@ for fila in resultados:
         st.subheader(fila["nombre"])
         st.caption(fila["estado"])
         if fila["n"] == 0:
-            st.info(f"No hay muestra evaluable en los archivos disponibles. Capturas en archivo: {fila['total']}.")
+            st.info(f"No hay muestra evaluable en los archivos disponibles. Capturas en archivo: {fila['total']}. Pendientes activos según reconciliación canónica: {contar_pendientes_activos(fila['nombre'])}. El total sin resultado puede incluir partidos no finalizados.")
             continue
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Resultados evaluados", fila["n"])
