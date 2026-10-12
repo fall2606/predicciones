@@ -872,10 +872,10 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     if not brier_model < brier_market:
         return {
             "eligible": False,
-            "reason": f"el modelo no supera al precio de Kalshi en Brier ({brier_model:.3f} vs {brier_market:.3f})",
+            "reason": f"el modelo no supera al precio de Kalshi en Brier ({brier_model:.3f} vs {brier_market:.3f}; n={n})",
             "n": n, "brier_model": brier_model, "brier_market": brier_market,
         }
-    return {"eligible": True, "reason": f"Brier mejor que Kalshi con {n} resultados", "n": n,
+    return {"eligible": True, "reason": f"Brier modelo {brier_model:.3f} < precio Kalshi {brier_market:.3f}; n={n}", "n": n,
             "brier_model": brier_model, "brier_market": brier_market}
 
 def _candidate_edge(row, price):
