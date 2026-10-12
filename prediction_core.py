@@ -809,18 +809,13 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
         if pid:
             latest_results[pid] = str(result.get("estado", result.get("estado_resultado", ""))).upper().strip()
 
-    def clean_category(value):
-        value = re.sub(r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\s*[·|:-]\s*", "", str(value or "").strip(), flags=re.I)
-        value = re.sub(r"\s*[·|:-]\s*(YES|NO)$", "", value, flags=re.I)
-        return re.sub(r"\s+", " ", value).casefold()
-
-    target_category = clean_category(row.get("Tipo", row.get("Categoría resumen", row.get("categoria", row.get("bloque", "")))))
+    # The Kalshi series ticker is the canonical market-family key. Category labels
+    # differ between live pages and historical CSVs, so do not silently discard
+    # comparable settlements because of presentation wording.
     observations = []
     for old in predictions:
         old_ticker = str(old.get("ticker", old.get("Ticker", ""))).strip().upper()
         if not old_ticker or old_ticker.split("-", 1)[0] != series:
-            continue
-        if target_category and clean_category(old.get("categoria", old.get("Tipo", ""))) != target_category:
             continue
         state = latest_results.get(str(old.get("prediction_id", "")).strip(), "")
         if state not in {"WIN", "LOSS"}:
