@@ -278,6 +278,9 @@ elif partido_cerrado:
     st.caption("No hay una captura previa guardada para este encuentro cerrado; no se inventa una predicción retrospectiva.")
 else:
     st.caption("Estimación en vivo. La captura automática se guarda cada dos horas; la hora de la última captura se muestra cuando esté disponible.")
+# Preserve one real candidate for a transparent NO BET / NO DATA explanation
+# when every candidate fails the recommendation filter. Never pad the list.
+candidatos_para_diagnostico = list(resumen_sencillo_kalshi or [])
 # Salvaguarda también las capturas históricas: las sencillas siempre respetan el filtro de valor.
 resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=5)
 if resumen_sencillo_kalshi:
@@ -298,10 +301,17 @@ if resumen_sencillo_kalshi:
         with st.expander(f"Auditoría · capturas guardadas ({len(historial_partido)})"):
             st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
 else:
-    if partido_cerrado:
-        st.info("No hay una captura previa de este encuentro cerrado; no se inventa una comparación retrospectiva.")
+    if not partido_cerrado and candidatos_para_diagnostico:
+        st.info("Hoy no hay recomendaciones para este partido. Muestro solo un mercado real evaluado para explicar por qué no pasa el filtro; no es una apuesta recomendada.")
+        mostrar_tarjetas_mercado(
+            [candidatos_para_diagnostico[0]],
+            titulo="Mercado evaluado · sin recomendación si faltan ask vigente, muestra o Brier favorable",
+            limite=1,
+        )
+    elif partido_cerrado:
+        st.info("No hay una captura previa ejecutable para este encuentro cerrado; revisa Auditoría. No se inventa una predicción retrospectiva.")
     else:
-        st.info("No encontré mercados modelables de Kalshi para resumir este partido.")
+        st.info("Hoy no hay recomendaciones: no encontré un mercado con precio de compra válido y ventaja neta suficiente.")
 
 
 st.markdown("### 5 de alta probabilidad para posibles combos")
