@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import os
 import re
@@ -644,13 +644,21 @@ st.caption(
     "datos actualizados cada 15 minutos."
 )
 
-# Resumen sencillo, similar a la página de fútbol: una fila por partido.
-# Estas probabilidades usan temporada + forma reciente; el detalle del partido
-# incorpora el abridor probable cuando sus estadísticas están disponibles.
+# Resumen de PRÓXIMOS partidos: no incluir juegos ya iniciados ni finalizados.
+# Los partidos pasados con captura siguen disponibles en el selector histórico inferior.
 resumen_partidos = []
+ahora_utc_mlb = datetime.now(timezone.utc)
 for juego_resumen in partidos:
-    estado_resumen = juego_resumen.get("status", {}).get("abstractGameState", "Preview")
-    if estado_resumen == "Final":
+    estado_resumen = str(juego_resumen.get("status", {}).get("abstractGameState", "Preview")).strip().casefold()
+    if estado_resumen in {"final", "completed", "cancelled", "canceled", "postponed"}:
+        continue
+    try:
+        _inicio_resumen = datetime.fromisoformat(str(juego_resumen.get("gameDate", "")).replace("Z", "+00:00"))
+        if _inicio_resumen.tzinfo is None:
+            _inicio_resumen = _inicio_resumen.replace(tzinfo=timezone.utc)
+        if _inicio_resumen.astimezone(timezone.utc) <= ahora_utc_mlb:
+            continue
+    except (TypeError, ValueError):
         continue
     teams_resumen = juego_resumen.get("teams", {})
     home_resumen = teams_resumen.get("home", {}).get("team", {})
@@ -699,14 +707,26 @@ for juego in partidos:
     local = juego.get("teams", {}).get("home", {}).get("team", {}).get("name", "Local")
     visita = juego.get("teams", {}).get("away", {}).get("team", {}).get("name", "Visita")
     hora = juego.get("gameDate", "")[:16].replace("T", " ")
-    estado = juego.get("status", {}).get("abstractGameState", "")
-    marcador = " · FINAL" if estado == "Final" else " · EN JUEGO" if estado == "Live" else ""
+    estado = str(juego.get("status", {}).get("abstractGameState", "")).strip()
+    estado_norm = estado.casefold()
+    marcador = " · FINAL" if estado_norm in {"final", "completed"} else " · EN JUEGO" if estado_norm in {"live", "in progress"} else " · SUSPENDIDO" if estado_norm in {"suspended", "postponed"} else ""
     clave = f"{hora} · {visita} @ {local}{marcador}"
     opciones[clave] = juego
 
+def _mlb_inicio_futuro(valor, ahora=None):
+    try:
+        inicio_dt = datetime.fromisoformat(str(valor or "").replace("Z", "+00:00"))
+        if inicio_dt.tzinfo is None:
+            inicio_dt = inicio_dt.replace(tzinfo=timezone.utc)
+        return inicio_dt.astimezone(timezone.utc) > (ahora or datetime.now(timezone.utc))
+    except (TypeError, ValueError):
+        return False
+
+
 indice_inicial = next(
     (i for i, partido in enumerate(partidos)
-     if partido.get("status", {}).get("abstractGameState") != "Final"),
+     if str(partido.get("status", {}).get("abstractGameState", "")).strip().casefold() not in {"final", "completed", "cancelled", "canceled", "postponed"}
+     and _mlb_inicio_futuro(partido.get("gameDate"), ahora_utc_mlb)),
     0,
 )
 seleccion = st.selectbox("Elige un partido (solo se muestran sus predicciones)", list(opciones), index=indice_inicial)
@@ -716,7 +736,9 @@ for juego in [juego]:
     away = juego.get("teams", {}).get("away", {}).get("team", {})
     if not home.get("id") or not away.get("id"):
         continue
-    status = juego.get("status", {}).get("abstractGameState", "Preview")
+    status_raw = str(juego.get("status", {}).get("abstractGameState", "Preview")).strip()
+    status_norm = status_raw.casefold()
+    status = "Final" if status_norm in {"final", "completed"} else "Live" if status_norm in {"live", "in progress"} else "Preview"
     h_runs = juego.get("teams", {}).get("home", {}).get("score")
     a_runs = juego.get("teams", {}).get("away", {}).get("score")
     game = {
