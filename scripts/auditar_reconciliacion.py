@@ -153,7 +153,26 @@ def kalshi_market(ticker):
                 "result": text(market.get("result")).lower(),
             }
     except (requests.RequestException, ValueError, TypeError) as exc:
-        result = {"kind": "error", "status": type(exc).__name__, "result": ""}
+        # If the direct lookup fails for any transport/server reason, try the
+        # list endpoint once before declaring the contract unavailable.
+        try:
+            fallback = SESSION.get(
+                "https://api.elections.kalshi.com/trade-api/v2/markets",
+                params={"tickers": ticker, "limit": 1000}, timeout=8
+            )
+            fallback.raise_for_status()
+            markets = (fallback.json() or {}).get("markets") or []
+            market = next((item for item in markets if text(item.get("ticker")) == ticker), {})
+            if market:
+                result = {
+                    "kind": "ok",
+                    "status": text(market.get("status")).lower(),
+                    "result": text(market.get("result")).lower(),
+                }
+            else:
+                result = {"kind": "error", "status": type(exc).__name__, "result": ""}
+        except (requests.RequestException, ValueError, TypeError):
+            result = {"kind": "error", "status": type(exc).__name__, "result": ""}
     KALSHI_CACHE[ticker] = result
     return result
 
