@@ -10,9 +10,11 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 import requests
 import streamlit as st
+from app_metadata import mostrar_metadata
 
 st.set_page_config(page_title="Contexto deportivo gratuito", page_icon="🧠", layout="wide")
 st.title("🧠 Contexto deportivo · fuentes gratuitas")
+mostrar_metadata()
 st.caption(
     "Consulta noticias públicas recientes sobre equipos y jugadores. No requiere API key ni servicio de IA de pago. "
     "Las noticias sirven para detectar riesgos; no alteran por sí solas las probabilidades ni la calibración."
