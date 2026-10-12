@@ -67,11 +67,22 @@ else:
             if field in valid_pred:
                 valid_pred[field + "_num"] = pd.to_numeric(valid_pred[field], errors="coerce")
         state = valid_pred.get("estado", pd.Series("", index=valid_pred.index)).astype(str).str.upper()
-        c1, c2, c3, c4 = st.columns(4)
+        settled = valid_pred[state.isin(["WIN", "LOSS"])].copy()
+        settled_p = pd.to_numeric(settled.get("probabilidad_modelo", pd.Series(dtype=float)), errors="coerce")
+        valid_p = settled_p.between(0, 1)
+        brier = None
+        if valid_p.any():
+            outcomes = settled.loc[valid_p, "estado"].astype(str).str.upper().eq("WIN").astype(float)
+            brier = float(((settled_p.loc[valid_p] - outcomes) ** 2).mean())
+        settled_count = int(state.isin(["WIN", "LOSS"]).sum())
+        hit_rate = float((state == "WIN").sum() / settled_count) if settled_count else None
+        c1, c2, c3, c4, c5, c6 = st.columns(6)
         c1.metric("Capturas válidas", len(valid_pred))
         c2.metric("WIN", int((state == "WIN").sum()))
         c3.metric("LOSS", int((state == "LOSS").sum()))
         c4.metric("Pendientes", int((~state.isin(["WIN", "LOSS", "ANULADA"])).sum()))
+        c5.metric("Acierto WIN/LOSS", f"{hit_rate:.1%}" if hit_rate is not None else "—")
+        c6.metric("Brier (menor es mejor)", f"{brier:.3f}" if brier is not None else "—"))
         st.subheader("Selecciones por partido")
         games = sorted(valid_current["match_id"].dropna().astype(str).unique()) if not valid_current.empty and "match_id" in valid_current else []
         if not games:
@@ -113,7 +124,8 @@ else:
                     "Prob. original": (pd.to_numeric(subset.get("probabilidad_modelo"), errors="coerce")*100).round(1).astype(str)+"%",
                     "Prob. recalibrada": (pd.to_numeric(subset.get("probabilidad_calibrada", subset.get("probabilidad_modelo")), errors="coerce")*100).round(1).astype(str)+"%",
                     "Precio captura": subset.get("precio_captura", ""),
-                    "Ventaja": (pd.to_numeric(subset.get("edge"), errors="coerce")*100).round(1).astype(str)+"%",
+                    "Ventaja neta": (pd.to_numeric(subset.get("edge"), errors="coerce")*100).round(1).astype(str)+"%",
+                    "Calibración": subset.get("calibracion", pd.Series("Sin dato", index=subset.index)).replace("", "Sin dato"),
                     "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
                     "Ticker": subset.get("ticker", ""),
                 })
