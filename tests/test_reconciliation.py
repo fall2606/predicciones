@@ -61,13 +61,14 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(result["cuenta_alerta"], "SI")
 
     @patch("scripts.auditar_reconciliacion.kalshi_market")
-    def test_open_market_inside_grace_does_not_trigger_alert(self, market):
+    def test_open_market_after_finished_game_is_alerted_even_inside_grace(self, market):
         recent = (datetime.now(timezone.utc) - timedelta(hours=3)).isoformat()
         market.return_value = {"kind":"ok","status":"open","result":""}
         row = {"prediction_id":"p2","match_id":"m2","fecha":recent,"ticker":"KXTEST-2"}
         result = _row_report("MLB", row, {}, {"m2":"FINAL"}, "mlb")
-        self.assertIn("dentro del plazo", result["motivo"])
-        self.assertEqual(result["cuenta_alerta"], "NO")
+        self.assertIn("revisar fuente alternativa", result["motivo"])
+        self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
+        self.assertEqual(result["cuenta_alerta"], "SI")
 
     @patch("scripts.auditar_reconciliacion.kalshi_market")
     def test_open_market_after_grace_is_alerted(self, market):
