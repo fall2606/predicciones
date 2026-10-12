@@ -21,6 +21,21 @@ def leer_csv(nombre):
         return pd.DataFrame()
 
 
+def contar_pendientes_activos(nombre):
+    """Use the same canonical reconciliation definition as the audit script."""
+    reconciliacion = leer_csv("reconciliacion_pendientes.csv")
+    columnas = {"deporte", "clasificacion", "cuenta_alerta"}
+    if reconciliacion.empty or not columnas.issubset(reconciliacion.columns):
+        return 0
+    deporte = "Champions" if nombre == "Champions League" else nombre
+    mascara = (
+        reconciliacion["deporte"].astype(str).str.strip().eq(deporte)
+        & reconciliacion["clasificacion"].astype(str).str.strip().str.upper().eq("PENDIENTE_ACTIVA")
+        & reconciliacion["cuenta_alerta"].astype(str).str.strip().str.upper().eq("SI")
+    )
+    return int(mascara.sum())
+
+
 def probabilidad(columna):
     original = columna.astype(str).str.strip()
     es_porcentaje = original.str.contains("%", regex=False)
@@ -133,7 +148,7 @@ for fila in resultados:
         c4.metric("Probabilidad media", f"{fila['media_p']:.1%}")
         c5.metric("Acierto real", f"{fila['tasa']:.1%}")
         c6.metric("Referencia Brier", f"{fila['baseline']:.3f}")
-        st.caption(f"Capturas totales: {fila['total']} · con ticker en las liquidaciones: {fila.get('real_ticker', fila['n'])} · sin resultado terminal asociado: {fila['sin_resultado']}. El contador puede incluir partidos futuros.")
+        st.caption(f"Capturas totales: {fila['total']} · con ticker en las liquidaciones: {fila.get('real_ticker', fila['n'])} · sin resultado terminal asociado (incluye partidos no finalizados): {fila['sin_resultado']} · pendientes activos según reconciliación canónica: {contar_pendientes_activos(fila['nombre'])}.")
         intervalos = fila.get("intervalos", [])
         if intervalos:
             st.caption("Calibración por intervalos: compara la probabilidad media con el acierto real; grupos pequeños son inestables.")
