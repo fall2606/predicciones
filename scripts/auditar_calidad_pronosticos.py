@@ -121,6 +121,18 @@ def summarize_reconciliation(rows):
     ]
 
 
+def summarize_active_pending(rows):
+    """Count only canonical unresolved alerts for matches already finished/overdue."""
+    counts = Counter()
+    for row in rows:
+        sport = str(row.get("deporte", "") or "SIN_DEPORTE").strip()
+        classification = str(row.get("clasificacion", "") or "").strip().upper()
+        alert = str(row.get("cuenta_alerta", "") or "").strip().upper()
+        if classification == "PENDIENTE_ACTIVA" and alert == "SI":
+            counts[sport] += 1
+    return dict(counts)
+
+
 def audit_file(name, predictions_file, results_file, probability_fields):
     predictions = read_csv(ROOT / predictions_file)
     results = read_csv(ROOT / results_file)
@@ -129,19 +141,25 @@ def audit_file(name, predictions_file, results_file, probability_fields):
 
 
 def main():
+    reconciliation_rows = read_csv(ROOT / "reconciliacion_pendientes.csv")
+    pending_counts = summarize_active_pending(reconciliation_rows)
+    sport_aliases = {"Champions League": "Champions"}
     audits = [
         audit_file("LaLiga", "predicciones_laliga.csv", "resultados_laliga.csv", ("probabilidad_calibrada", "probabilidad_base")),
         audit_file("Champions League", "predicciones_champions.csv", "resultados_champions.csv", ("probabilidad_calibrada", "probabilidad_base")),
         audit_file("MLB", "predicciones_mlb.csv", "resultados_mlb.csv", ("probabilidad_calibrada", "probabilidad_modelo")),
         audit_file("NFL", "predicciones_nfl.csv", "resultados_nfl.csv", ("probabilidad_calibrada", "probabilidad_modelo")),
     ]
+    for audit in audits:
+        source_sport = sport_aliases.get(audit["deporte"], audit["deporte"])
+        audit["pendientes_activos"] = pending_counts.get(source_sport, 0)
     (ROOT / "auditoria_calidad_actual.json").write_text(json.dumps(audits, ensure_ascii=False, indent=2), encoding="utf-8")
-    reconciliation = summarize_reconciliation(read_csv(ROOT / "reconciliacion_pendientes.csv"))
+    reconciliation = summarize_reconciliation(reconciliation_rows)
     with (ROOT / "auditoria_reconciliacion_actual.csv").open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["deporte", "clasificacion", "cuenta_alerta", "motivo", "filas"])
         writer.writeheader()
         writer.writerows(reconciliation)
-    fields = ["deporte", "capturas", "filas_resultados", "capturas_con_resultado_terminal", "sin_resultado_terminal",
+    fields = ["deporte", "capturas", "filas_resultados", "capturas_con_resultado_terminal", "sin_resultado_terminal", "pendientes_activos",
               "prediction_id_vacios", "prediction_id_duplicados_en_capturas", "ids_resultado_duplicados", "n_evaluable",
               "tasa_acierto", "probabilidad_media", "brier", "log_loss", "brier_referencia_muestra", "limitacion"]
     with (ROOT / "auditoria_calidad_actual.csv").open("w", newline="", encoding="utf-8") as f:
@@ -152,7 +170,7 @@ def main():
     print("AUDITORÍA DESCRIPTIVA DE CALIDAD (no equivale a backtest fuera de muestra)")
     for row in audits:
         print(f"{row['deporte']}: capturas={row['capturas']}; terminales enlazados={row['capturas_con_resultado_terminal']}; "
-              f"sin resultado terminal={row['sin_resultado_terminal']}; evaluables={row['n_evaluable']}; "
+              f"sin resultado terminal asociado (incluye no finalizados)={row['sin_resultado_terminal']}; pendientes activos={row['pendientes_activos']}; evaluables={row['n_evaluable']}; "
               f"Brier={row['brier'] if row['brier'] is not None else 'N/D'}; "
               f"log-loss={row['log_loss'] if row['log_loss'] is not None else 'N/D'}; "
               f"IDs duplicados en capturas={row['prediction_id_duplicados_en_capturas']}; "
