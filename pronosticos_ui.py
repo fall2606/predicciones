@@ -15,53 +15,102 @@ def _es_probabilidad(valor):
 
 
 def mostrar_pronosticos_sencillos(filas, deporte="deporte", origen="Modelo estadístico"):
-    """Muestra tarjetas legibles, nunca etiqueta una estimación como apuesta."""
+    """Permite analizar un partido a la vez y distingue pronóstico de apuesta."""
     if not filas:
         st.info("Todavía no hay pronósticos disponibles para mostrar.")
         return
-    st.caption(
-        f"**Pronóstico del modelo ({origen}).** Son estimaciones basadas en datos; "
-        "no son apuestas de Kalshi ni una garantía de resultado. Una probabilidad más alta "
-        "significa que el modelo considera ese resultado más posible, no seguro."
-    )
+
+    # Un selector evita una pared de tarjetas con todos los partidos a la vez.
+    filas = list(filas)
+    opciones = []
+    por_etiqueta = {}
     for i, fila in enumerate(filas):
         partido = str(fila.get("Partido") or fila.get("Juego") or f"Partido {i + 1}")
         fecha = str(fila.get("Fecha (Chicago)") or fila.get("Fecha (UTC)") or fila.get("Fecha") or "")
-        estado = str(fila.get("Estado del cálculo") or "")
-        with st.expander(f"{partido}" + (f" · {fecha}" if fecha else ""), expanded=(i == 0)):
-            if estado and estado.upper() not in {"OK", "PROBABILIDAD BASE"}:
-                st.warning("No se pudo calcular una predicción completa para este partido. " + estado.replace("NO DISPONIBLE:", "Motivo técnico:"))
-                continue
-            marcador = fila.get("Goles esperados") or fila.get("Marcador esperado") or fila.get("Marcador estimado (local-visita)")
-            if marcador:
-                st.write(f"**Marcador estimado:** {marcador}")
-            favorito = fila.get("Favorito del modelo")
-            if favorito:
-                st.write(f"**Equipo que el modelo ve con más posibilidades:** {favorito}")
-            probabilidades = []
-            for clave, valor in fila.items():
-                if clave in {"Partido", "Juego", "Fecha (Chicago)", "Fecha (UTC)", "Fecha", "Estado del cálculo",
-                             "Goles esperados", "Marcador esperado", "Marcador estimado (local-visita)",
-                             "Favorito", "Favorito del modelo", "Resultado 1X2 más probable"}:
-                    continue
-                p = _es_probabilidad(valor)
-                if p is not None:
-                    etiqueta = clave.replace("Gana local", "Gana el equipo local").replace(
-                        "Gana visitante", "Gana el equipo visitante"
-                    ).replace("Más de", "Que haya más de")
-                    probabilidades.append((etiqueta, p))
-            principal = fila.get("Resultado 1X2 más probable")
-            if principal:
-                st.write(f"**Resultado más probable entre victoria local, empate o victoria visitante:** {principal}")
-            if probabilidades:
-                cols = st.columns(min(3, len(probabilidades)))
-                for j, (etiqueta, prob) in enumerate(probabilidades):
-                    with cols[j % len(cols)]:
-                        st.metric(etiqueta, f"{prob:.0%}")
-            if not probabilidades and not principal and not favorito:
-                st.info("El modelo no devolvió probabilidades utilizables para este partido.")
-            st.info("**Cómo leerlo:** estos porcentajes describen lo que estima el modelo. No indican cuánto ganarías, no comparan cuotas y no significan que debas apostar.")
+        etiqueta = f"{fecha} · {partido}" if fecha else partido
+        if etiqueta in por_etiqueta:
+            etiqueta = f"{etiqueta} · {i + 1}"
+        opciones.append(etiqueta)
+        por_etiqueta[etiqueta] = fila
 
+    clave = re.sub(r"[^a-zA-Z0-9_]", "_", str(deporte).lower())
+    seleccionado = st.selectbox(
+        "Elige un partido para ver su pronóstico",
+        opciones,
+        key=f"selector_pronostico_{clave}",
+    )
+    fila = por_etiqueta[seleccionado]
+    st.caption(
+        f"**Estimación del modelo · {origen}.** Es un pronóstico estadístico, no una apuesta "
+        "de Kalshi ni una garantía. La calidad solo se considera demostrada si supera una "
+        "evaluación histórica fuera de muestra."
+    )
+
+    partido = str(fila.get("Partido") or fila.get("Juego") or "Partido seleccionado")
+    estado = str(fila.get("Estado del cálculo") or "")
+    if estado and estado.upper() not in {"OK", "PROBABILIDAD BASE"}:
+        st.warning(
+            "No se pudo calcular una predicción completa para este partido. "
+            + estado.replace("NO DISPONIBLE:", "Motivo técnico:")
+        )
+        return
+
+    with st.container(border=True):
+        st.subheader(partido)
+        fecha = str(fila.get("Fecha (Chicago)") or fila.get("Fecha (UTC)") or fila.get("Fecha") or "")
+        if fecha:
+            st.caption(f"Fecha del partido: {fecha}")
+        marcador = fila.get("Goles esperados") or fila.get("Marcador esperado") or fila.get("Marcador estimado (local-visita)")
+        if marcador:
+            st.write(f"**Marcador estimado:** {marcador}")
+        favorito = fila.get("Favorito del modelo")
+        if favorito:
+            st.write(f"**Equipo con más posibilidades según el modelo:** {favorito}")
+
+        probabilidades = []
+        ignorar = {
+            "Partido", "Juego", "Fecha (Chicago)", "Fecha (UTC)", "Fecha",
+            "Estado del cálculo", "Goles esperados", "Marcador esperado",
+            "Marcador estimado (local-visita)", "Favorito", "Favorito del modelo",
+            "Resultado 1X2 más probable",
+        }
+        for clave_prob, valor in fila.items():
+            if clave_prob in ignorar:
+                continue
+            p = _es_probabilidad(valor)
+            if p is not None:
+                etiqueta = clave_prob.replace("Gana local", "Gana el equipo local").replace(
+                    "Gana visitante", "Gana el equipo visitante"
+                ).replace("Más de", "Que haya más de")
+                probabilidades.append((etiqueta, p))
+        principal = fila.get("Resultado 1X2 más probable")
+        if principal:
+            st.write(f"**Resultado más probable entre victoria local, empate o victoria visitante:** {principal}")
+        if probabilidades:
+            for etiqueta, prob in probabilidades:
+                st.metric(etiqueta, f"{prob:.0%}")
+        if not probabilidades and not principal and not favorito:
+            st.info("El modelo no devolvió probabilidades utilizables para este partido.")
+
+        fundamento = next((
+            str(fila[k]).strip() for k in
+            ("Fundamento", "Datos usados", "Razón del modelo", "Explicación", "Nota del modelo")
+            if fila.get(k) and str(fila[k]).strip() not in {"—", "-", "nan", "None"}
+        ), "")
+        st.markdown("**¿Qué respalda esta predicción?**")
+        if fundamento:
+            st.write(fundamento)
+        else:
+            st.write(
+                "Esta pantalla solo contiene la estimación estadística y los datos que se muestran arriba. "
+                "No presenta una comprobación automática de lesiones, alineaciones, noticias ni clima, "
+                "y no demuestra por sí sola que exista ventaja frente al precio de una apuesta."
+            )
+        st.info(
+            "**Importante:** estos porcentajes indican lo que estima el modelo. No dicen cuánto ganarías "
+            "ni significan que debas apostar. Para valorar una apuesta hacen falta precio de compra actual, "
+            "costes, mercado confirmado y evidencia histórica suficiente."
+        )
 
 
 def _valor_fila(fila, claves, defecto="—"):
