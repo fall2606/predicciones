@@ -31,8 +31,10 @@ def probabilidad(columna):
 
 def crear_intervalos(p, y):
     filas = []
-    for inicio in np.arange(0.0, 1.0, 0.1):
-        mascara = (p >= inicio) & ((p < inicio + 0.1) | ((inicio >= 0.9) & (p <= 1.0)))
+    indices = np.minimum((p * 10).astype(int), 9)
+    for indice in range(10):
+        mascara = indices == indice
+        inicio = indice / 10
         if mascara.any():
             filas.append({"Intervalo estimado": f"{inicio:.0%}–{inicio + 0.1:.0%}", "Casos": int(mascara.sum()), "Probabilidad media": float(p[mascara].mean()), "Acierto real": float(y[mascara].mean())})
     return filas
