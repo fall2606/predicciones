@@ -42,11 +42,16 @@ def score_rows(predictions, results, probability_fields):
     """Score by immutable prediction_id; last result by resolved timestamp wins."""
     result_counts = Counter(str(r.get("prediction_id", "")).strip() for r in results)
     ordered = sorted(results, key=lambda r: str(r.get("resuelto_en", "")))
-    by_id = {}
+    terminal_by_id, nonterminal_by_id = {}, {}
     for row in ordered:
         key = str(row.get("prediction_id", "")).strip()
-        if key:
-            by_id[key] = row
+        if not key:
+            continue
+        state = str(row.get("estado", "")).strip().upper()
+        # A stale legacy nonterminal row must never erase a confirmed settlement.
+        target = terminal_by_id if state in RESULTADOS else nonterminal_by_id
+        target[key] = row
+    by_id = {**nonterminal_by_id, **terminal_by_id}
     scored, status_counts = [], Counter()
     missing_id = duplicate_prediction_ids = 0
     seen = set()
