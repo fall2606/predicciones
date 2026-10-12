@@ -38,6 +38,39 @@ def valid_probability(value):
     try: p=float(value)
     except (TypeError,ValueError,OverflowError): return None
     return p if math.isfinite(p) and 0 <= p <= 1 else None
+
+def probability_fraction(value):
+    """Parse a probability or executable contract price conservatively.
+
+    Accepts decimal values (0.57), percentage values ("57%") and dollar
+    prices ("$0.57"). Missing, malformed, zero and unit-invalid prices return
+    None so callers cannot manufacture an edge from unavailable quotes.
+    """
+    if value is None:
+        return None
+    raw = str(value).strip().replace(",", ".")
+    if not raw or raw.casefold() in {"—", "-", "none", "nan", "n/a"}:
+        return None
+    is_percent = raw.endswith("%")
+    if is_percent:
+        raw = raw[:-1].strip()
+    raw = raw.replace("$", "").strip()
+    try:
+        number = float(raw)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if not math.isfinite(number):
+        return None
+    if is_percent or number > 1:
+        number /= 100
+    return number if 0 < number < 1 else None
+
+
+def calculate_edge(probability, executable_price):
+    """Return model probability minus executable entry price, or None."""
+    p = probability_fraction(probability)
+    price = probability_fraction(executable_price)
+    return round(p - price, 8) if p is not None and price is not None else None
 def kalshi_get(path, params=None):
     error=None
     for attempt in range(4):
