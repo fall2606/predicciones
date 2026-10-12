@@ -2,7 +2,7 @@
 import os
 import re
 import streamlit as st
-from prediction_core import anchor_probability_to_market, probability_fraction
+from prediction_core import anchor_probability_to_market, probability_fraction, evaluate_market_recommendation
 
 
 def _es_probabilidad(valor):
@@ -165,9 +165,21 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
     if titulo:
         st.caption(titulo)
     if not filas:
-        st.info("No hay selecciones que mostrar con los filtros actuales.")
+        st.info("Hoy no hay recomendaciones: no hay candidatos con ventaja y datos suficientes para pasar los filtros actuales.")
         return
+    gates = []
     for fila in filas:
+        estado_actual = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
+        if estado_actual in {"WIN", "LOSS", "ANULADA"}:
+            gates.append(None)
+        else:
+            gates.append(evaluate_market_recommendation(fila))
+    elegibles = sum(1 for gate in gates if gate and gate.get("eligible"))
+    if not elegibles:
+        razones = list(dict.fromkeys(gate["reason"] for gate in gates if gate and gate.get("reason")))
+        detalle = "; ".join(razones[:3]) or "faltan resultados liquidados comparables, ventaja validada o precio ask"
+        st.info(f"Hoy no hay recomendaciones. Motivo(s): {detalle}.")
+    for fila, gate in zip(filas, gates):
         nombre = _valor_fila(
             fila,
             ("Jugada sencilla", "Apuesta", "Pronóstico", "Mercado", "Mercado Kalshi", "mercado", "seleccion", "Tipo", "Categoría resumen"),
@@ -216,6 +228,11 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
         resultado = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
         with st.container(border=True):
             st.markdown(f"**{nombre}**")
+            if gate is not None:
+                if gate.get("eligible"):
+                    st.success(f"Veredicto: APOSTAR · {gate.get('reason', '')}")
+                else:
+                    st.warning(f"Veredicto: SIN RECOMENDACIÓN · {gate.get('reason', 'no supera los requisitos de calidad')}")
             lado = _valor_fila(fila, ("Lado", "Lado Kalshi", "lado", "seleccion"), "")
             if lado and str(lado).upper() in {"YES", "NO"}:
                 st.caption(f"{categoria + ' · ' if categoria else ''}Lado del contrato: {str(lado).upper()}")
