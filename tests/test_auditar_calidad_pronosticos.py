@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.auditar_calidad_pronosticos import parse_probability, score_rows, summarize_active_pending, summarize_reconciliation
+from scripts.auditar_calidad_pronosticos import parse_probability, score_rows, summarize_active_pending, summarize_reconciliation, reconciliation_coverage
 
 
 class PredictionQualityAuditTests(unittest.TestCase):
@@ -74,6 +74,29 @@ class PredictionQualityAuditTests(unittest.TestCase):
         self.assertEqual(report["n_evaluable"], 0)
         self.assertIsNone(report["brier"])
         self.assertEqual(report["sin_resultado_terminal"], 1)
+
+
+
+    def test_pending_count_is_unavailable_when_reconciliation_coverage_is_incomplete(self):
+        predictions = [{"prediction_id": "a"}, {"prediction_id": "b"}]
+        reconciliation = [
+            {"deporte": "Champions", "prediction_id": "a",
+             "clasificacion": "LIQUIDADA", "cuenta_alerta": "NO"}
+        ]
+        coverage = reconciliation_coverage(predictions, reconciliation, "Champions")
+        self.assertFalse(coverage["reconciliacion_cobertura_completa"])
+        self.assertEqual(coverage["prediction_ids_sin_fila_reconciliacion"], 1)
+        self.assertEqual(coverage["filas_reconciliacion"], 1)
+
+    def test_pending_count_is_verifiable_only_when_every_prediction_has_a_reconciliation_row(self):
+        predictions = [{"prediction_id": "a"}, {"prediction_id": "b"}]
+        reconciliation = [
+            {"deporte": "Champions", "prediction_id": "a"},
+            {"deporte": "Champions", "prediction_id": "b"},
+        ]
+        coverage = reconciliation_coverage(predictions, reconciliation, "Champions")
+        self.assertTrue(coverage["reconciliacion_cobertura_completa"])
+        self.assertEqual(coverage["prediction_ids_sin_fila_reconciliacion"], 0)
 
 
 if __name__ == "__main__":
