@@ -688,15 +688,20 @@ def anchor_probability_to_market(model_probability, market_price, weight=None, c
     price = probability_fraction(market_price)
     if model_p is None or price is None:
         return None
+    allowed_weight = _market_model_weight(category, ticker)
     if weight is None:
-        weight = _market_model_weight(category, ticker)
-    try:
-        weight = float(weight)
-    except (TypeError, ValueError, OverflowError):
-        weight = _market_model_weight(category, ticker)
-    if not math.isfinite(weight):
-        weight = _market_model_weight(category, ticker)
-    weight = min(0.25, max(0.0, weight))
+        weight = allowed_weight
+    else:
+        try:
+            requested_weight = float(weight)
+        except (TypeError, ValueError, OverflowError):
+            requested_weight = allowed_weight
+        if not math.isfinite(requested_weight):
+            requested_weight = allowed_weight
+        # A caller cannot bypass the backtest gate by passing a larger weight.
+        if requested_weight > allowed_weight and not _market_has_chronological_evidence(category, ticker=ticker):
+            requested_weight = allowed_weight
+        weight = min(0.25, max(0.0, requested_weight))
     return min(0.995, max(0.005, price + weight * (model_p - price)))
 
 
