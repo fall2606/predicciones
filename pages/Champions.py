@@ -273,44 +273,11 @@ else:
 # Salvaguarda también las capturas históricas: las sencillas siempre respetan el filtro de valor.
 resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=5)
 if resumen_sencillo_kalshi:
-    for jugada in resumen_sencillo_kalshi:
-        with st.container(border=True):
-            st.markdown(f"**{jugada.get('Tipo', 'Sencilla')}:** {jugada.get('Jugada sencilla', '—')}")
-            st.write(f"Probabilidad del modelo calibrada: **{jugada.get('Probabilidad del modelo', jugada.get('Probabilidad modelo', '—'))}**")
-            st.write(f"Probabilidad final anclada a Kalshi: **{jugada.get('Probabilidad final', 'Sin precio válido')}**")
-            precio_txt = jugada.get("Precio de compra", jugada.get("Precio ahora", "—"))
-            st.write(f"Precio de compra Kalshi: **{precio_txt}**")
-            try:
-                edge_num = float(jugada.get("Ventaja (edge)", 0))
-                if abs(edge_num) > 1:
-                    edge_num /= 100
-                edge_txt = f"{edge_num * 100:+.1f} puntos"
-            except (TypeError, ValueError):
-                edge_txt = "No disponible"
-            st.write(f"Ventaja: **{edge_txt}**")
-            mercado_texto = str(jugada.get("Jugada sencilla") or jugada.get("Apuesta") or jugada.get("Tipo") or "")
-            fundamento = (f"El modelo proyecta {local} {gl:.2f} goles y {visita} {gv:.2f}. "
-                          "Esta proyección es el punto de partida; por sí sola no justifica una apuesta si el mercado y la línea no encajan.")
-            try:
-                linea_contexto = float(jugada.get("line"))
-                if any(token in mercado_texto.casefold() for token in ("más de", "over", "total goles")):
-                    total_esperado = gl + gv
-                    fundamento += f" Total esperado: {total_esperado:.2f} frente a la línea {linea_contexto:g}."
-            except (TypeError, ValueError):
-                fundamento += " No hay una línea numérica legible en la tarjeta para contrastar el umbral."
-            st.caption("Fundamento del modelo: " + fundamento)
-            if jugada.get("Revisión") == "REVISAR":
-                st.warning("REVISAR · ventaja superior a 20 puntos; comprobar precio y modelo.")
-            resultado_tarjeta = str(jugada.get("Resultado", "PENDIENTE")).upper()
-            if "ANULADA" in resultado_tarjeta or "VOID" in resultado_tarjeta:
-                st.info("ANULADA")
-            elif resultado_tarjeta == "WIN" or "SE CUMPLIÓ" in resultado_tarjeta:
-                st.success("WIN")
-            elif resultado_tarjeta == "LOSS" or "NO SE CUMPLIÓ" in resultado_tarjeta:
-                st.error("LOSS")
-            else:
-                st.caption("PENDIENTE" if not partido_cerrado else "sin datos para liquidar · mercado sin fuente compatible")
-            st.caption(f"Ticker: {jugada.get('Ticker', '—')}")
+    mostrar_tarjetas_mercado(
+        resumen_sencillo_kalshi,
+        titulo="Contratos del partido seleccionado · veredicto sujeto a muestra, Brier y ask",
+        limite=5,
+    )
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
         if not historial_partido.empty and partido_cerrado:
