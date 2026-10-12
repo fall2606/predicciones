@@ -3,6 +3,7 @@ from scipy.stats import poisson
 
 st.set_page_config(page_title="Predicciones Premier League", layout="wide")
 st.title("⚽ Predicciones Premier League")
+st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 
 CLAVE = st.secrets["CLAVE"]
 URL = "https://api.football-data.org/v4/competitions/PL/matches"
