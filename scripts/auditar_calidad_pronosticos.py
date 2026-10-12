@@ -77,8 +77,9 @@ def score_rows(predictions, results, probability_fields):
         logloss = -sum(r["y"] * math.log(max(eps, min(1-eps, r["p"]))) +
                        (1-r["y"]) * math.log(max(eps, min(1-eps, 1-r["p"]))) for r in scored) / n
         bins = []
-        for low in (0.0, .1, .2, .3, .4, .5, .6, .7, .8, .9):
-            group = [r for r in scored if low <= r["p"] < low + .1 or (low == .9 and r["p"] == 1)]
+        for index in range(10):
+            low = index / 10
+            group = [r for r in scored if min(int(r["p"] * 10), 9) == index]
             if group:
                 bins.append({"intervalo": f"{low:.0%}-{low+.1:.0%}", "n": len(group),
                              "probabilidad_media": sum(r["p"] for r in group)/len(group),
