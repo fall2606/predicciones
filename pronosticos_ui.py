@@ -202,7 +202,7 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
             ("Precio de compra", "Precio Kalshi", "Precio actual", "Precio captura", "Precio", "Precio ahora", "precio", "precio_captura"),
         )
         final_raw = _valor_fila(fila, ("Probabilidad final", "probabilidad_final"), "")
-        final_num = probability_fraction(final_raw) if final_raw else None
+        final_num = None if gate is not None else (probability_fraction(final_raw) if final_raw else None)
         if final_num is None:
             final_num = anchor_probability_to_market(model_raw, precio_raw, category=categoria, ticker=ticker)
         final_text = _porcentaje_legible(final_num) if final_num is not None else "Sin precio válido"
