@@ -923,9 +923,9 @@ for juego in [juego]:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
         columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Ventaja neta recalculada", "Revisión", "ticker", "Resultado"]
-        mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
-        mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
-        mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)
+        mostrar_bloque_mlb("SENCILLAS", "Contratos reales de Kalshi · posibles apuestas sencillas", columnas_bloque)
+        mostrar_bloque_mlb("ALTA_PROBABILIDAD", "Posibles combinaciones de contratos Kalshi (revisar cada línea)", columnas_bloque)
+        mostrar_bloque_mlb("A_TENER_EN_CUENTA", "Otros contratos Kalshi para revisar · ordenados por ventaja estimada", columnas_bloque)
         if game["status"] != "Preview":
             st.caption("Partido iniciado o terminado: solo se muestran capturas originales anteriores al inicio. La liquidación procede del resultado oficial del contrato en Kalshi.")
         else:
