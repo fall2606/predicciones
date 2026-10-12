@@ -262,6 +262,6 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "pendientes_activos": null
+    "pendientes_activos": 0
   }
 ]
