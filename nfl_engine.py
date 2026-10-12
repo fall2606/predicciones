@@ -350,7 +350,10 @@ def build_candidates(events, stats):
             title_market = str(market.get("yes_sub_title") or market.get("title") or ticker)
             for side, probability in (("YES", p_yes), ("NO", 1-p_yes)):
                 price = _price(market, side)
-                edge = probability-price if price is not None else None
+                # No executable ask means no tradeable recommendation or capture.
+                if price is None:
+                    continue
+                edge = probability - price
                 candidates.append({
                     "event_ticker": str(event.get("event_ticker") or ""),
                     "ticker": ticker, "match_id": str(event.get("event_ticker") or ""),
