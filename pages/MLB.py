@@ -62,6 +62,30 @@ def leer_historial_mlb():
 
 historial_mlb = leer_historial_mlb()
 mostrar_actualizacion_archivos([("Predicciones", PRED_MLB), ("Resultados", RES_MLB), ("Reconciliación", ROOT / "reconciliacion_pendientes.csv")])
+
+# Grade only settled predictions; pending rows must never improve or worsen the score.
+if not historial_mlb.empty and "estado" in historial_mlb.columns:
+    _estados_mlb = historial_mlb["estado"].astype(str).str.upper()
+    _win_mlb = int((_estados_mlb == "WIN").sum())
+    _loss_mlb = int((_estados_mlb == "LOSS").sum())
+    _settled_mlb = historial_mlb[_estados_mlb.isin(["WIN", "LOSS"])].copy()
+    _p_mlb = pd.to_numeric(_settled_mlb.get("probabilidad_modelo", pd.Series(dtype=float)), errors="coerce")
+    _valid_p_mlb = _p_mlb.between(0, 1)
+    _brier_mlb = None
+    if _valid_p_mlb.any():
+        _y_mlb = _settled_mlb.loc[_valid_p_mlb, "estado"].astype(str).str.upper().eq("WIN").astype(float)
+        _brier_mlb = float(((_p_mlb.loc[_valid_p_mlb] - _y_mlb) ** 2).mean())
+    _n_settled_mlb = _win_mlb + _loss_mlb
+    _hit_mlb = _win_mlb / _n_settled_mlb if _n_settled_mlb else None
+    st.subheader("Evaluación histórica del modelo MLB")
+    _m1, _m2, _m3, _m4, _m5, _m6 = st.columns(6)
+    _m1.metric("WIN", _win_mlb)
+    _m2.metric("LOSS", _loss_mlb)
+    _m3.metric("Resultados evaluados", _n_settled_mlb)
+    _m4.metric("Acierto WIN/LOSS", f"{_hit_mlb:.1%}" if _hit_mlb is not None else "—")
+    _m5.metric("Brier (menor es mejor)", f"{_brier_mlb:.3f}" if _brier_mlb is not None else "—")
+    _m6.metric("Pendientes", int((~_estados_mlb.isin(["WIN", "LOSS", "ANULADA"])).sum()))
+    st.caption("La tasa de acierto no sustituye la calibración. El Brier se calcula solo con probabilidades válidas y resultados WIN/LOSS liquidados; las anuladas y pendientes quedan fuera.")
 try:
     candidatos_descartados_actuales = pd.read_csv(ROOT / "mlb_probabilidades_actuales.csv", dtype=str).fillna("")
 except (OSError, ValueError, pd.errors.ParserError):
