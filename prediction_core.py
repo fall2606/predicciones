@@ -816,9 +816,13 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     # can contain duplicate captures; counting them repeatedly would fake the
     # minimum sample size and overweight the same match.
     observations_by_event = {}
+    target_line = str(row.get("line") or row.get("linea") or "").strip().casefold()
     for old in predictions:
         old_ticker = str(old.get("ticker", old.get("Ticker", ""))).strip().upper()
         if not old_ticker or old_ticker.split("-", 1)[0] != series:
+            continue
+        old_line = str(old.get("line") or old.get("linea") or "").strip().casefold()
+        if target_line and old_line != target_line:
             continue
         state = latest_results.get(str(old.get("prediction_id", "")).strip(), "")
         if state not in {"WIN", "LOSS"}:
@@ -838,7 +842,7 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
         y = 1.0 if state == "WIN" else 0.0
         event_id = str(old.get("match_id") or old.get("event_ticker") or old.get("prediction_id") or "").strip()
         side = str(old.get("seleccion") or old.get("lado") or "").upper().strip()
-        key = (event_id, side)
+        key = (event_id, old_line, side)
         captured = str(old.get("capturado_en", ""))
         prior = observations_by_event.get(key)
         if prior is None or captured >= prior[0]:
