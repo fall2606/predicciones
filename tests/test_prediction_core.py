@@ -24,9 +24,10 @@ class CoreTests(unittest.TestCase):
   self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60), 0.61)
   self.assertAlmostEqual(core.anchor_probability_to_market(0.20, 0.60), 0.58)
   self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60, weight=0.90), 0.65)
+  # The descriptive report has no chronological-validation flag, so LaLiga stays at 5%.
   self.assertAlmostEqual(core.anchor_probability_to_market(
    0.80, 0.60, category="Goles totales", ticker="KXLALIGATOTAL-TEST"
-  ), 0.65)
+  ), 0.61)
   self.assertAlmostEqual(core.anchor_probability_to_market(
    0.80, 0.60, category="Resultado", ticker="KXLALIGAGAME-TEST"
   ), 0.61)
@@ -37,6 +38,41 @@ class CoreTests(unittest.TestCase):
   self.assertIsNone(core.anchor_probability_to_market("—", 0.60))
   stale = {"probabilidad_final": 0.70, "probabilidad_calibrada": 0.60, "Precio de compra": "50%"}
   self.assertAlmostEqual(core._anchor_market_row(stale)["probabilidad_final"], 0.505)
+
+ 
+ def test_model_weight_increase_requires_chronological_brier_evidence(self):
+  import tempfile
+  from pathlib import Path
+  with tempfile.TemporaryDirectory() as tmp:
+   report=Path(tmp)/"backtest.csv"
+   report.write_text(
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\\n"
+    "Goles totales,120,0.18,0.21,true\\n",
+    encoding="utf-8",
+   )
+   with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
+    self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.25)
+   report.write_text(
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi\\n"
+    "Goles totales,120,0.18,0.21\\n",
+    encoding="utf-8",
+   )
+   with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
+    self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.05)
+   report.write_text(
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\\n"
+    "Goles totales,99,0.18,0.21,true\\n",
+    encoding="utf-8",
+   )
+   with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
+    self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.05)
+   report.write_text(
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\\n"
+    "Goles totales,120,0.24,0.21,true\\n",
+    encoding="utf-8",
+   )
+   with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
+    self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.05)
 
  def test_rank_single_candidates_preserves_yes_no_and_uses_net_calibrated_edge(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
