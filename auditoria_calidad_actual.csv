@@ -1,5 +1,5 @@
 deporte,capturas,filas_resultados,capturas_con_resultado_terminal,sin_resultado_terminal,pendientes_activos,filas_reconciliacion,prediction_ids_sin_fila_reconciliacion,reconciliacion_cobertura_completa,prediction_id_vacios,prediction_id_duplicados_en_capturas,ids_resultado_duplicados,n_evaluable,tasa_acierto,probabilidad_media,brier,log_loss,brier_referencia_muestra,limitacion
-LaLiga,532,293,293,239,9,532,0,True,0,0,0,293,0.563140,0.724454,0.256156,0.770246,0.246013,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
+LaLiga,532,293,293,239,0,532,0,True,0,0,0,293,0.563140,0.724454,0.256156,0.770246,0.246013,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
 Champions League,208,0,0,208,0,208,0,True,0,0,0,0,,,,,,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
 MLB,3741,24,24,3717,1,3741,0,True,0,0,0,24,0.291667,0.746218,0.391291,1.065251,0.206597,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
 NFL,2901,132,132,2769,0,2901,0,True,0,0,0,132,0.500000,0.500000,0.120698,0.378624,0.250000,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
