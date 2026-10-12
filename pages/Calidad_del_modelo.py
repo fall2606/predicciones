@@ -37,7 +37,10 @@ def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col=
     res = res.sort_values("resuelto_en") if "resuelto_en" in res else res
     res = res.drop_duplicates("prediction_id", keep="last")
     unido = pred.merge(res[["prediction_id", "estado"]], on="prediction_id", how="left", suffixes=("", "_resultado"))
-    estado = unido["estado"].astype(str).str.upper().str.strip()
+    # Si la captura también tiene una columna "estado", esa describe la captura,
+    # no necesariamente el resultado final. Para evaluar se prioriza el CSV de resultados.
+    columna_estado_resultado = "estado_resultado" if "estado_resultado" in unido.columns else "estado"
+    estado = unido[columna_estado_resultado].astype(str).str.upper().str.strip()
     liquidado = unido[estado.isin(["WIN", "LOSS"])].copy()
     p = pd.Series(np.nan, index=liquidado.index, dtype=float)
     for clave in claves_prob:
