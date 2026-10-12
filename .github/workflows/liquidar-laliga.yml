@@ -55,29 +55,21 @@ jobs:
         run: |
           git config user.name "bot"
           git config user.email "bot@users.noreply.github.com"
-          git add predicciones_laliga.csv resultados_laliga.csv
-          if ! git diff --cached --quiet; then
-            git commit -m "Liquidar pronósticos finalizados de LaLiga"
-            pushed=false
-            for intento in 1 2 3; do
-              if git pull --rebase origin main && git push origin HEAD:main; then pushed=true; break; fi
-              git rebase --abort || true
-              sleep $((intento * 3))
-            done
-            if [ "$pushed" != true ]; then exit 1; fi
-          fi
-          # Reconciliar DESPUÉS de sincronizar y publicar los resultados. Así ambos
-          # liquidadores no compiten por subir versiones obsoletas del mismo informe.
-          git fetch origin main
-          git reset --hard origin/main
+          # Reconcile before staging/committing so no generated file is left unstaged
+          # while retrying a push. This avoids the previous "cannot pull with rebase"
+          # failure and keeps results plus the pending audit in one consistent commit.
           python scripts/auditar_reconciliacion.py
-          git add reconciliacion_pendientes.csv
+          git add predicciones_laliga.csv resultados_laliga.csv reconciliacion_pendientes.csv
           if ! git diff --cached --quiet; then
-            git commit -m "Actualizar reconciliación tras liquidación de fútbol"
+            git commit -m "Liquidar y reconciliar pronósticos de LaLiga"
             pushed=false
             for intento in 1 2 3; do
-              if git pull --rebase origin main && git push origin HEAD:main; then pushed=true; break; fi
-              git rebase --abort || true
+              if git push origin HEAD:main; then pushed=true; break; fi
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                exit 1
+              fi
               sleep $((intento * 3))
             done
             if [ "$pushed" != true ]; then exit 1; fi
