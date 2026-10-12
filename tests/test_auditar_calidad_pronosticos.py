@@ -32,6 +32,18 @@ class PredictionQualityAuditTests(unittest.TestCase):
         self.assertIsNotNone(report["log_loss"])
         self.assertEqual(sum(b["n"] for b in report["calibracion_intervalos"]), 2)
 
+    def test_terminal_result_is_not_erased_by_later_nonterminal_row(self):
+        predictions = [{"prediction_id": "a", "probabilidad_calibrada": "0.8"}]
+        results = [
+            {"prediction_id": "a", "estado": "WIN", "resuelto_en": "2026-10-01"},
+            {"prediction_id": "a", "estado": "NO_EVALUABLE", "resuelto_en": "2026-10-02"},
+        ]
+        report = score_rows(predictions, results, ("probabilidad_calibrada",))
+        self.assertEqual(report["capturas_con_resultado_terminal"], 1)
+        self.assertEqual(report["sin_resultado_terminal"], 0)
+        self.assertEqual(report["n_evaluable"], 1)
+        self.assertEqual(report["tasa_acierto"], 1.0)
+
     def test_latest_result_for_same_id_wins_and_duplicates_are_reported(self):
         predictions = [
             {"prediction_id": "a", "probabilidad_modelo": "0.7"},
