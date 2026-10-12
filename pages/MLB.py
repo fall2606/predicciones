@@ -1019,13 +1019,33 @@ for juego in [juego]:
                 if "estado_modelo" in historial_partido.columns:
                     historial_partido["estado_modelo"] = historial_partido["estado_modelo"].replace("", "No calculado")
                 cols = [x for x in [
-                    "categoria", "mercado", "lado", "probabilidad_modelo", "estado_modelo",
-                    "precio_captura", "edge", "estado", "marcador", "capturado_en"
+                    "categoria", "mercado", "lado", "probabilidad_modelo", "probabilidad_calibrada",
+                    "estado_modelo", "precio_captura", "estado", "marcador", "capturado_en"
                 ] if x in historial_partido.columns]
                 historial_mostrar = (
                     historial_partido[cols].sort_values("capturado_en", ascending=False)
                     if "capturado_en" in cols else historial_partido[cols]
                 ).copy()
+                if {"probabilidad_modelo", "precio_captura"}.issubset(historial_mostrar.columns):
+                    def _final_historico(row):
+                        p_modelo = row.get("probabilidad_calibrada") or row.get("probabilidad_modelo")
+                        return anchor_probability_to_market(p_modelo, row.get("precio_captura"))
+                    historial_mostrar["Probabilidad final"] = historial_mostrar.apply(
+                        lambda row: (f"{_final_historico(row):.1%}" if _final_historico(row) is not None else "Sin precio válido"),
+                        axis=1,
+                    )
+                    def _ventaja_historica(row):
+                        p_final = _final_historico(row)
+                        precio = probability_fraction(row.get("precio_captura"))
+                        if p_final is None or precio is None:
+                            return "No calculable"
+                        try:
+                            coste = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+                        except (TypeError, ValueError, OverflowError):
+                            coste = 0.01
+                        return f"{(p_final - precio - coste) * 100:+.1f} pp"
+                    historial_mostrar["Ventaja final"] = historial_mostrar.apply(_ventaja_historica, axis=1)
+                    historial_mostrar = historial_mostrar.drop(columns=["edge"], errors="ignore")
                 if "estado" in historial_mostrar.columns:
                     historial_mostrar = historial_mostrar.rename(columns={"estado": "Resultado"})
                     historial_mostrar["Resultado"] = historial_mostrar["Resultado"].replace({
