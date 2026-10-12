@@ -1,6 +1,8 @@
 """Presentación sencilla de pronósticos: separa estimaciones del modelo de apuestas reales."""
+import os
 import re
 import streamlit as st
+from prediction_core import anchor_probability_to_market, probability_fraction
 
 
 def _es_probabilidad(valor):
@@ -170,16 +172,22 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
         categoria = _valor_fila(fila, ("Tipo", "Categoría resumen", "categoria", "bloque"), "")
         if str(categoria).casefold() == str(nombre).casefold():
             categoria = ""
-        prob = _porcentaje_legible(_valor_fila(
+        model_raw = _valor_fila(
             fila,
-            ("Prob. recalibrada", "Probabilidad recalculada", "Probabilidad del modelo",
-             "Probabilidad modelo", "Prob. modelo", "Prob. original", "Probabilidad estimada",
-             "probabilidad_calibrada", "probabilidad_modelo"),
-        ))
+            ("Probabilidad del modelo", "Probabilidad modelo", "Prob. modelo",
+             "Prob. recalibrada", "Probabilidad recalculada", "Prob. original",
+             "Probabilidad estimada", "probabilidad_calibrada", "probabilidad_modelo"),
+        )
+        prob = _porcentaje_legible(model_raw)
         precio_raw = _valor_fila(
             fila,
-            ("Precio de compra", "Precio Kalshi", "Precio actual", "Precio captura", "Precio", "Precio ahora", "precio"),
+            ("Precio de compra", "Precio Kalshi", "Precio actual", "Precio captura", "Precio", "Precio ahora", "precio", "precio_captura"),
         )
+        final_raw = _valor_fila(fila, ("Probabilidad final", "probabilidad_final"), "")
+        final_num = probability_fraction(final_raw) if final_raw else None
+        if final_num is None:
+            final_num = anchor_probability_to_market(model_raw, precio_raw)
+        final_text = _porcentaje_legible(final_num) if final_num is not None else "Sin precio válido"
         precio_texto = str(precio_raw)
         if not any(token in precio_texto for token in ("$", "¢", "%")):
             try:
@@ -190,9 +198,15 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
                     precio_texto = f"{precio_num:.0f}¢"
             except (TypeError, ValueError):
                 pass
-        edge = _ventaja_legible(_valor_fila(
-            fila, ("Ventaja neta", "Ventaja neta recalculada", "Ventaja (edge)", "edge", "EV neto por contrato"),
-        ))
+        precio_num = probability_fraction(precio_raw)
+        if final_num is not None and precio_num is not None:
+            try:
+                coste = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+            except (TypeError, ValueError, OverflowError):
+                coste = 0.01
+            edge = _ventaja_legible(final_num - precio_num - coste)
+        else:
+            edge = "No calculable sin precio válido"
         ticker = _valor_fila(fila, ("Ticker", "ticker"), "")
         calibracion = _valor_fila(fila, ("Calibración", "calibracion"), "")
         resultado = str(_valor_fila(fila, ("Resultado", "estado"), "PENDIENTE")).upper()
@@ -206,10 +220,13 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
             fundamento = _valor_fila(fila, ("Fundamento", "Dato base", "Marcador proyectado", "Nota"), "")
             if fundamento:
                 st.write(f"**Dato que apoya la estimación:** {fundamento}")
-            c1, c2, c3 = st.columns(3)
+            c1, c2, c3, c4 = st.columns(4)
             c1.metric("Probabilidad del modelo", prob)
-            c2.metric("Precio de compra", precio_texto)
-            c3.metric("Ventaja estimada", edge)
+            c2.metric("Probabilidad final", final_text)
+            c3.metric("Precio de compra", precio_texto)
+            c4.metric("Ventaja vs. precio", edge)
+            if final_num is None:
+                st.caption("No se calcula probabilidad final: falta una cotización de compra válida de Kalshi.")
             if calibracion:
                 st.caption(f"Validación: {calibracion}")
             if "WIN" == resultado or resultado.startswith("WIN "):
