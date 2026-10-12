@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 import streamlit as st
+from app_metadata import mostrar_metadata
 from reconciliacion_ui import mostrar_actualizacion_archivos
 from pronosticos_ui import mostrar_pronosticos_sencillos, mostrar_tarjetas_mercado
 from nfl_engine import ESPN, _json as nfl_json, _team_stats, projected_score, _normal_cdf
@@ -15,6 +16,7 @@ CURRENT = ROOT / "nfl_probabilidades_actuales.csv"
 EXCLUDED = ROOT / "nfl_predicciones_excluidas.csv"
 st.set_page_config(page_title="Predicciones NFL", page_icon="🏈", layout="wide")
 st.title("🏈 NFL · pronósticos por partido")
+mostrar_metadata()
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption("Aquí se muestran los contratos reales de Kalshi y su historial. Los pronósticos del modelo aparecen en una sección separada; no confundas una estimación con una apuesta.")
 if st.button("Actualizar datos NFL ahora", key="refresh_nfl"):
