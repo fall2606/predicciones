@@ -143,6 +143,7 @@ def audit_file(name, predictions_file, results_file, probability_fields):
 def main():
     reconciliation_rows = read_csv(ROOT / "reconciliacion_pendientes.csv")
     pending_counts = summarize_active_pending(reconciliation_rows)
+    covered_sports = {str(row.get("deporte", "") or "").strip() for row in reconciliation_rows}
     sport_aliases = {"Champions League": "Champions"}
     audits = [
         audit_file("LaLiga", "predicciones_laliga.csv", "resultados_laliga.csv", ("probabilidad_calibrada", "probabilidad_base")),
@@ -152,7 +153,7 @@ def main():
     ]
     for audit in audits:
         source_sport = sport_aliases.get(audit["deporte"], audit["deporte"])
-        audit["pendientes_activos"] = pending_counts.get(source_sport, 0)
+        audit["pendientes_activos"] = pending_counts.get(source_sport, 0) if source_sport in covered_sports else None
     (ROOT / "auditoria_calidad_actual.json").write_text(json.dumps(audits, ensure_ascii=False, indent=2), encoding="utf-8")
     reconciliation = summarize_reconciliation(reconciliation_rows)
     with (ROOT / "auditoria_reconciliacion_actual.csv").open("w", newline="", encoding="utf-8") as f:
