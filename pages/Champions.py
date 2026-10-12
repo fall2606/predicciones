@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
+from app_metadata import mostrar_metadata
 from scipy.stats import nbinom, poisson
 
 
@@ -50,6 +51,7 @@ def _tabla_con_resultado(df, columna="Resultado"):
 
 st.set_page_config(page_title="Champions League · predicciones", page_icon="🏆", layout="wide")
 st.title("🏆 Champions League · pronósticos y mercados")
+mostrar_metadata()
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
     "Pronósticos de Champions League para partidos futuros, con historial inmutable. Las probabilidades se muestran como estimaciones no validadas cuando no hay muestra suficiente para calibrarlas."
