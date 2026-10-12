@@ -702,7 +702,8 @@ def single_candidate_rejection_reasons(rows, *, price_max=None, min_edge=None):
         min_edge = float(os.getenv("SENCILLAS_EDGE_MIN", "0.05"))
     counts = {"sin ticker real": 0, "probabilidad inválida": 0, "sin precio Kalshi": 0,
               "precio por encima del máximo": 0, "ventaja insuficiente": 0,
-              "línea trivial": 0, "candidata que sí cumple": 0}
+              "ventaja extrema requiere revisión": 0, "línea trivial": 0,
+              "candidata que sí cumple": 0}
     for source in rows or []:
         row = dict(source)
         ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
@@ -719,6 +720,10 @@ def single_candidate_rejection_reasons(rows, *, price_max=None, min_edge=None):
             counts["precio por encima del máximo"] += 1
         elif edge is None or edge < min_edge:
             counts["ventaja insuficiente"] += 1
+        elif edge > float(os.getenv("SENCILLAS_EDGE_REVISAR", "0.20")):
+            counts["ventaja extrema requiere revisión"] += 1
+        elif p <= 0.01 or p >= 0.99:
+            counts["probabilidad inválida"] += 1
         elif _is_trivial_single(row):
             counts["línea trivial"] += 1
         else:
