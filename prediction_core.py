@@ -532,8 +532,8 @@ def read_csv_rows_resilient(path):
 def _probability(row):
     # Use the latest calibrated estimate when present; never override it with base probability.
     for key in ("probabilidad_calibrada", "Probabilidad calibrada",
-                "Prob. recalibrada", "Probabilidad del modelo",
-                "Probabilidad modelo", "Prob. modelo", "probabilidad_modelo", "_p"):
+                "Prob. recalibrada", "Probabilidad modelo",
+                "Probabilidad del modelo", "Prob. modelo", "probabilidad_modelo", "_p"):
         raw = row.get(key)
         p = valid_probability(raw)
         if p is not None:
