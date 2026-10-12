@@ -759,6 +759,101 @@ def _candidate_price(row):
     return None
 
 
+
+def evaluate_market_recommendation(row, *, predictions_path=None, results_path=None, min_samples=None):
+    """Fail-closed recommendation gate: valid ask, enough settlements, and Brier better than ask."""
+    ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
+    if not ticker or ticker in {"—", "-", "None", "nan"}:
+        return {"eligible": False, "reason": "no hay ticker real de Kalshi", "n": 0}
+    series = ticker.split("-", 1)[0].upper()
+    root = Path(__file__).resolve().parent
+    if predictions_path is None or results_path is None:
+        if series.startswith("KXMLB"):
+            predictions_path = predictions_path or root / "predicciones_mlb.csv"
+            results_path = results_path or root / "resultados_mlb.csv"
+        elif series.startswith("KXLALIGA"):
+            predictions_path = predictions_path or root / "predicciones_laliga.csv"
+            results_path = results_path or root / "resultados_laliga.csv"
+        elif series.startswith(("KXUCL", "KXCHAMP")):
+            predictions_path = predictions_path or root / "predicciones_champions.csv"
+            results_path = results_path or root / "resultados_champions.csv"
+        elif series.startswith(("KXNFL", "KXNFL")):
+            predictions_path = predictions_path or root / "predicciones_nfl.csv"
+            results_path = results_path or root / "resultados_nfl.csv"
+        else:
+            return {"eligible": False, "reason": "no hay historial de liquidaciones para este mercado", "n": 0}
+
+    ask_raw = None
+    for key in ("Precio de compra", "Precio de compra (ask)", "ask", "ask_price", "precio_ask"):
+        if row.get(key) not in (None, "", "—", "-"):
+            ask_raw = row.get(key)
+            break
+    if ask_raw is None:
+        side = str(row.get("_lado") or row.get("Lado Kalshi") or row.get("lado") or row.get("seleccion") or "").upper()
+        ask_keys = ("yes_ask_dollars", "yes_ask") if side == "YES" else ("no_ask_dollars", "no_ask")
+        ask_raw = next((row.get(k) for k in ask_keys if row.get(k) not in (None, "", "—", "-")), None)
+    ask = probability_fraction(ask_raw)
+    if ask is None:
+        return {"eligible": False, "reason": "precio de compra (ask) no válido", "n": 0}
+
+    try:
+        minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_RECOMENDACION", "100"))
+    except (TypeError, ValueError, OverflowError):
+        minimum = 100
+    minimum = max(1, minimum)
+    predictions = read_rows(predictions_path)
+    result_rows = read_rows(results_path)
+    latest_results = {}
+    for result in sorted(result_rows, key=lambda r: str(r.get("resuelto_en", ""))):
+        pid = str(result.get("prediction_id", "")).strip()
+        if pid:
+            latest_results[pid] = str(result.get("estado", result.get("estado_resultado", ""))).upper().strip()
+
+    def clean_category(value):
+        value = re.sub(r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\\s*[·|:-]\\s*", "", str(value or "").strip(), flags=re.I)
+        value = re.sub(r"\\s*[·|:-]\\s*(YES|NO)$", "", value, flags=re.I)
+        return re.sub(r"\\s+", " ", value).casefold()
+
+    target_category = clean_category(row.get("Tipo", row.get("Categoría resumen", row.get("categoria", row.get("bloque", "")))))
+    observations = []
+    for old in predictions:
+        old_ticker = str(old.get("ticker", old.get("Ticker", ""))).strip().upper()
+        if not old_ticker or old_ticker.split("-", 1)[0] != series:
+            continue
+        if target_category and clean_category(old.get("categoria", old.get("Tipo", ""))) != target_category:
+            continue
+        state = latest_results.get(str(old.get("prediction_id", "")).strip(), "")
+        if state not in {"WIN", "LOSS"}:
+            continue
+        p = None
+        for key in ("probabilidad_calibrada", "probabilidad_modelo", "probabilidad_base"):
+            p = probability_fraction(old.get(key))
+            if p is not None:
+                break
+        price = None
+        for key in ("precio_captura", "precio", "Precio de compra", "precio_kalshi"):
+            price = probability_fraction(old.get(key))
+            if price is not None:
+                break
+        if p is None or price is None:
+            continue
+        y = 1.0 if state == "WIN" else 0.0
+        observations.append(((p-y)**2, (price-y)**2))
+
+    n = len(observations)
+    if n < minimum:
+        return {"eligible": False, "reason": f"muestra insuficiente: {n}/{minimum} resultados WIN/LOSS del mismo mercado", "n": n}
+    brier_model = sum(x[0] for x in observations) / n
+    brier_market = sum(x[1] for x in observations) / n
+    if not brier_model < brier_market:
+        return {
+            "eligible": False,
+            "reason": f"el modelo no supera al precio de Kalshi en Brier ({brier_model:.3f} vs {brier_market:.3f})",
+            "n": n, "brier_model": brier_model, "brier_market": brier_market,
+        }
+    return {"eligible": True, "reason": f"Brier mejor que Kalshi con {n} resultados", "n": n,
+            "brier_model": brier_model, "brier_market": brier_market}
+
 def _candidate_edge(row, price):
     # Recompute using calibrated probability and executable price; reserve 1 pp for costs by default.
     p = _probability(row)
