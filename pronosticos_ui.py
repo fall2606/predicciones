@@ -236,7 +236,7 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
                 veredicto = "APOSTAR"
                 mejora = gate.get("brier_market", 0) - gate.get("brier_model", 0)
                 confianza = "Alta" if gate.get("n", 0) >= 200 and mejora >= 0.03 else "Media"
-            elif "no supera" in gate.get("reason", ""):
+            elif "no supera" in gate.get("reason", "") or "ventaja neta no positiva" in gate.get("reason", ""):
                 veredicto = "NO APOSTAR"
                 confianza = "Baja"
             else:
