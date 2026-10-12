@@ -353,7 +353,8 @@ def build_candidates(events, stats):
                 # No executable ask means no tradeable recommendation or capture.
                 if price is None:
                     continue
-                edge = probability - price
+                cost_buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+                edge = probability - price - cost_buffer
                 candidates.append({
                     "event_ticker": str(event.get("event_ticker") or ""),
                     "ticker": ticker, "match_id": str(event.get("event_ticker") or ""),
@@ -367,18 +368,26 @@ def build_candidates(events, stats):
     return candidates
 
 def _rank_nfl_game(rows):
-    """NFL-specific diversified ranking: one side per contract and per-game limits."""
+    """Conservative NFL ranking: executable ask, net edge, no extreme model outliers."""
     by_ticker = {}
-    for row in rows or []:
+    cost_buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+    min_edge = float(os.getenv("MERCADOS_EDGE_MIN_NETO", "0.05"))
+    max_edge = float(os.getenv("MERCADOS_EDGE_MAX_AUTO", "0.20"))
+    for source in rows or []:
+        row = dict(source)
         ticker = str(row.get("ticker") or "").strip()
         try:
             p = float(row.get("probabilidad_calibrada"))
             price = float(row.get("precio_captura"))
-            edge = float(row.get("edge"))
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, OverflowError):
             continue
-        if not ticker or not (0 < p < 1) or not (0 < price < 1) or not math.isfinite(edge):
+        if not ticker or not (0.01 < p < 0.99) or not (0 < price < 1) or not math.isfinite(p + price):
             continue
+        # Never trust a stale stored edge; recompute from calibrated probability and buy ask.
+        edge = p - price - cost_buffer
+        if edge < min_edge or edge > max_edge:
+            continue
+        row["edge"] = edge
         previous = by_ticker.get(ticker)
         if previous is None or edge > float(previous.get("edge") or -999):
             by_ticker[ticker] = row
@@ -398,15 +407,15 @@ def _rank_nfl_game(rows):
         return set(picked)
 
     singles = choose(
-        lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.50 and float(r["edge"]) >= 0.02,
+        lambda r: float(r["precio_captura"]) <= float(os.getenv("SENCILLAS_PRECIO_MAX", "0.88")) and float(r["probabilidad_calibrada"]) >= 0.50 and float(r["edge"]) >= min_edge,
         5, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 5,
     )
     combos = choose(
-        lambda r: float(r["precio_captura"]) <= 0.90 and float(r["probabilidad_calibrada"]) >= 0.60 and float(r["edge"]) >= 0.02,
+        lambda r: float(r["precio_captura"]) <= float(os.getenv("COMBO_PRECIO_MAX", "0.90")) and float(r["probabilidad_calibrada"]) >= 0.65 and float(r["edge"]) >= min_edge,
         5, lambda r: (float(r["probabilidad_calibrada"]), float(r["edge"])), 5, singles,
     )
     value = choose(
-        lambda r: float(r["edge"]) >= 0.02,
+        lambda r: float(r["precio_captura"]) <= float(os.getenv("VALOR_PRECIO_MAX", "0.88")) and float(r["edge"]) >= min_edge,
         10, lambda r: (float(r["edge"]), float(r["probabilidad_calibrada"])), 5, singles | combos,
     )
     return singles, combos, value
@@ -456,7 +465,8 @@ def main():
         row["probabilidad_calibrada"] = calibrated
         row["calibracion"] = note
         price = row["precio_captura"]
-        row["edge"] = calibrated-price if price is not None else None
+        cost_buffer = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
+        row["edge"] = calibrated-price-cost_buffer if price is not None else None
         row["bloque"] = ""
         row["capturado_en"] = captured
         base_id = f'{row["event_ticker"]}|{row["ticker"]}|{row["lado"]}'
