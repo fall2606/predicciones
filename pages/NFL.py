@@ -198,9 +198,9 @@ else:
                 mostrar_tarjetas_mercado(display.head(limit), titulo=f"{label} · revisa probabilidad, precio y resultado", limite=limit)
                 if block != "DETALLE" and len(subset) < limit:
                     st.caption(f"{len(subset)} de {limit} disponibles; no se completan cupos con selecciones que no superan los filtros del modelo.")
-    with st.expander("Historial completo de predicciones NFL (incluye capturas excluidas)", expanded=False):
+    with st.expander("Auditoría · historial completo NFL (incluye capturas excluidas)", expanded=False):
         st.dataframe(pred, use_container_width=True, hide_index=True)
 if not current.empty:
-    with st.expander("Mercados modelados actuales", expanded=False):
+    with st.expander("Auditoría · mercados modelados actuales", expanded=False):
         st.dataframe(current, use_container_width=True, hide_index=True)
 st.caption("La calibración exige al menos 30 resultados WIN/LOSS comparables. Los mercados no modelables se omiten en lugar de recibir una probabilidad inventada.")
