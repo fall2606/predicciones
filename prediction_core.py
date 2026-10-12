@@ -529,11 +529,12 @@ def read_csv_rows_resilient(path):
 
 
 
-def _probability(row):
-    # Use the latest calibrated estimate when present; never override it with base probability.
+def _base_probability(row):
+    """Calibrated model probability before the conservative market anchor."""
     for key in ("probabilidad_calibrada", "Probabilidad calibrada",
                 "Prob. recalibrada", "Probabilidad modelo",
-                "Probabilidad del modelo", "Prob. modelo", "probabilidad_modelo", "_p"):
+                "Probabilidad del modelo", "Prob. modelo", "probabilidad_modelo",
+                "probabilidad_modelo_original", "Probabilidad base", "_p"):
         raw = row.get(key)
         p = valid_probability(raw)
         if p is not None:
@@ -543,7 +544,7 @@ def _probability(row):
         if match:
             try:
                 number = float(match.group(0).replace(",", "."))
-                if "%" in text_value:
+                if "%" in text_value or number > 1:
                     number /= 100
                 p = valid_probability(number)
                 if p is not None:
@@ -551,6 +552,67 @@ def _probability(row):
             except (TypeError, ValueError, OverflowError):
                 pass
     return None
+
+
+def _market_model_weight():
+    """Model weight stays <=25% until a chronological market-specific backtest proves uplift."""
+    try:
+        weight = float(os.getenv("PESO_MODELO_MERCADO", "0.25"))
+    except (TypeError, ValueError, OverflowError):
+        weight = 0.25
+    return min(0.25, max(0.0, weight)) if math.isfinite(weight) else 0.25
+
+
+def anchor_probability_to_market(model_probability, market_price, weight=None):
+    """Blend a calibrated model probability with the selected contract's executable ask.
+
+    The price is the implied probability of the purchased YES/NO side. Missing or
+    invalid prices intentionally produce None rather than a model-only 'final'.
+    """
+    model_p = probability_fraction(model_probability)
+    price = probability_fraction(market_price)
+    if model_p is None or price is None:
+        return None
+    if weight is None:
+        weight = _market_model_weight()
+    try:
+        weight = float(weight)
+    except (TypeError, ValueError, OverflowError):
+        weight = _market_model_weight()
+    if not math.isfinite(weight):
+        weight = _market_model_weight()
+    weight = min(0.25, max(0.0, weight))
+    return min(0.995, max(0.005, price + weight * (model_p - price)))
+
+
+def _probability(row):
+    # Ranking/edge decisions must use the final market-anchored probability.
+    final = valid_probability(row.get("probabilidad_final", row.get("Probabilidad final")))
+    if final is not None:
+        return final
+    return _base_probability(row)
+
+
+def _anchor_market_row(source):
+    row = dict(source)
+    if valid_probability(row.get("probabilidad_final")) is not None:
+        return row
+    model_p = _base_probability(row)
+    price = _candidate_price(row)
+    final = anchor_probability_to_market(model_p, price)
+    if model_p is not None:
+        row.setdefault("probabilidad_modelo_original", model_p)
+        row["Probabilidad del modelo"] = f"{model_p:.1%}"
+    if price is not None:
+        row["Precio implícito Kalshi"] = price
+    if final is not None:
+        row["probabilidad_final"] = final
+        row["Probabilidad final"] = f"{final:.1%}"
+        row["Peso modelo aplicado"] = _market_model_weight()
+    else:
+        row["probabilidad_final"] = ""
+        row["Probabilidad final"] = "Sin precio válido"
+    return row
 def _family(ticker,label=""):
     series=str(ticker or "").split("-",1)[0].upper()
     text=f"{series} {label}".upper()
@@ -568,7 +630,7 @@ def rank_market_candidates(rows,min_probability=0.65,high_limit=5,value_limit=10
     max_auto_edge = float(os.getenv("MERCADOS_EDGE_MAX_AUTO", "0.20"))
     candidates = []
     for source in rows or []:
-        row = dict(source)
+        row = _anchor_market_row(source)
         ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
         p = _probability(row)
         price = _candidate_price(row)
@@ -705,7 +767,7 @@ def single_candidate_rejection_reasons(rows, *, price_max=None, min_edge=None):
               "ventaja extrema requiere revisión": 0, "línea trivial": 0,
               "candidata que sí cumple": 0}
     for source in rows or []:
-        row = dict(source)
+        row = _anchor_market_row(source)
         ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
         p = _probability(row)
         price = _candidate_price(row)
@@ -752,6 +814,7 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
             combined.update({k: v for k, v in row.items() if k != "_row"})
             combined["_row"] = nested
             row = combined
+        row = _anchor_market_row(row)
         ticker = str(row.get("Ticker") or row.get("ticker") or "").strip()
         p = _probability(row)
         price = _candidate_price(row)
@@ -792,9 +855,12 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
             break
     for row in selected:
         row["Ventaja (edge)"] = round(row["_single_edge"], 6)
-        row["Probabilidad base"] = row["_single_p"]
+        model_p = _base_probability(row)
+        row["Probabilidad base"] = model_p if model_p is not None else ""
         row["Precio de compra"] = f"{row['_single_price']:.0%}"
-        row["Probabilidad del modelo"] = f"{row['_single_p']:.1%}"
+        row["Probabilidad del modelo"] = f"{model_p:.1%}" if model_p is not None else "—"
+        row["Probabilidad final"] = f"{row['_single_p']:.1%}"
+        row["probabilidad_final"] = row["_single_p"]
         for key in ("_single_price", "_single_edge", "_single_p", "_single_family", "_p"):
             row.pop(key, None)
     return selected
