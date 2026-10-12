@@ -19,13 +19,23 @@ class CoreTests(unittest.TestCase):
   self.assertAlmostEqual(core.calculate_edge("72%", "57%"), 0.15)
   self.assertIsNone(core.calculate_edge("72%", "—"))
 
+ def test_market_anchor_uses_market_as_base_and_caps_model_weight(self):
+  self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60), 0.65)
+  self.assertAlmostEqual(core.anchor_probability_to_market(0.20, 0.60), 0.50)
+  self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60, weight=0.90), 0.65)
+  self.assertIsNone(core.anchor_probability_to_market(0.80, "—"))
+  self.assertIsNone(core.anchor_probability_to_market("—", 0.60))
+
  def test_rank_single_candidates_preserves_yes_no_and_uses_net_calibrated_edge(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
-       "Probabilidad modelo":"70%","probabilidad_calibrada":"0.70","Precio de compra":"50%","Ventaja (edge)":-0.30,"_lado":"YES"}
+       "Probabilidad modelo":"70%","probabilidad_calibrada":"0.70","Precio de compra":"40%","Ventaja (edge)":-0.30,"_lado":"YES"}
   selected=core.rank_single_candidates([row],limit=1)
   self.assertEqual(len(selected),1)
   self.assertEqual(selected[0].get("_lado"),"YES")
-  self.assertAlmostEqual(selected[0]["Ventaja (edge)"],0.19)
+  self.assertAlmostEqual(selected[0]["Ventaja (edge)"],0.065)
+  self.assertAlmostEqual(selected[0]["probabilidad_final"],0.475)
+  self.assertEqual(selected[0]["Probabilidad del modelo"],"70.0%")
+  self.assertEqual(selected[0]["Probabilidad final"],"47.5%")
   calibrated={**row,"probabilidad_calibrada":"0.60","Precio de compra":"65%"}
   self.assertEqual(core.rank_single_candidates([calibrated]),[])
 
