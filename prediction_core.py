@@ -565,7 +565,7 @@ def _market_has_chronological_evidence(category, ticker=None, min_samples=None):
     except (TypeError, ValueError, OverflowError):
         minimum = 100
     minimum = max(1, minimum)
-    target = re.sub(r"\\s+", " ", str(category or "").strip()).casefold()
+    target = re.sub(r"\s+", " ", str(category or "").strip()).casefold()
     if not target:
         return False
     ticker_text = str(ticker or "").strip().upper()
@@ -583,7 +583,7 @@ def _market_has_chronological_evidence(category, ticker=None, min_samples=None):
         try:
             with report.open(newline="", encoding="utf-8-sig") as f:
                 for row in csv.DictReader(f):
-                    name = re.sub(r"\\s+", " ", str(row.get("tipo_mercado", row.get("mercado", ""))).strip()).casefold()
+                    name = re.sub(r"\s+", " ", str(row.get("tipo_mercado", row.get("mercado", ""))).strip()).casefold()
                     if name != target:
                         continue
                     try:
