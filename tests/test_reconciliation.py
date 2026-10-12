@@ -25,21 +25,21 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(states["103"], "CANCELLED")
         self.assertEqual(states["104"], "SCHEDULED")
 
-    def test_missing_ticker_for_finished_match_is_actionable_not_hidden_as_historical(self):
+    def test_finished_match_without_ticker_is_explicitly_not_liquidatable(self):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
         row = {"prediction_id":"old-1","match_id":"m1","fecha":past,"ticker":"—","local":"A","visita":"B","bloque":"SENCILLAS"}
         result = _row_report("LaLiga", row, {}, {"m1":"FINISHED"}, "football")
         self.assertIn("sin ticker", result["motivo"])
-        self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
-        self.assertEqual(result["cuenta_alerta"], "SI")
+        self.assertEqual(result["clasificacion"], "SIN_DATOS_PARA_LIQUIDAR")
+        self.assertEqual(result["cuenta_alerta"], "NO")
 
-    def test_finished_prediction_without_ticker_is_not_hidden_as_historical(self):
+    def test_finished_prediction_without_ticker_is_not_left_pending(self):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
         row = {"prediction_id":"no-ticker-final","match_id":"m-final","fecha":past,
                "ticker":"—","local":"A","visita":"B"}
         result = _row_report("LaLiga", row, {}, {"m-final":"FINISHED"}, "football")
-        self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
-        self.assertEqual(result["cuenta_alerta"], "SI")
+        self.assertEqual(result["clasificacion"], "SIN_DATOS_PARA_LIQUIDAR")
+        self.assertEqual(result["cuenta_alerta"], "NO")
         self.assertIn("sin ticker", result["motivo"])
 
     def test_overdue_prediction_without_ticker_and_fixture_feed_is_alerted(self):
