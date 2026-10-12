@@ -795,6 +795,18 @@ def evaluate_market_recommendation(row, *, predictions_path=None, results_path=N
     ask = probability_fraction(ask_raw)
     if ask is None:
         return {"eligible": False, "reason": "precio de compra (ask) no válido", "n": 0}
+    quote_time_raw = next((row.get(k) for k in ("capturado_en", "actualizado_en", "timestamp_precio") if row.get(k)), None)
+    if quote_time_raw:
+        try:
+            quote_time = datetime.fromisoformat(str(quote_time_raw).replace("Z", "+00:00"))
+            if quote_time.tzinfo is None:
+                quote_time = quote_time.replace(tzinfo=timezone.utc)
+            max_age = max(1, int(os.getenv("ASK_MAX_AGE_MINUTES", "60")))
+            age_minutes = (datetime.now(timezone.utc) - quote_time.astimezone(timezone.utc)).total_seconds() / 60
+            if age_minutes < -5 or age_minutes > max_age:
+                return {"eligible": False, "reason": f"ask desactualizado ({age_minutes:.0f} min; máximo {max_age} min)", "n": 0}
+        except (TypeError, ValueError, OverflowError):
+            return {"eligible": False, "reason": "hora del ask inválida; no se puede confirmar que el precio siga vigente", "n": 0}
     model_p = _base_probability(row)
     if model_p is None:
         return {"eligible": False, "reason": "probabilidad del modelo no válida", "n": 0}
