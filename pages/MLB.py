@@ -936,7 +936,10 @@ for juego in [juego]:
                             precio_txt = "—"
                         p_final = probability_fraction(pick.get("probabilidad_final"))
                         if p_final is None:
-                            p_final = anchor_probability_to_market(prob, precio)
+                            p_final = anchor_probability_to_market(
+                                prob, precio, category=categoria,
+                                ticker=pick.get("ticker") or pick.get("Ticker"),
+                            )
                         final_txt = f"{p_final:.1%}" if p_final is not None else "Sin precio válido"
                         try:
                             buffer_costes = max(0.0, float(os.getenv("MERCADOS_BUFFER_COSTES", "0.01")))
@@ -1029,7 +1032,10 @@ for juego in [juego]:
                 if {"probabilidad_modelo", "precio_captura"}.issubset(historial_mostrar.columns):
                     def _final_historico(row):
                         p_modelo = row.get("probabilidad_calibrada") or row.get("probabilidad_modelo")
-                        return anchor_probability_to_market(p_modelo, row.get("precio_captura"))
+                        return anchor_probability_to_market(
+                            p_modelo, row.get("precio_captura"),
+                            category=row.get("categoria"), ticker=row.get("ticker"),
+                        )
                     historial_mostrar["Probabilidad final"] = historial_mostrar.apply(
                         lambda row: (f"{_final_historico(row):.1%}" if _final_historico(row) is not None else "Sin precio válido"),
                         axis=1,
