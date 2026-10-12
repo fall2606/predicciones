@@ -238,7 +238,7 @@ def mostrar_tarjetas_mercado(filas, titulo=None, limite=10):
                 confianza = "Alta" if gate.get("n", 0) >= 200 and mejora >= 0.03 else "Media"
             elif "no supera" in gate.get("reason", "") or "ventaja neta no positiva" in gate.get("reason", ""):
                 veredicto = "NO APOSTAR"
-                confianza = "Baja"
+                confianza = "No validada" if "muestra insuficiente" in gate.get("reason", "") else "Baja"
             else:
                 veredicto = "SIN DATOS"
                 confianza = "No validada"
