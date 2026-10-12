@@ -19,6 +19,7 @@ TIMEOUT = 20
 
 st.set_page_config(page_title="Predicciones MLB", page_icon="⚾", layout="wide")
 st.title("⚾ MLB · predicciones por partido")
+st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
     "Solo se muestran unas pocas selecciones por partido cuando la proyección es suficientemente favorable. "
     "Las opciones con probabilidad baja o sin datos sólidos se omiten."
