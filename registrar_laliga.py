@@ -5,7 +5,7 @@ import csv
 import os
 from datetime import datetime, timedelta, timezone
 import requests
-from prediction_core import append_immutable_predictions, rank_market_candidates, extract_line, calculate_edge
+from prediction_core import append_immutable_predictions, rank_market_candidates, extract_line, calculate_edge, anchor_probability_to_market
 
 from laliga_engine import (
     TZ,
@@ -102,7 +102,13 @@ def main():
                 p_calibrada = float(str(fila.get("Probabilidad modelo", "")).rstrip("%")) / 100
             except (TypeError, ValueError):
                 p_calibrada = None
-            fila["edge"] = calculate_edge(p_calibrada, fila.get("Precio de compra"))
+            p_final = anchor_probability_to_market(
+                p_calibrada, fila.get("Precio de compra"),
+                category=fila.get("Tipo"), ticker=fila.get("Ticker"),
+            )
+            fila["Probabilidad final"] = f"{p_final:.1%}" if p_final is not None else "Sin precio válido"
+            fila["probabilidad_final"] = p_final if p_final is not None else ""
+            fila["edge"] = calculate_edge(p_final, fila.get("Precio de compra"))
             if fila["edge"] is None or fila["edge"] < edge_minimo_sencillas:
                 continue
             resultado_actual.append(fila)
@@ -123,16 +129,23 @@ def main():
                     "Precio de compra": candidato.get("Precio de compra", "—"),
                 }], predicciones, resultados)[0]
                 p_calibrada = float(str(calibrado.get("Probabilidad modelo", f"{pbase:.1%}")).rstrip("%")) / 100
-                edge_calibrado = calculate_edge(p_calibrada, candidato.get("Precio de compra"))
-                # Calibration can erase an apparent advantage; do not keep a pick
-                # when the executable price or recalculated edge is missing/negative.
+                categoria_mercado = candidato.get("Categoría resumen", "Kalshi")
+                ticker_mercado = candidato.get("Ticker", "")
+                precio_compra = candidato.get("Precio de compra", "—")
+                p_final = anchor_probability_to_market(
+                    p_calibrada, precio_compra, category=categoria_mercado, ticker=ticker_mercado,
+                )
+                edge_calibrado = calculate_edge(p_final, precio_compra)
+                # Rank and edge must use the market-anchored probability, not raw model p.
                 if edge_calibrado is None or edge_calibrado < 0.02:
                     continue
                 resultado_actual.append({
-                    "Tipo": candidato.get("Categoría resumen", "Kalshi"),
+                    "Tipo": categoria_mercado,
                     "Jugada sencilla": candidato.get("Apuesta sencilla") or candidato.get("Apuesta", ""),
                     "Probabilidad base": pbase,
                     "Probabilidad modelo": f"{p_calibrada:.1%}",
+                    "Probabilidad final": f"{p_final:.1%}" if p_final is not None else "Sin precio válido",
+                    "probabilidad_final": p_final if p_final is not None else "",
                     "Calibración": calibrado.get("Calibración", "Sin calibrar"),
                     "Precio ahora": candidato.get("Precio de compra", "—"),
                     "Disponibilidad": candidato.get("Disponibilidad", ""),
