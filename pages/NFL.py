@@ -16,7 +16,7 @@ EXCLUDED = ROOT / "nfl_predicciones_excluidas.csv"
 st.set_page_config(page_title="Predicciones NFL", page_icon="🏈", layout="wide")
 st.title("🏈 NFL · pronósticos por partido")
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
-st.caption("Modelo específico de fútbol americano con resultados y precios de Kalshi. La probabilidad original se conserva; la calibración solo usa WIN/LOSS resueltos.")
+st.caption("Aquí se muestran los contratos reales de Kalshi y su historial. Los pronósticos del modelo aparecen en una sección separada; no confundas una estimación con una apuesta.")
 if st.button("Actualizar datos NFL ahora", key="refresh_nfl"):
     st.cache_data.clear()
     st.rerun()
