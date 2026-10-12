@@ -104,6 +104,23 @@ def score_rows(predictions, results, probability_fields):
             "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra."}
 
 
+def summarize_reconciliation(rows):
+    """Summarize the canonical reconciliation export without hiding alert rows."""
+    counts = Counter()
+    for row in rows:
+        key = (
+            str(row.get("deporte", "") or "SIN_DEPORTE").strip(),
+            str(row.get("clasificacion", "") or "SIN_CLASIFICACION").strip(),
+            str(row.get("cuenta_alerta", "") or "SIN_MARCA_ALERTA").strip().upper(),
+            str(row.get("motivo", "") or "SIN_MOTIVO").strip(),
+        )
+        counts[key] += 1
+    return [
+        {"deporte": k[0], "clasificacion": k[1], "cuenta_alerta": k[2], "motivo": k[3], "filas": n}
+        for k, n in sorted(counts.items())
+    ]
+
+
 def audit_file(name, predictions_file, results_file, probability_fields):
     predictions = read_csv(ROOT / predictions_file)
     results = read_csv(ROOT / results_file)
@@ -119,6 +136,11 @@ def main():
         audit_file("NFL", "predicciones_nfl.csv", "resultados_nfl.csv", ("probabilidad_calibrada", "probabilidad_modelo")),
     ]
     (ROOT / "auditoria_calidad_actual.json").write_text(json.dumps(audits, ensure_ascii=False, indent=2), encoding="utf-8")
+    reconciliation = summarize_reconciliation(read_csv(ROOT / "reconciliacion_pendientes.csv"))
+    with (ROOT / "auditoria_reconciliacion_actual.csv").open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["deporte", "clasificacion", "cuenta_alerta", "motivo", "filas"])
+        writer.writeheader()
+        writer.writerows(reconciliation)
     fields = ["deporte", "capturas", "filas_resultados", "capturas_con_resultado_terminal", "sin_resultado_terminal",
               "prediction_id_vacios", "prediction_id_duplicados_en_capturas", "ids_resultado_duplicados", "n_evaluable",
               "tasa_acierto", "probabilidad_media", "brier", "log_loss", "brier_referencia_muestra", "limitacion"]
@@ -135,7 +157,10 @@ def main():
               f"log-loss={row['log_loss'] if row['log_loss'] is not None else 'N/D'}; "
               f"IDs duplicados en capturas={row['prediction_id_duplicados_en_capturas']}; "
               f"IDs duplicados en resultados={row['ids_resultado_duplicados']}")
-    print("Informes generados: auditoria_calidad_actual.csv y auditoria_calidad_actual.json")
+    print("RECONCILIACIÓN: desglose de todas las filas del archivo canónico")
+    for row in reconciliation:
+        print(f"{row['deporte']} · {row['clasificacion']} · alerta={row['cuenta_alerta']} · filas={row['filas']} · motivo={row['motivo']}")
+    print("Informes generados: auditoria_calidad_actual.csv, auditoria_calidad_actual.json y auditoria_reconciliacion_actual.csv")
 
 
 if __name__ == "__main__":
