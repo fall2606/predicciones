@@ -555,27 +555,46 @@ def _base_probability(row):
     return None
 
 
-def _market_model_weight():
-    """Model weight stays <=25% until a chronological market-specific backtest proves uplift."""
+def _market_model_weight(category=None, ticker=None):
+    """Use 5% by default; use 25% only for LaLiga categories validated chronologically."""
     try:
-        weight = float(os.getenv("PESO_MODELO_MERCADO", "0.25"))
+        base_weight = float(os.getenv("PESO_MODELO_MERCADO", "0.05"))
     except (TypeError, ValueError, OverflowError):
-        weight = 0.25
-    return min(0.25, max(0.0, weight)) if math.isfinite(weight) else 0.25
+        base_weight = 0.05
+    if not math.isfinite(base_weight):
+        base_weight = 0.05
+    base_weight = min(0.25, max(0.0, base_weight))
+
+    market = re.sub(
+        r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\\s*[·|:-]\\s*",
+        "", str(category or "").strip(), flags=re.I,
+    ).casefold()
+    ticker_text = str(ticker or "").strip().upper()
+    validated_laliga_markets = {"hándicap de goles", "goles totales"}
+    if ticker_text.startswith("KXLALIGA") and market in validated_laliga_markets:
+        try:
+            weight = float(os.getenv("PESO_MODELO_MERCADO_VALIDADO", "0.25"))
+        except (TypeError, ValueError, OverflowError):
+            weight = 0.25
+        if not math.isfinite(weight):
+            weight = 0.25
+        return min(0.25, max(0.0, weight))
+    return base_weight
 
 
-def anchor_probability_to_market(model_probability, market_price, weight=None):
+def anchor_probability_to_market(model_probability, market_price, weight=None, category=None, ticker=None):
     """Blend a calibrated model probability with the selected contract's executable ask.
 
     The price is the implied probability of the purchased YES/NO side. Missing or
     invalid prices intentionally produce None rather than a model-only 'final'.
+    The model weight is 5% by default; only backtested LaLiga categories can use 25%.
     """
     model_p = probability_fraction(model_probability)
     price = probability_fraction(market_price)
     if model_p is None or price is None:
         return None
     if weight is None:
-        weight = _market_model_weight()
+        weight = _market_model_weight(category, ticker)
     try:
         weight = float(weight)
     except (TypeError, ValueError, OverflowError):
@@ -599,7 +618,9 @@ def _anchor_market_row(source):
     # Recompute after calibration changes the model estimate; never reuse a stale final.
     model_p = _base_probability(row)
     price = _candidate_price(row)
-    final = anchor_probability_to_market(model_p, price)
+    category = row.get("Tipo", row.get("Categoría resumen", row.get("categoria", row.get("bloque", ""))))
+    ticker = row.get("Ticker", row.get("ticker", ""))
+    final = anchor_probability_to_market(model_p, price, category=category, ticker=ticker)
     if model_p is not None:
         row.setdefault("probabilidad_modelo_original", model_p)
         row["Probabilidad del modelo"] = f"{model_p:.1%}"
@@ -608,7 +629,7 @@ def _anchor_market_row(source):
     if final is not None:
         row["probabilidad_final"] = final
         row["Probabilidad final"] = f"{final:.1%}"
-        row["Peso modelo aplicado"] = _market_model_weight()
+        row["Peso modelo aplicado"] = _market_model_weight(category, ticker)
     else:
         row["probabilidad_final"] = ""
         row["Probabilidad final"] = "Sin precio válido"
