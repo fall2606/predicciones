@@ -48,6 +48,7 @@ def _tabla_con_resultado(df, columna="Resultado"):
 
 st.set_page_config(page_title="LaLiga · predicciones", page_icon="⚽", layout="wide")
 st.title("🇪🇸 LaLiga · mercados y probabilidades de Kalshi")
+st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption(
     "Pronósticos de LaLiga para partidos próximos, con comparación inmutable de capturas anteriores y calibración basada en resultados."
 )
