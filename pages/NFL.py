@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 from reconciliacion_ui import mostrar_actualizacion_archivos
-from pronosticos_ui import mostrar_pronosticos_sencillos
+from pronosticos_ui import mostrar_pronosticos_sencillos, mostrar_tarjetas_mercado
 from nfl_engine import ESPN, _json as nfl_json, _team_stats, projected_score, _normal_cdf
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -192,7 +192,7 @@ else:
                     "Resultado": subset.get("estado", pd.Series("PENDIENTE", index=subset.index)).replace("", "PENDIENTE"),
                     "Ticker": subset.get("ticker", ""),
                 })
-                st.dataframe(display.head(limit), use_container_width=True, hide_index=True)
+                mostrar_tarjetas_mercado(display.head(limit), titulo=f"{label} · revisa probabilidad, precio y resultado", limite=limit)
                 if block != "DETALLE" and len(subset) < limit:
                     st.caption(f"{len(subset)} de {limit} disponibles; no se completan cupos con selecciones que no superan los filtros del modelo.")
     with st.expander("Historial completo de predicciones NFL (incluye capturas excluidas)", expanded=False):
