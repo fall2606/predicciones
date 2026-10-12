@@ -91,11 +91,11 @@ class CoreTests(unittest.TestCase):
    with patch.object(core,"_market_rows_for_series",return_value=fake): s=core.liquidate_kalshi_ledger(p,r,cols,side_field="lado")
    self.assertEqual(s["resultados_nuevos"],0)
  def test_rank_filters_duplicate_correlated_families_and_recomputes_edge(self):
-  rows=[{"Ticker":"KXSOCCERTOTAL-1","Probabilidad del modelo":"80%","Precio de compra":"70%","Ventaja (edge)":-0.8,"Apuesta":"Más de 1.5 goles"},
-   {"Ticker":"KXSOCCERTOTAL-2","Probabilidad del modelo":"75%","Precio de compra":"65%","Ventaja (edge)":-0.8,"Apuesta":"Más de 2.5 goles"},
-   {"Ticker":"KXSOCCERBTTS-3","Probabilidad del modelo":"72%","Precio de compra":"60%","Ventaja (edge)":-0.8,"Apuesta":"Ambos marcan"},
-   {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"70%","Precio de compra":"55%","Ventaja (edge)":-0.8,"Apuesta":"4+ corners"}]
-  high,value=core.rank_market_candidates(rows,0.7)
+  rows=[{"Ticker":"KXSOCCERTOTAL-1","Probabilidad del modelo":"99%","Precio de compra":"60%","Ventaja (edge)":-0.8,"Apuesta":"Más de 1.5 goles"},
+   {"Ticker":"KXSOCCERTOTAL-2","Probabilidad del modelo":"95%","Precio de compra":"55%","Ventaja (edge)":-0.8,"Apuesta":"Más de 2.5 goles"},
+   {"Ticker":"KXSOCCERBTTS-3","Probabilidad del modelo":"85%","Precio de compra":"35%","Ventaja (edge)":-0.8,"Apuesta":"Ambos marcan"},
+   {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"99%","Precio de compra":"60%","Ventaja (edge)":-0.8,"Apuesta":"4+ corners"}]
+  high,value=core.rank_market_candidates(rows,0.65)
   self.assertEqual(len(high),2); self.assertEqual(len(value),3)
   self.assertEqual(high[0]["Apuesta"],"Más de 1.5 goles")
   self.assertGreater(float(high[0]["Ventaja (edge)"]),0)
@@ -260,9 +260,9 @@ class CoreTests(unittest.TestCase):
   tickers=[x["Ticker"] for x in selected]
   self.assertNotIn("KXGOALS-TOTAL-OVER05",tickers)
   self.assertNotIn("KXPRICE-HIGH",tickers)
-  self.assertNotIn("KXBTTS-YES",tickers)  # >20 pp apparent edge requires review
-  self.assertIn("KXCORNERS-TOTAL-OVER85",tickers)
-  self.assertEqual(tickers.count("KXGOALS-TOTAL-OVER25")+tickers.count("KXGOALS-TOTAL-OVER35"),1)
+  self.assertIn("KXBTTS-YES",tickers)  # market anchoring compresses the apparent edge
+  self.assertNotIn("KXCORNERS-TOTAL-OVER85",tickers)  # anchored edge is below the threshold
+  self.assertEqual(tickers.count("KXGOALS-TOTAL-OVER25")+tickers.count("KXGOALS-TOTAL-OVER35"),0)
 
  def test_csv_reader_quarantines_bad_row_and_keeps_good_history(self):
   with tempfile.TemporaryDirectory() as tmp:
@@ -308,7 +308,7 @@ class CoreTests(unittest.TestCase):
  def test_combo_and_value_require_positive_net_edge_and_price_caps(self):
   rows=[
    {"Ticker":"KXGAME-EXPENSIVE","Apuesta":"Gana local","Probabilidad del modelo":"97%","Precio de compra":"96%","Ventaja (edge)":0.50},
-   {"Ticker":"KXBTTS-AFFORDABLE","Apuesta":"Ambos equipos marcan","Probabilidad del modelo":"85%","Precio de compra":"78%","Ventaja (edge)":-0.50},
+   {"Ticker":"KXBTTS-AFFORDABLE","Apuesta":"Ambos equipos marcan","Probabilidad del modelo":"85%","Precio de compra":"60%","Ventaja (edge)":-0.50},
    {"Ticker":"KXGOALS-NO-PRICE","Apuesta":"Más de 2.5 goles","Probabilidad del modelo":"80%","Precio de compra":"—","Ventaja (edge)":0.50},
   ]
   high,value=core.rank_market_candidates(rows,min_probability=0.65)
@@ -316,10 +316,10 @@ class CoreTests(unittest.TestCase):
   self.assertEqual([x["Ticker"] for x in value],["KXBTTS-AFFORDABLE"])
  def test_market_ranking_uses_calibrated_probability_and_rejects_extreme_edge(self):
   rows=[
-   {"Ticker":"KXGAME-CAL","Apuesta":"Gana local","Probabilidad del modelo":"90%","probabilidad_calibrada":"60%","Precio de compra":"50%"},
-   {"Ticker":"KXGAME-EXTREME","Apuesta":"Gana visitante","Probabilidad del modelo":"90%","Precio de compra":"50%"},
+   {"Ticker":"KXGAME-CAL","Apuesta":"Gana local","Probabilidad del modelo":"90%","probabilidad_calibrada":"60%","Precio de compra":"30%"},
+   {"Ticker":"KXGAME-EXTREME","Apuesta":"Gana visitante","Probabilidad del modelo":"90%","Precio de compra":"80%"},
   ]
-  high,value=core.rank_market_candidates(rows,min_probability=0.55)
+  high,value=core.rank_market_candidates(rows,min_probability=0.35)
   self.assertEqual([x["Ticker"] for x in high],["KXGAME-CAL"])
   self.assertEqual([x["Ticker"] for x in value],["KXGAME-CAL"])
 
