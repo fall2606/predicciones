@@ -806,9 +806,9 @@ for juego in [juego]:
                 if p_actual is None or precio_actual is None:
                     edges_recalculados.append("—")
                 else:
-                    edges_recalculados.append(f"{(p_actual - precio_actual) * 100:+.1f} pp")
+                    edges_recalculados.append(f"{(p_actual - precio_actual - max(0.0, float(os.getenv('MERCADOS_BUFFER_COSTES', '0.01')))) * 100:+.1f} pp")
             bloque["Probabilidad recalculada"] = recalculadas
-            bloque["Ventaja recalculada"] = edges_recalculados
+            bloque["Ventaja neta recalculada"] = edges_recalculados
 
             game_state = str(juego.get("status", {}).get("abstractGameState", "")).casefold()
             detailed_state = str(juego.get("status", {}).get("detailedState", "")).casefold()
@@ -920,7 +920,7 @@ for juego in [juego]:
             else:
                 st.dataframe(vista, use_container_width=True, hide_index=True)
 
-        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Ventaja recalculada", "Revisión", "ticker", "Resultado"]
+        columnas_bloque = ["bloque", "categoria", "mercado", "line", "seleccion", "lado", "probabilidad_modelo", "Probabilidad recalculada", "precio_captura", "disponibilidad", "edge", "Ventaja neta recalculada", "Revisión", "ticker", "Resultado"]
         mostrar_bloque_mlb("SENCILLAS", "Sencillas · mercados reales de Kalshi", columnas_bloque)
         mostrar_bloque_mlb("ALTA_PROBABILIDAD", "5 de alta probabilidad para posibles combos", columnas_bloque)
         mostrar_bloque_mlb("A_TENER_EN_CUENTA", "10 a tener en cuenta · ordenadas por edge", columnas_bloque)
