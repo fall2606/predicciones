@@ -83,6 +83,15 @@ class ScoreSettlementTests(unittest.TestCase):
         result = sports_results.settle_from_score(row("KXLALIGAFIRSTGOAL", "local", None, "NO"))
         self.assertEqual(result["state"], "WIN")
 
+    @patch("sports_results._espn_summary")
+    @patch("sports_results.find_match", return_value=match(1, 0, first_scoring_team="Celta"))
+    def test_first_team_to_score_prefers_official_ordered_goal_data(self, _find, summary):
+        captured = row("KXLALIGAFTTS", "visita", None, "YES")
+        captured.update({"local": "Elche", "visita": "Celta"})
+        result = sports_results.settle_from_score(captured)
+        self.assertEqual(result["state"], "WIN")
+        summary.assert_not_called()
+
     @patch("sports_results._espn_summary", return_value={
         "scoringPlays": [{"team": {"displayName": "Celta"}}]
     })
