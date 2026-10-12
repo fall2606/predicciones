@@ -29,6 +29,15 @@ def probabilidad(columna):
     return valores.where(~es_porcentaje, valores / 100)
 
 
+def crear_intervalos(p, y):
+    filas = []
+    for inicio in np.arange(0.0, 1.0, 0.1):
+        mascara = (p >= inicio) & ((p < inicio + 0.1) | ((inicio >= 0.9) & (p <= 1.0)))
+        if mascara.any():
+            filas.append({"Intervalo estimado": f"{inicio:.0%}–{inicio + 0.1:.0%}", "Casos": int(mascara.sum()), "Probabilidad media": float(p[mascara].mean()), "Acierto real": float(y[mascara].mean())})
+    return filas
+
+
 def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col="ticker"):
     pred = leer_csv(archivo_pred)
     res = leer_csv(archivo_res)
@@ -53,7 +62,7 @@ def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col=
     y = y[valido]
     n = len(p)
     if n == 0:
-        return {"nombre": nombre, "n": 0, "total": len(pred), "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()), "estado": "Sin probabilidades y resultados compatibles"}
+        return {"nombre": nombre, "n": 0, "total": len(pred), "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()), "intervalos": [], "estado": "Sin probabilidades y resultados compatibles"}
     tasa = float(y.mean())
     brier = float(((p - y) ** 2).mean())
     p_segura = p.clip(1e-15, 1 - 1e-15)
@@ -73,7 +82,7 @@ def evaluar_archivos(nombre, archivo_pred, archivo_res, claves_prob, ticker_col=
         "sin_resultado": int((~estado.isin(["WIN", "LOSS", "ANULADA"])).sum()),
         "accuracy": accuracy, "brier": brier, "log_loss": log_loss, "baseline": baseline,
         "media_p": media_p, "tasa": tasa, "real_ticker": real_ticker,
-        "estado": estado_modelo,
+        "intervalos": crear_intervalos(p, y), "estado": estado_modelo,
     }
 
 
@@ -93,7 +102,7 @@ def evaluar_premier_league():
     return {
         "nombre": "Premier League", "n": n, "total": len(df), "sin_resultado": int(pd.to_numeric(df["gano"], errors="coerce").isna().sum()),
         "accuracy": float(((p>=0.5)==(y==1)).mean()), "brier": brier, "log_loss": float((-(y*np.log(p.clip(1e-15, 1-1e-15))+(1-y)*np.log(1-p.clip(1e-15, 1-1e-15)))).mean()), "baseline": tasa*(1-tasa),
-        "media_p": float(p.mean()), "tasa": tasa, "real_ticker": n,
+        "media_p": float(p.mean()), "tasa": tasa, "real_ticker": n, "intervalos": crear_intervalos(p, y),
         "estado": "No supera la referencia simple" if n >= 30 and brier >= tasa*(1-tasa) else ("Muestra insuficiente" if n < 30 else "Señal preliminar favorable; falta backtest temporal"),
     }
 
@@ -123,11 +132,7 @@ for fila in resultados:
         c5.metric("Acierto real", f"{fila['tasa']:.1%}")
         c6.metric("Referencia Brier", f"{fila['baseline']:.3f}")
         st.caption(f"Capturas totales: {fila['total']} · con ticker en las liquidaciones: {fila.get('real_ticker', fila['n'])} · sin resultado terminal asociado: {fila['sin_resultado']}. El contador puede incluir partidos futuros.")
-        intervalos = []
-        for inicio in np.arange(0.0, 1.0, 0.1):
-            mascara = (p >= inicio) & ((p < inicio + 0.1) | ((inicio >= 0.9) & (p <= 1.0)))
-            if mascara.any():
-                intervalos.append({"Intervalo estimado": f"{inicio:.0%}–{inicio + 0.1:.0%}", "Casos": int(mascara.sum()), "Probabilidad media": float(p[mascara].mean()), "Acierto real": float(y[mascara].mean())})
+        intervalos = fila.get("intervalos", [])
         if intervalos:
             st.caption("Calibración por intervalos: compara la probabilidad media con el acierto real; grupos pequeños son inestables.")
             st.dataframe(pd.DataFrame(intervalos).style.format({"Probabilidad media": "{:.1%}", "Acierto real": "{:.1%}"}), hide_index=True, use_container_width=True)
