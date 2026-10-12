@@ -26,7 +26,7 @@ def contar_pendientes_activos(nombre):
     reconciliacion = leer_csv("reconciliacion_pendientes.csv")
     columnas = {"deporte", "clasificacion", "cuenta_alerta"}
     if reconciliacion.empty or not columnas.issubset(reconciliacion.columns):
-        return 0
+        return None
     deporte = "Champions" if nombre == "Champions League" else nombre
     mascara = (
         reconciliacion["deporte"].astype(str).str.strip().eq(deporte)
