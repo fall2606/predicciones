@@ -74,6 +74,52 @@ class CoreTests(unittest.TestCase):
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
     self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.05)
 
+
+ def test_recommendation_gate_requires_100_results_and_beats_market_brier(self):
+  import tempfile
+  from pathlib import Path
+  with tempfile.TemporaryDirectory() as tmp:
+   p=Path(tmp)/"pred.csv"; r=Path(tmp)/"res.csv"
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","categoria","probabilidad_calibrada","precio","match_id"]); w.writeheader()
+    for i in range(100):
+     w.writerow({"prediction_id":f"p{i}","ticker":f"KXMLBGAME-EVENT{i}","categoria":"Ganador","probabilidad_calibrada":"0.90","precio":"0.50","match_id":f"m{i}"})
+   with r.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","estado","resuelto_en"]); w.writeheader()
+    for i in range(100):
+     w.writerow({"prediction_id":f"p{i}","estado":"WIN","resuelto_en":f"2026-10-{(i%28)+1:02d}T00:00:00Z"})
+   candidate={"Ticker":"KXMLBGAME-CURRENT","Categoría resumen":"Ganador","Precio de compra":"55¢"}
+   gate=core.evaluate_market_recommendation(candidate,predictions_path=p,results_path=r,min_samples=100)
+   self.assertTrue(gate["eligible"],gate)
+   self.assertEqual(gate["n"],100)
+   self.assertLess(gate["brier_model"],gate["brier_market"])
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","categoria","probabilidad_calibrada","precio","match_id"]); w.writeheader()
+    for i in range(99):
+     w.writerow({"prediction_id":f"p{i}","ticker":f"KXMLBGAME-EVENT{i}","categoria":"Ganador","probabilidad_calibrada":"0.90","precio":"0.50","match_id":f"m{i}"})
+   with r.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","estado","resuelto_en"]); w.writeheader()
+    for i in range(99):
+     w.writerow({"prediction_id":f"p{i}","estado":"WIN","resuelto_en":f"2026-10-{(i%28)+1:02d}T00:00:00Z"})
+   gate=core.evaluate_market_recommendation(candidate,predictions_path=p,results_path=r,min_samples=100)
+   self.assertFalse(gate["eligible"])
+   self.assertIn("99/100",gate["reason"])
+   invalid=core.evaluate_market_recommendation({**candidate,"Precio de compra":"—"},predictions_path=p,results_path=r,min_samples=100)
+   self.assertFalse(invalid["eligible"])
+   self.assertIn("ask",invalid["reason"])
+   # Enough observations are still insufficient if the model's Brier is worse than market.
+   with p.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","categoria","probabilidad_calibrada","precio","match_id"]); w.writeheader()
+    for i in range(100):
+     w.writerow({"prediction_id":f"p{i}","ticker":f"KXMLBGAME-EVENT{i}","categoria":"Ganador","probabilidad_calibrada":"0.60","precio":"0.80","match_id":f"m{i}"})
+   with r.open("w",newline="",encoding="utf-8") as f:
+    w=csv.DictWriter(f,fieldnames=["prediction_id","estado","resuelto_en"]); w.writeheader()
+    for i in range(100):
+     w.writerow({"prediction_id":f"p{i}","estado":"WIN","resuelto_en":f"2026-10-{(i%28)+1:02d}T00:00:00Z"})
+   gate=core.evaluate_market_recommendation(candidate,predictions_path=p,results_path=r,min_samples=100)
+   self.assertFalse(gate["eligible"])
+   self.assertIn("no supera",gate["reason"])
+
  def test_rank_single_candidates_preserves_yes_no_and_uses_net_calibrated_edge(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
        "Probabilidad modelo":"70%","probabilidad_calibrada":"0.70","Precio de compra":"40%","Ventaja (edge)":-0.30,"_lado":"YES"}
