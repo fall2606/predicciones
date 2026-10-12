@@ -284,9 +284,10 @@ if resumen_sencillo_kalshi:
     for jugada in resumen_sencillo_kalshi:
         with st.container(border=True):
             st.markdown(f"**{jugada.get('Tipo', 'Sencilla')}:** {jugada.get('Jugada sencilla', '—')}")
-            st.write(f"Probabilidad del modelo: **{jugada.get('Probabilidad modelo', jugada.get('Probabilidad del modelo', '—'))}**")
+            st.write(f"Probabilidad del modelo calibrada: **{jugada.get('Probabilidad del modelo', jugada.get('Probabilidad modelo', '—'))}**")
+            st.write(f"Probabilidad final anclada a Kalshi: **{jugada.get('Probabilidad final', 'Sin precio válido')}**")
             precio_txt = jugada.get("Precio de compra", jugada.get("Precio ahora", "—"))
-            st.write(f"Precio Kalshi: **{precio_txt}**")
+            st.write(f"Precio de compra Kalshi: **{precio_txt}**")
             try:
                 edge_num = float(jugada.get("Ventaja (edge)", 0))
                 if abs(edge_num) > 1:
