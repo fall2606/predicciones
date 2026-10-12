@@ -109,7 +109,7 @@ def finished_matches(kind, competition, predictions):
                 predictions_by_id[match_id] = row
                 for offset in (-1, 0, 1):
                     days.add((kickoff.date() + timedelta(days=offset)).strftime("%Y%m%d"))
-        events = []
+        events_by_key = {}
         for day in sorted(days):
             try:
                 response = SESSION.get(
@@ -117,11 +117,16 @@ def finished_matches(kind, competition, predictions):
                     params={"dates": day, "limit": 100}, timeout=15,
                 )
                 response.raise_for_status()
-                events.extend((response.json() or {}).get("events") or [])
+                for event in ((response.json() or {}).get("events") or []):
+                    key = text(event.get("id")) or f"{text(event.get('date'))}|{text(event.get('name'))}"
+                    if key:
+                        events_by_key[key] = event
             except (requests.RequestException, ValueError, TypeError):
                 # Missing source coverage is reported as an alert by _row_report;
                 # it must never be interpreted as a zero-pending result.
                 continue
+
+        events = list(events_by_key.values())
 
         def norm_team(value):
             return re.sub(r"[^a-z0-9]", "", text(value).lower())
