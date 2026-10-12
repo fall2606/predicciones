@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 import streamlit as st
 from reconciliacion_ui import mostrar_actualizacion_archivos
+from pronosticos_ui import mostrar_pronosticos_sencillos
 from nfl_engine import ESPN, _json as nfl_json, _team_stats, projected_score, _normal_cdf
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -13,7 +14,7 @@ RES = ROOT / "resultados_nfl.csv"
 CURRENT = ROOT / "nfl_probabilidades_actuales.csv"
 EXCLUDED = ROOT / "nfl_predicciones_excluidas.csv"
 st.set_page_config(page_title="Predicciones NFL", page_icon="🏈", layout="wide")
-st.title("🏈 NFL · predicciones por partido")
+st.title("🏈 NFL · pronósticos por partido")
 st.page_link("pages/Contexto_deportivo.py", label="Analizar noticias, lesiones y contexto antes de decidir", icon="🧠")
 st.caption("Modelo específico de fútbol americano con resultados y precios de Kalshi. La probabilidad original se conserva; la calibración solo usa WIN/LOSS resueltos.")
 if st.button("Actualizar datos NFL ahora", key="refresh_nfl"):
@@ -76,12 +77,12 @@ def cargar_pronosticos_nfl_independientes():
             continue
     return filas_modelo
 
-st.subheader("Pronósticos NFL independientes de Kalshi")
-st.caption("Cálculo estadístico de puntos esperados a partir de resultados recientes de ESPN. Se muestran probabilidades base, sin afirmar que estén calibradas; la ausencia de un mercado de Kalshi no elimina el pronóstico.")
+st.subheader("Pronósticos del modelo (no son apuestas)")
+st.caption("Si Kalshi no ofrece un contrato, el modelo puede mostrar su propia estimación. Los pronósticos y las apuestas reales se identifican por separado.")
 try:
     _filas_nfl_modelo = cargar_pronosticos_nfl_independientes()
     if _filas_nfl_modelo:
-        st.dataframe(pd.DataFrame(_filas_nfl_modelo), use_container_width=True, hide_index=True)
+        mostrar_pronosticos_sencillos(_filas_nfl_modelo, "NFL", "estadístico basado en resultados recientes")
     else:
         st.info("ESPN no devolvió partidos futuros modelables en los próximos 14 días.")
 except (requests.RequestException, ValueError, KeyError, TypeError) as _exc:
