@@ -46,29 +46,29 @@ class CoreTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as tmp:
    report=Path(tmp)/"backtest.csv"
    report.write_text(
-    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\\n"
-    "Goles totales,120,0.18,0.21,true\\n",
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\n"
+    "Goles totales,120,0.18,0.21,true\n",
     encoding="utf-8",
    )
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
     self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.25)
    report.write_text(
-    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi\\n"
-    "Goles totales,120,0.18,0.21\\n",
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi\n"
+    "Goles totales,120,0.18,0.21\n",
     encoding="utf-8",
    )
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
     self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.05)
    report.write_text(
-    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\\n"
-    "Goles totales,99,0.18,0.21,true\\n",
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\n"
+    "Goles totales,99,0.18,0.21,true\n",
     encoding="utf-8",
    )
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
     self.assertAlmostEqual(core._market_model_weight("Goles totales","KXLALIGATOTAL-TEST"),0.05)
    report.write_text(
-    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\\n"
-    "Goles totales,120,0.24,0.21,true\\n",
+    "tipo_mercado,n_resueltos,brier_modelo,brier_precio_kalshi,validacion_cronologica\n"
+    "Goles totales,120,0.24,0.21,true\n",
     encoding="utf-8",
    )
    with patch.dict("os.environ", {"BACKTEST_MERCADO_PATH":str(report),"MUESTRA_MINIMA_BACKTEST":"100","PESO_MODELO_MERCADO_VALIDADO":"0.25"}):
