@@ -213,7 +213,7 @@ if not partido_cerrado:
     st.subheader("Pronóstico del partido seleccionado")
     with st.container(border=True):
         st.markdown(f"**{local} vs {visita}**")
-        st.caption(f"Marcador medio estimado: {gl:.2f}–{gv:.2f} goles · muestra histórica del modelo: {len(modelo[0])} partidos cargados")
+        st.caption(f"Marcador medio estimado: {gl:.2f}–{gv:.2f} goles · cálculo basado en las estadísticas disponibles de la competición")
         c_local, c_empate, c_visita = st.columns(3)
         c_local.metric("Gana local · modelo", f"{p_local_modelo:.1%}")
         c_empate.metric("Empate · modelo", f"{p_empate_modelo:.1%}")
