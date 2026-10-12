@@ -21,9 +21,18 @@ class CoreTests(unittest.TestCase):
   self.assertIsNone(core.calculate_edge("72%", "—"))
 
  def test_market_anchor_uses_market_as_base_and_caps_model_weight(self):
-  self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60), 0.65)
-  self.assertAlmostEqual(core.anchor_probability_to_market(0.20, 0.60), 0.50)
+  self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60), 0.61)
+  self.assertAlmostEqual(core.anchor_probability_to_market(0.20, 0.60), 0.58)
   self.assertAlmostEqual(core.anchor_probability_to_market(0.80, 0.60, weight=0.90), 0.65)
+  self.assertAlmostEqual(core.anchor_probability_to_market(
+   0.80, 0.60, category="Goles totales", ticker="KXLALIGATOTAL-TEST"
+  ), 0.65)
+  self.assertAlmostEqual(core.anchor_probability_to_market(
+   0.80, 0.60, category="Resultado", ticker="KXLALIGAGAME-TEST"
+  ), 0.61)
+  self.assertAlmostEqual(core.anchor_probability_to_market(
+   0.80, 0.60, category="Goles totales", ticker="KXUCLTOTAL-TEST"
+  ), 0.61)
   self.assertIsNone(core.anchor_probability_to_market(0.80, "—"))
   self.assertIsNone(core.anchor_probability_to_market("—", 0.60))
   stale = {"probabilidad_final": 0.70, "probabilidad_calibrada": 0.60, "Precio de compra": "50%"}
@@ -32,7 +41,8 @@ class CoreTests(unittest.TestCase):
  def test_rank_single_candidates_preserves_yes_no_and_uses_net_calibrated_edge(self):
   row={"Ticker":"KXLALIGAGAME-TEST-AWAY","Apuesta sencilla":"Gana Celta","Categoría resumen":"Resultado",
        "Probabilidad modelo":"70%","probabilidad_calibrada":"0.70","Precio de compra":"40%","Ventaja (edge)":-0.30,"_lado":"YES"}
-  selected=core.rank_single_candidates([row],limit=1)
+  with patch.dict("os.environ", {"PESO_MODELO_MERCADO": "0.25"}):
+   selected=core.rank_single_candidates([row],limit=1)
   self.assertEqual(len(selected),1)
   self.assertEqual(selected[0].get("_lado"),"YES")
   self.assertAlmostEqual(selected[0]["Ventaja (edge)"],0.065)
@@ -40,7 +50,8 @@ class CoreTests(unittest.TestCase):
   self.assertEqual(selected[0]["Probabilidad del modelo"],"70.0%")
   self.assertEqual(selected[0]["Probabilidad final"],"47.5%")
   calibrated={**row,"probabilidad_calibrada":"0.60","Precio de compra":"65%"}
-  self.assertEqual(core.rank_single_candidates([calibrated]),[])
+  with patch.dict("os.environ", {"PESO_MODELO_MERCADO": "0.25"}):
+   self.assertEqual(core.rank_single_candidates([calibrated]),[])
 
  def test_legacy_missing_side_is_inferred_only_for_unambiguous_game_and_btts(self):
   game={"ticker":"KXLALIGAGAME-TEST-AWAY","local":"Elche","visita":"Celta","jugada":"Gana Celta",
@@ -98,7 +109,8 @@ class CoreTests(unittest.TestCase):
    {"Ticker":"KXSOCCERTOTAL-2","Probabilidad del modelo":"95%","Precio de compra":"55%","Ventaja (edge)":-0.8,"Apuesta":"Más de 2.5 goles"},
    {"Ticker":"KXSOCCERBTTS-3","Probabilidad del modelo":"85%","Precio de compra":"35%","Ventaja (edge)":-0.8,"Apuesta":"Ambos marcan"},
    {"Ticker":"KXSOCCERCORNERS-4","Probabilidad del modelo":"99%","Precio de compra":"60%","Ventaja (edge)":-0.8,"Apuesta":"4+ corners"}]
-  high,value=core.rank_market_candidates(rows,0.65)
+  with patch.dict("os.environ", {"PESO_MODELO_MERCADO": "0.25"}):
+   high,value=core.rank_market_candidates(rows,0.65)
   self.assertEqual(len(high),2); self.assertEqual(len(value),3)
   self.assertEqual(high[0]["Apuesta"],"Más de 1.5 goles")
   self.assertGreater(float(high[0]["Ventaja (edge)"]),0)
@@ -259,7 +271,8 @@ class CoreTests(unittest.TestCase):
    {"Ticker":"KXGOALS-TOTAL-OVER35","Apuesta sencilla":"Más de 3.5 goles","Categoría resumen":"Goles totales","Probabilidad del modelo":"60%","Precio de compra":"45%","Ventaja (edge)":0.15,"line":"3.5"},
    {"Ticker":"KXPRICE-HIGH","Apuesta sencilla":"Gana local","Categoría resumen":"Resultado","Probabilidad del modelo":"95%","Precio de compra":"91%","Ventaja (edge)":0.04},
   ]
-  selected=core.rank_single_candidates(rows)
+  with patch.dict("os.environ", {"PESO_MODELO_MERCADO": "0.25"}):
+   selected=core.rank_single_candidates(rows)
   tickers=[x["Ticker"] for x in selected]
   self.assertNotIn("KXGOALS-TOTAL-OVER05",tickers)
   self.assertNotIn("KXPRICE-HIGH",tickers)
@@ -314,7 +327,8 @@ class CoreTests(unittest.TestCase):
    {"Ticker":"KXBTTS-AFFORDABLE","Apuesta":"Ambos equipos marcan","Probabilidad del modelo":"85%","Precio de compra":"60%","Ventaja (edge)":-0.50},
    {"Ticker":"KXGOALS-NO-PRICE","Apuesta":"Más de 2.5 goles","Probabilidad del modelo":"80%","Precio de compra":"—","Ventaja (edge)":0.50},
   ]
-  high,value=core.rank_market_candidates(rows,min_probability=0.65)
+  with patch.dict("os.environ", {"PESO_MODELO_MERCADO": "0.25"}):
+   high,value=core.rank_market_candidates(rows,min_probability=0.65)
   self.assertEqual([x["Ticker"] for x in high],["KXBTTS-AFFORDABLE"])
   self.assertEqual([x["Ticker"] for x in value],["KXBTTS-AFFORDABLE"])
  def test_market_ranking_uses_calibrated_probability_and_rejects_extreme_edge(self):
@@ -322,7 +336,8 @@ class CoreTests(unittest.TestCase):
    {"Ticker":"KXGAME-CAL","Apuesta":"Gana local","Probabilidad del modelo":"90%","probabilidad_calibrada":"60%","Precio de compra":"30%"},
    {"Ticker":"KXGAME-EXTREME","Apuesta":"Gana visitante","Probabilidad del modelo":"90%","Precio de compra":"80%"},
   ]
-  high,value=core.rank_market_candidates(rows,min_probability=0.35)
+  with patch.dict("os.environ", {"PESO_MODELO_MERCADO": "0.25"}):
+   high,value=core.rank_market_candidates(rows,min_probability=0.35)
   self.assertEqual([x["Ticker"] for x in high],["KXGAME-CAL"])
   self.assertEqual([x["Ticker"] for x in value],["KXGAME-CAL"])
 
