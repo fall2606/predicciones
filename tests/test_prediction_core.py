@@ -87,11 +87,13 @@ class CoreTests(unittest.TestCase):
    # A duplicate capture for the same event/series/side must not inflate n.
    with p.open("a",newline="",encoding="utf-8") as f:
     w=csv.DictWriter(f,fieldnames=["prediction_id","ticker","categoria","probabilidad_calibrada","precio","match_id"]); w.writerow({"prediction_id":"p0-duplicate","ticker":"KXMLBGAME-EVENT0","categoria":"Ganador","probabilidad_calibrada":"0.90","precio":"0.50","match_id":"m0"})
+    w.writerow({"prediction_id":"orphan","ticker":"KXMLBGAME-ORPHAN","categoria":"Ganador","probabilidad_calibrada":"0.90","precio":"0.50","match_id":""})
    with r.open("w",newline="",encoding="utf-8") as f:
     w=csv.DictWriter(f,fieldnames=["prediction_id","estado","resuelto_en"]); w.writeheader()
     for i in range(100):
      w.writerow({"prediction_id":f"p{i}","estado":"WIN","resuelto_en":f"2026-10-{(i%28)+1:02d}T00:00:00Z"})
     w.writerow({"prediction_id":"p0-duplicate","estado":"WIN","resuelto_en":"2026-10-28T00:00:00Z"})
+    w.writerow({"prediction_id":"orphan","estado":"WIN","resuelto_en":"2026-10-28T00:00:00Z"})
    candidate={"Ticker":"KXMLBGAME-CURRENT","Categoría resumen":"Ganador","Probabilidad del modelo":"90%","Precio de compra":"55¢"}
    gate=core.evaluate_market_recommendation(candidate,predictions_path=p,results_path=r,min_samples=100)
    self.assertTrue(gate["eligible"],gate)
