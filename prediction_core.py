@@ -595,8 +595,7 @@ def _probability(row):
 
 def _anchor_market_row(source):
     row = dict(source)
-    if valid_probability(row.get("probabilidad_final")) is not None:
-        return row
+    # Recompute after calibration changes the model estimate; never reuse a stale final.
     model_p = _base_probability(row)
     price = _candidate_price(row)
     final = anchor_probability_to_market(model_p, price)
@@ -857,7 +856,7 @@ def rank_single_candidates(rows, *, price_max=None, min_edge=None, review_edge=N
         row["Ventaja (edge)"] = round(row["_single_edge"], 6)
         model_p = _base_probability(row)
         row["Probabilidad base"] = model_p if model_p is not None else ""
-        row["Precio de compra"] = f"{row['_single_price']:.0%}"
+        row["Precio de compra"] = f"{round(row['_single_price'] * 100)}¢"
         row["Probabilidad del modelo"] = f"{model_p:.1%}" if model_p is not None else "—"
         row["Probabilidad final"] = f"{row['_single_p']:.1%}"
         row["probabilidad_final"] = row["_single_p"]
