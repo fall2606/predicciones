@@ -42,6 +42,15 @@ class ReconciliationStatusTests(unittest.TestCase):
         self.assertEqual(result["cuenta_alerta"], "SI")
         self.assertIn("sin ticker", result["motivo"])
 
+    def test_overdue_prediction_without_ticker_and_fixture_feed_is_alerted(self):
+        past = (datetime.now(timezone.utc) - timedelta(hours=8)).isoformat()
+        row = {"prediction_id":"no-ticker-no-feed","match_id":"missing-feed-id","fecha":past,
+               "ticker":"—","local":"A","visita":"B"}
+        result = _row_report("LaLiga", row, {}, {}, "football")
+        self.assertEqual(result["clasificacion"], "PENDIENTE_ACTIVA")
+        self.assertEqual(result["cuenta_alerta"], "SI")
+        self.assertIn("sin ticker", result["motivo"])
+
     @patch("scripts.auditar_reconciliacion.kalshi_market")
     def test_kalshi_settled_but_result_not_registered_is_alerted(self, market):
         past = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
