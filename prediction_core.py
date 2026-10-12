@@ -1,6 +1,6 @@
 """Shared Kalshi capture/settlement primitives: immutable pre-kickoff writes and official settlement."""
 from __future__ import annotations
-import csv, math, os, re, time
+import csv, json, math, os, re, time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
@@ -555,41 +555,101 @@ def _base_probability(row):
     return None
 
 
-def _market_has_chronological_evidence(category, min_samples=None):
-    """Require explicit out-of-time evidence before increasing a market's model weight.
+_MARKET_BACKTEST_CACHE = {}
 
-    Ordinary descriptive Brier summaries are deliberately insufficient: the report
-    must mark the market as chronologically validated, meet the configurable sample
-    minimum, and beat the contemporaneous Kalshi price on Brier score.
-    """
-    report = Path(os.getenv("BACKTEST_MERCADO_PATH", "backtest_mlb_resumen.csv"))
+
+def _market_has_chronological_evidence(category, ticker=None, min_samples=None):
+    """Only increase the weight when the paired chronological backtest validates it."""
     try:
         minimum = int(min_samples if min_samples is not None else os.getenv("MUESTRA_MINIMA_BACKTEST", "100"))
     except (TypeError, ValueError, OverflowError):
         minimum = 100
-    if minimum < 1:
-        minimum = 100
-    target = re.sub(r"\s+", " ", str(category or "").strip()).casefold()
-    if not target or not report.exists():
+    minimum = max(1, minimum)
+    target = re.sub(r"\\s+", " ", str(category or "").strip()).casefold()
+    if not target:
+        return False
+    ticker_text = str(ticker or "").strip().upper()
+    # The committed backtest currently validates LaLiga only. Other sports remain
+    # at the market-dominant base weight until their own paired temporal backtest exists.
+    if ticker_text and not ticker_text.startswith("KXLALIGA"):
+        return False
+
+    # Test/operator override: only accept an explicitly marked chronological CSV row.
+    explicit_csv = str(os.getenv("BACKTEST_MERCADO_PATH", "")).strip()
+    if explicit_csv:
+        report = Path(explicit_csv)
+        if not report.exists():
+            return False
+        try:
+            with report.open(newline="", encoding="utf-8-sig") as f:
+                for row in csv.DictReader(f):
+                    name = re.sub(r"\\s+", " ", str(row.get("tipo_mercado", row.get("mercado", ""))).strip()).casefold()
+                    if name != target:
+                        continue
+                    try:
+                        n = int(float(row.get("n_resueltos", row.get("n", 0))))
+                        model_brier = float(row.get("brier_modelo", "nan"))
+                        market_brier = float(row.get("brier_precio_kalshi", "nan"))
+                    except (TypeError, ValueError, OverflowError):
+                        return False
+                    temporal = str(row.get("validacion_cronologica", "")).strip().casefold() in {"1", "true", "yes", "sí", "si", "validado"}
+                    return temporal and n >= minimum and math.isfinite(model_brier) and math.isfinite(market_brier) and model_brier < market_brier
+        except (OSError, csv.Error):
+            return False
+        return False
+
+    root = Path(__file__).resolve().parent
+    report_json = Path(os.getenv("BACKTEST_MERCADO_JSON_PATH", str(root / "backtest_probabilidades_mercado.json")))
+    report = None
+    if report_json.exists():
+        try:
+            report = json.loads(report_json.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            report = None
+    if report is None:
+        predictions_path = root / "predicciones_laliga.csv"
+        results_path = root / "resultados_laliga.csv"
+        try:
+            cache_key = (
+                predictions_path.stat().st_mtime_ns, predictions_path.stat().st_size,
+                results_path.stat().st_mtime_ns, results_path.stat().st_size,
+            )
+        except OSError:
+            return False
+        report = _MARKET_BACKTEST_CACHE.get(cache_key)
+        if report is None:
+            try:
+                from scripts.backtest_probabilidades_mercado import build_backtest
+                report = build_backtest(read_rows(predictions_path), read_rows(results_path))
+                _MARKET_BACKTEST_CACHE.clear()
+                _MARKET_BACKTEST_CACHE[cache_key] = report
+            except (ImportError, OSError, ValueError, TypeError):
+                return False
+
+    method = str(report.get("method", ""))
+    if "captura anterior al inicio" not in method.casefold():
+        return False
+    categories = report.get("categories", {})
+    item = categories.get(target)
+    if not isinstance(item, dict):
         return False
     try:
-        with report.open(newline="", encoding="utf-8-sig") as f:
-            rows = csv.DictReader(f)
-            for row in rows:
-                name = re.sub(r"\s+", " ", str(row.get("tipo_mercado", row.get("mercado", ""))).strip()).casefold()
-                if name != target:
-                    continue
-                try:
-                    n = int(float(row.get("n_resueltos", row.get("n", 0))))
-                    model_brier = float(row.get("brier_modelo", "nan"))
-                    market_brier = float(row.get("brier_precio_kalshi", "nan"))
-                except (TypeError, ValueError, OverflowError):
-                    return False
-                temporal = str(row.get("validacion_cronologica", "")).strip().casefold() in {"1", "true", "yes", "sí", "si", "validado"}
-                return temporal and n >= minimum and math.isfinite(model_brier) and math.isfinite(market_brier) and model_brier < market_brier
-    except (OSError, csv.Error):
+        n = int(item.get("n", 0))
+        model_brier = float(item.get("brier_model", "nan"))
+        market_brier = float(item.get("brier_price", "nan"))
+        blend_brier = float(item.get("brier_blend_25pct", "nan"))
+    except (TypeError, ValueError, OverflowError):
         return False
-    return False
+    return (
+        n >= minimum
+        and bool(item.get("model_beats_price"))
+        and bool(item.get("blend_25pct_beats_price"))
+        and math.isfinite(model_brier)
+        and math.isfinite(market_brier)
+        and math.isfinite(blend_brier)
+        and model_brier < market_brier
+        and blend_brier < market_brier
+    )
 
 
 def _market_model_weight(category=None, ticker=None):
@@ -606,7 +666,7 @@ def _market_model_weight(category=None, ticker=None):
         r"^(SENCILLAS|ALTA_PROBABILIDAD|A_TENER_EN_CUENTA)\s*[·|:-]\s*",
         "", str(category or "").strip(), flags=re.I,
     )
-    if _market_has_chronological_evidence(market):
+    if _market_has_chronological_evidence(market, ticker=ticker):
         try:
             validated_weight = float(os.getenv("PESO_MODELO_MERCADO_VALIDADO", "0.25"))
         except (TypeError, ValueError, OverflowError):
