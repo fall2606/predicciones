@@ -34,6 +34,22 @@ class FootballMatchUtilsTests(unittest.TestCase):
         self.assertEqual(merged[0]["status"], "FINISHED")
         self.assertEqual(merged[0]["score"]["fullTime"], {"home": 2, "away": 0})
 
+    def test_espn_final_status_is_never_upcoming(self):
+        match = {"id": 8, "status": "STATUS_FINAL", "utcDate": "2026-10-13T18:00:00Z"}
+        self.assertFalse(is_upcoming_match(match))
+
+    def test_champions_league_reconciliation_alias_promotes_final(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "reconciliacion_pendientes.csv"
+            with path.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=["deporte", "match_id", "estado_partido"])
+                writer.writeheader()
+                writer.writerow({"deporte": "UEFA Champions League", "match_id": "77", "estado_partido": "STATUS_FINAL"})
+            matches = [{"id": 77, "status": "TIMED", "utcDate": "2026-10-15T18:00:00Z"}]
+            fixed = apply_reconciliation_statuses(matches, path, "Champions")
+            self.assertEqual(fixed[0]["status"], "FINISHED")
+            self.assertFalse(is_upcoming_match(fixed[0]))
+
     def test_reconciliation_promotes_stale_calendar_status(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "reconciliacion_pendientes.csv"
