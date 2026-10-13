@@ -6,16 +6,46 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Mapping, Any
 
-FINAL = {"FINISHED", "AWARDED", "FINAL", "COMPLETED"}
-CANCELLED = {"CANCELLED", "CANCELED", "POSTPONED"}
-SUSPENDED = {"SUSPENDED"}
-LIVE = {"IN_PLAY", "PAUSED", "LIVE", "INPLAY"}
-SCHEDULED = {"SCHEDULED", "TIMED"}
+FINAL = {"FINISHED", "AWARDED", "FINAL", "COMPLETED", "STATUS_FINAL"}
+CANCELLED = {"CANCELLED", "CANCELED", "POSTPONED", "STATUS_POSTPONED", "STATUS_CANCELED", "STATUS_CANCELLED"}
+SUSPENDED = {"SUSPENDED", "STATUS_SUSPENDED"}
+LIVE = {"IN_PLAY", "INPLAY", "PAUSED", "LIVE", "STATUS_IN_PROGRESS", "IN_PROGRESS", "STATUS_HALFTIME"}
+SCHEDULED = {"SCHEDULED", "TIMED", "STATUS_SCHEDULED", "NOT_STARTED", "STATUS_NOT_STARTED"}
 TERMINAL = FINAL | CANCELLED | SUSPENDED
 
 
 def _status(match: Mapping[str, Any]) -> str:
-    return str(match.get("status") or "").strip().upper()
+    status = str(match.get("status") or match.get("status_detail") or "").strip().upper()
+    # Feeds from football-data, ESPN and Kalshi-backed reconciliation use different
+    # terminal labels. Canonicalize before deciding whether a fixture is upcoming.
+    aliases = {
+        "STATUS_FINAL": "FINISHED",
+        "STATUS_POSTPONED": "POSTPONED",
+        "STATUS_CANCELED": "CANCELLED",
+        "STATUS_CANCELLED": "CANCELLED",
+        "STATUS_SUSPENDED": "SUSPENDED",
+        "STATUS_SCHEDULED": "SCHEDULED",
+        "STATUS_NOT_STARTED": "SCHEDULED",
+        "NOT_STARTED": "SCHEDULED",
+        "STATUS_IN_PROGRESS": "IN_PLAY",
+        "IN_PROGRESS": "IN_PLAY",
+        "STATUS_HALFTIME": "PAUSED",
+    }
+    return aliases.get(status, status)
+
+
+def _sport_key(value: Any) -> str:
+    key = " ".join(str(value or "").casefold().replace("_", " ").replace("-", " ").split())
+    aliases = {
+        "champions league": "champions",
+        "uefa champions league": "champions",
+        "ucl": "champions",
+        "champions": "champions",
+        "laliga": "laliga",
+        "la liga": "laliga",
+        "premier league": "premier league",
+    }
+    return aliases.get(key, key)
 
 
 def _rank(match: Mapping[str, Any]) -> int:
@@ -71,7 +101,7 @@ def apply_reconciliation_statuses(
         try:
             with path.open("r", encoding="utf-8-sig", newline="") as handle:
                 for row in csv.DictReader(handle):
-                    if str(row.get("deporte", "")).strip().casefold() != sport.casefold():
+                    if _sport_key(row.get("deporte", "")) != _sport_key(sport):
                         continue
                     match_id = str(row.get("match_id", "")).strip()
                     state = str(row.get("estado_partido", "")).strip().upper()
