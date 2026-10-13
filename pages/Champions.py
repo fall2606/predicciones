@@ -270,42 +270,54 @@ elif partido_cerrado:
     st.caption("No hay una captura previa guardada para este encuentro cerrado; no se inventa una predicción retrospectiva.")
 else:
     st.caption("Estimación en vivo. La captura automática se guarda cada dos horas; la hora de la última captura se muestra cuando esté disponible.")
-# Preserve one real candidate for a transparent NO BET / NO DATA explanation
-# when every candidate fails the recommendation filter. Never pad the list.
+# Historical fixtures are never ranked as live recommendations. Keep their
+# captured outcomes visible in audit even when a stale ask/edge fails today's gate.
 candidatos_para_diagnostico = list(resumen_sencillo_kalshi or top_kalshi or todas_kalshi or [])
 candidatos_para_diagnostico.sort(key=lambda fila: (
     str(fila.get("Ticker", fila.get("ticker", ""))),
     str(fila.get("Apuesta sencilla", fila.get("Apuesta", ""))),
 ))
-# Salvaguarda también las capturas históricas: las sencillas siempre respetan el filtro de valor.
-resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=5)
-if resumen_sencillo_kalshi:
-    mostrar_tarjetas_mercado(
-        resumen_sencillo_kalshi,
-        titulo="Contratos del partido seleccionado · veredicto sujeto a muestra, Brier y ask",
-        limite=5,
-    )
+
+if partido_cerrado:
+    st.info("Partido cerrado: no se muestran recomendaciones actuales ni se recalculan apuestas retrospectivas.")
     if resumen_archivado:
         historial_partido = historial_guardado(partido["id"], predicciones_guardadas, resultados_guardados)
-        if not historial_partido.empty and partido_cerrado:
+        if not historial_partido.empty:
             if estado_partido in {"CANCELLED", "CANCELED", "POSTPONED"}:
                 historial_partido["Resultado"] = "ANULADA"
             else:
                 _estado_historial = historial_partido["Resultado"].astype(str).str.upper()
                 _terminal_historial = _estado_historial.str.contains("WIN|LOSS|ANULADA", regex=True)
-                historial_partido.loc[~_terminal_historial, "Resultado"] = "sin datos para liquidar · mercado sin fuente compatible"
-        with st.expander(f"Auditoría · capturas guardadas ({len(historial_partido)})"):
-            st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
+                historial_partido.loc[~_terminal_historial, "Resultado"] = "PENDIENTE"
+            with st.expander(f"Auditoría · pronósticos archivados y resultados ({len(historial_partido)})", expanded=False):
+                st.dataframe(_tabla_con_resultado(historial_partido), use_container_width=True, hide_index=True)
+    else:
+        st.info("No existe una captura prepartido guardada para este encuentro; no se inventa una predicción retrospectiva.")
+elif resumen_sencillo_kalshi:
+    resumen_sencillo_kalshi = rank_single_candidates(resumen_sencillo_kalshi, limit=5)
+    if resumen_sencillo_kalshi:
+        mostrar_tarjetas_mercado(
+            resumen_sencillo_kalshi,
+            titulo="Contratos del partido seleccionado · veredicto sujeto a muestra, Brier y ask",
+            limite=5,
+        )
+    elif candidatos_para_diagnostico:
+        st.info("Hoy no hay recomendaciones para este partido. Esta tarjeta explica el primer mercado real evaluado; no es una apuesta recomendada.")
+        mostrar_tarjetas_mercado(
+            [candidatos_para_diagnostico[0]],
+            titulo="Mercado evaluado · motivo de descarte",
+            limite=1,
+        )
+    else:
+        st.info("Hoy no hay recomendaciones: no encontré un mercado con precio de compra válido y ventaja neta suficiente.")
 else:
-    if not partido_cerrado and candidatos_para_diagnostico:
+    if candidatos_para_diagnostico:
         st.info("Hoy no hay recomendaciones para este partido. Muestro solo un mercado real evaluado para explicar por qué no pasa el filtro; no es una apuesta recomendada.")
         mostrar_tarjetas_mercado(
             [candidatos_para_diagnostico[0]],
-            titulo="Mercado evaluado · sin recomendación si faltan ask vigente, muestra o Brier favorable",
+            titulo="Mercado evaluado · motivo de descarte",
             limite=1,
         )
-    elif partido_cerrado:
-        st.info("No hay una captura previa ejecutable para este encuentro cerrado; revisa Auditoría. No se inventa una predicción retrospectiva.")
     else:
         st.info("Hoy no hay recomendaciones: no encontré un mercado con precio de compra válido y ventaja neta suficiente.")
 
