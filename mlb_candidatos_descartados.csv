@@ -1,4 +1,12 @@
 match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,precio,edge,motivo
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-TBFPERALTA51-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-TBFPERALTA51-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-CLEPMESSICK77-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-CLEPMESSICK77-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-CLEPMESSICK77-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT132000CLETB,KXMLBERA-26OCT132000CLETB-CLEPMESSICK77-4,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBERA-26OCT142000MILLAD,KXMLBERA-26OCT142000MILLAD-MILRGASSER54-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBERA-26OCT142000MILLAD,KXMLBERA-26OCT142000MILLAD-MILRGASSER54-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBERA-26OCT142000MILLAD,KXMLBERA-26OCT142000MILLAD-MILRGASSER54-3,,Props de jugador,,,,sin_modelo_especifico
@@ -8,14 +16,45 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849818,Cleveland Guardians,Tampa Bay Rays,KXMLBEXTRAS-26OCT151800TBCLE,KXMLBEXTRAS-26OCT151800TBCLE-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
 849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBEXTRAS-26OCT152000MILLAD,KXMLBEXTRAS-26OCT152000MILLAD-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBEXTRAS-26OCT161800TBCLE,KXMLBEXTRAS-26OCT161800TBCLE-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT132000CLETB,KXMLBF3-26OCT132000CLETB-TIE,,Entradas parciales,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT132000CLETB,KXMLBF5-26OCT132000CLETB-TIE,,Entradas parciales,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT132000CLETB,KXMLBF7-26OCT132000CLETB-TIE,,Entradas parciales,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-TBFPERALTA51-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-TBFPERALTA51-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-TBFPERALTA51-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-CLEPMESSICK77-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-CLEPMESSICK77-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-CLEPMESSICK77-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-CLEPMESSICK77-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT132000CLETB,KXMLBHA-26OCT132000CLETB-CLEPMESSICK77-6,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHA-26OCT142000MILLAD,KXMLBHA-26OCT142000MILLAD-MILRGASSER54-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHA-26OCT142000MILLAD,KXMLBHA-26OCT142000MILLAD-MILRGASSER54-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHA-26OCT142000MILLAD,KXMLBHA-26OCT142000MILLAD-MILRGASSER54-3,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHA-26OCT142000MILLAD,KXMLBHA-26OCT142000MILLAD-MILRGASSER54-4,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHA-26OCT142000MILLAD,KXMLBHA-26OCT142000MILLAD-MILRGASSER54-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEJADELL7-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-CLEJRAMREZ11-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT132000CLETB,KXMLBHIT-26OCT132000CLETB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-LADAPAGES44-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-LADAPAGES44-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-LADAPAGES44-3,,Props de jugador,,,,sin_modelo_especifico
@@ -29,6 +68,27 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-LADSOHTANI17-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-LADSOHTANI17-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-LADSOHTANI17-3,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILBTURANG2-2,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILBTURANG2-3,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILJCHOURIO11-3,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILJCHOURIO11-4,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHIT-26OCT142000MILLAD,KXMLBHIT-26OCT142000MILLAD-MILWCONTRERAS24-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT132000CLETB,KXMLBHR-26OCT132000CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-LADAPAGES44-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-LADAPAGES44-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-LADFFREEMAN5-1,,Props de jugador,,,,sin_modelo_especifico
@@ -37,6 +97,40 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-LADMBETTS50-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-LADSOHTANI17-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-LADSOHTANI17-2,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHR-26OCT142000MILLAD,KXMLBHR-26OCT142000MILLAD-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEBROCCHIO4-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJADELL7-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJADELL7-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJADELL7-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJRAMREZ11-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJRAMREZ11-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-CLEJRAMREZ11-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJARANDA8-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJARANDA8-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJCAMINERO13-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBJCAMINERO13-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT132000CLETB,KXMLBHRR-26OCT132000CLETB-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHRR-26OCT142000MILLAD,KXMLBHRR-26OCT142000MILLAD-LADAPAGES44-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHRR-26OCT142000MILLAD,KXMLBHRR-26OCT142000MILLAD-LADAPAGES44-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBHRR-26OCT142000MILLAD,KXMLBHRR-26OCT142000MILLAD-LADAPAGES44-3,,Props de jugador,,,,sin_modelo_especifico
@@ -81,6 +175,19 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-9,KXMLBINNINGWIN-26OCT132000CLETB-9-CLE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
 849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-9,KXMLBINNINGWIN-26OCT132000CLETB-9-TB,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
 849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-9,KXMLBINNINGWIN-26OCT132000CLETB-9-TIE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-TBFPERALTA51-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-TBFPERALTA51-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-TBFPERALTA51-6,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-TBFPERALTA51-7,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-6,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-7,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-8,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT132000CLETB,KXMLBKS-26OCT132000CLETB-CLEPMESSICK77-9,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBKS-26OCT142000MILLAD,KXMLBKS-26OCT142000MILLAD-MILRGASSER54-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBKS-26OCT142000MILLAD,KXMLBKS-26OCT142000MILLAD-MILRGASSER54-3,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBKS-26OCT142000MILLAD,KXMLBKS-26OCT142000MILLAD-MILRGASSER54-4,,Props de jugador,,,,sin_modelo_especifico
@@ -88,7 +195,22 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBKS-26OCT142000MILLAD,KXMLBKS-26OCT142000MILLAD-MILRGASSER54-6,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBKS-26OCT142000MILLAD,KXMLBKS-26OCT142000MILLAD-MILRGASSER54-7,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBKS-26OCT142000MILLAD,KXMLBKS-26OCT142000MILLAD-MILRGASSER54-8,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBOUTS-26OCT132000CLETB,KXMLBOUTS-26OCT132000CLETB-TBFPERALTA51-14,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBOUTS-26OCT132000CLETB,KXMLBOUTS-26OCT132000CLETB-CLEPMESSICK77-15,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBOUTS-26OCT142000MILLAD,KXMLBOUTS-26OCT142000MILLAD-MILRGASSER54-12,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT132000CLETB,KXMLBRBI-26OCT132000CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRBI-26OCT142000MILLAD,KXMLBRBI-26OCT142000MILLAD-LADAPAGES44-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRBI-26OCT142000MILLAD,KXMLBRBI-26OCT142000MILLAD-LADAPAGES44-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRBI-26OCT142000MILLAD,KXMLBRBI-26OCT142000MILLAD-LADFFREEMAN5-1,,Props de jugador,,,,sin_modelo_especifico
@@ -97,12 +219,43 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRBI-26OCT142000MILLAD,KXMLBRBI-26OCT142000MILLAD-LADMBETTS50-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRBI-26OCT142000MILLAD,KXMLBRBI-26OCT142000MILLAD-LADSOHTANI17-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRBI-26OCT142000MILLAD,KXMLBRBI-26OCT142000MILLAD-LADSOHTANI17-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT132000CLETB,KXMLBSPREAD-26OCT132000CLETB-TB4,,Run line / margen,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT132000CLETB,KXMLBSPREAD-26OCT132000CLETB-TB3,,Run line / margen,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT132000CLETB,KXMLBSPREAD-26OCT132000CLETB-TB2,,Run line / margen,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT132000CLETB,KXMLBSPREAD-26OCT132000CLETB-CLE2,,Run line / margen,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT132000CLETB,KXMLBSPREAD-26OCT132000CLETB-CLE3,,Run line / margen,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT132000CLETB,KXMLBSPREAD-26OCT132000CLETB-CLE4,,Run line / margen,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSPREAD-26OCT142000MILLAD,KXMLBSPREAD-26OCT142000MILLAD-LAD4,,Run line / margen,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSPREAD-26OCT142000MILLAD,KXMLBSPREAD-26OCT142000MILLAD-LAD3,,Run line / margen,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSPREAD-26OCT142000MILLAD,KXMLBSPREAD-26OCT142000MILLAD-LAD2,,Run line / margen,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSPREAD-26OCT142000MILLAD,KXMLBSPREAD-26OCT142000MILLAD-MIL2,,Run line / margen,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSPREAD-26OCT142000MILLAD,KXMLBSPREAD-26OCT142000MILLAD-MIL3,,Run line / margen,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSPREAD-26OCT142000MILLAD,KXMLBSPREAD-26OCT142000MILLAD-MIL4,,Run line / margen,,,,sin_modelo_especifico
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBSTART-26OCT142000MILLAD-LAD,KXMLBSTART-26OCT142000MILLAD-LAD-SOHTANI17,,Otros mercados MLB,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEBROCCHIO4-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJADELL7-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJADELL7-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJADELL7-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJRAMREZ11-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJRAMREZ11-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-CLEJRAMREZ11-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJARANDA8-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJARANDA8-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJCAMINERO13-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJCAMINERO13-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBJCAMINERO13-6,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT132000CLETB,KXMLBTB-26OCT132000CLETB-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTB-26OCT142000MILLAD,KXMLBTB-26OCT142000MILLAD-LADAPAGES44-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTB-26OCT142000MILLAD,KXMLBTB-26OCT142000MILLAD-LADAPAGES44-3,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTB-26OCT142000MILLAD,KXMLBTB-26OCT142000MILLAD-LADAPAGES44-4,,Props de jugador,,,,sin_modelo_especifico
@@ -120,6 +273,20 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTB-26OCT142000MILLAD,KXMLBTB-26OCT142000MILLAD-LADSOHTANI17-3,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTB-26OCT142000MILLAD,KXMLBTB-26OCT142000MILLAD-LADSOHTANI17-4,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTB-26OCT142000MILLAD,KXMLBTB-26OCT142000MILLAD-LADSOHTANI17-5,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB2,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB3,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB4,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB5,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB6,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB7,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-TB8,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE2,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE3,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE4,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE5,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE6,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE7,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT132000CLETB,KXMLBTEAMTOTAL-26OCT132000CLETB-CLE8,,Total por equipo,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT142000MILLAD,KXMLBTEAMTOTAL-26OCT142000MILLAD-LAD2,,Total por equipo,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT142000MILLAD,KXMLBTEAMTOTAL-26OCT142000MILLAD-LAD3,,Total por equipo,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT142000MILLAD,KXMLBTEAMTOTAL-26OCT142000MILLAD-LAD4,,Total por equipo,,,,sin_modelo_especifico
@@ -134,94 +301,158 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT142000MILLAD,KXMLBTEAMTOTAL-26OCT142000MILLAD-MIL6,,Total por equipo,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT142000MILLAD,KXMLBTEAMTOTAL-26OCT142000MILLAD-MIL7,,Total por equipo,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT142000MILLAD,KXMLBTEAMTOTAL-26OCT142000MILLAD-MIL8,,Total por equipo,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT132000CLETB,KXMLBWA-26OCT132000CLETB-TBFPERALTA51-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT132000CLETB,KXMLBWA-26OCT132000CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT132000CLETB,KXMLBWA-26OCT132000CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT132000CLETB,KXMLBWA-26OCT132000CLETB-CLEPMESSICK77-1,,Props de jugador,,,,sin_modelo_especifico
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT132000CLETB,KXMLBWA-26OCT132000CLETB-CLEPMESSICK77-2,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBWA-26OCT142000MILLAD,KXMLBWA-26OCT142000MILLAD-MILRGASSER54-1,,Props de jugador,,,,sin_modelo_especifico
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBWA-26OCT142000MILLAD,KXMLBWA-26OCT142000MILLAD-MILRGASSER54-2,,Props de jugador,,,,sin_modelo_especifico
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-MIL,YES,Entradas parciales,0.49358227,0.310000,0.173582,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-MIL,NO,Entradas parciales,0.50641773,0.730000,-0.233582,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT132000CLETB,KXMLBF3-26OCT132000CLETB-CLE,YES,Entradas parciales,0.46702623,0.370000,0.087026,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT132000CLETB,KXMLBF3-26OCT132000CLETB-CLE,NO,Entradas parciales,0.53297377,0.650000,-0.127026,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT132000CLETB,KXMLBF3-26OCT132000CLETB-TB,YES,Entradas parciales,0.53297377,0.350000,0.172974,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT132000CLETB,KXMLBF3-26OCT132000CLETB-TB,NO,Entradas parciales,0.46702623,0.660000,-0.202974,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT132000CLETB,KXMLBF5-26OCT132000CLETB-CLE,YES,Entradas parciales,0.45859023,0.400000,0.048590,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT132000CLETB,KXMLBF5-26OCT132000CLETB-CLE,NO,Entradas parciales,0.54140977,0.610000,-0.078590,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT132000CLETB,KXMLBF5-26OCT132000CLETB-TB,YES,Entradas parciales,0.54140977,0.420000,0.111410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT132000CLETB,KXMLBF5-26OCT132000CLETB-TB,NO,Entradas parciales,0.45859023,0.590000,-0.141410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-TB3,YES,Entradas parciales,0.83197293,0.180000,0.641973,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-TB3,NO,Entradas parciales,0.16802707,0.840000,-0.681973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-TB2,YES,Entradas parciales,0.93511831,0.300000,0.625118,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-TB2,NO,Entradas parciales,0.06488169,0.710000,-0.655118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-CLE2,YES,Entradas parciales,0.93511831,0.260000,0.665118,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-CLE2,NO,Entradas parciales,0.06488169,0.750000,-0.695118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-CLE3,YES,Entradas parciales,0.83197293,0.170000,0.651973,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT132000CLETB,KXMLBF5SPREAD-26OCT132000CLETB-CLE3,NO,Entradas parciales,0.16802707,0.840000,-0.681973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-1,YES,Entradas parciales,0.98645606,0.950000,0.026456,precio por encima del máximo
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-1,NO,Entradas parciales,0.01354394,0.080000,-0.076456,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-2,YES,Entradas parciales,0.93511831,0.830000,0.095118,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-2,NO,Entradas parciales,0.06488169,0.190000,-0.135118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-3,YES,Entradas parciales,0.83197293,0.680000,0.141973,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-3,NO,Entradas parciales,0.16802707,0.340000,-0.181973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-4,YES,Entradas parciales,0.68598107,0.520000,0.155981,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-4,NO,Entradas parciales,0.31401893,0.490000,-0.185981,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-5,YES,Entradas parciales,0.52268424,0.390000,0.122684,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-5,NO,Entradas parciales,0.47731576,0.620000,-0.152684,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-6,YES,Entradas parciales,0.36911594,0.290000,0.069116,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-6,NO,Entradas parciales,0.63088406,0.740000,-0.119116,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-7,YES,Entradas parciales,0.24293005,0.190000,0.042930,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT132000CLETB,KXMLBF5TOTAL-26OCT132000CLETB-7,NO,Entradas parciales,0.75706995,0.820000,-0.072930,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT132000CLETB,KXMLBF7-26OCT132000CLETB-CLE,YES,Entradas parciales,0.45275148,0.410000,0.032751,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT132000CLETB,KXMLBF7-26OCT132000CLETB-CLE,NO,Entradas parciales,0.54724852,0.610000,-0.072751,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT132000CLETB,KXMLBF7-26OCT132000CLETB-TB,YES,Entradas parciales,0.54724852,0.450000,0.087249,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT132000CLETB,KXMLBF7-26OCT132000CLETB-TB,NO,Entradas parciales,0.45275148,0.560000,-0.117249,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-CLE,YES,Ganador (moneyline),0.44833208,0.440000,-0.001668,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-CLE,NO,Ganador (moneyline),0.55166792,0.570000,-0.028332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-TB,YES,Ganador (moneyline),0.55166792,0.570000,-0.028332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-TB,NO,Ganador (moneyline),0.44833208,0.440000,-0.001668,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-CLE,YES,Ganador de la 1.ª entrada,0.24555568,0.220000,0.015556,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-CLE,NO,Ganador de la 1.ª entrada,0.75444432,0.820000,-0.075556,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-TB,YES,Ganador de la 1.ª entrada,0.28094725,0.220000,0.050947,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-TB,NO,Ganador de la 1.ª entrada,0.71905275,0.830000,-0.120947,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-TIE,YES,Ganador de la 1.ª entrada,0.47349707,0.590000,-0.126503,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-TIE,NO,Ganador de la 1.ª entrada,0.52650293,0.460000,0.056503,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT132000CLETB,KXMLBRFI-26OCT132000CLETB,YES,1.ª entrada / YRFI-NRFI,0.37458272,0.430000,-0.065417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT132000CLETB,KXMLBRFI-26OCT132000CLETB,NO,1.ª entrada / YRFI-NRFI,0.62541728,0.580000,0.035417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-2,YES,Total de carreras,0.99434243,0.980000,0.004342,precio por encima del máximo
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-2,NO,Total de carreras,0.00565757,0.050000,-0.054342,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-3,YES,Total de carreras,0.97959206,0.940000,0.029592,precio por encima del máximo
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-3,NO,Total de carreras,0.02040794,0.070000,-0.059592,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-4,YES,Total de carreras,0.94780659,0.850000,0.087807,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-4,NO,Total de carreras,0.05219341,0.160000,-0.117807,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-5,YES,Total de carreras,0.89367983,0.780000,0.103680,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-5,NO,Total de carreras,0.10632017,0.240000,-0.143680,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-6,YES,Total de carreras,0.81618775,0.640000,0.166188,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-6,NO,Total de carreras,0.18381225,0.370000,-0.196188,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-7,YES,Total de carreras,0.71925393,0.550000,0.159254,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-7,NO,Total de carreras,0.28074607,0.460000,-0.189254,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-8,YES,Total de carreras,0.61051770,0.420000,0.180518,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-8,NO,Total de carreras,0.38948230,0.590000,-0.210518,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-9,YES,Total de carreras,0.49907210,0.340000,0.149072,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-9,NO,Total de carreras,0.50092790,0.670000,-0.179072,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-10,YES,Total de carreras,0.39324310,0.250000,0.133243,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-10,NO,Total de carreras,0.60675690,0.760000,-0.163243,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-11,YES,Total de carreras,0.29912348,0.210000,0.079123,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-11,NO,Total de carreras,0.70087652,0.810000,-0.119123,ventaja insuficiente
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-12,YES,Total de carreras,0.22005664,0.140000,0.070057,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849813,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT132000CLETB,KXMLBTOTAL-26OCT132000CLETB-12,NO,Total de carreras,0.77994336,0.880000,-0.110057,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-MIL,YES,Entradas parciales,0.49358227,0.320000,0.163582,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-MIL,NO,Entradas parciales,0.50641773,0.710000,-0.213582,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-LAD,YES,Entradas parciales,0.50641773,0.450000,0.046418,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF3-26OCT142000MILLAD,KXMLBF3-26OCT142000MILLAD-LAD,NO,Entradas parciales,0.49358227,0.580000,-0.096418,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-MIL,YES,Entradas parciales,0.49199192,0.330000,0.151992,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-MIL,NO,Entradas parciales,0.50800808,0.710000,-0.211992,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-LAD,YES,Entradas parciales,0.50800808,0.530000,-0.031992,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-LAD,NO,Entradas parciales,0.49199192,0.970000,-0.488008,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-MIL,YES,Entradas parciales,0.49199192,0.320000,0.161992,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-MIL,NO,Entradas parciales,0.50800808,0.700000,-0.201992,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-LAD,YES,Entradas parciales,0.50800808,0.520000,-0.021992,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5-26OCT142000MILLAD,KXMLBF5-26OCT142000MILLAD-LAD,NO,Entradas parciales,0.49199192,0.500000,-0.018008,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-LAD3,YES,Entradas parciales,0.87553257,0.260000,0.605533,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-LAD3,NO,Entradas parciales,0.12446743,0.780000,-0.665533,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-LAD2,YES,Entradas parciales,0.95484199,0.380000,0.564842,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-LAD3,NO,Entradas parciales,0.12446743,0.770000,-0.655533,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-LAD2,YES,Entradas parciales,0.95484199,0.390000,0.554842,ventaja insuficiente
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-LAD2,NO,Entradas parciales,0.04515801,0.660000,-0.624842,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL2,YES,Entradas parciales,0.95484199,0.210000,0.734842,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL2,NO,Entradas parciales,0.04515801,0.820000,-0.784842,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL3,YES,Entradas parciales,0.87553257,0.130000,0.735533,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL2,YES,Entradas parciales,0.95484199,0.220000,0.724842,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL2,NO,Entradas parciales,0.04515801,0.810000,-0.774842,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL3,YES,Entradas parciales,0.87553257,0.120000,0.745533,ventaja insuficiente
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5SPREAD-26OCT142000MILLAD,KXMLBF5SPREAD-26OCT142000MILLAD-MIL3,NO,Entradas parciales,0.12446743,0.900000,-0.785533,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-1,YES,Entradas parciales,0.99117718,0.970000,0.011177,precio por encima del máximo
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-1,NO,Entradas parciales,0.00882282,0.060000,-0.061177,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-2,YES,Entradas parciales,0.95484199,0.880000,0.064842,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-2,NO,Entradas parciales,0.04515801,0.160000,-0.124842,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-3,YES,Entradas parciales,0.87553257,0.750000,0.115533,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-3,NO,Entradas parciales,0.12446743,0.290000,-0.175533,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-4,YES,Entradas parciales,0.75359303,0.620000,0.123593,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-2,NO,Entradas parciales,0.04515801,0.150000,-0.114842,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-3,YES,Entradas parciales,0.87553257,0.740000,0.125533,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-3,NO,Entradas parciales,0.12446743,0.280000,-0.165533,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-4,YES,Entradas parciales,0.75359303,0.610000,0.133593,ventaja insuficiente
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-4,NO,Entradas parciales,0.24640697,0.420000,-0.183593,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-5,YES,Entradas parciales,0.60544666,0.490000,0.105447,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-5,YES,Entradas parciales,0.60544666,0.470000,0.125447,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-5,NO,Entradas parciales,0.39455334,0.550000,-0.165447,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-6,YES,Entradas parciales,0.45413632,0.370000,0.074136,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-6,NO,Entradas parciales,0.54586368,0.680000,-0.144136,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-7,YES,Entradas parciales,0.31911944,0.280000,0.029119,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-7,NO,Entradas parciales,0.68088056,0.770000,-0.099119,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-MIL,YES,Entradas parciales,0.49090248,0.820000,-0.339098,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-MIL,NO,Entradas parciales,0.50909752,0.910000,-0.410902,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-LAD,YES,Entradas parciales,0.50909752,0.780000,-0.280902,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-LAD,NO,Entradas parciales,0.49090248,0.910000,-0.429098,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-6,YES,Entradas parciales,0.45413632,0.350000,0.094136,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-6,NO,Entradas parciales,0.54586368,0.670000,-0.134136,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-7,YES,Entradas parciales,0.31911944,0.250000,0.059119,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF5TOTAL-26OCT142000MILLAD,KXMLBF5TOTAL-26OCT142000MILLAD-7,NO,Entradas parciales,0.68088056,0.760000,-0.089119,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-MIL,YES,Entradas parciales,0.49090248,0.340000,0.140902,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-MIL,NO,Entradas parciales,0.50909752,0.690000,-0.190902,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-LAD,YES,Entradas parciales,0.50909752,0.550000,-0.050902,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBF7-26OCT142000MILLAD,KXMLBF7-26OCT142000MILLAD-LAD,NO,Entradas parciales,0.49090248,0.480000,0.000902,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT142000MILLAD,KXMLBGAME-26OCT142000MILLAD-MIL,YES,Ganador (moneyline),0.49007942,0.390000,0.090079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT142000MILLAD,KXMLBGAME-26OCT142000MILLAD-MIL,NO,Ganador (moneyline),0.50992058,0.620000,-0.120079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT142000MILLAD,KXMLBGAME-26OCT142000MILLAD-LAD,YES,Ganador (moneyline),0.50992058,0.620000,-0.120079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT142000MILLAD,KXMLBGAME-26OCT142000MILLAD-LAD,NO,Ganador (moneyline),0.49007942,0.390000,0.090079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT142000MILLAD,KXMLBRFI-26OCT142000MILLAD,YES,1.ª entrada / YRFI-NRFI,0.33486907,0.470000,-0.145131,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT142000MILLAD,KXMLBRFI-26OCT142000MILLAD,NO,1.ª entrada / YRFI-NRFI,0.66513093,0.540000,0.115131,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT142000MILLAD,KXMLBRFI-26OCT142000MILLAD,YES,1.ª entrada / YRFI-NRFI,0.33486907,0.460000,-0.135131,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT142000MILLAD,KXMLBRFI-26OCT142000MILLAD,NO,1.ª entrada / YRFI-NRFI,0.66513093,0.550000,0.105131,ventaja insuficiente
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-2,YES,Total de carreras,0.99686216,0.990000,-0.003138,precio por encima del máximo
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-2,NO,Total de carreras,0.00313784,0.150000,-0.156862,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-3,YES,Total de carreras,0.98800058,0.970000,0.008001,precio por encima del máximo
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-2,NO,Total de carreras,0.00313784,0.040000,-0.046862,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-3,YES,Total de carreras,0.98800058,0.960000,0.018001,precio por encima del máximo
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-3,NO,Total de carreras,0.01199942,0.060000,-0.058001,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-4,YES,Total de carreras,0.96752393,0.890000,0.067524,precio por encima del máximo
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-4,NO,Total de carreras,0.03247607,0.140000,-0.117524,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-5,YES,Total de carreras,0.93013593,0.820000,0.100136,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-5,NO,Total de carreras,0.06986407,0.200000,-0.140136,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-5,NO,Total de carreras,0.06986407,0.210000,-0.150136,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-6,YES,Total de carreras,0.87274590,0.700000,0.162746,ventaja insuficiente
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-6,NO,Total de carreras,0.12725410,0.310000,-0.192746,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-7,YES,Total de carreras,0.79578287,0.630000,0.155783,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-6,NO,Total de carreras,0.12725410,0.320000,-0.202746,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-7,YES,Total de carreras,0.79578287,0.610000,0.175783,ventaja insuficiente
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-7,NO,Total de carreras,0.20421713,0.400000,-0.205783,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-8,YES,Total de carreras,0.70323263,0.500000,0.193233,ventaja insuficiente
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-8,YES,Total de carreras,0.70323263,0.490000,0.203233,ventaja insuficiente
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-8,NO,Total de carreras,0.29676737,0.520000,-0.233233,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-9,YES,Total de carreras,0.60155358,0.420000,0.171554,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-9,NO,Total de carreras,0.39844642,0.600000,-0.211554,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-10,YES,Total de carreras,0.49806146,0.320000,0.168061,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-10,NO,Total de carreras,0.50193854,0.700000,-0.208061,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-11,YES,Total de carreras,0.39941406,0.240000,0.149414,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-11,NO,Total de carreras,0.60058594,0.790000,-0.199414,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-12,YES,Total de carreras,0.31060208,0.180000,0.120602,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-11,YES,Total de carreras,0.39941406,0.260000,0.129414,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-11,NO,Total de carreras,0.60058594,0.760000,-0.169414,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-12,YES,Total de carreras,0.31060208,0.190000,0.110602,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849811,Los Angeles Dodgers,Milwaukee Brewers,KXMLBTOTAL-26OCT142000MILLAD,KXMLBTOTAL-26OCT142000MILLAD-12,NO,Total de carreras,0.68939792,0.830000,-0.150602,ventaja insuficiente
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-CLE,YES,Ganador (moneyline),0.44833208,0.390000,0.048332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-CLE,NO,Ganador (moneyline),0.55166792,0.630000,-0.088332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-TB,YES,Ganador (moneyline),0.55166792,0.620000,-0.078332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT132000CLETB,KXMLBGAME-26OCT132000CLETB-TB,NO,Ganador (moneyline),0.44833208,0.390000,0.048332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-CLE,YES,Ganador de la 1.ª entrada,0.24555568,0.950000,-0.714444,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-TB,YES,Ganador de la 1.ª entrada,0.28094725,0.950000,-0.679053,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT132000CLETB-1,KXMLBINNINGWIN-26OCT132000CLETB-1-TIE,YES,Ganador de la 1.ª entrada,0.47349707,0.990000,-0.526503,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT132000CLETB,KXMLBRFI-26OCT132000CLETB,YES,1.ª entrada / YRFI-NRFI,0.37458272,0.470000,-0.105417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849813,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT132000CLETB,KXMLBRFI-26OCT132000CLETB,NO,1.ª entrada / YRFI-NRFI,0.62541728,0.570000,0.045417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-TB,YES,Ganador (moneyline),0.50531526,0.500000,-0.004685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-TB,YES,Ganador (moneyline),0.50531526,0.470000,0.025315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-TB,NO,Ganador (moneyline),0.49468474,0.540000,-0.055315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-CLE,YES,Ganador (moneyline),0.49468474,0.520000,-0.035315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-CLE,NO,Ganador (moneyline),0.50531526,0.510000,-0.014685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849818,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT151800TBCLE,KXMLBRFI-26OCT151800TBCLE,YES,1.ª entrada / YRFI-NRFI,0.37514193,0.720000,-0.354858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849818,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT151800TBCLE,KXMLBRFI-26OCT151800TBCLE,NO,1.ª entrada / YRFI-NRFI,0.62485807,0.340000,0.274858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT152000MILLAD,KXMLBGAME-26OCT152000MILLAD-MIL,YES,Ganador (moneyline),0.49007942,0.440000,0.040079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-CLE,YES,Ganador (moneyline),0.49468474,0.540000,-0.055315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849818,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT151800TBCLE,KXMLBGAME-26OCT151800TBCLE-CLE,NO,Ganador (moneyline),0.50531526,0.470000,0.025315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849818,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT151800TBCLE,KXMLBRFI-26OCT151800TBCLE,YES,1.ª entrada / YRFI-NRFI,0.37514193,0.570000,-0.204858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849818,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT151800TBCLE,KXMLBRFI-26OCT151800TBCLE,NO,1.ª entrada / YRFI-NRFI,0.62485807,0.470000,0.144858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT152000MILLAD,KXMLBGAME-26OCT152000MILLAD-MIL,YES,Ganador (moneyline),0.49007942,0.430000,0.050079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT152000MILLAD,KXMLBGAME-26OCT152000MILLAD-MIL,NO,Ganador (moneyline),0.50992058,0.580000,-0.080079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT152000MILLAD,KXMLBGAME-26OCT152000MILLAD-LAD,YES,Ganador (moneyline),0.50992058,0.590000,-0.090079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBGAME-26OCT152000MILLAD,KXMLBGAME-26OCT152000MILLAD-LAD,NO,Ganador (moneyline),0.49007942,0.430000,0.050079,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT152100MILLAD,KXMLBRFI-26OCT152100MILLAD,YES,1.ª entrada / YRFI-NRFI,0.33486907,0.750000,-0.425131,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT152100MILLAD,KXMLBRFI-26OCT152100MILLAD,NO,1.ª entrada / YRFI-NRFI,0.66513093,0.580000,0.075131,ventaja insuficiente
+849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT152100MILLAD,KXMLBRFI-26OCT152100MILLAD,YES,1.ª entrada / YRFI-NRFI,0.33486907,0.590000,-0.265131,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849810,Los Angeles Dodgers,Milwaukee Brewers,KXMLBRFI-26OCT152100MILLAD,KXMLBRFI-26OCT152100MILLAD,NO,1.ª entrada / YRFI-NRFI,0.66513093,0.530000,0.125131,ventaja insuficiente
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT161800TBCLE,KXMLBGAME-26OCT161800TBCLE-TB,YES,Ganador (moneyline),0.50531526,0.550000,-0.054685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT161800TBCLE,KXMLBGAME-26OCT161800TBCLE-TB,NO,Ganador (moneyline),0.49468474,0.480000,0.004685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT161800TBCLE,KXMLBGAME-26OCT161800TBCLE-CLE,YES,Ganador (moneyline),0.49468474,0.490000,-0.005315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT161800TBCLE,KXMLBGAME-26OCT161800TBCLE-CLE,NO,Ganador (moneyline),0.50531526,0.540000,-0.044685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT161800TBCLE,KXMLBRFI-26OCT161800TBCLE,YES,1.ª entrada / YRFI-NRFI,0.37514193,0.740000,-0.374858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT161800TBCLE,KXMLBRFI-26OCT161800TBCLE,NO,1.ª entrada / YRFI-NRFI,0.62485807,0.430000,0.184858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT161800TBCLE,KXMLBGAME-26OCT161800TBCLE-CLE,YES,Ganador (moneyline),0.49468474,0.480000,0.004685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT161800TBCLE,KXMLBGAME-26OCT161800TBCLE-CLE,NO,Ganador (moneyline),0.50531526,0.530000,-0.034685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT161800TBCLE,KXMLBRFI-26OCT161800TBCLE,YES,1.ª entrada / YRFI-NRFI,0.37514193,0.640000,-0.274858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT161800TBCLE,KXMLBRFI-26OCT161800TBCLE,NO,1.ª entrada / YRFI-NRFI,0.62485807,0.560000,0.054858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
