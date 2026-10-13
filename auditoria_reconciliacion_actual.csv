@@ -1,5 +1,7 @@
 deporte,clasificacion,cuenta_alerta,motivo,filas
-Champions,NO_FINALIZADA,NO,partido no finalizado,209
+Champions,LIQUIDADA,NO,resultado registrado: LOSS,35
+Champions,LIQUIDADA,NO,resultado registrado: WIN,48
+Champions,NO_FINALIZADA,NO,partido no finalizado,126
 LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,156
 LaLiga,LIQUIDADA,NO,resultado registrado: WIN,199
 LaLiga,NO_FINALIZADA,NO,partido no finalizado,165
