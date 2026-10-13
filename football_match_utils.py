@@ -104,7 +104,7 @@ def apply_reconciliation_statuses(
                     if _sport_key(row.get("deporte", "")) != _sport_key(sport):
                         continue
                     match_id = str(row.get("match_id", "")).strip()
-                    state = str(row.get("estado_partido", "")).strip().upper()
+                    state = _status({"status": row.get("estado_partido", "")})
                     if match_id and state:
                         statuses.setdefault(match_id, set()).add(state)
         except (OSError, csv.Error, UnicodeError):
@@ -113,6 +113,7 @@ def apply_reconciliation_statuses(
     result = []
     for raw in matches:
         match = dict(raw)
+        match["status"] = _status(match)
         states = statuses.get(str(match.get("id") or "").strip(), set())
         if states & FINAL:
             match["status"] = "FINISHED"
