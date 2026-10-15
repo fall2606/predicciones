@@ -5,7 +5,8 @@ Champions,NO_FINALIZADA,NO,partido no finalizado,39
 LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,156
 LaLiga,LIQUIDADA,NO,resultado registrado: WIN,199
 LaLiga,NO_FINALIZADA,NO,partido no finalizado,165
-LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,12
+LaLiga,PENDIENTE_ACTIVA,SI,partido vencido sin ticker y sin estado oficial verificable; requiere revisar fuente,10
+LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,2
 MLB,HISTORICO_NO_PARTIDO,NO,partido no encontrado,3650
 MLB,LIQUIDADA,NO,resultado registrado: LOSS,37
 MLB,LIQUIDADA,NO,resultado registrado: WIN,40
