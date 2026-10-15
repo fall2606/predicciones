@@ -88,7 +88,7 @@
     "filas_reconciliacion": 532,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
-    "pendientes_activos": 10
+    "pendientes_activos": 0
   },
   {
     "deporte": "Champions League",
@@ -186,24 +186,24 @@
     "archivo_predicciones": "predicciones_mlb.csv",
     "archivo_resultados": "resultados_mlb.csv",
     "capturas": 3741,
-    "filas_resultados": 73,
-    "ids_resultado_terminal_en_archivo": 73,
-    "capturas_con_resultado_terminal": 73,
-    "sin_resultado_terminal": 3668,
+    "filas_resultados": 77,
+    "ids_resultado_terminal_en_archivo": 77,
+    "capturas_con_resultado_terminal": 77,
+    "sin_resultado_terminal": 3664,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3668,
+      "SIN_RESULTADO": 3664,
       "LOSS": 37,
-      "WIN": 36
+      "WIN": 40
     },
-    "n_evaluable": 73,
-    "tasa_acierto": 0.4931506849315068,
-    "probabilidad_media": 0.6873516252054794,
-    "brier": 0.32568268060304356,
-    "log_loss": 0.9131868777119747,
-    "brier_referencia_muestra": 0.2499530868830925,
+    "n_evaluable": 77,
+    "tasa_acierto": 0.5194805194805194,
+    "probabilidad_media": 0.677729318051948,
+    "brier": 0.32166370383610565,
+    "log_loss": 0.9015796958143294,
+    "brier_referencia_muestra": 0.2496205093607691,
     "calibracion_intervalos": [
       {
         "intervalo": "20%-30%",
@@ -219,15 +219,15 @@
       },
       {
         "intervalo": "40%-50%",
-        "n": 11,
-        "probabilidad_media": 0.4526167436363636,
-        "tasa_acierto": 0.45454545454545453
+        "n": 14,
+        "probabilidad_media": 0.46064446000000003,
+        "tasa_acierto": 0.5714285714285714
       },
       {
         "intervalo": "50%-60%",
-        "n": 14,
-        "probabilidad_media": 0.5414694421428571,
-        "tasa_acierto": 0.7142857142857143
+        "n": 15,
+        "probabilidad_media": 0.541254852,
+        "tasa_acierto": 0.7333333333333333
       },
       {
         "intervalo": "60%-70%",
@@ -258,7 +258,7 @@
     "filas_reconciliacion": 3741,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
-    "pendientes_activos": 2
+    "pendientes_activos": 1
   },
   {
     "deporte": "NFL",
