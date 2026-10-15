@@ -88,7 +88,7 @@
     "filas_reconciliacion": 532,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
-    "pendientes_activos": 0
+    "pendientes_activos": 10
   },
   {
     "deporte": "Champions League",
@@ -186,24 +186,24 @@
     "archivo_predicciones": "predicciones_mlb.csv",
     "archivo_resultados": "resultados_mlb.csv",
     "capturas": 3741,
-    "filas_resultados": 71,
-    "ids_resultado_terminal_en_archivo": 71,
-    "capturas_con_resultado_terminal": 71,
-    "sin_resultado_terminal": 3670,
+    "filas_resultados": 73,
+    "ids_resultado_terminal_en_archivo": 73,
+    "capturas_con_resultado_terminal": 73,
+    "sin_resultado_terminal": 3668,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3670,
-      "LOSS": 35,
+      "SIN_RESULTADO": 3668,
+      "LOSS": 37,
       "WIN": 36
     },
-    "n_evaluable": 71,
-    "tasa_acierto": 0.5070422535211268,
-    "probabilidad_media": 0.6879775602816902,
-    "brier": 0.32239489261882887,
-    "log_loss": 0.9080931092144476,
-    "brier_referencia_muestra": 0.24995040666534418,
+    "n_evaluable": 73,
+    "tasa_acierto": 0.4931506849315068,
+    "probabilidad_media": 0.6873516252054794,
+    "brier": 0.32568268060304356,
+    "log_loss": 0.9131868777119747,
+    "brier_referencia_muestra": 0.2499530868830925,
     "calibracion_intervalos": [
       {
         "intervalo": "20%-30%",
@@ -231,9 +231,9 @@
       },
       {
         "intervalo": "60%-70%",
-        "n": 12,
-        "probabilidad_media": 0.6523251458333333,
-        "tasa_acierto": 0.4166666666666667
+        "n": 14,
+        "probabilidad_media": 0.6541545435714287,
+        "tasa_acierto": 0.35714285714285715
       },
       {
         "intervalo": "70%-80%",
