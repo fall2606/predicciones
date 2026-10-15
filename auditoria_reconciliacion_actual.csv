@@ -5,13 +5,12 @@ Champions,NO_FINALIZADA,NO,partido no finalizado,39
 LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,156
 LaLiga,LIQUIDADA,NO,resultado registrado: WIN,199
 LaLiga,NO_FINALIZADA,NO,partido no finalizado,165
-LaLiga,PENDIENTE_ACTIVA,SI,partido vencido sin ticker y sin estado oficial verificable; requiere revisar fuente,10
-LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,2
+LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,12
 MLB,HISTORICO_NO_PARTIDO,NO,partido no encontrado,3650
-MLB,LIQUIDADA,NO,resultado registrado: LOSS,37
+MLB,LIQUIDADA,NO,resultado registrado: LOSS,38
 MLB,LIQUIDADA,NO,resultado registrado: WIN,40
-MLB,NO_FINALIZADA,NO,partido no finalizado,13
-MLB,PENDIENTE_ACTIVA,SI,partido finalizado pero Kalshi aún no liquida (dentro del plazo de 72 h); revisar fuente alternativa,1
+MLB,NO_FINALIZADA,NO,partido no finalizado,10
+MLB,PENDIENTE_ACTIVA,SI,resultado de Kalshi disponible pero no registrado,3
 NFL,HISTORICO_NO_EVALUABLE,NO,Captura de la primera versión no validada; excluida de resultados y calibración,312
 NFL,HISTORICO_NO_EVALUABLE,NO,Captura histórica asociada a una serie de periodo; excluida por el modelo inicial incorrecto,702
 NFL,HISTORICO_NO_EVALUABLE,NO,Contrato de periodo/cuarto no cubierto por el modelo NFL,426
