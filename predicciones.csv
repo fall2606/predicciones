@@ -829,54 +829,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560597,2026-10-12,Coventry City,Newcastle,0.0,,,Más de 12.5 corners totales,0.2409
 560597,2026-10-12,Coventry City,Newcastle,0.0,,,Más de 13.5 corners totales,0.1712
 560597,2026-10-12,Coventry City,Newcastle,0.0,,,Más de 14.5 corners totales,0.1175
-560603,2026-10-17,Everton,Chelsea,,,,Gana local,0.4092
-560603,2026-10-17,Everton,Chelsea,,,,Empate,0.253
-560603,2026-10-17,Everton,Chelsea,,,,Gana visita,0.3378
-560603,2026-10-17,Everton,Chelsea,,,,Ambos marcan,0.5623
-560603,2026-10-17,Everton,Chelsea,,,,Local gana por más de 1.5,0.1972
-560603,2026-10-17,Everton,Chelsea,,,,Visita gana por más de 1.5,0.1485
-560603,2026-10-17,Everton,Chelsea,,,,Local gana por más de 2.5,0.0756
-560603,2026-10-17,Everton,Chelsea,,,,Visita gana por más de 2.5,0.0515
-560603,2026-10-17,Everton,Chelsea,,,,Local gana por más de 3.5,0.0237
-560603,2026-10-17,Everton,Chelsea,,,,Visita gana por más de 3.5,0.0145
-560603,2026-10-17,Everton,Chelsea,,,,Más de 1.5 goles,0.7655
-560603,2026-10-17,Everton,Chelsea,,,,Más de 2.5 goles,0.5257
-560603,2026-10-17,Everton,Chelsea,,,,Más de 3.5 goles,0.3036
-560603,2026-10-17,Everton,Chelsea,,,,Más de 4.5 goles,0.1492
-560603,2026-10-17,Everton,Chelsea,,,,Más de 5.5 goles,0.0634
-560603,2026-10-17,Everton,Chelsea,,,,Local más de 0.5 goles,0.7697
-560603,2026-10-17,Everton,Chelsea,,,,Visita más de 0.5 goles,0.7305
-560603,2026-10-17,Everton,Chelsea,,,,Local más de 1.5 goles,0.4316
-560603,2026-10-17,Everton,Chelsea,,,,Visita más de 1.5 goles,0.3772
-560603,2026-10-17,Everton,Chelsea,,,,Local más de 2.5 goles,0.1833
-560603,2026-10-17,Everton,Chelsea,,,,Visita más de 2.5 goles,0.1455
-560603,2026-10-17,Everton,Chelsea,,,,Local más de 3.5 goles,0.0617
-560603,2026-10-17,Everton,Chelsea,,,,Visita más de 3.5 goles,0.0442
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 0-0,0.0621
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 0-1,0.0814
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 0-2,0.0533
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 0-3,0.0233
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 0-4,0.0076
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 1-0,0.0911
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 1-1,0.1195
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 1-2,0.0783
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 1-3,0.0342
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 1-4,0.0112
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 2-0,0.0669
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 2-1,0.0877
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 2-2,0.0575
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 2-3,0.0251
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 2-4,0.0082
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 3-0,0.0327
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 3-1,0.0429
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 3-2,0.0282
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 3-3,0.0123
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 3-4,0.004
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 4-0,0.012
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 4-1,0.0158
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 4-2,0.0103
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 4-3,0.0045
-560603,2026-10-17,Everton,Chelsea,,,,Marcador 4-4,0.0015
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Gana local,0.4092
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Empate,0.253
+560603,2026-10-17,Everton,Chelsea,1.0,0.0,2.0,Gana visita,0.3378
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Ambos marcan,0.5623
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local gana por más de 1.5,0.1972
+560603,2026-10-17,Everton,Chelsea,1.0,0.0,2.0,Visita gana por más de 1.5,0.1485
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local gana por más de 2.5,0.0756
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Visita gana por más de 2.5,0.0515
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local gana por más de 3.5,0.0237
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Visita gana por más de 3.5,0.0145
+560603,2026-10-17,Everton,Chelsea,1.0,0.0,2.0,Más de 1.5 goles,0.7655
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Más de 2.5 goles,0.5257
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Más de 3.5 goles,0.3036
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Más de 4.5 goles,0.1492
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Más de 5.5 goles,0.0634
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local más de 0.5 goles,0.7697
+560603,2026-10-17,Everton,Chelsea,1.0,0.0,2.0,Visita más de 0.5 goles,0.7305
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local más de 1.5 goles,0.4316
+560603,2026-10-17,Everton,Chelsea,1.0,0.0,2.0,Visita más de 1.5 goles,0.3772
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local más de 2.5 goles,0.1833
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Visita más de 2.5 goles,0.1455
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Local más de 3.5 goles,0.0617
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Visita más de 3.5 goles,0.0442
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 0-0,0.0621
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 0-1,0.0814
+560603,2026-10-17,Everton,Chelsea,1.0,0.0,2.0,Marcador 0-2,0.0533
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 0-3,0.0233
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 0-4,0.0076
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 1-0,0.0911
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 1-1,0.1195
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 1-2,0.0783
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 1-3,0.0342
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 1-4,0.0112
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 2-0,0.0669
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 2-1,0.0877
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 2-2,0.0575
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 2-3,0.0251
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 2-4,0.0082
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 3-0,0.0327
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 3-1,0.0429
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 3-2,0.0282
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 3-3,0.0123
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 3-4,0.004
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 4-0,0.012
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 4-1,0.0158
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 4-2,0.0103
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 4-3,0.0045
+560603,2026-10-17,Everton,Chelsea,0.0,0.0,2.0,Marcador 4-4,0.0015
 560603,2026-10-17,Everton,Chelsea,,,,Primer gol: local,0.4955
 560603,2026-10-17,Everton,Chelsea,,,,Primer gol: visita,0.4425
 560603,2026-10-17,Everton,Chelsea,,,,Primer gol: ninguno,0.0621
@@ -912,54 +912,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560603,2026-10-17,Everton,Chelsea,,,,Más de 12.5 corners totales,0.2256
 560603,2026-10-17,Everton,Chelsea,,,,Más de 13.5 corners totales,0.1587
 560603,2026-10-17,Everton,Chelsea,,,,Más de 14.5 corners totales,0.1078
-560602,2026-10-17,Fulham,Hull City,,,,Gana local,0.3409
-560602,2026-10-17,Fulham,Hull City,,,,Empate,0.2865
-560602,2026-10-17,Fulham,Hull City,,,,Gana visita,0.3726
-560602,2026-10-17,Fulham,Hull City,,,,Ambos marcan,0.4579
-560602,2026-10-17,Fulham,Hull City,,,,Local gana por más de 1.5,0.1359
-560602,2026-10-17,Fulham,Hull City,,,,Visita gana por más de 1.5,0.1557
-560602,2026-10-17,Fulham,Hull City,,,,Local gana por más de 2.5,0.0416
-560602,2026-10-17,Fulham,Hull City,,,,Visita gana por más de 2.5,0.0501
-560602,2026-10-17,Fulham,Hull City,,,,Local gana por más de 3.5,0.0102
-560602,2026-10-17,Fulham,Hull City,,,,Visita gana por más de 3.5,0.0129
-560602,2026-10-17,Fulham,Hull City,,,,Más de 1.5 goles,0.6597
-560602,2026-10-17,Fulham,Hull City,,,,Más de 2.5 goles,0.3932
-560602,2026-10-17,Fulham,Hull City,,,,Más de 3.5 goles,0.1925
-560602,2026-10-17,Fulham,Hull City,,,,Más de 4.5 goles,0.0791
-560602,2026-10-17,Fulham,Hull City,,,,Más de 5.5 goles,0.0279
-560602,2026-10-17,Fulham,Hull City,,,,Local más de 0.5 goles,0.6664
-560602,2026-10-17,Fulham,Hull City,,,,Visita más de 0.5 goles,0.6871
-560602,2026-10-17,Fulham,Hull City,,,,Local más de 1.5 goles,0.3002
-560602,2026-10-17,Fulham,Hull City,,,,Visita más de 1.5 goles,0.3235
-560602,2026-10-17,Fulham,Hull City,,,,Local más de 2.5 goles,0.0992
-560602,2026-10-17,Fulham,Hull City,,,,Visita más de 2.5 goles,0.1123
-560602,2026-10-17,Fulham,Hull City,,,,Local más de 3.5 goles,0.0256
-560602,2026-10-17,Fulham,Hull City,,,,Visita más de 3.5 goles,0.0305
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 0-0,0.1044
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 0-1,0.1213
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 0-2,0.0704
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 0-3,0.0273
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 0-4,0.0079
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 1-0,0.1146
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 1-1,0.1331
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 1-2,0.0773
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 1-3,0.0299
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 1-4,0.0087
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 2-0,0.0629
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 2-1,0.0731
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 2-2,0.0425
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 2-3,0.0164
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 2-4,0.0048
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 3-0,0.023
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 3-1,0.0267
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 3-2,0.0155
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 3-3,0.006
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 3-4,0.0017
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 4-0,0.0063
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 4-1,0.0073
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 4-2,0.0043
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 4-3,0.0017
-560602,2026-10-17,Fulham,Hull City,,,,Marcador 4-4,0.0005
+560602,2026-10-17,Fulham,Hull City,1.0,1.0,0.0,Gana local,0.3409
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Empate,0.2865
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Gana visita,0.3726
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Ambos marcan,0.4579
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Local gana por más de 1.5,0.1359
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita gana por más de 1.5,0.1557
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Local gana por más de 2.5,0.0416
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita gana por más de 2.5,0.0501
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Local gana por más de 3.5,0.0102
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita gana por más de 3.5,0.0129
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Más de 1.5 goles,0.6597
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Más de 2.5 goles,0.3932
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Más de 3.5 goles,0.1925
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Más de 4.5 goles,0.0791
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Más de 5.5 goles,0.0279
+560602,2026-10-17,Fulham,Hull City,1.0,1.0,0.0,Local más de 0.5 goles,0.6664
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita más de 0.5 goles,0.6871
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Local más de 1.5 goles,0.3002
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita más de 1.5 goles,0.3235
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Local más de 2.5 goles,0.0992
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita más de 2.5 goles,0.1123
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Local más de 3.5 goles,0.0256
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Visita más de 3.5 goles,0.0305
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 0-0,0.1044
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 0-1,0.1213
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 0-2,0.0704
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 0-3,0.0273
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 0-4,0.0079
+560602,2026-10-17,Fulham,Hull City,1.0,1.0,0.0,Marcador 1-0,0.1146
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 1-1,0.1331
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 1-2,0.0773
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 1-3,0.0299
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 1-4,0.0087
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 2-0,0.0629
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 2-1,0.0731
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 2-2,0.0425
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 2-3,0.0164
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 2-4,0.0048
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 3-0,0.023
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 3-1,0.0267
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 3-2,0.0155
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 3-3,0.006
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 3-4,0.0017
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 4-0,0.0063
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 4-1,0.0073
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 4-2,0.0043
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 4-3,0.0017
+560602,2026-10-17,Fulham,Hull City,0.0,1.0,0.0,Marcador 4-4,0.0005
 560602,2026-10-17,Fulham,Hull City,,,,Primer gol: local,0.4352
 560602,2026-10-17,Fulham,Hull City,,,,Primer gol: visita,0.4605
 560602,2026-10-17,Fulham,Hull City,,,,Primer gol: ninguno,0.1044
@@ -995,54 +995,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560602,2026-10-17,Fulham,Hull City,,,,Más de 12.5 corners totales,0.2511
 560602,2026-10-17,Fulham,Hull City,,,,Más de 13.5 corners totales,0.1799
 560602,2026-10-17,Fulham,Hull City,,,,Más de 14.5 corners totales,0.1245
-560610,2026-10-17,Man City,Ipswich Town,,,,Gana local,0.7525
-560610,2026-10-17,Man City,Ipswich Town,,,,Empate,0.1464
-560610,2026-10-17,Man City,Ipswich Town,,,,Gana visita,0.1011
-560610,2026-10-17,Man City,Ipswich Town,,,,Ambos marcan,0.5603
-560610,2026-10-17,Man City,Ipswich Town,,,,Local gana por más de 1.5,0.5455
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita gana por más de 1.5,0.0313
-560610,2026-10-17,Man City,Ipswich Town,,,,Local gana por más de 2.5,0.3372
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita gana por más de 2.5,0.0076
-560610,2026-10-17,Man City,Ipswich Town,,,,Local gana por más de 3.5,0.178
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita gana por más de 3.5,0.0015
-560610,2026-10-17,Man City,Ipswich Town,,,,Más de 1.5 goles,0.8776
-560610,2026-10-17,Man City,Ipswich Town,,,,Más de 2.5 goles,0.7032
-560610,2026-10-17,Man City,Ipswich Town,,,,Más de 3.5 goles,0.4919
-560610,2026-10-17,Man City,Ipswich Town,,,,Más de 4.5 goles,0.3
-560610,2026-10-17,Man City,Ipswich Town,,,,Más de 5.5 goles,0.1605
-560610,2026-10-17,Man City,Ipswich Town,,,,Local más de 0.5 goles,0.9339
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita más de 0.5 goles,0.6
-560610,2026-10-17,Man City,Ipswich Town,,,,Local más de 1.5 goles,0.7545
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita más de 1.5 goles,0.2335
-560610,2026-10-17,Man City,Ipswich Town,,,,Local más de 2.5 goles,0.5106
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita más de 2.5 goles,0.0656
-560610,2026-10-17,Man City,Ipswich Town,,,,Local más de 3.5 goles,0.2898
-560610,2026-10-17,Man City,Ipswich Town,,,,Visita más de 3.5 goles,0.0143
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 0-0,0.0264
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 0-1,0.0242
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 0-2,0.0111
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 0-3,0.0034
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 0-4,0.0008
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 1-0,0.0718
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 1-1,0.0658
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 1-2,0.0301
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 1-3,0.0092
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 1-4,0.0021
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 2-0,0.0975
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 2-1,0.0894
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 2-2,0.0409
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 2-3,0.0125
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 2-4,0.0029
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 3-0,0.0884
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 3-1,0.081
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 3-2,0.0371
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 3-3,0.0113
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 3-4,0.0026
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 4-0,0.06
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 4-1,0.055
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 4-2,0.0252
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 4-3,0.0077
-560610,2026-10-17,Man City,Ipswich Town,,,,Marcador 4-4,0.0018
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Gana local,0.7525
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Empate,0.1464
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Gana visita,0.1011
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Ambos marcan,0.5603
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Local gana por más de 1.5,0.5455
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Visita gana por más de 1.5,0.0313
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Local gana por más de 2.5,0.3372
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Visita gana por más de 2.5,0.0076
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Local gana por más de 3.5,0.178
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Visita gana por más de 3.5,0.0015
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Más de 1.5 goles,0.8776
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Más de 2.5 goles,0.7032
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Más de 3.5 goles,0.4919
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Más de 4.5 goles,0.3
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Más de 5.5 goles,0.1605
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Local más de 0.5 goles,0.9339
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Visita más de 0.5 goles,0.6
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Local más de 1.5 goles,0.7545
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Visita más de 1.5 goles,0.2335
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Local más de 2.5 goles,0.5106
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Visita más de 2.5 goles,0.0656
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Local más de 3.5 goles,0.2898
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Visita más de 3.5 goles,0.0143
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 0-0,0.0264
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 0-1,0.0242
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 0-2,0.0111
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 0-3,0.0034
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 0-4,0.0008
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 1-0,0.0718
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 1-1,0.0658
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 1-2,0.0301
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 1-3,0.0092
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 1-4,0.0021
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 2-0,0.0975
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 2-1,0.0894
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 2-2,0.0409
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 2-3,0.0125
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 2-4,0.0029
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 3-0,0.0884
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 3-1,0.081
+560610,2026-10-17,Man City,Ipswich Town,1.0,3.0,2.0,Marcador 3-2,0.0371
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 3-3,0.0113
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 3-4,0.0026
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 4-0,0.06
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 4-1,0.055
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 4-2,0.0252
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 4-3,0.0077
+560610,2026-10-17,Man City,Ipswich Town,0.0,3.0,2.0,Marcador 4-4,0.0018
 560610,2026-10-17,Man City,Ipswich Town,,,,Primer gol: local,0.7281
 560610,2026-10-17,Man City,Ipswich Town,,,,Primer gol: visita,0.2455
 560610,2026-10-17,Man City,Ipswich Town,,,,Primer gol: ninguno,0.0264
@@ -1078,54 +1078,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560610,2026-10-17,Man City,Ipswich Town,,,,Más de 12.5 corners totales,0.2467
 560610,2026-10-17,Man City,Ipswich Town,,,,Más de 13.5 corners totales,0.1772
 560610,2026-10-17,Man City,Ipswich Town,,,,Más de 14.5 corners totales,0.1231
-560611,2026-10-17,Brentford,Liverpool,,,,Gana local,0.4319
-560611,2026-10-17,Brentford,Liverpool,,,,Empate,0.2423
-560611,2026-10-17,Brentford,Liverpool,,,,Gana visita,0.3257
-560611,2026-10-17,Brentford,Liverpool,,,,Ambos marcan,0.5955
-560611,2026-10-17,Brentford,Liverpool,,,,Local gana por más de 1.5,0.2198
-560611,2026-10-17,Brentford,Liverpool,,,,Visita gana por más de 1.5,0.1454
-560611,2026-10-17,Brentford,Liverpool,,,,Local gana por más de 2.5,0.09
-560611,2026-10-17,Brentford,Liverpool,,,,Visita gana por más de 2.5,0.0516
-560611,2026-10-17,Brentford,Liverpool,,,,Local gana por más de 3.5,0.0304
-560611,2026-10-17,Brentford,Liverpool,,,,Visita gana por más de 3.5,0.015
-560611,2026-10-17,Brentford,Liverpool,,,,Más de 1.5 goles,0.7968
-560611,2026-10-17,Brentford,Liverpool,,,,Más de 2.5 goles,0.5707
-560611,2026-10-17,Brentford,Liverpool,,,,Más de 3.5 goles,0.3467
-560611,2026-10-17,Brentford,Liverpool,,,,Más de 4.5 goles,0.1802
-560611,2026-10-17,Brentford,Liverpool,,,,Más de 5.5 goles,0.0812
-560611,2026-10-17,Brentford,Liverpool,,,,Local más de 0.5 goles,0.7995
-560611,2026-10-17,Brentford,Liverpool,,,,Visita más de 0.5 goles,0.7449
-560611,2026-10-17,Brentford,Liverpool,,,,Local más de 1.5 goles,0.4773
-560611,2026-10-17,Brentford,Liverpool,,,,Visita más de 1.5 goles,0.3963
-560611,2026-10-17,Brentford,Liverpool,,,,Local más de 2.5 goles,0.2184
-560611,2026-10-17,Brentford,Liverpool,,,,Visita más de 2.5 goles,0.1583
-560611,2026-10-17,Brentford,Liverpool,,,,Local más de 3.5 goles,0.0798
-560611,2026-10-17,Brentford,Liverpool,,,,Visita más de 3.5 goles,0.05
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 0-0,0.0512
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 0-1,0.0699
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 0-2,0.0477
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 0-3,0.0217
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 0-4,0.0074
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 1-0,0.0822
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 1-1,0.1123
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 1-2,0.0767
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 1-3,0.0349
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 1-4,0.0119
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 2-0,0.0661
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 2-1,0.0902
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 2-2,0.0616
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 2-3,0.0281
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 2-4,0.0096
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 3-0,0.0354
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 3-1,0.0483
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 3-2,0.033
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 3-3,0.015
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 3-4,0.0051
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 4-0,0.0142
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 4-1,0.0194
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 4-2,0.0133
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 4-3,0.006
-560611,2026-10-17,Brentford,Liverpool,,,,Marcador 4-4,0.0021
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Gana local,0.4319
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Empate,0.2423
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Gana visita,0.3257
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Ambos marcan,0.5955
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Local gana por más de 1.5,0.2198
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Visita gana por más de 1.5,0.1454
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Local gana por más de 2.5,0.09
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Visita gana por más de 2.5,0.0516
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Local gana por más de 3.5,0.0304
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Visita gana por más de 3.5,0.015
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Más de 1.5 goles,0.7968
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Más de 2.5 goles,0.5707
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Más de 3.5 goles,0.3467
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Más de 4.5 goles,0.1802
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Más de 5.5 goles,0.0812
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Local más de 0.5 goles,0.7995
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Visita más de 0.5 goles,0.7449
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Local más de 1.5 goles,0.4773
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Visita más de 1.5 goles,0.3963
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Local más de 2.5 goles,0.2184
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Visita más de 2.5 goles,0.1583
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Local más de 3.5 goles,0.0798
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Visita más de 3.5 goles,0.05
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 0-0,0.0512
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 0-1,0.0699
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 0-2,0.0477
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 0-3,0.0217
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 0-4,0.0074
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 1-0,0.0822
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 1-1,0.1123
+560611,2026-10-17,Brentford,Liverpool,1.0,1.0,2.0,Marcador 1-2,0.0767
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 1-3,0.0349
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 1-4,0.0119
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 2-0,0.0661
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 2-1,0.0902
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 2-2,0.0616
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 2-3,0.0281
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 2-4,0.0096
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 3-0,0.0354
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 3-1,0.0483
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 3-2,0.033
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 3-3,0.015
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 3-4,0.0051
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 4-0,0.0142
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 4-1,0.0194
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 4-2,0.0133
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 4-3,0.006
+560611,2026-10-17,Brentford,Liverpool,0.0,1.0,2.0,Marcador 4-4,0.0021
 560611,2026-10-17,Brentford,Liverpool,,,,Primer gol: local,0.5129
 560611,2026-10-17,Brentford,Liverpool,,,,Primer gol: visita,0.436
 560611,2026-10-17,Brentford,Liverpool,,,,Primer gol: ninguno,0.0512
@@ -1659,3 +1659,418 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560606,2026-10-19,Tottenham,Coventry City,,,,Más de 12.5 corners totales,0.2084
 560606,2026-10-19,Tottenham,Coventry City,,,,Más de 13.5 corners totales,0.145
 560606,2026-10-19,Tottenham,Coventry City,,,,Más de 14.5 corners totales,0.0974
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Gana local,0.4184
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Empate,0.2414
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Gana visita,0.3402
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Ambos marcan,0.6039
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local gana por más de 1.5,0.2108
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita gana por más de 1.5,0.1558
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local gana por más de 2.5,0.0855
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita gana por más de 2.5,0.057
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local gana por más de 3.5,0.0286
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita gana por más de 3.5,0.0171
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 1.5 goles,0.8027
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 2.5 goles,0.5796
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 3.5 goles,0.3555
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 4.5 goles,0.1868
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 5.5 goles,0.0852
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local más de 0.5 goles,0.7972
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita más de 0.5 goles,0.7576
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local más de 1.5 goles,0.4736
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita más de 1.5 goles,0.414
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local más de 2.5 goles,0.2154
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita más de 2.5 goles,0.1706
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Local más de 3.5 goles,0.0782
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Visita más de 3.5 goles,0.0557
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 0-0,0.0492
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 0-1,0.0697
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 0-2,0.0494
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 0-3,0.0233
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 0-4,0.0083
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 1-0,0.0785
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 1-1,0.1112
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 1-2,0.0788
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 1-3,0.0372
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 1-4,0.0132
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 2-0,0.0626
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 2-1,0.0887
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 2-2,0.0628
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 2-3,0.0297
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 2-4,0.0105
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 3-0,0.0333
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 3-1,0.0472
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 3-2,0.0334
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 3-3,0.0158
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 3-4,0.0056
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 4-0,0.0133
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 4-1,0.0188
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 4-2,0.0133
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 4-3,0.0063
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Marcador 4-4,0.0022
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Primer gol: local,0.5036
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Primer gol: visita,0.4473
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Primer gol: ninguno,0.0492
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 1+,0.9781
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 1+,0.9851
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 2+,0.9035
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 2+,0.9302
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 3+,0.7689
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 3+,0.8221
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 4+,0.5975
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 4+,0.672
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 5+,0.4245
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 5+,0.5072
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 6+,0.2776
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 6+,0.3546
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 7+,0.1684
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 7+,0.2311
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 8+,0.0956
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 8+,0.1413
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 9+,0.0511
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 9+,0.0815
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 10+,0.0259
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 10+,0.0447
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 11+,0.0125
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 11+,0.0234
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners local: 12+,0.0058
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Corners visita: 12+,0.0117
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 7.5 corners totales,0.6609
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 8.5 corners totales,0.5431
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 9.5 corners totales,0.4269
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 10.5 corners totales,0.3211
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 11.5 corners totales,0.2315
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 12.5 corners totales,0.1602
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 13.5 corners totales,0.1066
+560620,2026-10-23,Ipswich Town,Nottingham,,,,Más de 14.5 corners totales,0.0684
+560614,2026-10-24,Aston Villa,Man City,,,,Gana local,0.2325
+560614,2026-10-24,Aston Villa,Man City,,,,Empate,0.2314
+560614,2026-10-24,Aston Villa,Man City,,,,Gana visita,0.5361
+560614,2026-10-24,Aston Villa,Man City,,,,Ambos marcan,0.5585
+560614,2026-10-24,Aston Villa,Man City,,,,Local gana por más de 1.5,0.0881
+560614,2026-10-24,Aston Villa,Man City,,,,Visita gana por más de 1.5,0.3012
+560614,2026-10-24,Aston Villa,Man City,,,,Local gana por más de 2.5,0.0261
+560614,2026-10-24,Aston Villa,Man City,,,,Visita gana por más de 2.5,0.137
+560614,2026-10-24,Aston Villa,Man City,,,,Local gana por más de 3.5,0.0063
+560614,2026-10-24,Aston Villa,Man City,,,,Visita gana por más de 3.5,0.0516
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 1.5 goles,0.7863
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 2.5 goles,0.5553
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 3.5 goles,0.3316
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 4.5 goles,0.1691
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 5.5 goles,0.0747
+560614,2026-10-24,Aston Villa,Man City,,,,Local más de 0.5 goles,0.6691
+560614,2026-10-24,Aston Villa,Man City,,,,Visita más de 0.5 goles,0.8346
+560614,2026-10-24,Aston Villa,Man City,,,,Local más de 1.5 goles,0.3032
+560614,2026-10-24,Aston Villa,Man City,,,,Visita más de 1.5 goles,0.537
+560614,2026-10-24,Aston Villa,Man City,,,,Local más de 2.5 goles,0.1008
+560614,2026-10-24,Aston Villa,Man City,,,,Visita más de 2.5 goles,0.2693
+560614,2026-10-24,Aston Villa,Man City,,,,Local más de 3.5 goles,0.0262
+560614,2026-10-24,Aston Villa,Man City,,,,Visita más de 3.5 goles,0.1086
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 0-0,0.0547
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 0-1,0.0985
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 0-2,0.0886
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 0-3,0.0531
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 0-4,0.0239
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 1-0,0.0605
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 1-1,0.1089
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 1-2,0.098
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 1-3,0.0588
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 1-4,0.0264
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 2-0,0.0335
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 2-1,0.0602
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 2-2,0.0542
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 2-3,0.0325
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 2-4,0.0146
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 3-0,0.0123
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 3-1,0.0222
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 3-2,0.02
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 3-3,0.012
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 3-4,0.0054
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 4-0,0.0034
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 4-1,0.0061
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 4-2,0.0055
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 4-3,0.0033
+560614,2026-10-24,Aston Villa,Man City,,,,Marcador 4-4,0.0015
+560614,2026-10-24,Aston Villa,Man City,,,,Primer gol: local,0.3598
+560614,2026-10-24,Aston Villa,Man City,,,,Primer gol: visita,0.5855
+560614,2026-10-24,Aston Villa,Man City,,,,Primer gol: ninguno,0.0547
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 1+,0.9772
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 1+,0.9924
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 2+,0.9005
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 2+,0.9606
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 3+,0.7633
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 3+,0.8894
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 4+,0.5899
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 4+,0.7771
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 5+,0.4165
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 5+,0.6367
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 6+,0.2705
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 6+,0.4889
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 7+,0.1629
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 7+,0.3528
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 8+,0.0917
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 8+,0.2403
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 9+,0.0486
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 9+,0.1552
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 10+,0.0244
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 10+,0.0955
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 11+,0.0117
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 11+,0.0562
+560614,2026-10-24,Aston Villa,Man City,,,,Corners local: 12+,0.0054
+560614,2026-10-24,Aston Villa,Man City,,,,Corners visita: 12+,0.0318
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 7.5 corners totales,0.7404
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 8.5 corners totales,0.6345
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 9.5 corners totales,0.5227
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 10.5 corners totales,0.4139
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 11.5 corners totales,0.3151
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 12.5 corners totales,0.2309
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 13.5 corners totales,0.1631
+560614,2026-10-24,Aston Villa,Man City,,,,Más de 14.5 corners totales,0.1112
+560616,2026-10-24,Arsenal,Everton,,,,Gana local,0.657
+560616,2026-10-24,Arsenal,Everton,,,,Empate,0.2178
+560616,2026-10-24,Arsenal,Everton,,,,Gana visita,0.1252
+560616,2026-10-24,Arsenal,Everton,,,,Ambos marcan,0.3985
+560616,2026-10-24,Arsenal,Everton,,,,Local gana por más de 1.5,0.392
+560616,2026-10-24,Arsenal,Everton,,,,Visita gana por más de 1.5,0.0315
+560616,2026-10-24,Arsenal,Everton,,,,Local gana por más de 2.5,0.1872
+560616,2026-10-24,Arsenal,Everton,,,,Visita gana por más de 2.5,0.0059
+560616,2026-10-24,Arsenal,Everton,,,,Local gana por más de 3.5,0.0732
+560616,2026-10-24,Arsenal,Everton,,,,Visita gana por más de 3.5,0.0009
+560616,2026-10-24,Arsenal,Everton,,,,Más de 1.5 goles,0.7061
+560616,2026-10-24,Arsenal,Everton,,,,Más de 2.5 goles,0.448
+560616,2026-10-24,Arsenal,Everton,,,,Más de 3.5 goles,0.2356
+560616,2026-10-24,Arsenal,Everton,,,,Más de 4.5 goles,0.1046
+560616,2026-10-24,Arsenal,Everton,,,,Más de 5.5 goles,0.0399
+560616,2026-10-24,Arsenal,Everton,,,,Local más de 0.5 goles,0.8385
+560616,2026-10-24,Arsenal,Everton,,,,Visita más de 0.5 goles,0.4752
+560616,2026-10-24,Arsenal,Everton,,,,Local más de 1.5 goles,0.5441
+560616,2026-10-24,Arsenal,Everton,,,,Visita más de 1.5 goles,0.1368
+560616,2026-10-24,Arsenal,Everton,,,,Local más de 2.5 goles,0.2757
+560616,2026-10-24,Arsenal,Everton,,,,Visita más de 2.5 goles,0.0278
+560616,2026-10-24,Arsenal,Everton,,,,Local más de 3.5 goles,0.1125
+560616,2026-10-24,Arsenal,Everton,,,,Visita más de 3.5 goles,0.0043
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 0-0,0.0847
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 0-1,0.0546
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 0-2,0.0176
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 0-3,0.0038
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 0-4,0.0006
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 1-0,0.1545
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 1-1,0.0996
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 1-2,0.0321
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 1-3,0.0069
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 1-4,0.0011
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 2-0,0.1409
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 2-1,0.0908
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 2-2,0.0293
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 2-3,0.0063
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 2-4,0.001
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 3-0,0.0856
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 3-1,0.0552
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 3-2,0.0178
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 3-3,0.0038
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 3-4,0.0006
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 4-0,0.039
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 4-1,0.0252
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 4-2,0.0081
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 4-3,0.0017
+560616,2026-10-24,Arsenal,Everton,,,,Marcador 4-4,0.0003
+560616,2026-10-24,Arsenal,Everton,,,,Primer gol: local,0.6762
+560616,2026-10-24,Arsenal,Everton,,,,Primer gol: visita,0.2391
+560616,2026-10-24,Arsenal,Everton,,,,Primer gol: ninguno,0.0847
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 1+,0.9937
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 1+,0.9351
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 2+,0.9664
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 2+,0.772
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 3+,0.9033
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 3+,0.5541
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 4+,0.8005
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 4+,0.3487
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 5+,0.6679
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 5+,0.1954
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 6+,0.524
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 6+,0.099
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 7+,0.3872
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 7+,0.046
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 8+,0.2705
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 8+,0.0198
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 9+,0.1794
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 9+,0.008
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 10+,0.1135
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 10+,0.0031
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 11+,0.0687
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 11+,0.0011
+560616,2026-10-24,Arsenal,Everton,,,,Corners local: 12+,0.04
+560616,2026-10-24,Arsenal,Everton,,,,Corners visita: 12+,0.0004
+560616,2026-10-24,Arsenal,Everton,,,,Más de 7.5 corners totales,0.6389
+560616,2026-10-24,Arsenal,Everton,,,,Más de 8.5 corners totales,0.5202
+560616,2026-10-24,Arsenal,Everton,,,,Más de 9.5 corners totales,0.4053
+560616,2026-10-24,Arsenal,Everton,,,,Más de 10.5 corners totales,0.3023
+560616,2026-10-24,Arsenal,Everton,,,,Más de 11.5 corners totales,0.2163
+560616,2026-10-24,Arsenal,Everton,,,,Más de 12.5 corners totales,0.1488
+560616,2026-10-24,Arsenal,Everton,,,,Más de 13.5 corners totales,0.0985
+560616,2026-10-24,Arsenal,Everton,,,,Más de 14.5 corners totales,0.063
+560618,2026-10-24,Coventry City,Fulham,,,,Gana local,0.3488
+560618,2026-10-24,Coventry City,Fulham,,,,Empate,0.2718
+560618,2026-10-24,Coventry City,Fulham,,,,Gana visita,0.3795
+560618,2026-10-24,Coventry City,Fulham,,,,Ambos marcan,0.5027
+560618,2026-10-24,Coventry City,Fulham,,,,Local gana por más de 1.5,0.1471
+560618,2026-10-24,Coventry City,Fulham,,,,Visita gana por más de 1.5,0.167
+560618,2026-10-24,Coventry City,Fulham,,,,Local gana por más de 2.5,0.0482
+560618,2026-10-24,Coventry City,Fulham,,,,Visita gana por más de 2.5,0.0573
+560618,2026-10-24,Coventry City,Fulham,,,,Local gana por más de 3.5,0.0128
+560618,2026-10-24,Coventry City,Fulham,,,,Visita gana por más de 3.5,0.0159
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 1.5 goles,0.7066
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 2.5 goles,0.4486
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 3.5 goles,0.2361
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 4.5 goles,0.1049
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 5.5 goles,0.0401
+560618,2026-10-24,Coventry City,Fulham,,,,Local más de 0.5 goles,0.6998
+560618,2026-10-24,Coventry City,Fulham,,,,Visita más de 0.5 goles,0.7184
+560618,2026-10-24,Coventry City,Fulham,,,,Local más de 1.5 goles,0.3385
+560618,2026-10-24,Coventry City,Fulham,,,,Visita más de 1.5 goles,0.3615
+560618,2026-10-24,Coventry City,Fulham,,,,Local más de 2.5 goles,0.1212
+560618,2026-10-24,Coventry City,Fulham,,,,Visita más de 2.5 goles,0.1354
+560618,2026-10-24,Coventry City,Fulham,,,,Local más de 3.5 goles,0.034
+560618,2026-10-24,Coventry City,Fulham,,,,Visita más de 3.5 goles,0.0399
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 0-0,0.0845
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 0-1,0.1071
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 0-2,0.0679
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 0-3,0.0287
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 0-4,0.0091
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 1-0,0.1017
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 1-1,0.1289
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 1-2,0.0817
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 1-3,0.0345
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 1-4,0.0109
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 2-0,0.0612
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 2-1,0.0776
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 2-2,0.0491
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 2-3,0.0208
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 2-4,0.0066
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 3-0,0.0245
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 3-1,0.0311
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 3-2,0.0197
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 3-3,0.0083
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 3-4,0.0026
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 4-0,0.0074
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 4-1,0.0094
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 4-2,0.0059
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 4-3,0.0025
+560618,2026-10-24,Coventry City,Fulham,,,,Marcador 4-4,0.0008
+560618,2026-10-24,Coventry City,Fulham,,,,Primer gol: local,0.4459
+560618,2026-10-24,Coventry City,Fulham,,,,Primer gol: visita,0.4696
+560618,2026-10-24,Coventry City,Fulham,,,,Primer gol: ninguno,0.0845
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 1+,0.987
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 1+,0.9825
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 2+,0.9376
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 2+,0.9199
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 3+,0.8378
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 3+,0.801
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 4+,0.6954
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 4+,0.6417
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 5+,0.5345
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 5+,0.4727
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 6+,0.3815
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 6+,0.3217
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 7+,0.2542
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 7+,0.2036
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 8+,0.1591
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 8+,0.1208
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 9+,0.0941
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 9+,0.0676
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 10+,0.0529
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 10+,0.0359
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 11+,0.0284
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 11+,0.0182
+560618,2026-10-24,Coventry City,Fulham,,,,Corners local: 12+,0.0146
+560618,2026-10-24,Coventry City,Fulham,,,,Corners visita: 12+,0.0088
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 7.5 corners totales,0.7065
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 8.5 corners totales,0.5946
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 9.5 corners totales,0.48
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 10.5 corners totales,0.3716
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 11.5 corners totales,0.2761
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 12.5 corners totales,0.1972
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 13.5 corners totales,0.1356
+560618,2026-10-24,Coventry City,Fulham,,,,Más de 14.5 corners totales,0.09
+560617,2026-10-24,Chelsea,Tottenham,,,,Gana local,0.5685
+560617,2026-10-24,Chelsea,Tottenham,,,,Empate,0.2196
+560617,2026-10-24,Chelsea,Tottenham,,,,Gana visita,0.2119
+560617,2026-10-24,Chelsea,Tottenham,,,,Ambos marcan,0.5703
+560617,2026-10-24,Chelsea,Tottenham,,,,Local gana por más de 1.5,0.3343
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita gana por más de 1.5,0.079
+560617,2026-10-24,Chelsea,Tottenham,,,,Local gana por más de 2.5,0.1607
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita gana por más de 2.5,0.0231
+560617,2026-10-24,Chelsea,Tottenham,,,,Local gana por más de 3.5,0.0642
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita gana por más de 3.5,0.0055
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 1.5 goles,0.8058
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 2.5 goles,0.5843
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 3.5 goles,0.3603
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 4.5 goles,0.1904
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 5.5 goles,0.0873
+560617,2026-10-24,Chelsea,Tottenham,,,,Local más de 0.5 goles,0.8556
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita más de 0.5 goles,0.6665
+560617,2026-10-24,Chelsea,Tottenham,,,,Local más de 1.5 goles,0.5762
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita más de 1.5 goles,0.3003
+560617,2026-10-24,Chelsea,Tottenham,,,,Local más de 2.5 goles,0.3058
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita más de 2.5 goles,0.0992
+560617,2026-10-24,Chelsea,Tottenham,,,,Local más de 3.5 goles,0.1314
+560617,2026-10-24,Chelsea,Tottenham,,,,Visita más de 3.5 goles,0.0256
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 0-0,0.0481
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 0-1,0.0529
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 0-2,0.029
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 0-3,0.0106
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 0-4,0.0029
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 1-0,0.0932
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 1-1,0.1023
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 1-2,0.0562
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 1-3,0.0206
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 1-4,0.0056
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 2-0,0.0902
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 2-1,0.099
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 2-2,0.0544
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 2-3,0.0199
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 2-4,0.0055
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 3-0,0.0582
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 3-1,0.0639
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 3-2,0.0351
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 3-3,0.0128
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 3-4,0.0035
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 4-0,0.0281
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 4-1,0.0309
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 4-2,0.017
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 4-3,0.0062
+560617,2026-10-24,Chelsea,Tottenham,,,,Marcador 4-4,0.0017
+560617,2026-10-24,Chelsea,Tottenham,,,,Primer gol: local,0.6072
+560617,2026-10-24,Chelsea,Tottenham,,,,Primer gol: visita,0.3446
+560617,2026-10-24,Chelsea,Tottenham,,,,Primer gol: ninguno,0.0481
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 1+,0.9938
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 1+,0.9845
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 2+,0.9668
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 2+,0.9275
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 3+,0.9044
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 3+,0.8166
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 4+,0.8024
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 4+,0.6641
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 5+,0.6706
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 5+,0.498
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 6+,0.527
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 6+,0.3457
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 7+,0.3902
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 7+,0.2236
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 8+,0.2732
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 8+,0.1356
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 9+,0.1816
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 9+,0.0776
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 10+,0.1151
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 10+,0.0422
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 11+,0.0699
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 11+,0.0219
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners local: 12+,0.0408
+560617,2026-10-24,Chelsea,Tottenham,,,,Corners visita: 12+,0.0109
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 7.5 corners totales,0.7993
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 8.5 corners totales,0.7064
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 9.5 corners totales,0.6026
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 10.5 corners totales,0.4958
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 11.5 corners totales,0.3933
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 12.5 corners totales,0.301
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 13.5 corners totales,0.2224
+560617,2026-10-24,Chelsea,Tottenham,,,,Más de 14.5 corners totales,0.1589
