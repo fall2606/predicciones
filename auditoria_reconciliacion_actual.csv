@@ -2,9 +2,9 @@ deporte,clasificacion,cuenta_alerta,motivo,filas
 Champions,LIQUIDADA,NO,resultado registrado: LOSS,72
 Champions,LIQUIDADA,NO,resultado registrado: WIN,98
 Champions,NO_FINALIZADA,NO,partido no finalizado,39
-LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,180
-LaLiga,LIQUIDADA,NO,resultado registrado: WIN,210
-LaLiga,NO_FINALIZADA,NO,partido no finalizado,130
+LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,197
+LaLiga,LIQUIDADA,NO,resultado registrado: WIN,212
+LaLiga,NO_FINALIZADA,NO,partido no finalizado,111
 LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,12
 MLB,HISTORICO_NO_PARTIDO,NO,partido no encontrado,3650
 MLB,LIQUIDADA,NO,resultado registrado: ANULADA,4
