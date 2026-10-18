@@ -1,1 +1,8 @@
 match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,precio,edge,motivo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBEXTRAS-26OCT192008CLETB,KXMLBEXTRAS-26OCT192008CLETB-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-CLE,YES,Ganador (moneyline),0.44833208,0.470000,-0.031668,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-CLE,NO,Ganador (moneyline),0.55166792,0.590000,-0.048332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-TB,YES,Ganador (moneyline),0.55166792,0.620000,-0.078332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-TB,NO,Ganador (moneyline),0.44833208,0.430000,0.008332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT192008CLETB,KXMLBRFI-26OCT192008CLETB,YES,1.ª entrada / YRFI-NRFI,0.37458272,0.590000,-0.225417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT192008CLETB,KXMLBRFI-26OCT192008CLETB,NO,1.ª entrada / YRFI-NRFI,0.62541728,0.550000,0.065417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
