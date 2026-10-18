@@ -38,15 +38,7 @@ KXMLBDEBUT-RCHOLOWSKY,KXMLBDEBUT,Roch Cholowsky: Debut Date,,mercado_no_partido/
 KXMLBDEBUT-VLACKEY,KXMLBDEBUT,Vahn Lackey: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-GEMERSON,KXMLBDEBUT,Grady Emerson: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBEOTY-26,KXMLBEOTY,Executive of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBERA-26OCT161800TBCLE,KXMLBERA,Tampa Bay vs Cleveland: Earned Runs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBEXTRAS-26OCT161800TBCLE,KXMLBEXTRAS,Tampa Bay vs Cleveland: Extra Innings,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBF3-26OCT161800TBCLE,KXMLBF3,Tampa Bay vs Cleveland: First 3 Innings,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBF5-26OCT161800TBCLE,KXMLBF5,Tampa Bay vs Cleveland: First 5 Innings,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBF5SPREAD-26OCT161800TBCLE,KXMLBF5SPREAD,Tampa Bay vs Cleveland: First 5 Spread,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBF5TOTAL-26OCT161800TBCLE,KXMLBF5TOTAL,Tampa Bay vs Cleveland: First 5 Innings Total,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBF7-26OCT161800TBCLE,KXMLBF7,Tampa Bay vs Cleveland: First 7 Innings,,equipos_identificados_pero_fecha_o_hora_ambigua
 KXMLBFASTPITCH-26JMISIOROWSKI32,KXMLBFASTPITCH,Jacob Misiorowski: Fastest Pitch this Season,,mercado_no_partido/futuro_premio_o_prop
-KXMLBGAME-26OCT161800TBCLE,KXMLBGAME,Game 4: Tampa Bay vs Cleveland,,equipos_identificados_pero_fecha_o_hora_ambigua
 KXMLBGG-26AL1B,KXMLBGG,Gold Glove: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL2B,KXMLBGG,Gold Glove: AL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL3B,KXMLBGG,Gold Glove: AL Third Baseman,,mercado_no_partido/futuro_premio_o_prop
@@ -67,11 +59,6 @@ KXMLBGG-26NLP,KXMLBGG,Gold Glove: NL Pitcher,,mercado_no_partido/futuro_premio_o
 KXMLBGG-26NLRF,KXMLBGG,Gold Glove: NL Right Field,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26NLSS,KXMLBGG,Gold Glove: NL Shortstop,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26NLTEAM,KXMLBGG,Gold Glove: NL Team,,mercado_no_partido/futuro_premio_o_prop
-KXMLBHA-26OCT161800TBCLE,KXMLBHA,Tampa Bay vs Cleveland: Hits Allowed,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBHIT-26OCT161800TBCLE,KXMLBHIT,Tampa Bay vs Cleveland: Hits,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBHR-26OCT161800TBCLE,KXMLBHR,Tampa Bay vs Cleveland: Home Runs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBHRR-26OCT161800TBCLE,KXMLBHRR,Tampa Bay vs Cleveland: Hits + Runs + RBIs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBKS-26OCT161800TBCLE,KXMLBKS,Tampa Bay vs Cleveland: Strikeouts,,equipos_identificados_pero_fecha_o_hora_ambigua
 KXMLBNEXTTEAM-27FLINDOR12,KXMLBNEXTTEAM,Francisco Lindor's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNEXTTEAM-27RACUNA,KXMLBNEXTTEAM,Ronald Acuna Jr. Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNEXTTEAM-27TSKUBAL,KXMLBNEXTTEAM,Tarik Skubal Next Team,,mercado_no_partido/futuro_premio_o_prop
@@ -82,13 +69,8 @@ KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner,,mercado_no_partido/fut
 KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,mercado_no_partido/futuro_premio_o_prop
-KXMLBOUTS-26OCT161800TBCLE,KXMLBOUTS,Tampa Bay vs Cleveland: Outs Recorded,,mercado_no_partido/futuro_premio_o_prop
-KXMLBRBI-26OCT161800TBCLE,KXMLBRBI,Tampa Bay vs Cleveland: RBIs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBRFI-26OCT161800TBCLE,KXMLBRFI,Tampa Bay vs Cleveland: First Inning Run,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBSB-26OCT161800TBCLE,KXMLBSB,Tampa Bay vs Cleveland: Stolen Bases,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEEDWIN-26,KXMLBSEEDWIN,Seed of Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSPREAD-26OCT161800TBCLE,KXMLBSPREAD,Tampa Bay vs Cleveland: Spread,,equipos_identificados_pero_fecha_o_hora_ambigua
 KXMLBSS-26AL1B,KXMLBSS,Silver Slugger: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL2B,KXMLBSS,Silver Slugger: AL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL3B,KXMLBSS,Silver Slugger: AL Third Baseman,,mercado_no_partido/futuro_premio_o_prop
@@ -116,11 +98,7 @@ KXMLBSTATCOUNT-263HR,KXMLBSTATCOUNT,Pro Baseball: 3+ Home Run Games,,mercado_no_
 KXMLBSTATCOUNT-26CYCLE,KXMLBSTATCOUNT,Pro Baseball: Cycles,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSTATCOUNT-26IMMACULATE,KXMLBSTATCOUNT,Pro Baseball: Immaculate Innings,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSTATCOUNT-26ITPHR,KXMLBSTATCOUNT,Pro Baseball: Inside-The-Park Home Runs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBTB-26OCT161800TBCLE,KXMLBTB,Tampa Bay vs Cleveland: Total Bases,,mercado_no_partido/futuro_premio_o_prop
 KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBTEAMTOTAL-26OCT161800TBCLE,KXMLBTEAMTOTAL,Tampa Bay vs Cleveland: Team Total,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBTOTAL-26OCT161800TBCLE,KXMLBTOTAL,Tampa Bay vs Cleveland: Total Runs,,equipos_identificados_pero_fecha_o_hora_ambigua
-KXMLBWA-26OCT161800TBCLE,KXMLBWA,Tampa Bay vs Cleveland: Walks Allowed,,equipos_identificados_pero_fecha_o_hora_ambigua
 KXMLBWALKOFFS-26,KXMLBWALKOFFS,Total Walk-Offs in Pro Baseball Playoffs,,mercado_no_partido/futuro_premio_o_prop
 KXMLBWSOUTCOME-26,KXMLBWSOUTCOME,Pro Baseball Championship Outcome,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27ACHAPMAN,KXNEXTTEAMMLB,Aroldis Chapman's Next Team,,mercado_no_partido/futuro_premio_o_prop
