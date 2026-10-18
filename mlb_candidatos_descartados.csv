@@ -1,8 +1,12 @@
 match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,precio,edge,motivo
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBEXTRAS-26OCT172000TBCLE,KXMLBEXTRAS-26OCT172000TBCLE-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF3-26OCT172000TBCLE,KXMLBF3-26OCT172000TBCLE-TIE,,Entradas parciales,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF5-26OCT172000TBCLE,KXMLBF5-26OCT172000TBCLE-TIE,,Entradas parciales,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF7-26OCT172000TBCLE,KXMLBF7-26OCT172000TBCLE-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBERA-26OCT181700TBCLE,KXMLBERA-26OCT181700TBCLE-TBNMARTINEZ28-1,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBERA-26OCT181700TBCLE,KXMLBERA-26OCT181700TBCLE-TBNMARTINEZ28-2,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBERA-26OCT181700TBCLE,KXMLBERA-26OCT181700TBCLE-TBNMARTINEZ28-3,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHA-26OCT181700TBCLE,KXMLBHA-26OCT181700TBCLE-TBNMARTINEZ28-1,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHA-26OCT181700TBCLE,KXMLBHA-26OCT181700TBCLE-TBNMARTINEZ28-2,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHA-26OCT181700TBCLE,KXMLBHA-26OCT181700TBCLE-TBNMARTINEZ28-3,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHA-26OCT181700TBCLE,KXMLBHA-26OCT181700TBCLE-TBNMARTINEZ28-4,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHA-26OCT181700TBCLE,KXMLBHA-26OCT181700TBCLE-TBNMARTINEZ28-5,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHIT-26OCT181700TBCLE,KXMLBHIT-26OCT181700TBCLE-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHIT-26OCT181700TBCLE,KXMLBHIT-26OCT181700TBCLE-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHIT-26OCT181700TBCLE,KXMLBHIT-26OCT181700TBCLE-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
@@ -64,30 +68,13 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHRR-26OCT181700TBCLE,KXMLBHRR-26OCT181700TBCLE-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHRR-26OCT181700TBCLE,KXMLBHRR-26OCT181700TBCLE-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBHRR-26OCT181700TBCLE,KXMLBHRR-26OCT181700TBCLE-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-2,KXMLBINNINGWIN-26OCT172000TBCLE-2-TB,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-2,KXMLBINNINGWIN-26OCT172000TBCLE-2-CLE,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-2,KXMLBINNINGWIN-26OCT172000TBCLE-2-TIE,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-3,KXMLBINNINGWIN-26OCT172000TBCLE-3-TB,,Ganador de la 3.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-3,KXMLBINNINGWIN-26OCT172000TBCLE-3-CLE,,Ganador de la 3.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-3,KXMLBINNINGWIN-26OCT172000TBCLE-3-TIE,,Ganador de la 3.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-4,KXMLBINNINGWIN-26OCT172000TBCLE-4-TB,,Ganador de la 4.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-4,KXMLBINNINGWIN-26OCT172000TBCLE-4-CLE,,Ganador de la 4.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-4,KXMLBINNINGWIN-26OCT172000TBCLE-4-TIE,,Ganador de la 4.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-5,KXMLBINNINGWIN-26OCT172000TBCLE-5-TB,,Ganador de la 5.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-5,KXMLBINNINGWIN-26OCT172000TBCLE-5-CLE,,Ganador de la 5.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-5,KXMLBINNINGWIN-26OCT172000TBCLE-5-TIE,,Ganador de la 5.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-6,KXMLBINNINGWIN-26OCT172000TBCLE-6-TB,,Ganador de la 6.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-6,KXMLBINNINGWIN-26OCT172000TBCLE-6-CLE,,Ganador de la 6.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-6,KXMLBINNINGWIN-26OCT172000TBCLE-6-TIE,,Ganador de la 6.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-7,KXMLBINNINGWIN-26OCT172000TBCLE-7-TB,,Ganador de la 7.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-7,KXMLBINNINGWIN-26OCT172000TBCLE-7-CLE,,Ganador de la 7.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-7,KXMLBINNINGWIN-26OCT172000TBCLE-7-TIE,,Ganador de la 7.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-8,KXMLBINNINGWIN-26OCT172000TBCLE-8-TB,,Ganador de la 8.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-8,KXMLBINNINGWIN-26OCT172000TBCLE-8-CLE,,Ganador de la 8.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-8,KXMLBINNINGWIN-26OCT172000TBCLE-8-TIE,,Ganador de la 8.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-9,KXMLBINNINGWIN-26OCT172000TBCLE-9-TB,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-9,KXMLBINNINGWIN-26OCT172000TBCLE-9-CLE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-9,KXMLBINNINGWIN-26OCT172000TBCLE-9-TIE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBKS-26OCT181700TBCLE,KXMLBKS-26OCT181700TBCLE-TBNMARTINEZ28-1,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBKS-26OCT181700TBCLE,KXMLBKS-26OCT181700TBCLE-TBNMARTINEZ28-2,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBKS-26OCT181700TBCLE,KXMLBKS-26OCT181700TBCLE-TBNMARTINEZ28-3,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBKS-26OCT181700TBCLE,KXMLBKS-26OCT181700TBCLE-TBNMARTINEZ28-4,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBKS-26OCT181700TBCLE,KXMLBKS-26OCT181700TBCLE-TBNMARTINEZ28-5,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBKS-26OCT181700TBCLE,KXMLBKS-26OCT181700TBCLE-TBNMARTINEZ28-6,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBOUTS-26OCT181700TBCLE,KXMLBOUTS-26OCT181700TBCLE-TBNMARTINEZ28-12,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRBI-26OCT181700TBCLE,KXMLBRBI-26OCT181700TBCLE-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRBI-26OCT181700TBCLE,KXMLBRBI-26OCT181700TBCLE-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBRBI-26OCT181700TBCLE,KXMLBRBI-26OCT181700TBCLE-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
@@ -106,12 +93,6 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBSB-26OCT181700TBCLE,KXMLBSB-26OCT181700TBCLE-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBSB-26OCT181700TBCLE,KXMLBSB-26OCT181700TBCLE-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBSB-26OCT181700TBCLE,KXMLBSB-26OCT181700TBCLE-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBSPREAD-26OCT172000TBCLE,KXMLBSPREAD-26OCT172000TBCLE-CLE4,,Run line / margen,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBSPREAD-26OCT172000TBCLE,KXMLBSPREAD-26OCT172000TBCLE-CLE3,,Run line / margen,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBSPREAD-26OCT172000TBCLE,KXMLBSPREAD-26OCT172000TBCLE-CLE2,,Run line / margen,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBSPREAD-26OCT172000TBCLE,KXMLBSPREAD-26OCT172000TBCLE-TB2,,Run line / margen,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBSPREAD-26OCT172000TBCLE,KXMLBSPREAD-26OCT172000TBCLE-TB3,,Run line / margen,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBSPREAD-26OCT172000TBCLE,KXMLBSPREAD-26OCT172000TBCLE-TB4,,Run line / margen,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBTB-26OCT181700TBCLE,KXMLBTB-26OCT181700TBCLE-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBTB-26OCT181700TBCLE,KXMLBTB-26OCT181700TBCLE-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBTB-26OCT181700TBCLE,KXMLBTB-26OCT181700TBCLE-CLEBROCCHIO4-4,,Props de jugador,,,,sin_modelo_especifico
@@ -135,83 +116,27 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBTB-26OCT181700TBCLE,KXMLBTB-26OCT181700TBCLE-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBTB-26OCT181700TBCLE,KXMLBTB-26OCT181700TBCLE-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBTB-26OCT181700TBCLE,KXMLBTB-26OCT181700TBCLE-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE2,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE3,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE4,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE5,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE6,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE7,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-CLE8,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB2,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB3,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB4,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB5,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB6,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB7,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTEAMTOTAL-26OCT172000TBCLE,KXMLBTEAMTOTAL-26OCT172000TBCLE-TB8,,Total por equipo,,,,sin_modelo_especifico
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF3-26OCT172000TBCLE,KXMLBF3-26OCT172000TBCLE-TB,YES,Entradas parciales,0.50338612,0.510000,-0.016614,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF3-26OCT172000TBCLE,KXMLBF3-26OCT172000TBCLE-TB,NO,Entradas parciales,0.49661388,0.780000,-0.293386,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF3-26OCT172000TBCLE,KXMLBF3-26OCT172000TBCLE-CLE,YES,Entradas parciales,0.49661388,0.500000,-0.013386,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF3-26OCT172000TBCLE,KXMLBF3-26OCT172000TBCLE-CLE,NO,Entradas parciales,0.50338612,0.780000,-0.286614,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF5-26OCT172000TBCLE,KXMLBF5-26OCT172000TBCLE-TB,YES,Entradas parciales,0.50425544,0.440000,0.054255,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF5-26OCT172000TBCLE,KXMLBF5-26OCT172000TBCLE-TB,NO,Entradas parciales,0.49574456,0.590000,-0.104255,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF5-26OCT172000TBCLE,KXMLBF5-26OCT172000TBCLE-CLE,YES,Entradas parciales,0.49574456,0.390000,0.095745,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF5-26OCT172000TBCLE,KXMLBF5-26OCT172000TBCLE-CLE,NO,Entradas parciales,0.50425544,0.640000,-0.145745,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF7-26OCT172000TBCLE,KXMLBF7-26OCT172000TBCLE-TB,YES,Entradas parciales,0.50485829,0.460000,0.034858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF7-26OCT172000TBCLE,KXMLBF7-26OCT172000TBCLE-TB,NO,Entradas parciales,0.49514171,0.710000,-0.224858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF7-26OCT172000TBCLE,KXMLBF7-26OCT172000TBCLE-CLE,YES,Entradas parciales,0.49514171,0.500000,-0.014858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBF7-26OCT172000TBCLE,KXMLBF7-26OCT172000TBCLE-CLE,NO,Entradas parciales,0.50485829,0.740000,-0.245142,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT172000TBCLE,KXMLBGAME-26OCT172000TBCLE-TB,YES,Ganador (moneyline),0.50531526,0.510000,-0.014685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT172000TBCLE,KXMLBGAME-26OCT172000TBCLE-TB,NO,Ganador (moneyline),0.49468474,0.500000,-0.015315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT172000TBCLE,KXMLBGAME-26OCT172000TBCLE-CLE,YES,Ganador (moneyline),0.49468474,0.500000,-0.015315,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBGAME-26OCT172000TBCLE,KXMLBGAME-26OCT172000TBCLE-CLE,NO,Ganador (moneyline),0.50531526,0.510000,-0.014685,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-1,KXMLBINNINGWIN-26OCT172000TBCLE-1-TB,YES,Ganador de la 1.ª entrada,0.26474426,0.370000,-0.115256,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-1,KXMLBINNINGWIN-26OCT172000TBCLE-1-TB,NO,Ganador de la 1.ª entrada,0.73525574,0.910000,-0.184744,precio por encima del máximo
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-1,KXMLBINNINGWIN-26OCT172000TBCLE-1-CLE,YES,Ganador de la 1.ª entrada,0.26111322,0.370000,-0.118887,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-1,KXMLBINNINGWIN-26OCT172000TBCLE-1-CLE,NO,Ganador de la 1.ª entrada,0.73888678,0.910000,-0.181113,precio por encima del máximo
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-1,KXMLBINNINGWIN-26OCT172000TBCLE-1-TIE,YES,Ganador de la 1.ª entrada,0.47414252,0.840000,-0.375857,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBINNINGWIN-26OCT172000TBCLE-1,KXMLBINNINGWIN-26OCT172000TBCLE-1-TIE,NO,Ganador de la 1.ª entrada,0.52585748,0.570000,-0.054143,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT172000TBCLE,KXMLBRFI-26OCT172000TBCLE,YES,1.ª entrada / YRFI-NRFI,0.37514193,0.410000,-0.044858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBRFI-26OCT172000TBCLE,KXMLBRFI-26OCT172000TBCLE,NO,1.ª entrada / YRFI-NRFI,0.62485807,0.600000,0.014858,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-2,YES,Total de carreras,0.99431136,0.980000,0.004311,precio por encima del máximo
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-2,NO,Total de carreras,0.00568864,0.050000,-0.054311,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-3,YES,Total de carreras,0.97948629,0.940000,0.029486,precio por encima del máximo
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-3,NO,Total de carreras,0.02051371,0.080000,-0.069486,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-4,YES,Total de carreras,0.94755429,0.820000,0.117554,ventaja insuficiente
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-4,NO,Total de carreras,0.05244571,0.190000,-0.147554,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-5,YES,Total de carreras,0.89320662,0.750000,0.133207,ventaja insuficiente
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-5,NO,Total de carreras,0.10679338,0.270000,-0.173207,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-6,YES,Total de carreras,0.81544494,0.610000,0.195445,ventaja insuficiente
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-6,NO,Total de carreras,0.18455506,0.410000,-0.235445,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-7,YES,Total de carreras,0.71823937,0.510000,0.198239,ventaja insuficiente
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-7,NO,Total de carreras,0.28176063,0.500000,-0.228239,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-8,YES,Total de carreras,0.60927969,0.380000,0.219280,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-8,NO,Total de carreras,0.39072031,0.630000,-0.249280,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-9,YES,Total de carreras,0.49769663,0.310000,0.177697,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-9,NO,Total de carreras,0.50230337,0.710000,-0.217697,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-10,YES,Total de carreras,0.39183174,0.230000,0.151832,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-10,NO,Total de carreras,0.60816826,0.780000,-0.181832,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-11,YES,Total de carreras,0.29777121,0.180000,0.107771,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849816,Cleveland Guardians,Tampa Bay Rays,KXMLBTOTAL-26OCT172000TBCLE,KXMLBTOTAL-26OCT172000TBCLE-11,NO,Total de carreras,0.70222879,0.830000,-0.137771,ventaja insuficiente
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE3,YES,Entradas parciales,0.83139949,0.140000,0.681399,ventaja insuficiente
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE3,NO,Entradas parciales,0.16860051,0.940000,-0.781399,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE2,YES,Entradas parciales,0.93486182,0.240000,0.684862,ventaja insuficiente
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE2,NO,Entradas parciales,0.06513818,0.940000,-0.884862,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB2,YES,Entradas parciales,0.93486182,0.290000,0.634862,ventaja insuficiente
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB2,NO,Entradas parciales,0.06513818,0.860000,-0.804862,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB3,YES,Entradas parciales,0.83139949,0.180000,0.641399,ventaja insuficiente
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB3,NO,Entradas parciales,0.16860051,0.970000,-0.811399,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBWA-26OCT181700TBCLE,KXMLBWA-26OCT181700TBCLE-TBNMARTINEZ28-1,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBWA-26OCT181700TBCLE,KXMLBWA-26OCT181700TBCLE-TBNMARTINEZ28-2,,Props de jugador,,,,sin_modelo_especifico
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE3,YES,Entradas parciales,0.83139949,0.490000,0.331399,ventaja insuficiente
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE3,NO,Entradas parciales,0.16860051,0.840000,-0.681399,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE2,YES,Entradas parciales,0.93486182,0.590000,0.334862,ventaja insuficiente
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-CLE2,NO,Entradas parciales,0.06513818,0.760000,-0.704862,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB2,YES,Entradas parciales,0.93486182,0.520000,0.404862,ventaja insuficiente
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB2,NO,Entradas parciales,0.06513818,0.980000,-0.924862,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB3,YES,Entradas parciales,0.83139949,0.520000,0.301399,ventaja insuficiente
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5SPREAD-26OCT181700TBCLE,KXMLBF5SPREAD-26OCT181700TBCLE-TB3,NO,Entradas parciales,0.16860051,0.990000,-0.831399,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-1,YES,Entradas parciales,0.98639563,0.990000,-0.013604,precio por encima del máximo
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-1,NO,Entradas parciales,0.01360437,0.270000,-0.266396,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-1,NO,Entradas parciales,0.01360437,0.300000,-0.296396,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-2,YES,Entradas parciales,0.93486182,0.980000,-0.055138,precio por encima del máximo
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-2,NO,Entradas parciales,0.06513818,0.410000,-0.354862,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-3,YES,Entradas parciales,0.83139949,0.710000,0.111399,ventaja insuficiente
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-3,NO,Entradas parciales,0.16860051,0.560000,-0.401399,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-2,NO,Entradas parciales,0.06513818,0.700000,-0.644862,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-3,YES,Entradas parciales,0.83139949,0.690000,0.131399,ventaja insuficiente
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-3,NO,Entradas parciales,0.16860051,0.550000,-0.391399,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-4,YES,Entradas parciales,0.68508287,0.690000,-0.014917,ventaja insuficiente
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-4,NO,Entradas parciales,0.31491713,0.700000,-0.395083,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-5,YES,Entradas parciales,0.52157795,0.550000,-0.038422,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-5,NO,Entradas parciales,0.47842205,0.840000,-0.371578,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-6,YES,Entradas parciales,0.36797553,0.450000,-0.092024,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-6,NO,Entradas parciales,0.63202447,0.960000,-0.337976,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-7,YES,Entradas parciales,0.24190712,0.370000,-0.138093,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-5,YES,Entradas parciales,0.52157795,0.830000,-0.318422,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-5,NO,Entradas parciales,0.47842205,0.940000,-0.471578,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-6,YES,Entradas parciales,0.36797553,0.800000,-0.442024,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-6,NO,Entradas parciales,0.63202447,0.990000,-0.367976,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-7,YES,Entradas parciales,0.24190712,0.810000,-0.578093,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849817,Cleveland Guardians,Tampa Bay Rays,KXMLBF5TOTAL-26OCT181700TBCLE,KXMLBF5TOTAL-26OCT181700TBCLE-7,NO,Entradas parciales,0.75809288,0.990000,-0.241907,precio por encima del máximo
