@@ -1493,54 +1493,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560609,2026-10-18,Brighton Hove,Crystal Palace,,,,Más de 12.5 corners totales,0.1671
 560609,2026-10-18,Brighton Hove,Crystal Palace,,,,Más de 13.5 corners totales,0.1122
 560609,2026-10-18,Brighton Hove,Crystal Palace,,,,Más de 14.5 corners totales,0.0726
-560608,2026-10-18,Nottingham,Arsenal,,,,Gana local,0.1902
-560608,2026-10-18,Nottingham,Arsenal,,,,Empate,0.2555
-560608,2026-10-18,Nottingham,Arsenal,,,,Gana visita,0.5543
-560608,2026-10-18,Nottingham,Arsenal,,,,Ambos marcan,0.43
-560608,2026-10-18,Nottingham,Arsenal,,,,Local gana por más de 1.5,0.0572
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita gana por más de 1.5,0.2928
-560608,2026-10-18,Nottingham,Arsenal,,,,Local gana por más de 2.5,0.0129
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita gana por más de 2.5,0.1218
-560608,2026-10-18,Nottingham,Arsenal,,,,Local gana por más de 3.5,0.0023
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita gana por más de 3.5,0.0412
-560608,2026-10-18,Nottingham,Arsenal,,,,Más de 1.5 goles,0.6783
-560608,2026-10-18,Nottingham,Arsenal,,,,Más de 2.5 goles,0.4146
-560608,2026-10-18,Nottingham,Arsenal,,,,Más de 3.5 goles,0.2089
-560608,2026-10-18,Nottingham,Arsenal,,,,Más de 4.5 goles,0.0885
-560608,2026-10-18,Nottingham,Arsenal,,,,Más de 5.5 goles,0.0322
-560608,2026-10-18,Nottingham,Arsenal,,,,Local más de 0.5 goles,0.5457
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita más de 0.5 goles,0.788
-560608,2026-10-18,Nottingham,Arsenal,,,,Local más de 1.5 goles,0.1873
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita más de 1.5 goles,0.4591
-560608,2026-10-18,Nottingham,Arsenal,,,,Local más de 2.5 goles,0.0459
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita más de 2.5 goles,0.2041
-560608,2026-10-18,Nottingham,Arsenal,,,,Local más de 3.5 goles,0.0087
-560608,2026-10-18,Nottingham,Arsenal,,,,Visita más de 3.5 goles,0.0722
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 0-0,0.0963
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 0-1,0.1494
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 0-2,0.1159
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 0-3,0.0599
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 0-4,0.0232
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 1-0,0.076
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 1-1,0.1179
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 1-2,0.0914
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 1-3,0.0473
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 1-4,0.0183
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 2-0,0.03
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 2-1,0.0465
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 2-2,0.0361
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 2-3,0.0186
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 2-4,0.0072
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 3-0,0.0079
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 3-1,0.0122
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 3-2,0.0095
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 3-3,0.0049
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 3-4,0.0019
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 4-0,0.0016
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 4-1,0.0024
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 4-2,0.0019
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 4-3,0.001
-560608,2026-10-18,Nottingham,Arsenal,,,,Marcador 4-4,0.0004
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Gana local,0.1902
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Empate,0.2555
+560608,2026-10-18,Nottingham,Arsenal,1.0,0.0,1.0,Gana visita,0.5543
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Ambos marcan,0.43
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local gana por más de 1.5,0.0572
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Visita gana por más de 1.5,0.2928
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local gana por más de 2.5,0.0129
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Visita gana por más de 2.5,0.1218
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local gana por más de 3.5,0.0023
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Visita gana por más de 3.5,0.0412
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Más de 1.5 goles,0.6783
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Más de 2.5 goles,0.4146
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Más de 3.5 goles,0.2089
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Más de 4.5 goles,0.0885
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Más de 5.5 goles,0.0322
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local más de 0.5 goles,0.5457
+560608,2026-10-18,Nottingham,Arsenal,1.0,0.0,1.0,Visita más de 0.5 goles,0.788
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local más de 1.5 goles,0.1873
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Visita más de 1.5 goles,0.4591
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local más de 2.5 goles,0.0459
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Visita más de 2.5 goles,0.2041
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Local más de 3.5 goles,0.0087
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Visita más de 3.5 goles,0.0722
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 0-0,0.0963
+560608,2026-10-18,Nottingham,Arsenal,1.0,0.0,1.0,Marcador 0-1,0.1494
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 0-2,0.1159
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 0-3,0.0599
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 0-4,0.0232
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 1-0,0.076
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 1-1,0.1179
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 1-2,0.0914
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 1-3,0.0473
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 1-4,0.0183
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 2-0,0.03
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 2-1,0.0465
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 2-2,0.0361
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 2-3,0.0186
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 2-4,0.0072
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 3-0,0.0079
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 3-1,0.0122
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 3-2,0.0095
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 3-3,0.0049
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 3-4,0.0019
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 4-0,0.0016
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 4-1,0.0024
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 4-2,0.0019
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 4-3,0.001
+560608,2026-10-18,Nottingham,Arsenal,0.0,0.0,1.0,Marcador 4-4,0.0004
 560608,2026-10-18,Nottingham,Arsenal,,,,Primer gol: local,0.3047
 560608,2026-10-18,Nottingham,Arsenal,,,,Primer gol: visita,0.599
 560608,2026-10-18,Nottingham,Arsenal,,,,Primer gol: ninguno,0.0963
