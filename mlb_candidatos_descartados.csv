@@ -1,8 +1,228 @@
 match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,precio,edge,motivo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT192008CLETB,KXMLBERA-26OCT192008CLETB-TBFPERALTA51-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT192008CLETB,KXMLBERA-26OCT192008CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBERA-26OCT192008CLETB,KXMLBERA-26OCT192008CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
 849815,Tampa Bay Rays,Cleveland Guardians,KXMLBEXTRAS-26OCT192008CLETB,KXMLBEXTRAS-26OCT192008CLETB-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
-849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-CLE,YES,Ganador (moneyline),0.44833208,0.470000,-0.031668,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-CLE,NO,Ganador (moneyline),0.55166792,0.590000,-0.048332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-TB,YES,Ganador (moneyline),0.55166792,0.620000,-0.078332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT192008CLETB,KXMLBF3-26OCT192008CLETB-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT192008CLETB,KXMLBF5-26OCT192008CLETB-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT192008CLETB,KXMLBF7-26OCT192008CLETB-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT192008CLETB,KXMLBHA-26OCT192008CLETB-TBFPERALTA51-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT192008CLETB,KXMLBHA-26OCT192008CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT192008CLETB,KXMLBHA-26OCT192008CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT192008CLETB,KXMLBHA-26OCT192008CLETB-TBFPERALTA51-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHA-26OCT192008CLETB,KXMLBHA-26OCT192008CLETB-TBFPERALTA51-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEJADELL7-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-CLEJRAMREZ11-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHIT-26OCT192008CLETB,KXMLBHIT-26OCT192008CLETB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHR-26OCT192008CLETB,KXMLBHR-26OCT192008CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEBROCCHIO4-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJADELL7-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJADELL7-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJADELL7-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJRAMREZ11-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJRAMREZ11-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-CLEJRAMREZ11-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJARANDA8-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJARANDA8-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJCAMINERO13-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBJCAMINERO13-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBHRR-26OCT192008CLETB,KXMLBHRR-26OCT192008CLETB-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-2,KXMLBINNINGWIN-26OCT192008CLETB-2-CLE,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-2,KXMLBINNINGWIN-26OCT192008CLETB-2-TB,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-2,KXMLBINNINGWIN-26OCT192008CLETB-2-TIE,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-3,KXMLBINNINGWIN-26OCT192008CLETB-3-CLE,,Ganador de la 3.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-3,KXMLBINNINGWIN-26OCT192008CLETB-3-TB,,Ganador de la 3.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-3,KXMLBINNINGWIN-26OCT192008CLETB-3-TIE,,Ganador de la 3.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-4,KXMLBINNINGWIN-26OCT192008CLETB-4-CLE,,Ganador de la 4.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-4,KXMLBINNINGWIN-26OCT192008CLETB-4-TB,,Ganador de la 4.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-4,KXMLBINNINGWIN-26OCT192008CLETB-4-TIE,,Ganador de la 4.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-5,KXMLBINNINGWIN-26OCT192008CLETB-5-CLE,,Ganador de la 5.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-5,KXMLBINNINGWIN-26OCT192008CLETB-5-TB,,Ganador de la 5.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-5,KXMLBINNINGWIN-26OCT192008CLETB-5-TIE,,Ganador de la 5.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-6,KXMLBINNINGWIN-26OCT192008CLETB-6-CLE,,Ganador de la 6.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-6,KXMLBINNINGWIN-26OCT192008CLETB-6-TB,,Ganador de la 6.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-6,KXMLBINNINGWIN-26OCT192008CLETB-6-TIE,,Ganador de la 6.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-7,KXMLBINNINGWIN-26OCT192008CLETB-7-CLE,,Ganador de la 7.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-7,KXMLBINNINGWIN-26OCT192008CLETB-7-TB,,Ganador de la 7.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-7,KXMLBINNINGWIN-26OCT192008CLETB-7-TIE,,Ganador de la 7.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-8,KXMLBINNINGWIN-26OCT192008CLETB-8-CLE,,Ganador de la 8.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-8,KXMLBINNINGWIN-26OCT192008CLETB-8-TB,,Ganador de la 8.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-8,KXMLBINNINGWIN-26OCT192008CLETB-8-TIE,,Ganador de la 8.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-9,KXMLBINNINGWIN-26OCT192008CLETB-9-CLE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-9,KXMLBINNINGWIN-26OCT192008CLETB-9-TB,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-9,KXMLBINNINGWIN-26OCT192008CLETB-9-TIE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-6,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-7,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBKS-26OCT192008CLETB,KXMLBKS-26OCT192008CLETB-TBFPERALTA51-8,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBOUTS-26OCT192008CLETB,KXMLBOUTS-26OCT192008CLETB-TBFPERALTA51-15,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-CLEBROCCHIO4-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-CLEJADELL7-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-CLEJRAMREZ11-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRBI-26OCT192008CLETB,KXMLBRBI-26OCT192008CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT192008CLETB,KXMLBSPREAD-26OCT192008CLETB-TB4,,Run line / margen,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT192008CLETB,KXMLBSPREAD-26OCT192008CLETB-TB3,,Run line / margen,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT192008CLETB,KXMLBSPREAD-26OCT192008CLETB-TB2,,Run line / margen,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT192008CLETB,KXMLBSPREAD-26OCT192008CLETB-CLE2,,Run line / margen,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT192008CLETB,KXMLBSPREAD-26OCT192008CLETB-CLE3,,Run line / margen,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBSPREAD-26OCT192008CLETB,KXMLBSPREAD-26OCT192008CLETB-CLE4,,Run line / margen,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEBROCCHIO4-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEBROCCHIO4-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEBROCCHIO4-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJADELL7-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJADELL7-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJADELL7-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJADELL7-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJRAMREZ11-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJRAMREZ11-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJRAMREZ11-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-CLEJRAMREZ11-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJARANDA8-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJARANDA8-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJCAMINERO13-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBJCAMINERO13-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTB-26OCT192008CLETB,KXMLBTB-26OCT192008CLETB-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB2,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB3,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB4,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB5,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB6,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB7,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-TB8,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE2,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE3,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE4,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE5,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE6,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE7,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTEAMTOTAL-26OCT192008CLETB,KXMLBTEAMTOTAL-26OCT192008CLETB-CLE8,,Total por equipo,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT192008CLETB,KXMLBWA-26OCT192008CLETB-TBFPERALTA51-1,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT192008CLETB,KXMLBWA-26OCT192008CLETB-TBFPERALTA51-2,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBWA-26OCT192008CLETB,KXMLBWA-26OCT192008CLETB-TBFPERALTA51-3,,Props de jugador,,,,sin_modelo_especifico
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT192008CLETB,KXMLBF3-26OCT192008CLETB-CLE,YES,Entradas parciales,0.46702623,0.470000,-0.012974,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT192008CLETB,KXMLBF3-26OCT192008CLETB-CLE,NO,Entradas parciales,0.53297377,0.730000,-0.207026,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT192008CLETB,KXMLBF3-26OCT192008CLETB-TB,YES,Entradas parciales,0.53297377,0.550000,-0.027026,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF3-26OCT192008CLETB,KXMLBF3-26OCT192008CLETB-TB,NO,Entradas parciales,0.46702623,0.660000,-0.202974,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT192008CLETB,KXMLBF5-26OCT192008CLETB-CLE,YES,Entradas parciales,0.45859023,0.340000,0.108590,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT192008CLETB,KXMLBF5-26OCT192008CLETB-CLE,NO,Entradas parciales,0.54140977,0.670000,-0.138590,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT192008CLETB,KXMLBF5-26OCT192008CLETB-TB,YES,Entradas parciales,0.54140977,0.480000,0.051410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5-26OCT192008CLETB,KXMLBF5-26OCT192008CLETB-TB,NO,Entradas parciales,0.45859023,0.540000,-0.091410,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-TB3,YES,Entradas parciales,0.83197293,0.220000,0.601973,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-TB3,NO,Entradas parciales,0.16802707,0.810000,-0.651973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-TB2,YES,Entradas parciales,0.93511831,0.340000,0.585118,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-TB2,NO,Entradas parciales,0.06488169,0.690000,-0.635118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-CLE2,YES,Entradas parciales,0.93511831,0.220000,0.705118,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-CLE2,NO,Entradas parciales,0.06488169,0.810000,-0.755118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-CLE3,YES,Entradas parciales,0.83197293,0.130000,0.691973,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5SPREAD-26OCT192008CLETB,KXMLBF5SPREAD-26OCT192008CLETB-CLE3,NO,Entradas parciales,0.16802707,0.890000,-0.731973,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-1,YES,Entradas parciales,0.98645606,0.950000,0.026456,precio por encima del máximo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-1,NO,Entradas parciales,0.01354394,0.080000,-0.076456,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-2,YES,Entradas parciales,0.93511831,0.820000,0.105118,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-2,NO,Entradas parciales,0.06488169,0.210000,-0.155118,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-3,YES,Entradas parciales,0.83197293,0.670000,0.151973,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-3,NO,Entradas parciales,0.16802707,0.370000,-0.211973,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-4,YES,Entradas parciales,0.68598107,0.510000,0.165981,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-4,NO,Entradas parciales,0.31401893,0.510000,-0.205981,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-5,YES,Entradas parciales,0.52268424,0.380000,0.132684,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-5,NO,Entradas parciales,0.47731576,0.650000,-0.182684,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-6,YES,Entradas parciales,0.36911594,0.280000,0.079116,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-6,NO,Entradas parciales,0.63088406,0.750000,-0.129116,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-7,YES,Entradas parciales,0.24293005,0.190000,0.042930,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF5TOTAL-26OCT192008CLETB,KXMLBF5TOTAL-26OCT192008CLETB-7,NO,Entradas parciales,0.75706995,0.830000,-0.082930,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT192008CLETB,KXMLBF7-26OCT192008CLETB-CLE,YES,Entradas parciales,0.45275148,0.550000,-0.107249,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT192008CLETB,KXMLBF7-26OCT192008CLETB-CLE,NO,Entradas parciales,0.54724852,0.730000,-0.192751,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT192008CLETB,KXMLBF7-26OCT192008CLETB-TB,YES,Entradas parciales,0.54724852,0.500000,0.037249,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBF7-26OCT192008CLETB,KXMLBF7-26OCT192008CLETB-TB,NO,Entradas parciales,0.45275148,0.550000,-0.107249,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-CLE,YES,Ganador (moneyline),0.44833208,0.440000,-0.001668,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-CLE,NO,Ganador (moneyline),0.55166792,0.580000,-0.038332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-TB,YES,Ganador (moneyline),0.55166792,0.580000,-0.038332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849815,Tampa Bay Rays,Cleveland Guardians,KXMLBGAME-26OCT192008CLETB,KXMLBGAME-26OCT192008CLETB-TB,NO,Ganador (moneyline),0.44833208,0.430000,0.008332,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT192008CLETB,KXMLBRFI-26OCT192008CLETB,YES,1.ª entrada / YRFI-NRFI,0.37458272,0.590000,-0.225417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT192008CLETB,KXMLBRFI-26OCT192008CLETB,NO,1.ª entrada / YRFI-NRFI,0.62541728,0.550000,0.065417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-1,KXMLBINNINGWIN-26OCT192008CLETB-1-CLE,YES,Ganador de la 1.ª entrada,0.24555568,0.380000,-0.144444,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-1,KXMLBINNINGWIN-26OCT192008CLETB-1-CLE,NO,Ganador de la 1.ª entrada,0.75444432,0.910000,-0.165556,precio por encima del máximo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-1,KXMLBINNINGWIN-26OCT192008CLETB-1-TB,YES,Ganador de la 1.ª entrada,0.28094725,0.360000,-0.089053,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-1,KXMLBINNINGWIN-26OCT192008CLETB-1-TB,NO,Ganador de la 1.ª entrada,0.71905275,0.890000,-0.180947,precio por encima del máximo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-1,KXMLBINNINGWIN-26OCT192008CLETB-1-TIE,YES,Ganador de la 1.ª entrada,0.47349707,0.800000,-0.336503,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBINNINGWIN-26OCT192008CLETB-1,KXMLBINNINGWIN-26OCT192008CLETB-1-TIE,NO,Ganador de la 1.ª entrada,0.52650293,0.590000,-0.073497,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT192008CLETB,KXMLBRFI-26OCT192008CLETB,YES,1.ª entrada / YRFI-NRFI,0.37458272,0.430000,-0.065417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBRFI-26OCT192008CLETB,KXMLBRFI-26OCT192008CLETB,NO,1.ª entrada / YRFI-NRFI,0.62541728,0.580000,0.035417,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-2,YES,Total de carreras,0.99434243,0.980000,0.004342,precio por encima del máximo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-2,NO,Total de carreras,0.00565757,0.050000,-0.054342,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-3,YES,Total de carreras,0.97959206,0.920000,0.049592,precio por encima del máximo
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-3,NO,Total de carreras,0.02040794,0.090000,-0.079592,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-4,YES,Total de carreras,0.94780659,0.820000,0.117807,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-4,NO,Total de carreras,0.05219341,0.200000,-0.157807,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-5,YES,Total de carreras,0.89367983,0.740000,0.143680,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-5,NO,Total de carreras,0.10632017,0.280000,-0.183680,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-6,YES,Total de carreras,0.81618775,0.600000,0.206188,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-6,NO,Total de carreras,0.18381225,0.420000,-0.246188,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-7,YES,Total de carreras,0.71925393,0.520000,0.189254,ventaja insuficiente
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-7,NO,Total de carreras,0.28074607,0.490000,-0.219254,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-8,YES,Total de carreras,0.61051770,0.390000,0.210518,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-8,NO,Total de carreras,0.38948230,0.640000,-0.260518,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-9,YES,Total de carreras,0.49907210,0.310000,0.179072,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-9,NO,Total de carreras,0.50092790,0.710000,-0.219072,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-10,YES,Total de carreras,0.39324310,0.220000,0.163243,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-10,NO,Total de carreras,0.60675690,0.790000,-0.193243,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-11,YES,Total de carreras,0.29912348,0.170000,0.119123,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849815,Tampa Bay Rays,Cleveland Guardians,KXMLBTOTAL-26OCT192008CLETB,KXMLBTOTAL-26OCT192008CLETB-11,NO,Total de carreras,0.70087652,0.860000,-0.169123,ventaja insuficiente
