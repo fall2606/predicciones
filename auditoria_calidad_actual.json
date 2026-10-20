@@ -95,24 +95,24 @@
     "archivo_predicciones": "predicciones_champions.csv",
     "archivo_resultados": "resultados_champions.csv",
     "capturas": 209,
-    "filas_resultados": 170,
-    "ids_resultado_terminal_en_archivo": 170,
-    "capturas_con_resultado_terminal": 170,
-    "sin_resultado_terminal": 39,
+    "filas_resultados": 177,
+    "ids_resultado_terminal_en_archivo": 177,
+    "capturas_con_resultado_terminal": 177,
+    "sin_resultado_terminal": 32,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
       "LOSS": 72,
-      "WIN": 98,
-      "SIN_RESULTADO": 39
+      "WIN": 105,
+      "SIN_RESULTADO": 32
     },
-    "n_evaluable": 170,
-    "tasa_acierto": 0.5764705882352941,
-    "probabilidad_media": 0.6342941176470588,
-    "brier": 0.24339543529411764,
-    "log_loss": 0.7103323581781764,
-    "brier_referencia_muestra": 0.2441522491349481,
+    "n_evaluable": 177,
+    "tasa_acierto": 0.5932203389830508,
+    "probabilidad_media": 0.6405084745762712,
+    "brier": 0.23570302824858758,
+    "log_loss": 0.6916639743920895,
+    "brier_referencia_muestra": 0.24130996839988508,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
@@ -158,15 +158,15 @@
       },
       {
         "intervalo": "70%-80%",
-        "n": 33,
-        "probabilidad_media": 0.7563636363636363,
-        "tasa_acierto": 0.7272727272727273
+        "n": 36,
+        "probabilidad_media": 0.7523333333333333,
+        "tasa_acierto": 0.75
       },
       {
         "intervalo": "80%-90%",
-        "n": 24,
-        "probabilidad_media": 0.86075,
-        "tasa_acierto": 0.625
+        "n": 28,
+        "probabilidad_media": 0.8597857142857143,
+        "tasa_acierto": 0.6785714285714286
       },
       {
         "intervalo": "90%-100%",
