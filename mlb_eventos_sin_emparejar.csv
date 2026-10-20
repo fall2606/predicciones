@@ -1,7 +1,6 @@
 event_ticker,series_ticker,title,start_time,motivo
 KXCOACHOUTMLBDATE-27NYY,KXCOACHOUTMLBDATE,Aaron Boone: Out by Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLB-26,KXMLB,Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop
-KXMLBAL-26,KXMLBAL,American League Champion,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
@@ -61,7 +60,6 @@ KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner,,mercado_no_partid
 KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSEEDWIN-26,KXMLBSEEDWIN,Seed of Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL1B,KXMLBSS,Silver Slugger: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL2B,KXMLBSS,Silver Slugger: AL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL3B,KXMLBSS,Silver Slugger: AL Third Baseman,,mercado_no_partido/futuro_premio_o_prop
@@ -102,4 +100,3 @@ KXNEXTTEAMMLB-27MTROUT,KXNEXTTEAMMLB,Mike Trout's Next Team,,mercado_no_partido/
 KXNEXTTEAMMLB-27RDEVERS,KXNEXTTEAMMLB,Rafael Devers's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27SALCANTARA,KXNEXTTEAMMLB,Sandy Alcantara's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27YDIAZ,KXNEXTTEAMMLB,Yandy Diaz's Next Team,,mercado_no_partido/futuro_premio_o_prop
-KXTEAMSINWS-26,KXTEAMSINWS,Pro Baseball Championship Series Matchup,,mercado_no_partido/futuro_premio_o_prop
