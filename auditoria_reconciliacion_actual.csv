@@ -1,12 +1,9 @@
 deporte,clasificacion,cuenta_alerta,motivo,filas
-Champions,LIQUIDADA,NO,resultado registrado: LOSS,72
-Champions,LIQUIDADA,NO,resultado registrado: WIN,105
-Champions,NO_FINALIZADA,NO,partido no finalizado,32
-LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,229
-LaLiga,LIQUIDADA,NO,resultado registrado: WIN,244
-LaLiga,NO_FINALIZADA,NO,partido no finalizado,46
-LaLiga,PENDIENTE_ACTIVA,SI,estado desconocido: captura sin selección YES/NO; no se puede liquidar con seguridad,1
-LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,12
+Champions,NO_VERIFICADO,NO,estado desconocido,39
+Champions,PENDIENTE_ACTIVA,SI,estado desconocido,170
+LaLiga,HISTORICO_SIN_CONTRATO,NO,sin ticker (histórico),87
+LaLiga,NO_VERIFICADO,NO,estado desconocido,111
+LaLiga,PENDIENTE_ACTIVA,SI,estado desconocido,334
 MLB,HISTORICO_NO_PARTIDO,NO,partido no encontrado,3650
 MLB,LIQUIDADA,NO,resultado registrado: ANULADA,4
 MLB,LIQUIDADA,NO,resultado registrado: LOSS,40
