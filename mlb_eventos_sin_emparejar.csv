@@ -5,9 +5,14 @@ KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner,,mercado_no_p
 KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALROTY-26,KXMLBALROTY,AL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBBGAME-26OCT220300ONICFAL,KXMLBBGAME,ONIC PH vs. Team Falcons PH,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26OCT220700ARTLPH,KXMLBBGAME,Aurora Gaming vs. Team Liquid PH,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26OCT230200VALSYS,KXMLBBGAME,Valhalla vs. See You Soon,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26OCT230430GXPFLKH,KXMLBBGAME,Galaxy Phoenix vs. Team Flash KH,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26OCT230700EEETNR,KXMLBBGAME,Evil Eye Esports vs. TNR Esports,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBCBA-26DEC02,KXMLBCBA,"Pro Baseball new CBA agreement before Dec 2, 2026",,evento_no_identificado/otro
+KXMLBCHAMPLEAGUE-26,KXMLBCHAMPLEAGUE,Pro Baseball Championship Winning League,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-AMILLER,KXMLBDEBUT,Aidan Miller: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-LDEVRIES,KXMLBDEBUT,Leo De Vries: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-TWHITE,KXMLBDEBUT,Thomas White: Debut Date,,mercado_no_partido/futuro_premio_o_prop
@@ -49,10 +54,13 @@ KXMLBGG-26NLTEAM,KXMLBGG,Gold Glove: NL Team,,mercado_no_partido/futuro_premio_o
 KXMLBNEXTTEAM-27FLINDOR12,KXMLBNEXTTEAM,Francisco Lindor's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNEXTTEAM-27RACUNA,KXMLBNEXTTEAM,Ronald Acuna Jr. Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNEXTTEAM-27TSKUBAL,KXMLBNEXTTEAM,Tarik Skubal Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLCPOTY-26,KXMLBNLCPOTY,NL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLCY-26,KXMLBNLCY,NL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLHAARON-26,KXMLBNLHAARON,NL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL1B,KXMLBSS,Silver Slugger: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL2B,KXMLBSS,Silver Slugger: AL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
@@ -84,3 +92,13 @@ KXMLBSTATCOUNT-26ITPHR,KXMLBSTATCOUNT,Pro Baseball: Inside-The-Park Home Runs,,m
 KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,mercado_no_partido/futuro_premio_o_prop
 KXMLBWALKOFFS-26,KXMLBWALKOFFS,Total Walk-Offs in Pro Baseball Playoffs,,mercado_no_partido/futuro_premio_o_prop
 KXMLBWSOUTCOME-26,KXMLBWSOUTCOME,Pro Baseball Championship Outcome,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27ACHAPMAN,KXNEXTTEAMMLB,Aroldis Chapman's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27CWALKER,KXNEXTTEAMMLB,Christian Walker's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27FTATIS,KXNEXTTEAMMLB,Fernando Tatis Jr.'s Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27JDURAN,KXNEXTTEAMMLB,Jarren Duran's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27JRYAN,KXNEXTTEAMMLB,Joe Ryan's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27LSEVERINO,KXNEXTTEAMMLB,Luis Severino's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27MTROUT,KXNEXTTEAMMLB,Mike Trout's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27RDEVERS,KXNEXTTEAMMLB,Rafael Devers's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27SALCANTARA,KXNEXTTEAMMLB,Sandy Alcantara's Next Team,,mercado_no_partido/futuro_premio_o_prop
+KXNEXTTEAMMLB-27YDIAZ,KXNEXTTEAMMLB,Yandy Diaz's Next Team,,mercado_no_partido/futuro_premio_o_prop
