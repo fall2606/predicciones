@@ -4,24 +4,24 @@
     "archivo_predicciones": "predicciones_laliga.csv",
     "archivo_resultados": "resultados_laliga.csv",
     "capturas": 532,
-    "filas_resultados": 473,
-    "ids_resultado_terminal_en_archivo": 473,
-    "capturas_con_resultado_terminal": 473,
-    "sin_resultado_terminal": 59,
+    "filas_resultados": 478,
+    "ids_resultado_terminal_en_archivo": 478,
+    "capturas_con_resultado_terminal": 478,
+    "sin_resultado_terminal": 54,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "LOSS": 229,
-      "WIN": 244,
-      "SIN_RESULTADO": 59
+      "LOSS": 232,
+      "WIN": 246,
+      "SIN_RESULTADO": 54
     },
-    "n_evaluable": 473,
-    "tasa_acierto": 0.5158562367864693,
-    "probabilidad_media": 0.7001797040169133,
-    "brier": 0.2627730211416491,
-    "log_loss": 0.776304057232222,
-    "brier_referencia_muestra": 0.24974857975497142,
+    "n_evaluable": 478,
+    "tasa_acierto": 0.5146443514644351,
+    "probabilidad_media": 0.7007175732217573,
+    "brier": 0.26305921966527196,
+    "log_loss": 0.7761885160351322,
+    "brier_referencia_muestra": 0.2497855429701861,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
@@ -61,21 +61,21 @@
       },
       {
         "intervalo": "60%-70%",
-        "n": 56,
-        "probabilidad_media": 0.6428571428571429,
-        "tasa_acierto": 0.4642857142857143
+        "n": 58,
+        "probabilidad_media": 0.642551724137931,
+        "tasa_acierto": 0.4482758620689655
       },
       {
         "intervalo": "70%-80%",
-        "n": 223,
-        "probabilidad_media": 0.7553139013452915,
-        "tasa_acierto": 0.6412556053811659
+        "n": 224,
+        "probabilidad_media": 0.7554151785714286,
+        "tasa_acierto": 0.6383928571428571
       },
       {
         "intervalo": "80%-90%",
-        "n": 41,
-        "probabilidad_media": 0.8467317073170731,
-        "tasa_acierto": 0.7560975609756098
+        "n": 43,
+        "probabilidad_media": 0.8471627906976743,
+        "tasa_acierto": 0.7674418604651163
       },
       {
         "intervalo": "90%-100%",
