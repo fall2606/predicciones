@@ -4,24 +4,24 @@
     "archivo_predicciones": "predicciones_laliga.csv",
     "archivo_resultados": "resultados_laliga.csv",
     "capturas": 532,
-    "filas_resultados": 478,
-    "ids_resultado_terminal_en_archivo": 478,
-    "capturas_con_resultado_terminal": 478,
-    "sin_resultado_terminal": 54,
+    "filas_resultados": 490,
+    "ids_resultado_terminal_en_archivo": 490,
+    "capturas_con_resultado_terminal": 490,
+    "sin_resultado_terminal": 42,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "LOSS": 232,
-      "WIN": 246,
-      "SIN_RESULTADO": 54
+      "LOSS": 235,
+      "WIN": 255,
+      "SIN_RESULTADO": 42
     },
-    "n_evaluable": 478,
-    "tasa_acierto": 0.5146443514644351,
-    "probabilidad_media": 0.7007175732217573,
-    "brier": 0.26305921966527196,
-    "log_loss": 0.7761885160351322,
-    "brier_referencia_muestra": 0.2497855429701861,
+    "n_evaluable": 490,
+    "tasa_acierto": 0.5204081632653061,
+    "probabilidad_media": 0.6983102040816327,
+    "brier": 0.2625491918367347,
+    "log_loss": 0.7737194567315462,
+    "brier_referencia_muestra": 0.2495835068721366,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
@@ -37,9 +37,9 @@
       },
       {
         "intervalo": "20%-30%",
-        "n": 10,
-        "probabilidad_media": 0.24689999999999998,
-        "tasa_acierto": 0.1
+        "n": 11,
+        "probabilidad_media": 0.24663636363636365,
+        "tasa_acierto": 0.18181818181818182
       },
       {
         "intervalo": "30%-40%",
@@ -49,27 +49,27 @@
       },
       {
         "intervalo": "40%-50%",
-        "n": 26,
-        "probabilidad_media": 0.4487307692307692,
-        "tasa_acierto": 0.19230769230769232
+        "n": 29,
+        "probabilidad_media": 0.44941379310344826,
+        "tasa_acierto": 0.27586206896551724
       },
       {
         "intervalo": "50%-60%",
-        "n": 38,
-        "probabilidad_media": 0.5531315789473684,
-        "tasa_acierto": 0.2631578947368421
+        "n": 40,
+        "probabilidad_media": 0.552325,
+        "tasa_acierto": 0.25
       },
       {
         "intervalo": "60%-70%",
-        "n": 58,
-        "probabilidad_media": 0.642551724137931,
-        "tasa_acierto": 0.4482758620689655
+        "n": 59,
+        "probabilidad_media": 0.6432033898305084,
+        "tasa_acierto": 0.4576271186440678
       },
       {
         "intervalo": "70%-80%",
-        "n": 224,
-        "probabilidad_media": 0.7554151785714286,
-        "tasa_acierto": 0.6383928571428571
+        "n": 229,
+        "probabilidad_media": 0.7557947598253275,
+        "tasa_acierto": 0.6419213973799127
       },
       {
         "intervalo": "80%-90%",
