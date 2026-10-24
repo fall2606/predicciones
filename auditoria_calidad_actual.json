@@ -4,24 +4,24 @@
     "archivo_predicciones": "predicciones_laliga.csv",
     "archivo_resultados": "resultados_laliga.csv",
     "capturas": 532,
-    "filas_resultados": 490,
-    "ids_resultado_terminal_en_archivo": 490,
-    "capturas_con_resultado_terminal": 490,
-    "sin_resultado_terminal": 42,
+    "filas_resultados": 496,
+    "ids_resultado_terminal_en_archivo": 496,
+    "capturas_con_resultado_terminal": 496,
+    "sin_resultado_terminal": 36,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
       "LOSS": 235,
-      "WIN": 255,
-      "SIN_RESULTADO": 42
+      "WIN": 261,
+      "SIN_RESULTADO": 36
     },
-    "n_evaluable": 490,
-    "tasa_acierto": 0.5204081632653061,
-    "probabilidad_media": 0.6983102040816327,
-    "brier": 0.2625491918367347,
-    "log_loss": 0.7737194567315462,
-    "brier_referencia_muestra": 0.2495835068721366,
+    "n_evaluable": 496,
+    "tasa_acierto": 0.5262096774193549,
+    "probabilidad_media": 0.6979193548387097,
+    "brier": 0.26089179838709675,
+    "log_loss": 0.7694887667089471,
+    "brier_referencia_muestra": 0.24931305280957336,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
@@ -49,9 +49,9 @@
       },
       {
         "intervalo": "40%-50%",
-        "n": 29,
-        "probabilidad_media": 0.44941379310344826,
-        "tasa_acierto": 0.27586206896551724
+        "n": 31,
+        "probabilidad_media": 0.4526129032258065,
+        "tasa_acierto": 0.3225806451612903
       },
       {
         "intervalo": "50%-60%",
@@ -67,9 +67,9 @@
       },
       {
         "intervalo": "70%-80%",
-        "n": 229,
-        "probabilidad_media": 0.7557947598253275,
-        "tasa_acierto": 0.6419213973799127
+        "n": 233,
+        "probabilidad_media": 0.7556866952789699,
+        "tasa_acierto": 0.648068669527897
       },
       {
         "intervalo": "80%-90%",
