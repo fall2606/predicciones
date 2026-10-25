@@ -3,25 +3,25 @@
     "deporte": "LaLiga",
     "archivo_predicciones": "predicciones_laliga.csv",
     "archivo_resultados": "resultados_laliga.csv",
-    "capturas": 532,
-    "filas_resultados": 496,
-    "ids_resultado_terminal_en_archivo": 496,
-    "capturas_con_resultado_terminal": 496,
-    "sin_resultado_terminal": 36,
+    "capturas": 534,
+    "filas_resultados": 504,
+    "ids_resultado_terminal_en_archivo": 504,
+    "capturas_con_resultado_terminal": 504,
+    "sin_resultado_terminal": 30,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "LOSS": 235,
-      "WIN": 261,
-      "SIN_RESULTADO": 36
+      "LOSS": 238,
+      "WIN": 266,
+      "SIN_RESULTADO": 30
     },
-    "n_evaluable": 496,
-    "tasa_acierto": 0.5262096774193549,
-    "probabilidad_media": 0.6979193548387097,
-    "brier": 0.26089179838709675,
-    "log_loss": 0.7694887667089471,
-    "brier_referencia_muestra": 0.24931305280957336,
+    "n_evaluable": 504,
+    "tasa_acierto": 0.5277777777777778,
+    "probabilidad_media": 0.6954246031746032,
+    "brier": 0.2587412936507936,
+    "log_loss": 0.7639128888835173,
+    "brier_referencia_muestra": 0.2492283950617284,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
@@ -31,9 +31,9 @@
       },
       {
         "intervalo": "10%-20%",
-        "n": 7,
-        "probabilidad_media": 0.15285714285714286,
-        "tasa_acierto": 0.14285714285714285
+        "n": 8,
+        "probabilidad_media": 0.156375,
+        "tasa_acierto": 0.125
       },
       {
         "intervalo": "20%-30%",
@@ -43,27 +43,27 @@
       },
       {
         "intervalo": "30%-40%",
-        "n": 13,
-        "probabilidad_media": 0.3456923076923077,
-        "tasa_acierto": 0.15384615384615385
+        "n": 14,
+        "probabilidad_media": 0.34285714285714286,
+        "tasa_acierto": 0.14285714285714285
       },
       {
         "intervalo": "40%-50%",
-        "n": 31,
-        "probabilidad_media": 0.4526129032258065,
-        "tasa_acierto": 0.3225806451612903
+        "n": 32,
+        "probabilidad_media": 0.45371875,
+        "tasa_acierto": 0.3125
       },
       {
         "intervalo": "50%-60%",
-        "n": 40,
-        "probabilidad_media": 0.552325,
-        "tasa_acierto": 0.25
+        "n": 42,
+        "probabilidad_media": 0.5503571428571428,
+        "tasa_acierto": 0.2857142857142857
       },
       {
         "intervalo": "60%-70%",
-        "n": 59,
-        "probabilidad_media": 0.6432033898305084,
-        "tasa_acierto": 0.4576271186440678
+        "n": 60,
+        "probabilidad_media": 0.6440333333333333,
+        "tasa_acierto": 0.4666666666666667
       },
       {
         "intervalo": "70%-80%",
@@ -73,9 +73,9 @@
       },
       {
         "intervalo": "80%-90%",
-        "n": 43,
-        "probabilidad_media": 0.8471627906976743,
-        "tasa_acierto": 0.7674418604651163
+        "n": 45,
+        "probabilidad_media": 0.8458666666666667,
+        "tasa_acierto": 0.7777777777777778
       },
       {
         "intervalo": "90%-100%",
@@ -85,7 +85,7 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 532,
+    "filas_reconciliacion": 534,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 1
