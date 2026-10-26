@@ -2,4 +2,4 @@ deporte,capturas,filas_resultados,capturas_con_resultado_terminal,sin_resultado_
 LaLiga,534,517,517,17,1,534,0,True,0,0,0,517,0.526112,0.692058,0.257355,0.759716,0.249318,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
 Champions League,209,209,209,0,0,209,0,True,0,0,0,209,0.583732,0.639866,0.237325,0.691542,0.242989,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
 MLB,3741,91,91,3650,0,3741,0,True,0,0,0,87,0.540230,0.663325,0.310772,0.872051,0.248382,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
-NFL,6522,3382,3382,3140,256,6522,0,True,0,0,0,3382,0.500000,0.499863,0.165783,0.502583,0.250000,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
+NFL,6522,3756,3756,2766,0,6522,0,True,0,0,0,3756,0.500000,0.499910,0.164346,0.497276,0.250000,Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.
