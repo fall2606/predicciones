@@ -13,6 +13,6 @@ MLB,LIQUIDADA,NO,resultado registrado: WIN,47
 NFL,HISTORICO_NO_EVALUABLE,NO,Captura de la primera versión no validada; excluida de resultados y calibración,312
 NFL,HISTORICO_NO_EVALUABLE,NO,Captura histórica asociada a una serie de periodo; excluida por el modelo inicial incorrecto,702
 NFL,HISTORICO_NO_EVALUABLE,NO,Contrato de periodo/cuarto no cubierto por el modelo NFL,426
-NFL,LIQUIDADA,NO,resultado registrado: LOSS,1946
-NFL,LIQUIDADA,NO,resultado registrado: WIN,1946
-NFL,NO_FINALIZADA,NO,partido no finalizado,1997
+NFL,LIQUIDADA,NO,resultado registrado: LOSS,2010
+NFL,LIQUIDADA,NO,resultado registrado: WIN,2010
+NFL,NO_FINALIZADA,NO,partido no finalizado,1874

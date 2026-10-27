@@ -1,5 +1,124 @@
 match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,precio,edge,motivo
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBERA-26OCT272000MILTB,KXMLBERA-26OCT272000MILTB-TBGJAX22-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBERA-26OCT272000MILTB,KXMLBERA-26OCT272000MILTB-TBGJAX22-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBERA-26OCT272000MILTB,KXMLBERA-26OCT272000MILTB-TBGJAX22-3,,Props de jugador,,,,sin_modelo_especifico
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBEXTRAS-26OCT272000MILTB,KXMLBEXTRAS-26OCT272000MILTB-EXTRAS,,Entrada individual,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF3-26OCT272000MILTB,KXMLBF3-26OCT272000MILTB-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5-26OCT272000MILTB,KXMLBF5-26OCT272000MILTB-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF7-26OCT272000MILTB,KXMLBF7-26OCT272000MILTB-TIE,,Entradas parciales,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHA-26OCT272000MILTB,KXMLBHA-26OCT272000MILTB-TBGJAX22-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHA-26OCT272000MILTB,KXMLBHA-26OCT272000MILTB-TBGJAX22-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHA-26OCT272000MILTB,KXMLBHA-26OCT272000MILTB-TBGJAX22-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHA-26OCT272000MILTB,KXMLBHA-26OCT272000MILTB-TBGJAX22-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHA-26OCT272000MILTB,KXMLBHA-26OCT272000MILTB-TBGJAX22-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILBTURANG2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILBTURANG2-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILCPRATT87-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILCPRATT87-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILCPRATT87-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILGMITCHELL5-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILGMITCHELL5-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILGMITCHELL5-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJCHOURIO11-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJCHOURIO11-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJBAUERS9-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJBAUERS9-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILJBAUERS9-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJDELUCA21-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJDELUCA21-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJDELUCA21-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBTWALLS6-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBTWALLS6-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBTWALLS6-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-MILWCONTRERAS24-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHIT-26OCT272000MILTB,KXMLBHIT-26OCT272000MILTB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILBTURANG2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILCPRATT87-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILGMITCHELL5-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILGMITCHELL5-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILJBAUERS9-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILJBAUERS9-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBJDELUCA21-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBTWALLS6-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHR-26OCT272000MILTB,KXMLBHR-26OCT272000MILTB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILBTURANG2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILBTURANG2-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILBTURANG2-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILBTURANG2-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILCPRATT87-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILCPRATT87-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILCPRATT87-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILCPRATT87-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILCPRATT87-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILGMITCHELL5-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILGMITCHELL5-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILGMITCHELL5-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILGMITCHELL5-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILGMITCHELL5-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJCHOURIO11-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJCHOURIO11-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJCHOURIO11-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJBAUERS9-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJBAUERS9-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJBAUERS9-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJBAUERS9-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILJBAUERS9-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJARANDA8-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJARANDA8-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJDELUCA21-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJDELUCA21-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJDELUCA21-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJDELUCA21-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJDELUCA21-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJCAMINERO13-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBJCAMINERO13-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBTWALLS6-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBTWALLS6-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBTWALLS6-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBTWALLS6-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILWCONTRERAS24-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILWCONTRERAS24-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-MILWCONTRERAS24-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBHRR-26OCT272000MILTB,KXMLBHRR-26OCT272000MILTB-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-2,KXMLBINNINGWIN-26OCT272000MILTB-2-MIL,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-2,KXMLBINNINGWIN-26OCT272000MILTB-2-TB,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-2,KXMLBINNINGWIN-26OCT272000MILTB-2-TIE,,Ganador de la 2.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
@@ -24,12 +143,168 @@ match_id,local,visita,event_ticker,ticker,lado,categoria,probabilidad_modelo,pre
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-9,KXMLBINNINGWIN-26OCT272000MILTB-9-MIL,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-9,KXMLBINNINGWIN-26OCT272000MILTB-9-TB,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-9,KXMLBINNINGWIN-26OCT272000MILTB-9-TIE,,Ganador de la 9.ª entrada,,,,sin_modelo_especifico: solo se modela la 1.ª entrada
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-6,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-7,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBKS-26OCT272000MILTB,KXMLBKS-26OCT272000MILTB-TBGJAX22-8,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBOUTS-26OCT272000MILTB,KXMLBOUTS-26OCT272000MILTB-TBGJAX22-12,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILBTURANG2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILCPRATT87-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILCPRATT87-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILGMITCHELL5-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILGMITCHELL5-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILJBAUERS9-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILJBAUERS9-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBJARANDA8-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBJDELUCA21-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBJDELUCA21-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBJCAMINERO13-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBYDIAZ2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRBI-26OCT272000MILTB,KXMLBRBI-26OCT272000MILTB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSB-26OCT272000MILTB,KXMLBSB-26OCT272000MILTB-MILBTURANG2-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSB-26OCT272000MILTB,KXMLBSB-26OCT272000MILTB-MILCPRATT87-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSB-26OCT272000MILTB,KXMLBSB-26OCT272000MILTB-MILGMITCHELL5-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSB-26OCT272000MILTB,KXMLBSB-26OCT272000MILTB-MILJCHOURIO11-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSB-26OCT272000MILTB,KXMLBSB-26OCT272000MILTB-MILJBAUERS9-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSB-26OCT272000MILTB,KXMLBSB-26OCT272000MILTB-MILWCONTRERAS24-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSPREAD-26OCT272000MILTB,KXMLBSPREAD-26OCT272000MILTB-TB4,,Run line / margen,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSPREAD-26OCT272000MILTB,KXMLBSPREAD-26OCT272000MILTB-TB3,,Run line / margen,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSPREAD-26OCT272000MILTB,KXMLBSPREAD-26OCT272000MILTB-TB2,,Run line / margen,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSPREAD-26OCT272000MILTB,KXMLBSPREAD-26OCT272000MILTB-MIL2,,Run line / margen,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSPREAD-26OCT272000MILTB,KXMLBSPREAD-26OCT272000MILTB-MIL3,,Run line / margen,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBSPREAD-26OCT272000MILTB,KXMLBSPREAD-26OCT272000MILTB-MIL4,,Run line / margen,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILBTURANG2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILBTURANG2-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILBTURANG2-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILBTURANG2-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILCPRATT87-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILCPRATT87-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILCPRATT87-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILGMITCHELL5-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILGMITCHELL5-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILGMITCHELL5-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILGMITCHELL5-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJCHOURIO11-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJCHOURIO11-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJCHOURIO11-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJCHOURIO11-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJCHOURIO11-6,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJBAUERS9-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJBAUERS9-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJBAUERS9-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILJBAUERS9-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJARANDA8-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJARANDA8-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJARANDA8-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJARANDA8-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJDELUCA21-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJDELUCA21-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJDELUCA21-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJCAMINERO13-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJCAMINERO13-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJCAMINERO13-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBJCAMINERO13-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBTWALLS6-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBTWALLS6-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBTWALLS6-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILWCONTRERAS24-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILWCONTRERAS24-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILWCONTRERAS24-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-MILWCONTRERAS24-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBYDIAZ2-2,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBYDIAZ2-3,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBYDIAZ2-4,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTB-26OCT272000MILTB,KXMLBTB-26OCT272000MILTB-TBYDIAZ2-5,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB2,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB3,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB4,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB5,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB6,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB7,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-TB8,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL2,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL3,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL4,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL5,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL6,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL7,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTEAMTOTAL-26OCT272000MILTB,KXMLBTEAMTOTAL-26OCT272000MILTB-MIL8,,Total por equipo,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBWA-26OCT272000MILTB,KXMLBWA-26OCT272000MILTB-TBGJAX22-1,,Props de jugador,,,,sin_modelo_especifico
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF3-26OCT272000MILTB,KXMLBF3-26OCT272000MILTB-MIL,YES,Entradas parciales,0.51354702,0.380000,0.123547,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF3-26OCT272000MILTB,KXMLBF3-26OCT272000MILTB-MIL,NO,Entradas parciales,0.48645298,0.640000,-0.163547,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF3-26OCT272000MILTB,KXMLBF3-26OCT272000MILTB-TB,YES,Entradas parciales,0.48645298,0.350000,0.126453,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF3-26OCT272000MILTB,KXMLBF3-26OCT272000MILTB-TB,NO,Entradas parciales,0.51354702,0.660000,-0.156453,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5-26OCT272000MILTB,KXMLBF5-26OCT272000MILTB-MIL,YES,Entradas parciales,0.51693765,0.430000,0.076938,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5-26OCT272000MILTB,KXMLBF5-26OCT272000MILTB-MIL,NO,Entradas parciales,0.48306235,0.580000,-0.106938,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5-26OCT272000MILTB,KXMLBF5-26OCT272000MILTB-TB,YES,Entradas parciales,0.48306235,0.410000,0.063062,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5-26OCT272000MILTB,KXMLBF5-26OCT272000MILTB-TB,NO,Entradas parciales,0.51693765,0.600000,-0.093062,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-TB3,YES,Entradas parciales,0.86347291,0.170000,0.683473,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-TB3,NO,Entradas parciales,0.13652709,0.850000,-0.723473,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-TB2,YES,Entradas parciales,0.94954722,0.280000,0.659547,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-TB2,NO,Entradas parciales,0.05045278,0.750000,-0.709547,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-MIL2,YES,Entradas parciales,0.94954722,0.310000,0.629547,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-MIL2,NO,Entradas parciales,0.05045278,0.740000,-0.699547,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-MIL3,YES,Entradas parciales,0.86347291,0.190000,0.663473,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5SPREAD-26OCT272000MILTB,KXMLBF5SPREAD-26OCT272000MILTB-MIL3,NO,Entradas parciales,0.13652709,0.820000,-0.693473,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-1,YES,Entradas parciales,0.98994899,0.960000,0.019949,precio por encima del máximo
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-1,NO,Entradas parciales,0.01005101,0.070000,-0.069949,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-2,YES,Entradas parciales,0.94954722,0.840000,0.099547,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-2,NO,Entradas parciales,0.05045278,0.190000,-0.149547,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-3,YES,Entradas parciales,0.86347291,0.690000,0.163473,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-3,NO,Entradas parciales,0.13652709,0.350000,-0.223473,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-4,YES,Entradas parciales,0.73429912,0.540000,0.184299,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-4,NO,Entradas parciales,0.26570088,0.470000,-0.214299,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-5,YES,Entradas parciales,0.58111726,0.390000,0.181117,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-5,NO,Entradas parciales,0.41888274,0.640000,-0.231117,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-6,YES,Entradas parciales,0.42840399,0.290000,0.128404,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-6,NO,Entradas parciales,0.57159601,0.750000,-0.188404,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-7,YES,Entradas parciales,0.29539120,0.190000,0.095391,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF5TOTAL-26OCT272000MILTB,KXMLBF5TOTAL-26OCT272000MILTB-7,NO,Entradas parciales,0.70460880,0.840000,-0.145391,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF7-26OCT272000MILTB,KXMLBF7-26OCT272000MILTB-MIL,YES,Entradas parciales,0.51926898,0.470000,0.039269,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF7-26OCT272000MILTB,KXMLBF7-26OCT272000MILTB-MIL,NO,Entradas parciales,0.48073102,0.550000,-0.079269,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF7-26OCT272000MILTB,KXMLBF7-26OCT272000MILTB-TB,YES,Entradas parciales,0.48073102,0.410000,0.060731,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBF7-26OCT272000MILTB,KXMLBF7-26OCT272000MILTB-TB,NO,Entradas parciales,0.51926898,0.610000,-0.100731,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
 849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-MIL,YES,Ganador (moneyline),0.52103067,0.580000,-0.068969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-MIL,NO,Ganador (moneyline),0.47896933,0.440000,0.028969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-TB,YES,Ganador (moneyline),0.47896933,0.440000,0.028969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-TB,NO,Ganador (moneyline),0.52103067,0.570000,-0.058969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-MIL,YES,Ganador de la 1.ª entrada,0.28037607,0.950000,-0.679624,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-TB,YES,Ganador de la 1.ª entrada,0.26564064,0.950000,-0.694359,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-TIE,YES,Ganador de la 1.ª entrada,0.45398329,0.990000,-0.546017,precio por encima del máximo; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRFI-26OCT272000MILTB,KXMLBRFI-26OCT272000MILTB,YES,1.ª entrada / YRFI-NRFI,0.34660261,0.460000,-0.123397,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
-849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRFI-26OCT272000MILTB,KXMLBRFI-26OCT272000MILTB,NO,1.ª entrada / YRFI-NRFI,0.65339739,0.560000,0.083397,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-MIL,NO,Ganador (moneyline),0.47896933,0.430000,0.038969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-TB,YES,Ganador (moneyline),0.47896933,0.430000,0.038969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBGAME-26OCT272000MILTB,KXMLBGAME-26OCT272000MILTB-TB,NO,Ganador (moneyline),0.52103067,0.580000,-0.068969,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-MIL,YES,Ganador de la 1.ª entrada,0.28037607,0.220000,0.050376,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-MIL,NO,Ganador de la 1.ª entrada,0.71962393,0.810000,-0.100376,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-TB,YES,Ganador de la 1.ª entrada,0.26564064,0.200000,0.055641,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-TB,NO,Ganador de la 1.ª entrada,0.73435936,0.840000,-0.115641,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-TIE,YES,Ganador de la 1.ª entrada,0.45398329,0.610000,-0.166017,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBINNINGWIN-26OCT272000MILTB-1,KXMLBINNINGWIN-26OCT272000MILTB-1-TIE,NO,Ganador de la 1.ª entrada,0.54601671,0.420000,0.116017,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRFI-26OCT272000MILTB,KXMLBRFI-26OCT272000MILTB,YES,1.ª entrada / YRFI-NRFI,0.34660261,0.440000,-0.103397,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBRFI-26OCT272000MILTB,KXMLBRFI-26OCT272000MILTB,NO,1.ª entrada / YRFI-NRFI,0.65339739,0.570000,0.073397,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-2,YES,Total de carreras,0.99624731,0.990000,-0.003753,precio por encima del máximo
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-2,NO,Total de carreras,0.00375269,0.030000,-0.036247,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-3,YES,Total de carreras,0.98589188,0.960000,0.015892,precio por encima del máximo
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-3,NO,Total de carreras,0.01410812,0.070000,-0.065892,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-4,YES,Total de carreras,0.96244415,0.860000,0.092444,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-4,NO,Total de carreras,0.03755585,0.150000,-0.122444,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-5,YES,Total de carreras,0.92049107,0.790000,0.120491,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-5,NO,Total de carreras,0.07950893,0.230000,-0.160491,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-6,YES,Total de carreras,0.85738645,0.670000,0.177386,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-6,NO,Total de carreras,0.14261355,0.350000,-0.217386,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-7,YES,Total de carreras,0.77445795,0.580000,0.184458,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-7,NO,Total de carreras,0.22554205,0.430000,-0.214458,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-8,YES,Total de carreras,0.67673425,0.460000,0.206734,ventaja insuficiente
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-8,NO,Total de carreras,0.32326575,0.560000,-0.246734,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-9,YES,Total de carreras,0.57152394,0.380000,0.181524,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-9,NO,Total de carreras,0.42847606,0.640000,-0.221524,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-10,YES,Total de carreras,0.46658362,0.280000,0.176584,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-10,NO,Total de carreras,0.53341638,0.740000,-0.216584,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-11,YES,Total de carreras,0.36855956,0.210000,0.148560,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-11,NO,Total de carreras,0.63144044,0.800000,-0.178560,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-12,YES,Total de carreras,0.28207583,0.150000,0.122076,ventaja insuficiente; probabilidad inferior al umbral de alta probabilidad
+849803,Tampa Bay Rays,Milwaukee Brewers,KXMLBTOTAL-26OCT272000MILTB,KXMLBTOTAL-26OCT272000MILTB-12,NO,Total de carreras,0.71792417,0.870000,-0.162076,ventaja insuficiente
