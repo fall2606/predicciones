@@ -264,31 +264,31 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 7198,
-    "filas_resultados": 3886,
-    "ids_resultado_terminal_en_archivo": 3886,
-    "capturas_con_resultado_terminal": 3886,
-    "sin_resultado_terminal": 3312,
+    "capturas": 7329,
+    "filas_resultados": 3892,
+    "ids_resultado_terminal_en_archivo": 3892,
+    "capturas_con_resultado_terminal": 3892,
+    "sin_resultado_terminal": 3437,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3312,
-      "WIN": 1943,
-      "LOSS": 1943
+      "SIN_RESULTADO": 3437,
+      "WIN": 1946,
+      "LOSS": 1946
     },
-    "n_evaluable": 3886,
+    "n_evaluable": 3892,
     "tasa_acierto": 0.5,
-    "probabilidad_media": 0.4999181892642051,
-    "brier": 0.1693062194601797,
-    "log_loss": 0.5119752309701597,
+    "probabilidad_media": 0.49992024278701575,
+    "brier": 0.16905817726397343,
+    "log_loss": 0.5113341714538809,
     "brier_referencia_muestra": 0.25,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
-        "n": 527,
-        "probabilidad_media": 0.055305122345634575,
-        "tasa_acierto": 0.08159392789373814
+        "n": 530,
+        "probabilidad_media": 0.05551798112696162,
+        "tasa_acierto": 0.08113207547169811
       },
       {
         "intervalo": "10%-20%",
@@ -340,13 +340,13 @@
       },
       {
         "intervalo": "90%-100%",
-        "n": 529,
-        "probabilidad_media": 0.9442223138064793,
-        "tasa_acierto": 0.9187145557655955
+        "n": 532,
+        "probabilidad_media": 0.944027020542954,
+        "tasa_acierto": 0.9191729323308271
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 7198,
+    "filas_reconciliacion": 7329,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
