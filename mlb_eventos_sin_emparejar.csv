@@ -1,6 +1,6 @@
 event_ticker,series_ticker,title,start_time,motivo
 KXCOACHOUTMLBDATE-27NYY,KXCOACHOUTMLBDATE,Aaron Boone: Out by Date,,mercado_no_partido/futuro_premio_o_prop
-KXMLB-26,KXMLB,Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop
+KXMLB-27,KXMLB,2027 Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
@@ -14,7 +14,6 @@ KXMLBBGAME-26OCT300430GLRVZ,KXMLBBGAME,Galaxy Legends vs. Team RVZ,,no_es_MLB/ot
 KXMLBBGAME-26OCT300700VALTNR,KXMLBBGAME,Valhalla vs. TNR Esports,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26OCT310600YNDXAUR,KXMLBBGAME,Team Yandex vs. Aurevia Team,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBCBA-26DEC02,KXMLBCBA,"Pro Baseball new CBA agreement before Dec 2, 2026",,evento_no_identificado/otro
-KXMLBCHAMPLEAGUE-26,KXMLBCHAMPLEAGUE,Pro Baseball Championship Winning League,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-AMILLER,KXMLBDEBUT,Aidan Miller: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-LDEVRIES,KXMLBDEBUT,Leo De Vries: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-TWHITE,KXMLBDEBUT,Thomas White: Debut Date,,mercado_no_partido/futuro_premio_o_prop
@@ -32,7 +31,6 @@ KXMLBDEBUT-RCHOLOWSKY,KXMLBDEBUT,Roch Cholowsky: Debut Date,,mercado_no_partido/
 KXMLBDEBUT-VLACKEY,KXMLBDEBUT,Vahn Lackey: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBDEBUT-GEMERSON,KXMLBDEBUT,Grady Emerson: Debut Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBEOTY-26,KXMLBEOTY,Executive of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBFASTPITCH-26JMISIOROWSKI32,KXMLBFASTPITCH,Jacob Misiorowski: Fastest Pitch this Season,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL1B,KXMLBGG,Gold Glove: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL2B,KXMLBGG,Gold Glove: AL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBGG-26AL3B,KXMLBGG,Gold Glove: AL Third Baseman,,mercado_no_partido/futuro_premio_o_prop
@@ -79,21 +77,7 @@ KXMLBSS-26NLC,KXMLBSS,Silver Slugger: NL Catcher,,mercado_no_partido/futuro_prem
 KXMLBSS-26NLOF,KXMLBSS,Silver Slugger: NL Outfield,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NLSS,KXMLBSS,Silver Slugger: NL Shortstop,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NLTEAM,KXMLBSS,Silver Slugger: NL Team,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26GS2,KXMLBSTAT,Pro Baseball: 2+ Grand Slam Game,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26HR4,KXMLBSTAT,Pro Baseball: 4+ Home Run Game,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26HR500,KXMLBSTAT,Pro Baseball: 500+ Foot Home Run,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26K20,KXMLBSTAT,Pro Baseball: 20+ Strikeout Game,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26NOHIT,KXMLBSTAT,Pro Baseball: Individual Pitcher No Hitter,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26P106,KXMLBSTAT,Pro Baseball: 106+ MPH Pitch,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26P107,KXMLBSTAT,Pro Baseball: 107+ MPH Pitch,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTAT-26PG,KXMLBSTAT,Pro Baseball: Perfect Game,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTATCOUNT-263HR,KXMLBSTATCOUNT,Pro Baseball: 3+ Home Run Games,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTATCOUNT-26CYCLE,KXMLBSTATCOUNT,Pro Baseball: Cycles,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTATCOUNT-26IMMACULATE,KXMLBSTATCOUNT,Pro Baseball: Immaculate Innings,,mercado_no_partido/futuro_premio_o_prop
-KXMLBSTATCOUNT-26ITPHR,KXMLBSTATCOUNT,Pro Baseball: Inside-The-Park Home Runs,,mercado_no_partido/futuro_premio_o_prop
 KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,mercado_no_partido/futuro_premio_o_prop
-KXMLBWALKOFFS-26,KXMLBWALKOFFS,Total Walk-Offs in Pro Baseball Playoffs,,mercado_no_partido/futuro_premio_o_prop
-KXMLBWSOUTCOME-26,KXMLBWSOUTCOME,Pro Baseball Championship Outcome,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27ACHAPMAN,KXNEXTTEAMMLB,Aroldis Chapman's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27CWALKER,KXNEXTTEAMMLB,Christian Walker's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27FTATIS,KXNEXTTEAMMLB,Fernando Tatis Jr.'s Next Team,,mercado_no_partido/futuro_premio_o_prop
