@@ -264,16 +264,16 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 7334,
+    "capturas": 7428,
     "filas_resultados": 4020,
     "ids_resultado_terminal_en_archivo": 4020,
     "capturas_con_resultado_terminal": 4020,
-    "sin_resultado_terminal": 3314,
+    "sin_resultado_terminal": 3408,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3314,
+      "SIN_RESULTADO": 3408,
       "WIN": 2010,
       "LOSS": 2010
     },
@@ -346,7 +346,7 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 7334,
+    "filas_reconciliacion": 7428,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
