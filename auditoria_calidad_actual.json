@@ -264,43 +264,43 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 7428,
-    "filas_resultados": 4020,
-    "ids_resultado_terminal_en_archivo": 4020,
-    "capturas_con_resultado_terminal": 4020,
-    "sin_resultado_terminal": 3408,
+    "capturas": 7516,
+    "filas_resultados": 4032,
+    "ids_resultado_terminal_en_archivo": 4032,
+    "capturas_con_resultado_terminal": 4032,
+    "sin_resultado_terminal": 3484,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3408,
-      "WIN": 2010,
-      "LOSS": 2010
+      "SIN_RESULTADO": 3484,
+      "WIN": 2016,
+      "LOSS": 2016
     },
-    "n_evaluable": 4020,
+    "n_evaluable": 4032,
     "tasa_acierto": 0.5,
-    "probabilidad_media": 0.49992877971025557,
-    "brier": 0.1691969646239773,
-    "log_loss": 0.5114716061258239,
+    "probabilidad_media": 0.4999296526826414,
+    "brier": 0.16875030522006867,
+    "log_loss": 0.5103402354338005,
     "brier_referencia_muestra": 0.25,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
-        "n": 543,
-        "probabilidad_media": 0.05568315725564842,
-        "tasa_acierto": 0.08103130755064457
+        "n": 546,
+        "probabilidad_media": 0.05581006261374347,
+        "tasa_acierto": 0.08058608058608059
       },
       {
         "intervalo": "10%-20%",
-        "n": 397,
-        "probabilidad_media": 0.14869783454942712,
-        "tasa_acierto": 0.1561712846347607
+        "n": 399,
+        "probabilidad_media": 0.14849138316012991,
+        "tasa_acierto": 0.15538847117794485
       },
       {
         "intervalo": "20%-30%",
-        "n": 353,
-        "probabilidad_media": 0.24982732736669044,
-        "tasa_acierto": 0.28895184135977336
+        "n": 354,
+        "probabilidad_media": 0.24988701128102825,
+        "tasa_acierto": 0.288135593220339
       },
       {
         "intervalo": "30%-40%",
@@ -328,25 +328,25 @@
       },
       {
         "intervalo": "70%-80%",
-        "n": 352,
-        "probabilidad_media": 0.7502023051512731,
-        "tasa_acierto": 0.7073863636363636
+        "n": 353,
+        "probabilidad_media": 0.7501525863491795,
+        "tasa_acierto": 0.7082152974504249
       },
       {
         "intervalo": "80%-90%",
-        "n": 397,
-        "probabilidad_media": 0.8505360070825684,
-        "tasa_acierto": 0.8438287153652393
+        "n": 399,
+        "probabilidad_media": 0.8507462988646877,
+        "tasa_acierto": 0.8446115288220551
       },
       {
         "intervalo": "90%-100%",
-        "n": 545,
-        "probabilidad_media": 0.9438656459849101,
-        "tasa_acierto": 0.9192660550458716
+        "n": 548,
+        "probabilidad_media": 0.9437399551909076,
+        "tasa_acierto": 0.9197080291970803
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 7428,
+    "filas_reconciliacion": 7516,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
