@@ -178,7 +178,7 @@
     "filas_reconciliacion": 209,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
-    "pendientes_activos": 209
+    "pendientes_activos": 0
   },
   {
     "deporte": "MLB",
@@ -264,16 +264,16 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 7516,
+    "capturas": 8688,
     "filas_resultados": 4248,
     "ids_resultado_terminal_en_archivo": 4248,
     "capturas_con_resultado_terminal": 4248,
-    "sin_resultado_terminal": 3268,
+    "sin_resultado_terminal": 4440,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3268,
+      "SIN_RESULTADO": 4440,
       "WIN": 2122,
       "LOSS": 2126
     },
@@ -346,7 +346,7 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 7516,
+    "filas_reconciliacion": 8688,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
