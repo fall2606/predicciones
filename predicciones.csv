@@ -3236,89 +3236,89 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560631,2026-11-01,Liverpool,Arsenal,0.0,,,Más de 12.5 corners totales,0.1614
 560631,2026-11-01,Liverpool,Arsenal,0.0,,,Más de 13.5 corners totales,0.1075
 560631,2026-11-01,Liverpool,Arsenal,0.0,,,Más de 14.5 corners totales,0.0691
-560622,2026-11-02,Newcastle,Everton,,,,Gana local,0.4384
-560622,2026-11-02,Newcastle,Everton,,,,Empate,0.2585
-560622,2026-11-02,Newcastle,Everton,,,,Gana visita,0.3031
-560622,2026-11-02,Newcastle,Everton,,,,Ambos marcan,0.5308
-560622,2026-11-02,Newcastle,Everton,,,,Local gana por más de 1.5,0.2138
-560622,2026-11-02,Newcastle,Everton,,,,Visita gana por más de 1.5,0.1233
-560622,2026-11-02,Newcastle,Everton,,,,Local gana por más de 2.5,0.0826
-560622,2026-11-02,Newcastle,Everton,,,,Visita gana por más de 2.5,0.0391
-560622,2026-11-02,Newcastle,Everton,,,,Local gana por más de 3.5,0.026
-560622,2026-11-02,Newcastle,Everton,,,,Visita gana por más de 3.5,0.01
-560622,2026-11-02,Newcastle,Everton,,,,Más de 1.5 goles,0.7397
-560622,2026-11-02,Newcastle,Everton,,,,Más de 2.5 goles,0.4908
-560622,2026-11-02,Newcastle,Everton,,,,Más de 3.5 goles,0.2721
-560622,2026-11-02,Newcastle,Everton,,,,Más de 4.5 goles,0.1279
-560622,2026-11-02,Newcastle,Everton,,,,Más de 5.5 goles,0.0518
-560622,2026-11-02,Newcastle,Everton,,,,Local más de 0.5 goles,0.7688
-560622,2026-11-02,Newcastle,Everton,,,,Visita más de 0.5 goles,0.6905
-560622,2026-11-02,Newcastle,Everton,,,,Local más de 1.5 goles,0.4302
-560622,2026-11-02,Newcastle,Everton,,,,Visita más de 1.5 goles,0.3275
-560622,2026-11-02,Newcastle,Everton,,,,Local más de 2.5 goles,0.1823
-560622,2026-11-02,Newcastle,Everton,,,,Visita más de 2.5 goles,0.1147
-560622,2026-11-02,Newcastle,Everton,,,,Local más de 3.5 goles,0.0612
-560622,2026-11-02,Newcastle,Everton,,,,Visita más de 3.5 goles,0.0315
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 0-0,0.0716
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 0-1,0.0839
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 0-2,0.0492
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 0-3,0.0192
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 0-4,0.0056
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 1-0,0.1048
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 1-1,0.1229
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 1-2,0.0721
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 1-3,0.0282
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 1-4,0.0083
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 2-0,0.0767
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 2-1,0.09
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 2-2,0.0528
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 2-3,0.0206
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 2-4,0.006
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 3-0,0.0375
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 3-1,0.0439
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 3-2,0.0258
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 3-3,0.0101
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 3-4,0.003
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 4-0,0.0137
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 4-1,0.0161
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 4-2,0.0094
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 4-3,0.0037
-560622,2026-11-02,Newcastle,Everton,,,,Marcador 4-4,0.0011
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Gana local,0.4384
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Empate,0.2585
+560622,2026-11-02,Newcastle,Everton,1.0,0.0,1.0,Gana visita,0.3031
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Ambos marcan,0.5308
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local gana por más de 1.5,0.2138
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Visita gana por más de 1.5,0.1233
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local gana por más de 2.5,0.0826
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Visita gana por más de 2.5,0.0391
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local gana por más de 3.5,0.026
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Visita gana por más de 3.5,0.01
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Más de 1.5 goles,0.7397
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Más de 2.5 goles,0.4908
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Más de 3.5 goles,0.2721
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Más de 4.5 goles,0.1279
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Más de 5.5 goles,0.0518
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local más de 0.5 goles,0.7688
+560622,2026-11-02,Newcastle,Everton,1.0,0.0,1.0,Visita más de 0.5 goles,0.6905
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local más de 1.5 goles,0.4302
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Visita más de 1.5 goles,0.3275
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local más de 2.5 goles,0.1823
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Visita más de 2.5 goles,0.1147
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Local más de 3.5 goles,0.0612
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Visita más de 3.5 goles,0.0315
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 0-0,0.0716
+560622,2026-11-02,Newcastle,Everton,1.0,0.0,1.0,Marcador 0-1,0.0839
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 0-2,0.0492
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 0-3,0.0192
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 0-4,0.0056
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 1-0,0.1048
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 1-1,0.1229
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 1-2,0.0721
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 1-3,0.0282
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 1-4,0.0083
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 2-0,0.0767
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 2-1,0.09
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 2-2,0.0528
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 2-3,0.0206
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 2-4,0.006
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 3-0,0.0375
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 3-1,0.0439
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 3-2,0.0258
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 3-3,0.0101
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 3-4,0.003
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 4-0,0.0137
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 4-1,0.0161
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 4-2,0.0094
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 4-3,0.0037
+560622,2026-11-02,Newcastle,Everton,0.0,0.0,1.0,Marcador 4-4,0.0011
 560622,2026-11-02,Newcastle,Everton,,,,Primer gol: local,0.5155
 560622,2026-11-02,Newcastle,Everton,,,,Primer gol: visita,0.4129
 560622,2026-11-02,Newcastle,Everton,,,,Primer gol: ninguno,0.0716
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 1+,0.9955
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 1+,0.976
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 2+,0.9751
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 2+,0.8962
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 3+,0.9251
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 3+,0.7552
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 4+,0.839
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 4+,0.5792
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 5+,0.7217
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 5+,0.4053
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 6+,0.5871
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 6+,0.2606
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 7+,0.4518
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 7+,0.1553
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 8+,0.3298
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 8+,0.0865
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 9+,0.2291
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 9+,0.0454
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 10+,0.152
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 10+,0.0225
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 11+,0.0967
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 11+,0.0107
-560622,2026-11-02,Newcastle,Everton,,,,Corners local: 12+,0.0592
-560622,2026-11-02,Newcastle,Everton,,,,Corners visita: 12+,0.0048
-560622,2026-11-02,Newcastle,Everton,,,,Más de 7.5 corners totales,0.7912
-560622,2026-11-02,Newcastle,Everton,,,,Más de 8.5 corners totales,0.6966
-560622,2026-11-02,Newcastle,Everton,,,,Más de 9.5 corners totales,0.5918
-560622,2026-11-02,Newcastle,Everton,,,,Más de 10.5 corners totales,0.4848
-560622,2026-11-02,Newcastle,Everton,,,,Más de 11.5 corners totales,0.3829
-560622,2026-11-02,Newcastle,Everton,,,,Más de 12.5 corners totales,0.2918
-560622,2026-11-02,Newcastle,Everton,,,,Más de 13.5 corners totales,0.2148
-560622,2026-11-02,Newcastle,Everton,,,,Más de 14.5 corners totales,0.1529
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners local: 1+,0.9955
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners visita: 1+,0.976
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners local: 2+,0.9751
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners visita: 2+,0.8962
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners local: 3+,0.9251
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners visita: 3+,0.7552
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners local: 4+,0.839
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners visita: 4+,0.5792
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 5+,0.7217
+560622,2026-11-02,Newcastle,Everton,1.0,,,Corners visita: 5+,0.4053
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 6+,0.5871
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 6+,0.2606
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 7+,0.4518
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 7+,0.1553
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 8+,0.3298
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 8+,0.0865
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 9+,0.2291
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 9+,0.0454
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 10+,0.152
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 10+,0.0225
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 11+,0.0967
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 11+,0.0107
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners local: 12+,0.0592
+560622,2026-11-02,Newcastle,Everton,0.0,,,Corners visita: 12+,0.0048
+560622,2026-11-02,Newcastle,Everton,1.0,,,Más de 7.5 corners totales,0.7912
+560622,2026-11-02,Newcastle,Everton,1.0,,,Más de 8.5 corners totales,0.6966
+560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 9.5 corners totales,0.5918
+560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 10.5 corners totales,0.4848
+560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 11.5 corners totales,0.3829
+560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 12.5 corners totales,0.2918
+560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 13.5 corners totales,0.2148
+560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 14.5 corners totales,0.1529
 560634,2026-11-06,Everton,Coventry City,,,,Gana local,0.5199
 560634,2026-11-06,Everton,Coventry City,,,,Empate,0.2514
 560634,2026-11-06,Everton,Coventry City,,,,Gana visita,0.2287
