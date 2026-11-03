@@ -264,91 +264,91 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 9997,
-    "filas_resultados": 7029,
-    "ids_resultado_terminal_en_archivo": 7029,
-    "capturas_con_resultado_terminal": 7029,
-    "sin_resultado_terminal": 2968,
+    "capturas": 10727,
+    "filas_resultados": 7259,
+    "ids_resultado_terminal_en_archivo": 7259,
+    "capturas_con_resultado_terminal": 7259,
+    "sin_resultado_terminal": 3468,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 2968,
-      "WIN": 3512,
-      "LOSS": 3517
+      "SIN_RESULTADO": 3468,
+      "WIN": 3627,
+      "LOSS": 3632
     },
-    "n_evaluable": 7029,
-    "tasa_acierto": 0.4996443306302461,
-    "probabilidad_media": 0.4996575042979054,
-    "brier": 0.17792331310645987,
-    "log_loss": 0.5375620680458426,
-    "brier_referencia_muestra": 0.24999987349929945,
+    "n_evaluable": 7259,
+    "tasa_acierto": 0.499655599944896,
+    "probabilidad_media": 0.4996657228623329,
+    "brier": 0.17688772936764485,
+    "log_loss": 0.5347176971247346,
+    "brier_referencia_muestra": 0.24999988138860207,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
-        "n": 862,
-        "probabilidad_media": 0.06111020287765774,
-        "tasa_acierto": 0.11716937354988399
+        "n": 888,
+        "probabilidad_media": 0.06158623431461563,
+        "tasa_acierto": 0.11486486486486487
       },
       {
         "intervalo": "10%-20%",
-        "n": 850,
-        "probabilidad_media": 0.14187117185443643,
-        "tasa_acierto": 0.15529411764705883
+        "n": 880,
+        "probabilidad_media": 0.14181859203353828,
+        "tasa_acierto": 0.1534090909090909
       },
       {
         "intervalo": "20%-30%",
-        "n": 541,
-        "probabilidad_media": 0.24822088412593035,
-        "tasa_acierto": 0.2975970425138632
+        "n": 558,
+        "probabilidad_media": 0.24824659364458873,
+        "tasa_acierto": 0.2956989247311828
       },
       {
         "intervalo": "30%-40%",
-        "n": 567,
-        "probabilidad_media": 0.3534530690019944,
-        "tasa_acierto": 0.3985890652557319
+        "n": 587,
+        "probabilidad_media": 0.35322818674453876,
+        "tasa_acierto": 0.3969335604770017
       },
       {
         "intervalo": "40%-50%",
-        "n": 693,
-        "probabilidad_media": 0.4470626556750412,
-        "tasa_acierto": 0.44733044733044736
+        "n": 715,
+        "probabilidad_media": 0.44705851553280695,
+        "tasa_acierto": 0.45034965034965035
       },
       {
         "intervalo": "50%-60%",
-        "n": 702,
-        "probabilidad_media": 0.5523375062337907,
-        "tasa_acierto": 0.5555555555555556
+        "n": 724,
+        "probabilidad_media": 0.5523736885778534,
+        "tasa_acierto": 0.5524861878453039
       },
       {
         "intervalo": "60%-70%",
-        "n": 565,
-        "probabilidad_media": 0.6468038214080822,
-        "tasa_acierto": 0.5982300884955752
+        "n": 585,
+        "probabilidad_media": 0.6470201428915012,
+        "tasa_acierto": 0.6
       },
       {
         "intervalo": "70%-80%",
-        "n": 540,
-        "probabilidad_media": 0.7518484318614561,
-        "tasa_acierto": 0.7
+        "n": 557,
+        "probabilidad_media": 0.7518208024424162,
+        "tasa_acierto": 0.7019748653500898
       },
       {
         "intervalo": "80%-90%",
-        "n": 850,
-        "probabilidad_media": 0.8577221486493052,
-        "tasa_acierto": 0.8447058823529412
+        "n": 880,
+        "probabilidad_media": 0.857784169190804,
+        "tasa_acierto": 0.8465909090909091
       },
       {
         "intervalo": "90%-100%",
-        "n": 859,
-        "probabilidad_media": 0.9383797787023503,
-        "tasa_acierto": 0.8824214202561118
+        "n": 885,
+        "probabilidad_media": 0.9378887816360145,
+        "tasa_acierto": 0.8847457627118644
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 9997,
+    "filas_reconciliacion": 10727,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
-    "pendientes_activos": 230
+    "pendientes_activos": 0
   }
 ]
