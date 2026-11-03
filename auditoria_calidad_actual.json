@@ -265,30 +265,30 @@
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
     "capturas": 9997,
-    "filas_resultados": 7027,
-    "ids_resultado_terminal_en_archivo": 7027,
-    "capturas_con_resultado_terminal": 7027,
-    "sin_resultado_terminal": 2970,
+    "filas_resultados": 7029,
+    "ids_resultado_terminal_en_archivo": 7029,
+    "capturas_con_resultado_terminal": 7029,
+    "sin_resultado_terminal": 2968,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 2970,
-      "WIN": 3511,
-      "LOSS": 3516
+      "SIN_RESULTADO": 2968,
+      "WIN": 3512,
+      "LOSS": 3517
     },
-    "n_evaluable": 7027,
-    "tasa_acierto": 0.4996442294008823,
-    "probabilidad_media": 0.49965763567664556,
-    "brier": 0.1779718981187155,
-    "log_loss": 0.5376897946987529,
-    "brier_referencia_muestra": 0.24999987342728083,
+    "n_evaluable": 7029,
+    "tasa_acierto": 0.4996443306302461,
+    "probabilidad_media": 0.4996575042979054,
+    "brier": 0.17792331310645987,
+    "log_loss": 0.5375620680458426,
+    "brier_referencia_muestra": 0.24999987349929945,
     "calibracion_intervalos": [
       {
         "intervalo": "0%-10%",
-        "n": 861,
-        "probabilidad_media": 0.06108342967139629,
-        "tasa_acierto": 0.1173054587688734
+        "n": 862,
+        "probabilidad_media": 0.06111020287765774,
+        "tasa_acierto": 0.11716937354988399
       },
       {
         "intervalo": "10%-20%",
@@ -340,15 +340,15 @@
       },
       {
         "intervalo": "90%-100%",
-        "n": 858,
-        "probabilidad_media": 0.938407925441258,
-        "tasa_acierto": 0.8822843822843823
+        "n": 859,
+        "probabilidad_media": 0.9383797787023503,
+        "tasa_acierto": 0.8824214202561118
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
     "filas_reconciliacion": 9997,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
-    "pendientes_activos": 0
+    "pendientes_activos": 230
   }
 ]
