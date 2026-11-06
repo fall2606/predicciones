@@ -264,16 +264,16 @@
     "deporte": "NFL",
     "archivo_predicciones": "predicciones_nfl.csv",
     "archivo_resultados": "resultados_nfl.csv",
-    "capturas": 10820,
+    "capturas": 10906,
     "filas_resultados": 7488,
     "ids_resultado_terminal_en_archivo": 7488,
     "capturas_con_resultado_terminal": 7488,
-    "sin_resultado_terminal": 3332,
+    "sin_resultado_terminal": 3418,
     "prediction_id_vacios": 0,
     "prediction_id_duplicados_en_capturas": 0,
     "ids_resultado_duplicados": 0,
     "estados": {
-      "SIN_RESULTADO": 3332,
+      "SIN_RESULTADO": 3418,
       "WIN": 3739,
       "LOSS": 3749
     },
@@ -346,7 +346,7 @@
       }
     ],
     "limitacion": "Diagnóstico descriptivo; no es backtest cronológico fuera de muestra.",
-    "filas_reconciliacion": 10820,
+    "filas_reconciliacion": 10906,
     "prediction_ids_sin_fila_reconciliacion": 0,
     "reconciliacion_cobertura_completa": true,
     "pendientes_activos": 0
