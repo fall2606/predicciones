@@ -3319,54 +3319,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 12.5 corners totales,0.2918
 560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 13.5 corners totales,0.2148
 560622,2026-11-02,Newcastle,Everton,0.0,,,Más de 14.5 corners totales,0.1529
-560634,2026-11-06,Everton,Coventry City,,,,Gana local,0.5199
-560634,2026-11-06,Everton,Coventry City,,,,Empate,0.2514
-560634,2026-11-06,Everton,Coventry City,,,,Gana visita,0.2287
-560634,2026-11-06,Everton,Coventry City,,,,Ambos marcan,0.4916
-560634,2026-11-06,Everton,Coventry City,,,,Local gana por más de 1.5,0.2737
-560634,2026-11-06,Everton,Coventry City,,,,Visita gana por más de 1.5,0.0797
-560634,2026-11-06,Everton,Coventry City,,,,Local gana por más de 2.5,0.1144
-560634,2026-11-06,Everton,Coventry City,,,,Visita gana por más de 2.5,0.0213
-560634,2026-11-06,Everton,Coventry City,,,,Local gana por más de 3.5,0.0391
-560634,2026-11-06,Everton,Coventry City,,,,Visita gana por más de 3.5,0.0046
-560634,2026-11-06,Everton,Coventry City,,,,Más de 1.5 goles,0.7228
-560634,2026-11-06,Everton,Coventry City,,,,Más de 2.5 goles,0.4689
-560634,2026-11-06,Everton,Coventry City,,,,Más de 3.5 goles,0.2531
-560634,2026-11-06,Everton,Coventry City,,,,Más de 4.5 goles,0.1156
-560634,2026-11-06,Everton,Coventry City,,,,Más de 5.5 goles,0.0454
-560634,2026-11-06,Everton,Coventry City,,,,Local más de 0.5 goles,0.7957
-560634,2026-11-06,Everton,Coventry City,,,,Visita más de 0.5 goles,0.6178
-560634,2026-11-06,Everton,Coventry City,,,,Local más de 1.5 goles,0.4713
-560634,2026-11-06,Everton,Coventry City,,,,Visita más de 1.5 goles,0.2501
-560634,2026-11-06,Everton,Coventry City,,,,Local más de 2.5 goles,0.2136
-560634,2026-11-06,Everton,Coventry City,,,,Visita más de 2.5 goles,0.0734
-560634,2026-11-06,Everton,Coventry City,,,,Local más de 3.5 goles,0.0772
-560634,2026-11-06,Everton,Coventry City,,,,Visita más de 3.5 goles,0.0167
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 0-0,0.0781
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 0-1,0.0751
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 0-2,0.0361
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 0-3,0.0116
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 0-4,0.0028
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 1-0,0.124
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 1-1,0.1193
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 1-2,0.0574
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 1-3,0.0184
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 1-4,0.0044
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 2-0,0.0985
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 2-1,0.0947
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 2-2,0.0455
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 2-3,0.0146
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 2-4,0.0035
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 3-0,0.0521
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 3-1,0.0501
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 3-2,0.0241
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 3-3,0.0077
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 3-4,0.0019
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 4-0,0.0207
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 4-1,0.0199
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 4-2,0.0096
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 4-3,0.0031
-560634,2026-11-06,Everton,Coventry City,,,,Marcador 4-4,0.0007
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Gana local,0.5199
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Empate,0.2514
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Gana visita,0.2287
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Ambos marcan,0.4916
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Local gana por más de 1.5,0.2737
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Visita gana por más de 1.5,0.0797
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Local gana por más de 2.5,0.1144
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Visita gana por más de 2.5,0.0213
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Local gana por más de 3.5,0.0391
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Visita gana por más de 3.5,0.0046
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Más de 1.5 goles,0.7228
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Más de 2.5 goles,0.4689
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Más de 3.5 goles,0.2531
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Más de 4.5 goles,0.1156
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Más de 5.5 goles,0.0454
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Local más de 0.5 goles,0.7957
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Visita más de 0.5 goles,0.6178
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Local más de 1.5 goles,0.4713
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Visita más de 1.5 goles,0.2501
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Local más de 2.5 goles,0.2136
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Visita más de 2.5 goles,0.0734
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Local más de 3.5 goles,0.0772
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Visita más de 3.5 goles,0.0167
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 0-0,0.0781
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 0-1,0.0751
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 0-2,0.0361
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 0-3,0.0116
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 0-4,0.0028
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 1-0,0.124
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 1-1,0.1193
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 1-2,0.0574
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 1-3,0.0184
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 1-4,0.0044
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 2-0,0.0985
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 2-1,0.0947
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 2-2,0.0455
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 2-3,0.0146
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 2-4,0.0035
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 3-0,0.0521
+560634,2026-11-06,Everton,Coventry City,1.0,3.0,1.0,Marcador 3-1,0.0501
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 3-2,0.0241
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 3-3,0.0077
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 3-4,0.0019
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 4-0,0.0207
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 4-1,0.0199
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 4-2,0.0096
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 4-3,0.0031
+560634,2026-11-06,Everton,Coventry City,0.0,3.0,1.0,Marcador 4-4,0.0007
 560634,2026-11-06,Everton,Coventry City,,,,Primer gol: local,0.5742
 560634,2026-11-06,Everton,Coventry City,,,,Primer gol: visita,0.3477
 560634,2026-11-06,Everton,Coventry City,,,,Primer gol: ninguno,0.0781
@@ -3402,54 +3402,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560634,2026-11-06,Everton,Coventry City,,,,Más de 12.5 corners totales,0.1442
 560634,2026-11-06,Everton,Coventry City,,,,Más de 13.5 corners totales,0.0944
 560634,2026-11-06,Everton,Coventry City,,,,Más de 14.5 corners totales,0.0596
-560632,2026-11-07,Leeds United,Tottenham,,,,Gana local,0.4566
-560632,2026-11-07,Leeds United,Tottenham,,,,Empate,0.2614
-560632,2026-11-07,Leeds United,Tottenham,,,,Gana visita,0.282
-560632,2026-11-07,Leeds United,Tottenham,,,,Ambos marcan,0.5095
-560632,2026-11-07,Leeds United,Tottenham,,,,Local gana por más de 1.5,0.2243
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita gana por más de 1.5,0.1088
-560632,2026-11-07,Leeds United,Tottenham,,,,Local gana por más de 2.5,0.087
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita gana por más de 2.5,0.0325
-560632,2026-11-07,Leeds United,Tottenham,,,,Local gana por más de 3.5,0.0275
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita gana por más de 3.5,0.0078
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 1.5 goles,0.7228
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 2.5 goles,0.4689
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 3.5 goles,0.2531
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 4.5 goles,0.1156
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 5.5 goles,0.0454
-560632,2026-11-07,Leeds United,Tottenham,,,,Local más de 0.5 goles,0.768
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita más de 0.5 goles,0.6634
-560632,2026-11-07,Leeds United,Tottenham,,,,Local más de 1.5 goles,0.429
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita más de 1.5 goles,0.2969
-560632,2026-11-07,Leeds United,Tottenham,,,,Local más de 2.5 goles,0.1814
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita más de 2.5 goles,0.0974
-560632,2026-11-07,Leeds United,Tottenham,,,,Local más de 3.5 goles,0.0608
-560632,2026-11-07,Leeds United,Tottenham,,,,Visita más de 3.5 goles,0.0249
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 0-0,0.0781
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 0-1,0.085
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 0-2,0.0463
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 0-3,0.0168
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 0-4,0.0046
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 1-0,0.1141
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 1-1,0.1242
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 1-2,0.0676
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 1-3,0.0246
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 1-4,0.0067
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 2-0,0.0833
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 2-1,0.0907
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 2-2,0.0494
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 2-3,0.0179
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 2-4,0.0049
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 3-0,0.0406
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 3-1,0.0442
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 3-2,0.0241
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 3-3,0.0087
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 3-4,0.0024
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 4-0,0.0148
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 4-1,0.0161
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 4-2,0.0088
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 4-3,0.0032
-560632,2026-11-07,Leeds United,Tottenham,,,,Marcador 4-4,0.0009
+560632,2026-11-07,Leeds United,Tottenham,1.0,1.0,0.0,Gana local,0.4566
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Empate,0.2614
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Gana visita,0.282
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Ambos marcan,0.5095
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Local gana por más de 1.5,0.2243
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita gana por más de 1.5,0.1088
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Local gana por más de 2.5,0.087
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita gana por más de 2.5,0.0325
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Local gana por más de 3.5,0.0275
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita gana por más de 3.5,0.0078
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Más de 1.5 goles,0.7228
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Más de 2.5 goles,0.4689
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Más de 3.5 goles,0.2531
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Más de 4.5 goles,0.1156
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Más de 5.5 goles,0.0454
+560632,2026-11-07,Leeds United,Tottenham,1.0,1.0,0.0,Local más de 0.5 goles,0.768
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita más de 0.5 goles,0.6634
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Local más de 1.5 goles,0.429
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita más de 1.5 goles,0.2969
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Local más de 2.5 goles,0.1814
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita más de 2.5 goles,0.0974
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Local más de 3.5 goles,0.0608
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Visita más de 3.5 goles,0.0249
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 0-0,0.0781
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 0-1,0.085
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 0-2,0.0463
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 0-3,0.0168
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 0-4,0.0046
+560632,2026-11-07,Leeds United,Tottenham,1.0,1.0,0.0,Marcador 1-0,0.1141
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 1-1,0.1242
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 1-2,0.0676
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 1-3,0.0246
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 1-4,0.0067
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 2-0,0.0833
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 2-1,0.0907
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 2-2,0.0494
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 2-3,0.0179
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 2-4,0.0049
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 3-0,0.0406
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 3-1,0.0442
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 3-2,0.0241
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 3-3,0.0087
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 3-4,0.0024
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 4-0,0.0148
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 4-1,0.0161
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 4-2,0.0088
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 4-3,0.0032
+560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Marcador 4-4,0.0009
 560632,2026-11-07,Leeds United,Tottenham,,,,Primer gol: local,0.5282
 560632,2026-11-07,Leeds United,Tottenham,,,,Primer gol: visita,0.3937
 560632,2026-11-07,Leeds United,Tottenham,,,,Primer gol: ninguno,0.0781
@@ -3485,54 +3485,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560632,2026-11-07,Leeds United,Tottenham,,,,Más de 12.5 corners totales,0.2001
 560632,2026-11-07,Leeds United,Tottenham,,,,Más de 13.5 corners totales,0.138
 560632,2026-11-07,Leeds United,Tottenham,,,,Más de 14.5 corners totales,0.0918
-560640,2026-11-07,Arsenal,Hull City,,,,Gana local,0.6398
-560640,2026-11-07,Arsenal,Hull City,,,,Empate,0.2278
-560640,2026-11-07,Arsenal,Hull City,,,,Gana visita,0.1324
-560640,2026-11-07,Arsenal,Hull City,,,,Ambos marcan,0.391
-560640,2026-11-07,Arsenal,Hull City,,,,Local gana por más de 1.5,0.3711
-560640,2026-11-07,Arsenal,Hull City,,,,Visita gana por más de 1.5,0.0334
-560640,2026-11-07,Arsenal,Hull City,,,,Local gana por más de 2.5,0.1712
-560640,2026-11-07,Arsenal,Hull City,,,,Visita gana por más de 2.5,0.0063
-560640,2026-11-07,Arsenal,Hull City,,,,Local gana por más de 3.5,0.0645
-560640,2026-11-07,Arsenal,Hull City,,,,Visita gana por más de 3.5,0.0009
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 1.5 goles,0.6884
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 2.5 goles,0.4265
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 3.5 goles,0.2183
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 4.5 goles,0.0941
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 5.5 goles,0.0348
-560640,2026-11-07,Arsenal,Hull City,,,,Local más de 0.5 goles,0.8251
-560640,2026-11-07,Arsenal,Hull City,,,,Visita más de 0.5 goles,0.4739
-560640,2026-11-07,Arsenal,Hull City,,,,Local más de 1.5 goles,0.5201
-560640,2026-11-07,Arsenal,Hull City,,,,Visita más de 1.5 goles,0.136
-560640,2026-11-07,Arsenal,Hull City,,,,Local más de 2.5 goles,0.2543
-560640,2026-11-07,Arsenal,Hull City,,,,Visita más de 2.5 goles,0.0275
-560640,2026-11-07,Arsenal,Hull City,,,,Local más de 3.5 goles,0.0998
-560640,2026-11-07,Arsenal,Hull City,,,,Visita más de 3.5 goles,0.0043
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 0-0,0.092
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 0-1,0.0591
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 0-2,0.019
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 0-3,0.0041
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 0-4,0.0007
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 1-0,0.1604
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 1-1,0.1031
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 1-2,0.0331
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 1-3,0.0071
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 1-4,0.0011
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 2-0,0.1398
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 2-1,0.0898
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 2-2,0.0288
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 2-3,0.0062
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 2-4,0.001
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 3-0,0.0813
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 3-1,0.0522
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 3-2,0.0168
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 3-3,0.0036
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 3-4,0.0006
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 4-0,0.0354
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 4-1,0.0227
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 4-2,0.0073
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 4-3,0.0016
-560640,2026-11-07,Arsenal,Hull City,,,,Marcador 4-4,0.0003
+560640,2026-11-07,Arsenal,Hull City,1.0,1.0,0.0,Gana local,0.6398
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Empate,0.2278
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Gana visita,0.1324
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Ambos marcan,0.391
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Local gana por más de 1.5,0.3711
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita gana por más de 1.5,0.0334
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Local gana por más de 2.5,0.1712
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita gana por más de 2.5,0.0063
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Local gana por más de 3.5,0.0645
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita gana por más de 3.5,0.0009
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Más de 1.5 goles,0.6884
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Más de 2.5 goles,0.4265
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Más de 3.5 goles,0.2183
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Más de 4.5 goles,0.0941
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Más de 5.5 goles,0.0348
+560640,2026-11-07,Arsenal,Hull City,1.0,1.0,0.0,Local más de 0.5 goles,0.8251
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita más de 0.5 goles,0.4739
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Local más de 1.5 goles,0.5201
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita más de 1.5 goles,0.136
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Local más de 2.5 goles,0.2543
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita más de 2.5 goles,0.0275
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Local más de 3.5 goles,0.0998
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Visita más de 3.5 goles,0.0043
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 0-0,0.092
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 0-1,0.0591
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 0-2,0.019
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 0-3,0.0041
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 0-4,0.0007
+560640,2026-11-07,Arsenal,Hull City,1.0,1.0,0.0,Marcador 1-0,0.1604
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 1-1,0.1031
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 1-2,0.0331
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 1-3,0.0071
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 1-4,0.0011
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 2-0,0.1398
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 2-1,0.0898
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 2-2,0.0288
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 2-3,0.0062
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 2-4,0.001
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 3-0,0.0813
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 3-1,0.0522
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 3-2,0.0168
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 3-3,0.0036
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 3-4,0.0006
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 4-0,0.0354
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 4-1,0.0227
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 4-2,0.0073
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 4-3,0.0016
+560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Marcador 4-4,0.0003
 560640,2026-11-07,Arsenal,Hull City,,,,Primer gol: local,0.6635
 560640,2026-11-07,Arsenal,Hull City,,,,Primer gol: visita,0.2445
 560640,2026-11-07,Arsenal,Hull City,,,,Primer gol: ninguno,0.092
@@ -3568,54 +3568,54 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560640,2026-11-07,Arsenal,Hull City,,,,Más de 12.5 corners totales,0.2357
 560640,2026-11-07,Arsenal,Hull City,,,,Más de 13.5 corners totales,0.1683
 560640,2026-11-07,Arsenal,Hull City,,,,Más de 14.5 corners totales,0.1163
-560633,2026-11-07,Fulham,Newcastle,,,,Gana local,0.4282
-560633,2026-11-07,Fulham,Newcastle,,,,Empate,0.2574
-560633,2026-11-07,Fulham,Newcastle,,,,Gana visita,0.3144
-560633,2026-11-07,Fulham,Newcastle,,,,Ambos marcan,0.5394
-560633,2026-11-07,Fulham,Newcastle,,,,Local gana por más de 1.5,0.2075
-560633,2026-11-07,Fulham,Newcastle,,,,Visita gana por más de 1.5,0.131
-560633,2026-11-07,Fulham,Newcastle,,,,Local gana por más de 2.5,0.0797
-560633,2026-11-07,Fulham,Newcastle,,,,Visita gana por más de 2.5,0.0427
-560633,2026-11-07,Fulham,Newcastle,,,,Local gana por más de 3.5,0.025
-560633,2026-11-07,Fulham,Newcastle,,,,Visita gana por más de 3.5,0.0113
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 1.5 goles,0.7462
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 2.5 goles,0.4995
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 3.5 goles,0.2798
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 4.5 goles,0.133
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 5.5 goles,0.0545
-560633,2026-11-07,Fulham,Newcastle,,,,Local más de 0.5 goles,0.7676
-560633,2026-11-07,Fulham,Newcastle,,,,Visita más de 0.5 goles,0.7026
-560633,2026-11-07,Fulham,Newcastle,,,,Local más de 1.5 goles,0.4285
-560633,2026-11-07,Fulham,Newcastle,,,,Visita más de 1.5 goles,0.342
-560633,2026-11-07,Fulham,Newcastle,,,,Local más de 2.5 goles,0.181
-560633,2026-11-07,Fulham,Newcastle,,,,Visita más de 2.5 goles,0.1233
-560633,2026-11-07,Fulham,Newcastle,,,,Local más de 3.5 goles,0.0606
-560633,2026-11-07,Fulham,Newcastle,,,,Visita más de 3.5 goles,0.0349
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 0-0,0.0691
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 0-1,0.0838
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 0-2,0.0508
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 0-3,0.0205
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 0-4,0.0062
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 1-0,0.1008
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 1-1,0.1223
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 1-2,0.0742
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 1-3,0.03
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 1-4,0.0091
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 2-0,0.0736
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 2-1,0.0892
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 2-2,0.0541
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 2-3,0.0219
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 2-4,0.0066
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 3-0,0.0358
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 3-1,0.0434
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 3-2,0.0263
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 3-3,0.0106
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 3-4,0.0032
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 4-0,0.0131
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 4-1,0.0158
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 4-2,0.0096
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 4-3,0.0039
-560633,2026-11-07,Fulham,Newcastle,,,,Marcador 4-4,0.0012
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Gana local,0.4282
+560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Empate,0.2574
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Gana visita,0.3144
+560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Ambos marcan,0.5394
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Local gana por más de 1.5,0.2075
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Visita gana por más de 1.5,0.131
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Local gana por más de 2.5,0.0797
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Visita gana por más de 2.5,0.0427
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Local gana por más de 3.5,0.025
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Visita gana por más de 3.5,0.0113
+560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Más de 1.5 goles,0.7462
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Más de 2.5 goles,0.4995
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Más de 3.5 goles,0.2798
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Más de 4.5 goles,0.133
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Más de 5.5 goles,0.0545
+560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Local más de 0.5 goles,0.7676
+560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Visita más de 0.5 goles,0.7026
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Local más de 1.5 goles,0.4285
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Visita más de 1.5 goles,0.342
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Local más de 2.5 goles,0.181
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Visita más de 2.5 goles,0.1233
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Local más de 3.5 goles,0.0606
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Visita más de 3.5 goles,0.0349
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 0-0,0.0691
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 0-1,0.0838
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 0-2,0.0508
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 0-3,0.0205
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 0-4,0.0062
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 1-0,0.1008
+560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Marcador 1-1,0.1223
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 1-2,0.0742
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 1-3,0.03
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 1-4,0.0091
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 2-0,0.0736
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 2-1,0.0892
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 2-2,0.0541
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 2-3,0.0219
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 2-4,0.0066
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 3-0,0.0358
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 3-1,0.0434
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 3-2,0.0263
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 3-3,0.0106
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 3-4,0.0032
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 4-0,0.0131
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 4-1,0.0158
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 4-2,0.0096
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 4-3,0.0039
+560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Marcador 4-4,0.0012
 560633,2026-11-07,Fulham,Newcastle,,,,Primer gol: local,0.5084
 560633,2026-11-07,Fulham,Newcastle,,,,Primer gol: visita,0.4225
 560633,2026-11-07,Fulham,Newcastle,,,,Primer gol: ninguno,0.0691
