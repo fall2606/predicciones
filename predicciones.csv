@@ -3370,38 +3370,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560634,2026-11-06,Everton,Coventry City,,,,Primer gol: local,0.5742
 560634,2026-11-06,Everton,Coventry City,,,,Primer gol: visita,0.3477
 560634,2026-11-06,Everton,Coventry City,,,,Primer gol: ninguno,0.0781
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 1+,0.9841
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 1+,0.9758
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 2+,0.9259
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 2+,0.8955
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 3+,0.8133
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 3+,0.7538
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 4+,0.6592
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 4+,0.5773
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 5+,0.4925
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 5+,0.4033
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 6+,0.3404
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 6+,0.2589
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 7+,0.2191
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 7+,0.1541
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 8+,0.1323
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 8+,0.0856
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 9+,0.0753
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 9+,0.0448
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 10+,0.0407
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 10+,0.0222
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 11+,0.021
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 11+,0.0105
-560634,2026-11-06,Everton,Coventry City,,,,Corners local: 12+,0.0104
-560634,2026-11-06,Everton,Coventry City,,,,Corners visita: 12+,0.0048
-560634,2026-11-06,Everton,Coventry City,,,,Más de 7.5 corners totales,0.6381
-560634,2026-11-06,Everton,Coventry City,,,,Más de 8.5 corners totales,0.5181
-560634,2026-11-06,Everton,Coventry City,,,,Más de 9.5 corners totales,0.4018
-560634,2026-11-06,Everton,Coventry City,,,,Más de 10.5 corners totales,0.298
-560634,2026-11-06,Everton,Coventry City,,,,Más de 11.5 corners totales,0.2116
-560634,2026-11-06,Everton,Coventry City,,,,Más de 12.5 corners totales,0.1442
-560634,2026-11-06,Everton,Coventry City,,,,Más de 13.5 corners totales,0.0944
-560634,2026-11-06,Everton,Coventry City,,,,Más de 14.5 corners totales,0.0596
+560634,2026-11-06,Everton,Coventry City,1.0,,,Corners local: 1+,0.9841
+560634,2026-11-06,Everton,Coventry City,1.0,,,Corners visita: 1+,0.9758
+560634,2026-11-06,Everton,Coventry City,1.0,,,Corners local: 2+,0.9259
+560634,2026-11-06,Everton,Coventry City,1.0,,,Corners visita: 2+,0.8955
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 3+,0.8133
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 3+,0.7538
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 4+,0.6592
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 4+,0.5773
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 5+,0.4925
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 5+,0.4033
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 6+,0.3404
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 6+,0.2589
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 7+,0.2191
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 7+,0.1541
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 8+,0.1323
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 8+,0.0856
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 9+,0.0753
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 9+,0.0448
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 10+,0.0407
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 10+,0.0222
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 11+,0.021
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 11+,0.0105
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners local: 12+,0.0104
+560634,2026-11-06,Everton,Coventry City,0.0,,,Corners visita: 12+,0.0048
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 7.5 corners totales,0.6381
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 8.5 corners totales,0.5181
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 9.5 corners totales,0.4018
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 10.5 corners totales,0.298
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 11.5 corners totales,0.2116
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 12.5 corners totales,0.1442
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 13.5 corners totales,0.0944
+560634,2026-11-06,Everton,Coventry City,0.0,,,Más de 14.5 corners totales,0.0596
 560632,2026-11-07,Leeds United,Tottenham,1.0,1.0,0.0,Gana local,0.4566
 560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Empate,0.2614
 560632,2026-11-07,Leeds United,Tottenham,0.0,1.0,0.0,Gana visita,0.282
@@ -3453,38 +3453,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560632,2026-11-07,Leeds United,Tottenham,,,,Primer gol: local,0.5282
 560632,2026-11-07,Leeds United,Tottenham,,,,Primer gol: visita,0.3937
 560632,2026-11-07,Leeds United,Tottenham,,,,Primer gol: ninguno,0.0781
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 1+,0.9806
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 1+,0.9885
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 2+,0.913
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 2+,0.9437
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 3+,0.7873
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 3+,0.8511
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 4+,0.6225
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 4+,0.7156
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 5+,0.4514
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 5+,0.5589
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 6+,0.302
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 6+,0.4062
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 7+,0.1877
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 7+,0.276
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 8+,0.1092
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 8+,0.1763
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 9+,0.0599
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 9+,0.1065
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 10+,0.0311
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 10+,0.0612
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 11+,0.0154
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 11+,0.0336
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners local: 12+,0.0073
-560632,2026-11-07,Leeds United,Tottenham,,,,Corners visita: 12+,0.0177
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 7.5 corners totales,0.7095
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 8.5 corners totales,0.5981
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 9.5 corners totales,0.4837
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 10.5 corners totales,0.3752
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 11.5 corners totales,0.2795
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 12.5 corners totales,0.2001
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 13.5 corners totales,0.138
-560632,2026-11-07,Leeds United,Tottenham,,,,Más de 14.5 corners totales,0.0918
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners local: 1+,0.9806
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners visita: 1+,0.9885
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners local: 2+,0.913
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners visita: 2+,0.9437
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners local: 3+,0.7873
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners visita: 3+,0.8511
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners local: 4+,0.6225
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners visita: 4+,0.7156
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners local: 5+,0.4514
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 5+,0.5589
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Corners local: 6+,0.302
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 6+,0.4062
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners local: 7+,0.1877
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 7+,0.276
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners local: 8+,0.1092
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 8+,0.1763
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners local: 9+,0.0599
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 9+,0.1065
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners local: 10+,0.0311
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 10+,0.0612
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners local: 11+,0.0154
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 11+,0.0336
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners local: 12+,0.0073
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Corners visita: 12+,0.0177
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Más de 7.5 corners totales,0.7095
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Más de 8.5 corners totales,0.5981
+560632,2026-11-07,Leeds United,Tottenham,1.0,,,Más de 9.5 corners totales,0.4837
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Más de 10.5 corners totales,0.3752
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Más de 11.5 corners totales,0.2795
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Más de 12.5 corners totales,0.2001
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Más de 13.5 corners totales,0.138
+560632,2026-11-07,Leeds United,Tottenham,0.0,,,Más de 14.5 corners totales,0.0918
 560640,2026-11-07,Arsenal,Hull City,1.0,1.0,0.0,Gana local,0.6398
 560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Empate,0.2278
 560640,2026-11-07,Arsenal,Hull City,0.0,1.0,0.0,Gana visita,0.1324
@@ -3536,38 +3536,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560640,2026-11-07,Arsenal,Hull City,,,,Primer gol: local,0.6635
 560640,2026-11-07,Arsenal,Hull City,,,,Primer gol: visita,0.2445
 560640,2026-11-07,Arsenal,Hull City,,,,Primer gol: ninguno,0.092
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 1+,0.9971
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 1+,0.9338
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 2+,0.9829
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 2+,0.7685
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 3+,0.9458
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 3+,0.5491
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 4+,0.8779
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 4+,0.3438
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 5+,0.7793
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 5+,0.1915
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 6+,0.6587
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 6+,0.0965
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 7+,0.5296
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 7+,0.0445
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 8+,0.4055
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 8+,0.0191
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 9+,0.2965
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 9+,0.0077
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 10+,0.2075
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 10+,0.0029
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 11+,0.1395
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 11+,0.001
-560640,2026-11-07,Arsenal,Hull City,,,,Corners local: 12+,0.0904
-560640,2026-11-07,Arsenal,Hull City,,,,Corners visita: 12+,0.0004
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 7.5 corners totales,0.738
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 8.5 corners totales,0.6334
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 9.5 corners totales,0.5234
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 10.5 corners totales,0.4163
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 11.5 corners totales,0.319
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 12.5 corners totales,0.2357
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 13.5 corners totales,0.1683
-560640,2026-11-07,Arsenal,Hull City,,,,Más de 14.5 corners totales,0.1163
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 1+,0.9971
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners visita: 1+,0.9338
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 2+,0.9829
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners visita: 2+,0.7685
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 3+,0.9458
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners visita: 3+,0.5491
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 4+,0.8779
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners visita: 4+,0.3438
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 5+,0.7793
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 5+,0.1915
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 6+,0.6587
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 6+,0.0965
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Corners local: 7+,0.5296
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 7+,0.0445
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners local: 8+,0.4055
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 8+,0.0191
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners local: 9+,0.2965
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 9+,0.0077
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners local: 10+,0.2075
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 10+,0.0029
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners local: 11+,0.1395
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 11+,0.001
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners local: 12+,0.0904
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Corners visita: 12+,0.0004
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Más de 7.5 corners totales,0.738
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Más de 8.5 corners totales,0.6334
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Más de 9.5 corners totales,0.5234
+560640,2026-11-07,Arsenal,Hull City,1.0,,,Más de 10.5 corners totales,0.4163
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Más de 11.5 corners totales,0.319
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Más de 12.5 corners totales,0.2357
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Más de 13.5 corners totales,0.1683
+560640,2026-11-07,Arsenal,Hull City,0.0,,,Más de 14.5 corners totales,0.1163
 560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Gana local,0.4282
 560633,2026-11-07,Fulham,Newcastle,1.0,1.0,1.0,Empate,0.2574
 560633,2026-11-07,Fulham,Newcastle,0.0,1.0,1.0,Gana visita,0.3144
@@ -3619,38 +3619,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560633,2026-11-07,Fulham,Newcastle,,,,Primer gol: local,0.5084
 560633,2026-11-07,Fulham,Newcastle,,,,Primer gol: visita,0.4225
 560633,2026-11-07,Fulham,Newcastle,,,,Primer gol: ninguno,0.0691
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 1+,0.9915
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 1+,0.9921
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 2+,0.9565
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 2+,0.959
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 3+,0.8797
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 3+,0.8856
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 4+,0.7611
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 4+,0.7707
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 5+,0.6159
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 5+,0.6283
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 6+,0.4661
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 6+,0.4797
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 7+,0.3311
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 7+,0.344
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 8+,0.2217
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 8+,0.2327
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 9+,0.1407
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 9+,0.1492
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 10+,0.085
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 10+,0.0911
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 11+,0.0491
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 11+,0.0532
-560633,2026-11-07,Fulham,Newcastle,,,,Corners local: 12+,0.0272
-560633,2026-11-07,Fulham,Newcastle,,,,Corners visita: 12+,0.0299
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 7.5 corners totales,0.8296
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 8.5 corners totales,0.7449
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 9.5 corners totales,0.6473
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 10.5 corners totales,0.5435
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 11.5 corners totales,0.4407
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 12.5 corners totales,0.3452
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 13.5 corners totales,0.2614
-560633,2026-11-07,Fulham,Newcastle,,,,Más de 14.5 corners totales,0.1915
+560633,2026-11-07,Fulham,Newcastle,1.0,,,Corners local: 1+,0.9915
+560633,2026-11-07,Fulham,Newcastle,1.0,,,Corners visita: 1+,0.9921
+560633,2026-11-07,Fulham,Newcastle,1.0,,,Corners local: 2+,0.9565
+560633,2026-11-07,Fulham,Newcastle,1.0,,,Corners visita: 2+,0.959
+560633,2026-11-07,Fulham,Newcastle,1.0,,,Corners local: 3+,0.8797
+560633,2026-11-07,Fulham,Newcastle,1.0,,,Corners visita: 3+,0.8856
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 4+,0.7611
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 4+,0.7707
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 5+,0.6159
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 5+,0.6283
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 6+,0.4661
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 6+,0.4797
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 7+,0.3311
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 7+,0.344
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 8+,0.2217
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 8+,0.2327
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 9+,0.1407
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 9+,0.1492
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 10+,0.085
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 10+,0.0911
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 11+,0.0491
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 11+,0.0532
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners local: 12+,0.0272
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Corners visita: 12+,0.0299
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 7.5 corners totales,0.8296
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 8.5 corners totales,0.7449
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 9.5 corners totales,0.6473
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 10.5 corners totales,0.5435
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 11.5 corners totales,0.4407
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 12.5 corners totales,0.3452
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 13.5 corners totales,0.2614
+560633,2026-11-07,Fulham,Newcastle,0.0,,,Más de 14.5 corners totales,0.1915
 560641,2026-11-07,Nottingham,Man City,1.0,3.0,1.0,Gana local,0.207
 560641,2026-11-07,Nottingham,Man City,0.0,3.0,1.0,Empate,0.2374
 560641,2026-11-07,Nottingham,Man City,0.0,3.0,1.0,Gana visita,0.5557
@@ -3702,38 +3702,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560641,2026-11-07,Nottingham,Man City,,,,Primer gol: local,0.3313
 560641,2026-11-07,Nottingham,Man City,,,,Primer gol: visita,0.6
 560641,2026-11-07,Nottingham,Man City,,,,Primer gol: ninguno,0.0686
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 1+,0.9799
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 1+,0.9914
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 2+,0.9102
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 2+,0.956
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 3+,0.7819
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 3+,0.8786
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 4+,0.6151
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 4+,0.7592
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 5+,0.4435
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 5+,0.6135
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 6+,0.2947
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 6+,0.4636
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 7+,0.1818
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 7+,0.3287
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 8+,0.105
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 8+,0.2197
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 9+,0.0571
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 9+,0.1391
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 10+,0.0295
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 10+,0.0838
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 11+,0.0145
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 11+,0.0483
-560641,2026-11-07,Nottingham,Man City,,,,Corners local: 12+,0.0068
-560641,2026-11-07,Nottingham,Man City,,,,Corners visita: 12+,0.0268
-560641,2026-11-07,Nottingham,Man City,,,,Más de 7.5 corners totales,0.7392
-560641,2026-11-07,Nottingham,Man City,,,,Más de 8.5 corners totales,0.633
-560641,2026-11-07,Nottingham,Man City,,,,Más de 9.5 corners totales,0.5211
-560641,2026-11-07,Nottingham,Man City,,,,Más de 10.5 corners totales,0.4121
-560641,2026-11-07,Nottingham,Man City,,,,Más de 11.5 corners totales,0.3133
-560641,2026-11-07,Nottingham,Man City,,,,Más de 12.5 corners totales,0.2293
-560641,2026-11-07,Nottingham,Man City,,,,Más de 13.5 corners totales,0.1617
-560641,2026-11-07,Nottingham,Man City,,,,Más de 14.5 corners totales,0.1101
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners local: 1+,0.9799
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 1+,0.9914
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners local: 2+,0.9102
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 2+,0.956
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners local: 3+,0.7819
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 3+,0.8786
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 4+,0.6151
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 4+,0.7592
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 5+,0.4435
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 5+,0.6135
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 6+,0.2947
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 6+,0.4636
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 7+,0.1818
+560641,2026-11-07,Nottingham,Man City,1.0,,,Corners visita: 7+,0.3287
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 8+,0.105
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners visita: 8+,0.2197
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 9+,0.0571
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners visita: 9+,0.1391
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 10+,0.0295
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners visita: 10+,0.0838
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 11+,0.0145
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners visita: 11+,0.0483
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners local: 12+,0.0068
+560641,2026-11-07,Nottingham,Man City,0.0,,,Corners visita: 12+,0.0268
+560641,2026-11-07,Nottingham,Man City,1.0,,,Más de 7.5 corners totales,0.7392
+560641,2026-11-07,Nottingham,Man City,1.0,,,Más de 8.5 corners totales,0.633
+560641,2026-11-07,Nottingham,Man City,1.0,,,Más de 9.5 corners totales,0.5211
+560641,2026-11-07,Nottingham,Man City,0.0,,,Más de 10.5 corners totales,0.4121
+560641,2026-11-07,Nottingham,Man City,0.0,,,Más de 11.5 corners totales,0.3133
+560641,2026-11-07,Nottingham,Man City,0.0,,,Más de 12.5 corners totales,0.2293
+560641,2026-11-07,Nottingham,Man City,0.0,,,Más de 13.5 corners totales,0.1617
+560641,2026-11-07,Nottingham,Man City,0.0,,,Más de 14.5 corners totales,0.1101
 560635,2026-11-08,Crystal Palace,Liverpool,0.0,1.0,3.0,Gana local,0.2946
 560635,2026-11-08,Crystal Palace,Liverpool,0.0,1.0,3.0,Empate,0.2538
 560635,2026-11-08,Crystal Palace,Liverpool,1.0,1.0,3.0,Gana visita,0.4517
@@ -3785,38 +3785,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560635,2026-11-08,Crystal Palace,Liverpool,,,,Primer gol: local,0.4073
 560635,2026-11-08,Crystal Palace,Liverpool,,,,Primer gol: visita,0.5256
 560635,2026-11-08,Crystal Palace,Liverpool,,,,Primer gol: ninguno,0.0672
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 1+,0.9722
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 1+,0.9923
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 2+,0.8828
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 2+,0.9599
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 3+,0.7305
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 3+,0.8878
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 4+,0.5473
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 4+,0.7743
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 5+,0.3727
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 5+,0.633
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 6+,0.2327
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 6+,0.4849
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 7+,0.1344
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 7+,0.349
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 8+,0.0725
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 8+,0.237
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 9+,0.0367
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 9+,0.1526
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 10+,0.0177
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 10+,0.0936
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 11+,0.0081
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 11+,0.0549
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners local: 12+,0.0035
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Corners visita: 12+,0.0309
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 7.5 corners totales,0.7154
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 8.5 corners totales,0.6052
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 9.5 corners totales,0.4915
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 10.5 corners totales,0.3832
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 11.5 corners totales,0.2869
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 12.5 corners totales,0.2067
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 13.5 corners totales,0.1434
-560635,2026-11-08,Crystal Palace,Liverpool,,,,Más de 14.5 corners totales,0.0961
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners local: 1+,0.9722
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 1+,0.9923
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners local: 2+,0.8828
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 2+,0.9599
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners local: 3+,0.7305
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 3+,0.8878
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners local: 4+,0.5473
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 4+,0.7743
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 5+,0.3727
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 5+,0.633
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 6+,0.2327
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 6+,0.4849
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 7+,0.1344
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Corners visita: 7+,0.349
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 8+,0.0725
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners visita: 8+,0.237
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 9+,0.0367
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners visita: 9+,0.1526
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 10+,0.0177
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners visita: 10+,0.0936
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 11+,0.0081
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners visita: 11+,0.0549
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners local: 12+,0.0035
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Corners visita: 12+,0.0309
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Más de 7.5 corners totales,0.7154
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Más de 8.5 corners totales,0.6052
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Más de 9.5 corners totales,0.4915
+560635,2026-11-08,Crystal Palace,Liverpool,1.0,,,Más de 10.5 corners totales,0.3832
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Más de 11.5 corners totales,0.2869
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Más de 12.5 corners totales,0.2067
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Más de 13.5 corners totales,0.1434
+560635,2026-11-08,Crystal Palace,Liverpool,0.0,,,Más de 14.5 corners totales,0.0961
 560636,2026-11-08,Sunderland,Chelsea,1.0,1.0,0.0,Gana local,0.3254
 560636,2026-11-08,Sunderland,Chelsea,0.0,1.0,0.0,Empate,0.2578
 560636,2026-11-08,Sunderland,Chelsea,0.0,1.0,0.0,Gana visita,0.4169
@@ -3868,38 +3868,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560636,2026-11-08,Sunderland,Chelsea,,,,Primer gol: local,0.4313
 560636,2026-11-08,Sunderland,Chelsea,,,,Primer gol: visita,0.5002
 560636,2026-11-08,Sunderland,Chelsea,,,,Primer gol: ninguno,0.0685
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 1+,0.9692
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 1+,0.992
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 2+,0.8728
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 2+,0.9585
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 3+,0.7127
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 3+,0.8844
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 4+,0.525
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 4+,0.7687
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 5+,0.3506
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 5+,0.6256
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 6+,0.2143
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 6+,0.4768
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 7+,0.1211
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 7+,0.3412
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 8+,0.0638
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 8+,0.2303
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 9+,0.0316
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 9+,0.1474
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 10+,0.0148
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 10+,0.0898
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 11+,0.0066
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 11+,0.0523
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners local: 12+,0.0028
-560636,2026-11-08,Sunderland,Chelsea,,,,Corners visita: 12+,0.0293
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 7.5 corners totales,0.6983
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 8.5 corners totales,0.5856
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 9.5 corners totales,0.471
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 10.5 corners totales,0.3633
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 11.5 corners totales,0.269
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 12.5 corners totales,0.1915
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 13.5 corners totales,0.1313
-560636,2026-11-08,Sunderland,Chelsea,,,,Más de 14.5 corners totales,0.0869
+560636,2026-11-08,Sunderland,Chelsea,1.0,,,Corners local: 1+,0.9692
+560636,2026-11-08,Sunderland,Chelsea,1.0,,,Corners visita: 1+,0.992
+560636,2026-11-08,Sunderland,Chelsea,1.0,,,Corners local: 2+,0.8728
+560636,2026-11-08,Sunderland,Chelsea,1.0,,,Corners visita: 2+,0.9585
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 3+,0.7127
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 3+,0.8844
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 4+,0.525
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 4+,0.7687
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 5+,0.3506
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 5+,0.6256
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 6+,0.2143
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 6+,0.4768
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 7+,0.1211
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 7+,0.3412
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 8+,0.0638
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 8+,0.2303
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 9+,0.0316
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 9+,0.1474
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 10+,0.0148
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 10+,0.0898
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 11+,0.0066
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 11+,0.0523
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners local: 12+,0.0028
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Corners visita: 12+,0.0293
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 7.5 corners totales,0.6983
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 8.5 corners totales,0.5856
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 9.5 corners totales,0.471
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 10.5 corners totales,0.3633
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 11.5 corners totales,0.269
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 12.5 corners totales,0.1915
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 13.5 corners totales,0.1313
+560636,2026-11-08,Sunderland,Chelsea,0.0,,,Más de 14.5 corners totales,0.0869
 560637,2026-11-08,Ipswich Town,Bournemouth,0.0,1.0,2.0,Gana local,0.3848
 560637,2026-11-08,Ipswich Town,Bournemouth,0.0,1.0,2.0,Empate,0.2257
 560637,2026-11-08,Ipswich Town,Bournemouth,1.0,1.0,2.0,Gana visita,0.3895
@@ -3951,38 +3951,38 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560637,2026-11-08,Ipswich Town,Bournemouth,,,,Primer gol: local,0.482
 560637,2026-11-08,Ipswich Town,Bournemouth,,,,Primer gol: visita,0.4852
 560637,2026-11-08,Ipswich Town,Bournemouth,,,,Primer gol: ninguno,0.0327
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 1+,0.9745
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 1+,0.9858
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 2+,0.8909
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 2+,0.9328
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 3+,0.7452
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 3+,0.8275
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 4+,0.5661
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 4+,0.68
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 5+,0.3918
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 5+,0.5164
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 6+,0.249
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 6+,0.3636
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 7+,0.1465
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 7+,0.2388
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 8+,0.0805
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 8+,0.1472
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 9+,0.0417
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 9+,0.0856
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 10+,0.0204
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 10+,0.0473
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 11+,0.0095
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 11+,0.025
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners local: 12+,0.0043
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Corners visita: 12+,0.0126
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 7.5 corners totales,0.6471
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 8.5 corners totales,0.5279
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 9.5 corners totales,0.4116
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 10.5 corners totales,0.307
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 11.5 corners totales,0.2194
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 12.5 corners totales,0.1504
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 13.5 corners totales,0.0992
-560637,2026-11-08,Ipswich Town,Bournemouth,,,,Más de 14.5 corners totales,0.063
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners local: 1+,0.9745
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 1+,0.9858
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners local: 2+,0.8909
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 2+,0.9328
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 3+,0.7452
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 3+,0.8275
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 4+,0.5661
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 4+,0.68
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 5+,0.3918
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 5+,0.5164
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 6+,0.249
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 6+,0.3636
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 7+,0.1465
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Corners visita: 7+,0.2388
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 8+,0.0805
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners visita: 8+,0.1472
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 9+,0.0417
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners visita: 9+,0.0856
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 10+,0.0204
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners visita: 10+,0.0473
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 11+,0.0095
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners visita: 11+,0.025
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners local: 12+,0.0043
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Corners visita: 12+,0.0126
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Más de 7.5 corners totales,0.6471
+560637,2026-11-08,Ipswich Town,Bournemouth,1.0,,,Más de 8.5 corners totales,0.5279
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Más de 9.5 corners totales,0.4116
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Más de 10.5 corners totales,0.307
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Más de 11.5 corners totales,0.2194
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Más de 12.5 corners totales,0.1504
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Más de 13.5 corners totales,0.0992
+560637,2026-11-08,Ipswich Town,Bournemouth,0.0,,,Más de 14.5 corners totales,0.063
 560638,2026-11-08,Brighton Hove,Brentford,1.0,2.0,0.0,Gana local,0.5051
 560638,2026-11-08,Brighton Hove,Brentford,0.0,2.0,0.0,Empate,0.2416
 560638,2026-11-08,Brighton Hove,Brentford,0.0,2.0,0.0,Gana visita,0.2533
@@ -4034,118 +4034,118 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560638,2026-11-08,Brighton Hove,Brentford,,,,Primer gol: local,0.5639
 560638,2026-11-08,Brighton Hove,Brentford,,,,Primer gol: visita,0.3753
 560638,2026-11-08,Brighton Hove,Brentford,,,,Primer gol: ninguno,0.0608
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 1+,0.992
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 1+,0.9775
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 2+,0.9586
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 2+,0.9016
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 3+,0.8847
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 3+,0.7654
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 4+,0.7692
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 4+,0.5927
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 5+,0.6264
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 5+,0.4194
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 6+,0.4776
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 6+,0.2731
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 7+,0.342
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 7+,0.1649
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 8+,0.231
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 8+,0.0931
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 9+,0.1479
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 9+,0.0495
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 10+,0.0902
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 10+,0.025
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 11+,0.0526
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 11+,0.012
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners local: 12+,0.0295
-560638,2026-11-08,Brighton Hove,Brentford,,,,Corners visita: 12+,0.0055
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 7.5 corners totales,0.7352
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 8.5 corners totales,0.6283
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 9.5 corners totales,0.516
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 10.5 corners totales,0.4071
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 11.5 corners totales,0.3088
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 12.5 corners totales,0.2254
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 13.5 corners totales,0.1586
-560638,2026-11-08,Brighton Hove,Brentford,,,,Más de 14.5 corners totales,0.1077
-560639,2026-11-08,Man United,Aston Villa,,,,Gana local,0.4944
-560639,2026-11-08,Man United,Aston Villa,,,,Empate,0.2336
-560639,2026-11-08,Man United,Aston Villa,,,,Gana visita,0.272
-560639,2026-11-08,Man United,Aston Villa,,,,Ambos marcan,0.5924
-560639,2026-11-08,Man United,Aston Villa,,,,Local gana por más de 1.5,0.2703
-560639,2026-11-08,Man United,Aston Villa,,,,Visita gana por más de 1.5,0.1129
-560639,2026-11-08,Man United,Aston Villa,,,,Local gana por más de 2.5,0.1199
-560639,2026-11-08,Man United,Aston Villa,,,,Visita gana por más de 2.5,0.0371
-560639,2026-11-08,Man United,Aston Villa,,,,Local gana por más de 3.5,0.044
-560639,2026-11-08,Man United,Aston Villa,,,,Visita gana por más de 3.5,0.0099
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 1.5 goles,0.8038
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 2.5 goles,0.5813
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 3.5 goles,0.3572
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 4.5 goles,0.1881
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 5.5 goles,0.0859
-560639,2026-11-08,Man United,Aston Villa,,,,Local más de 0.5 goles,0.829
-560639,2026-11-08,Man United,Aston Villa,,,,Visita más de 0.5 goles,0.7146
-560639,2026-11-08,Man United,Aston Villa,,,,Local más de 1.5 goles,0.527
-560639,2026-11-08,Man United,Aston Villa,,,,Visita más de 1.5 goles,0.3567
-560639,2026-11-08,Man United,Aston Villa,,,,Local más de 2.5 goles,0.2604
-560639,2026-11-08,Man United,Aston Villa,,,,Visita más de 2.5 goles,0.1324
-560639,2026-11-08,Man United,Aston Villa,,,,Local más de 3.5 goles,0.1033
-560639,2026-11-08,Man United,Aston Villa,,,,Visita más de 3.5 goles,0.0386
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 0-0,0.0488
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 0-1,0.0612
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 0-2,0.0384
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 0-3,0.016
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 0-4,0.005
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 1-0,0.0862
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 1-1,0.1081
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 1-2,0.0677
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 1-3,0.0283
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 1-4,0.0089
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 2-0,0.0761
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 2-1,0.0954
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 2-2,0.0598
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 2-3,0.025
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 2-4,0.0078
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 3-0,0.0448
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 3-1,0.0562
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 3-2,0.0352
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 3-3,0.0147
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 3-4,0.0046
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 4-0,0.0198
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 4-1,0.0248
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 4-2,0.0156
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 4-3,0.0065
-560639,2026-11-08,Man United,Aston Villa,,,,Marcador 4-4,0.002
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 1+,0.992
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners visita: 1+,0.9775
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 2+,0.9586
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners visita: 2+,0.9016
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 3+,0.8847
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners visita: 3+,0.7654
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 4+,0.7692
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 4+,0.5927
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 5+,0.6264
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 5+,0.4194
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 6+,0.4776
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 6+,0.2731
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Corners local: 7+,0.342
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 7+,0.1649
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners local: 8+,0.231
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 8+,0.0931
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners local: 9+,0.1479
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 9+,0.0495
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners local: 10+,0.0902
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 10+,0.025
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners local: 11+,0.0526
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 11+,0.012
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners local: 12+,0.0295
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Corners visita: 12+,0.0055
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Más de 7.5 corners totales,0.7352
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Más de 8.5 corners totales,0.6283
+560638,2026-11-08,Brighton Hove,Brentford,1.0,,,Más de 9.5 corners totales,0.516
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Más de 10.5 corners totales,0.4071
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Más de 11.5 corners totales,0.3088
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Más de 12.5 corners totales,0.2254
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Más de 13.5 corners totales,0.1586
+560638,2026-11-08,Brighton Hove,Brentford,0.0,,,Más de 14.5 corners totales,0.1077
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Gana local,0.4944
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Empate,0.2336
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Gana visita,0.272
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Ambos marcan,0.5924
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Local gana por más de 1.5,0.2703
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Visita gana por más de 1.5,0.1129
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Local gana por más de 2.5,0.1199
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Visita gana por más de 2.5,0.0371
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Local gana por más de 3.5,0.044
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Visita gana por más de 3.5,0.0099
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Más de 1.5 goles,0.8038
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Más de 2.5 goles,0.5813
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Más de 3.5 goles,0.3572
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Más de 4.5 goles,0.1881
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Más de 5.5 goles,0.0859
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Local más de 0.5 goles,0.829
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Visita más de 0.5 goles,0.7146
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Local más de 1.5 goles,0.527
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Visita más de 1.5 goles,0.3567
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Local más de 2.5 goles,0.2604
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Visita más de 2.5 goles,0.1324
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Local más de 3.5 goles,0.1033
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Visita más de 3.5 goles,0.0386
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 0-0,0.0488
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 0-1,0.0612
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 0-2,0.0384
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 0-3,0.016
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 0-4,0.005
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 1-0,0.0862
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 1-1,0.1081
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 1-2,0.0677
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 1-3,0.0283
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 1-4,0.0089
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 2-0,0.0761
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 2-1,0.0954
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 2-2,0.0598
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 2-3,0.025
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 2-4,0.0078
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 3-0,0.0448
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 3-1,0.0562
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 3-2,0.0352
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 3-3,0.0147
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 3-4,0.0046
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 4-0,0.0198
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 4-1,0.0248
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 4-2,0.0156
+560639,2026-11-08,Man United,Aston Villa,0.0,4.0,4.0,Marcador 4-3,0.0065
+560639,2026-11-08,Man United,Aston Villa,1.0,4.0,4.0,Marcador 4-4,0.002
 560639,2026-11-08,Man United,Aston Villa,,,,Primer gol: local,0.5563
 560639,2026-11-08,Man United,Aston Villa,,,,Primer gol: visita,0.3949
 560639,2026-11-08,Man United,Aston Villa,,,,Primer gol: ninguno,0.0488
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 1+,0.9894
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 1+,0.9784
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 2+,0.9476
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 2+,0.9048
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 3+,0.8596
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 3+,0.7715
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 4+,0.7289
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 4+,0.6009
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 5+,0.5752
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 5+,0.4281
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 6+,0.423
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 6+,0.2808
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 7+,0.2911
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 7+,0.1709
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 8+,0.1885
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 8+,0.0973
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 9+,0.1155
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 9+,0.0522
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 10+,0.0673
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 10+,0.0265
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 11+,0.0375
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 11+,0.0129
-560639,2026-11-08,Man United,Aston Villa,,,,Corners local: 12+,0.02
-560639,2026-11-08,Man United,Aston Villa,,,,Corners visita: 12+,0.006
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 7.5 corners totales,0.7069
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 8.5 corners totales,0.5952
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 9.5 corners totales,0.4806
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 10.5 corners totales,0.3723
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 11.5 corners totales,0.2769
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 12.5 corners totales,0.1979
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 13.5 corners totales,0.1363
-560639,2026-11-08,Man United,Aston Villa,,,,Más de 14.5 corners totales,0.0905
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 1+,0.9894
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners visita: 1+,0.9784
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 2+,0.9476
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 2+,0.9048
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 3+,0.8596
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 3+,0.7715
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 4+,0.7289
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 4+,0.6009
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 5+,0.5752
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 5+,0.4281
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 6+,0.423
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 6+,0.2808
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 7+,0.2911
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 7+,0.1709
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Corners local: 8+,0.1885
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 8+,0.0973
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners local: 9+,0.1155
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 9+,0.0522
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners local: 10+,0.0673
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 10+,0.0265
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners local: 11+,0.0375
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 11+,0.0129
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners local: 12+,0.02
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Corners visita: 12+,0.006
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Más de 7.5 corners totales,0.7069
+560639,2026-11-08,Man United,Aston Villa,1.0,,,Más de 8.5 corners totales,0.5952
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Más de 9.5 corners totales,0.4806
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Más de 10.5 corners totales,0.3723
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Más de 11.5 corners totales,0.2769
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Más de 12.5 corners totales,0.1979
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Más de 13.5 corners totales,0.1363
+560639,2026-11-08,Man United,Aston Villa,0.0,,,Más de 14.5 corners totales,0.0905
