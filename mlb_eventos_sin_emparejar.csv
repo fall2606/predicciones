@@ -6,7 +6,14 @@ KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_pr
 KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALROTY-26,KXMLBALROTY,AL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
+KXMLBBGAME-26NOV100700YNDXRAK,KXMLBBGAME,Team Yandex vs. Rakuzan,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV100830FUTAUR,KXMLBBGAME,FUT Esports vs. Aurevia Team,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV101000CHTST,KXMLBBGAME,Cyber Hero vs. The Soulless Team,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV101130NICOMN,KXMLBBGAME,Nice Try vs. Omnix,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV110700AFTHE,KXMLBBGAME,Aura Farmers vs. The World,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV110830DAROBV,KXMLBBGAME,Dark Phoenix vs. Team Oblivion,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV111000BWCHEM,KXMLBBGAME,Bushido Wildcats vs. Chempiki,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
+KXMLBBGAME-26NOV111130HARNVM,KXMLBBGAME,HARD GRIND vs. Never maind,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV120100TNRPRO,KXMLBBGAME,TNR Esports vs. PRO Esports,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV120430VALFLKH,KXMLBBGAME,Valhalla vs. Team Flash KH,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBCBA-26DEC02,KXMLBCBA,"Pro Baseball new CBA agreement before Dec 2, 2026",,evento_no_identificado/otro
@@ -37,7 +44,6 @@ KXMLBNLCY-26,KXMLBNLCY,NL Cy Young Winner,,mercado_no_partido/futuro_premio_o_pr
 KXMLBNLHAARON-26,KXMLBNLHAARON,NL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLROTY-26,KXMLBNLROTY,NL Rookie of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26AL1B,KXMLBSS,Silver Slugger: AL First Baseman,,mercado_no_partido/futuro_premio_o_prop
