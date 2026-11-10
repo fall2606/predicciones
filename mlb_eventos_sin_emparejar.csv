@@ -6,10 +6,6 @@ KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_pr
 KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBBGAME-26NOV100700YNDXRAK,KXMLBBGAME,Team Yandex vs. Rakuzan,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
-KXMLBBGAME-26NOV100830FUTAUR,KXMLBBGAME,FUT Esports vs. Aurevia Team,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
-KXMLBBGAME-26NOV101000CHTST,KXMLBBGAME,Cyber Hero vs. The Soulless Team,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
-KXMLBBGAME-26NOV101130NICOMN,KXMLBBGAME,Nice Try vs. Omnix,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV110700AFTHE,KXMLBBGAME,Aura Farmers vs. The World,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV110830DAROBV,KXMLBBGAME,Dark Phoenix vs. Team Oblivion,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV111000BWCHEM,KXMLBBGAME,Bushido Wildcats vs. Chempiki,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
@@ -54,13 +50,16 @@ KXMLBSS-26ALDH,KXMLBSS,Silver Slugger: AL Designated Hitter,,mercado_no_partido/
 KXMLBSS-26ALOF,KXMLBSS,Silver Slugger: AL Outfield,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26ALSS,KXMLBSS,Silver Slugger: AL Shortstop,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26ALTEAM,KXMLBSS,Silver Slugger: AL Team,,mercado_no_partido/futuro_premio_o_prop
+KXMLBSS-26ALUTIL,KXMLBSS,Silver Slugger: AL Utility,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NL1B,KXMLBSS,Silver Slugger: NL First Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NL2B,KXMLBSS,Silver Slugger: NL Second Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NL3B,KXMLBSS,Silver Slugger: NL Third Baseman,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NLC,KXMLBSS,Silver Slugger: NL Catcher,,mercado_no_partido/futuro_premio_o_prop
+KXMLBSS-26NLDH,KXMLBSS,Silver Slugger: NL Designated Hitter,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NLOF,KXMLBSS,Silver Slugger: NL Outfield,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NLSS,KXMLBSS,Silver Slugger: NL Shortstop,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSS-26NLTEAM,KXMLBSS,Silver Slugger: NL Team,,mercado_no_partido/futuro_premio_o_prop
+KXMLBSS-26NLUTIL,KXMLBSS,Silver Slugger: NL Utility,,mercado_no_partido/futuro_premio_o_prop
 KXMLBTEAMSALE-27JANLAD,KXMLBTEAMSALE,Will the Los Angeles D Pro Baseball team be sold this year?,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27ACHAPMAN,KXNEXTTEAMMLB,Aroldis Chapman's Next Team,,mercado_no_partido/futuro_premio_o_prop
 KXNEXTTEAMMLB-27CWALKER,KXNEXTTEAMMLB,Christian Walker's Next Team,,mercado_no_partido/futuro_premio_o_prop
