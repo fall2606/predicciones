@@ -4,11 +4,7 @@ KXMLB-27,KXMLB,2027 Pro Baseball Champion,,mercado_no_partido/futuro_premio_o_pr
 KXMLBALCPOTY-26,KXMLBALCPOTY,AL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALCY-26,KXMLBALCY,AL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALHAARON-26,KXMLBALHAARON,AL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBALMOTY-26,KXMLBALMOTY,AL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBALRELOTY-26,KXMLBALRELOTY,AL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBBGAME-26NOV110700AFTHE,KXMLBBGAME,Aura Farmers vs. The World,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
-KXMLBBGAME-26NOV110830DAROBV,KXMLBBGAME,Dark Phoenix vs. Team Oblivion,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
-KXMLBBGAME-26NOV111000BWCHEM,KXMLBBGAME,Bushido Wildcats vs. Chempiki,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV111130HARNVM,KXMLBBGAME,HARD GRIND vs. Never maind,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV120100TNRPRO,KXMLBBGAME,TNR Esports vs. PRO Esports,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
 KXMLBBGAME-26NOV120430VALFLKH,KXMLBBGAME,Valhalla vs. Team Flash KH,,no_es_MLB/otra_competicion (serie KXMLBBGAME)
@@ -38,7 +34,6 @@ KXMLBNEXTTEAM-27TSKUBAL,KXMLBNEXTTEAM,Tarik Skubal Next Team,,mercado_no_partido
 KXMLBNLCPOTY-26,KXMLBNLCPOTY,NL Comeback Player of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLCY-26,KXMLBNLCY,NL Cy Young Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLHAARON-26,KXMLBNLHAARON,NL Hank Aaron Award Winner,,mercado_no_partido/futuro_premio_o_prop
-KXMLBNLMOTY-26,KXMLBNLMOTY,NL Manager of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBNLRELOTY-26,KXMLBNLRELOTY,NL Reliever of the Year Winner,,mercado_no_partido/futuro_premio_o_prop
 KXMLBOPENINGDAY-27,KXMLBOPENINGDAY,Pro Baseball · 2027 Regular Season Start Date,,mercado_no_partido/futuro_premio_o_prop
 KXMLBSEASONGAMES-27,KXMLBSEASONGAMES,Pro Baseball · Games Played in the 2027 Season,,mercado_no_partido/futuro_premio_o_prop
