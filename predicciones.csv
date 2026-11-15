@@ -4730,3 +4730,169 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560651,2026-11-21,Newcastle,Arsenal,,,,Más de 12.5 corners totales,0.2082
 560651,2026-11-21,Newcastle,Arsenal,,,,Más de 13.5 corners totales,0.1445
 560651,2026-11-21,Newcastle,Arsenal,,,,Más de 14.5 corners totales,0.0968
+560646,2026-11-22,Hull City,Brighton Hove,,,,Gana local,0.3267
+560646,2026-11-22,Hull City,Brighton Hove,,,,Empate,0.2795
+560646,2026-11-22,Hull City,Brighton Hove,,,,Gana visita,0.3937
+560646,2026-11-22,Hull City,Brighton Hove,,,,Ambos marcan,0.4755
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local gana por más de 1.5,0.1299
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita gana por más de 1.5,0.1725
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local gana por más de 2.5,0.0397
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita gana por más de 2.5,0.0586
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local gana por más de 3.5,0.0098
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita gana por más de 3.5,0.0161
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 1.5 goles,0.6797
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 2.5 goles,0.4162
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 3.5 goles,0.2101
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 4.5 goles,0.0892
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 5.5 goles,0.0325
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local más de 0.5 goles,0.6687
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita más de 0.5 goles,0.7111
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local más de 1.5 goles,0.3027
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita más de 1.5 goles,0.3523
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local más de 2.5 goles,0.1005
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita más de 2.5 goles,0.1296
+560646,2026-11-22,Hull City,Brighton Hove,,,,Local más de 3.5 goles,0.0261
+560646,2026-11-22,Hull City,Brighton Hove,,,,Visita más de 3.5 goles,0.0375
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 0-0,0.0957
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 0-1,0.1189
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 0-2,0.0738
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 0-3,0.0305
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 0-4,0.0095
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 1-0,0.1058
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 1-1,0.1313
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 1-2,0.0815
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 1-3,0.0337
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 1-4,0.0105
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 2-0,0.0584
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 2-1,0.0725
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 2-2,0.045
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 2-3,0.0186
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 2-4,0.0058
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 3-0,0.0215
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 3-1,0.0267
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 3-2,0.0166
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 3-3,0.0069
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 3-4,0.0021
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 4-0,0.0059
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 4-1,0.0074
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 4-2,0.0046
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 4-3,0.0019
+560646,2026-11-22,Hull City,Brighton Hove,,,,Marcador 4-4,0.0006
+560646,2026-11-22,Hull City,Brighton Hove,,,,Primer gol: local,0.4258
+560646,2026-11-22,Hull City,Brighton Hove,,,,Primer gol: visita,0.4785
+560646,2026-11-22,Hull City,Brighton Hove,,,,Primer gol: ninguno,0.0957
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 1+,0.9833
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 1+,0.9896
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 2+,0.923
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 2+,0.9482
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 3+,0.8074
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 3+,0.8609
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 4+,0.6508
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 4+,0.7309
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 5+,0.4829
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 5+,0.5777
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 6+,0.3313
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 6+,0.4256
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 7+,0.2116
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 7+,0.2935
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 8+,0.1266
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 8+,0.1905
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 9+,0.0715
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 9+,0.117
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 10+,0.0383
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 10+,0.0683
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 11+,0.0196
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 11+,0.0381
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners local: 12+,0.0096
+560646,2026-11-22,Hull City,Brighton Hove,,,,Corners visita: 12+,0.0204
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 7.5 corners totales,0.738
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 8.5 corners totales,0.6315
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 9.5 corners totales,0.5193
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 10.5 corners totales,0.4102
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 11.5 corners totales,0.3115
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 12.5 corners totales,0.2276
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 13.5 corners totales,0.1602
+560646,2026-11-22,Hull City,Brighton Hove,,,,Más de 14.5 corners totales,0.1089
+560645,2026-11-22,Liverpool,Man United,,,,Gana local,0.4681
+560645,2026-11-22,Liverpool,Man United,,,,Empate,0.227
+560645,2026-11-22,Liverpool,Man United,,,,Gana visita,0.3049
+560645,2026-11-22,Liverpool,Man United,,,,Ambos marcan,0.6408
+560645,2026-11-22,Liverpool,Man United,,,,Local gana por más de 1.5,0.2566
+560645,2026-11-22,Liverpool,Man United,,,,Visita gana por más de 1.5,0.1383
+560645,2026-11-22,Liverpool,Man United,,,,Local gana por más de 2.5,0.1152
+560645,2026-11-22,Liverpool,Man United,,,,Visita gana por más de 2.5,0.0505
+560645,2026-11-22,Liverpool,Man United,,,,Local gana por más de 3.5,0.0431
+560645,2026-11-22,Liverpool,Man United,,,,Visita gana por más de 3.5,0.0152
+560645,2026-11-22,Liverpool,Man United,,,,Más de 1.5 goles,0.8378
+560645,2026-11-22,Liverpool,Man United,,,,Más de 2.5 goles,0.6346
+560645,2026-11-22,Liverpool,Man United,,,,Más de 3.5 goles,0.4131
+560645,2026-11-22,Liverpool,Man United,,,,Más de 4.5 goles,0.232
+560645,2026-11-22,Liverpool,Man United,,,,Más de 5.5 goles,0.1136
+560645,2026-11-22,Liverpool,Man United,,,,Local más de 0.5 goles,0.8394
+560645,2026-11-22,Liverpool,Man United,,,,Visita más de 0.5 goles,0.7634
+560645,2026-11-22,Liverpool,Man United,,,,Local más de 1.5 goles,0.5458
+560645,2026-11-22,Liverpool,Man United,,,,Visita más de 1.5 goles,0.4223
+560645,2026-11-22,Liverpool,Man United,,,,Local más de 2.5 goles,0.2772
+560645,2026-11-22,Liverpool,Man United,,,,Visita más de 2.5 goles,0.1765
+560645,2026-11-22,Liverpool,Man United,,,,Local más de 3.5 goles,0.1134
+560645,2026-11-22,Liverpool,Man United,,,,Visita más de 3.5 goles,0.0585
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 0-0,0.038
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 0-1,0.0548
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 0-2,0.0395
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 0-3,0.019
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 0-4,0.0068
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 1-0,0.0695
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 1-1,0.1002
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 1-2,0.0722
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 1-3,0.0347
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 1-4,0.0125
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 2-0,0.0636
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 2-1,0.0916
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 2-2,0.066
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 2-3,0.0317
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 2-4,0.0114
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 3-0,0.0388
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 3-1,0.0559
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 3-2,0.0402
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 3-3,0.0193
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 3-4,0.007
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 4-0,0.0177
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 4-1,0.0255
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 4-2,0.0184
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 4-3,0.0088
+560645,2026-11-22,Liverpool,Man United,,,,Marcador 4-4,0.0032
+560645,2026-11-22,Liverpool,Man United,,,,Primer gol: local,0.5381
+560645,2026-11-22,Liverpool,Man United,,,,Primer gol: visita,0.4239
+560645,2026-11-22,Liverpool,Man United,,,,Primer gol: ninguno,0.038
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 1+,0.9935
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 1+,0.9759
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 2+,0.9655
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 2+,0.8958
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 3+,0.9012
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 3+,0.7543
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 4+,0.797
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 4+,0.578
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 5+,0.6632
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 5+,0.4041
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 6+,0.5187
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 6+,0.2596
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 7+,0.3819
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 7+,0.1546
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 8+,0.2658
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 8+,0.086
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 9+,0.1756
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 9+,0.045
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 10+,0.1106
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 10+,0.0223
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 11+,0.0667
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 11+,0.0106
+560645,2026-11-22,Liverpool,Man United,,,,Corners local: 12+,0.0386
+560645,2026-11-22,Liverpool,Man United,,,,Corners visita: 12+,0.0048
+560645,2026-11-22,Liverpool,Man United,,,,Más de 7.5 corners totales,0.7517
+560645,2026-11-22,Liverpool,Man United,,,,Más de 8.5 corners totales,0.6481
+560645,2026-11-22,Liverpool,Man United,,,,Más de 9.5 corners totales,0.5377
+560645,2026-11-22,Liverpool,Man United,,,,Más de 10.5 corners totales,0.4289
+560645,2026-11-22,Liverpool,Man United,,,,Más de 11.5 corners totales,0.3292
+560645,2026-11-22,Liverpool,Man United,,,,Más de 12.5 corners totales,0.2434
+560645,2026-11-22,Liverpool,Man United,,,,Más de 13.5 corners totales,0.1735
+560645,2026-11-22,Liverpool,Man United,,,,Más de 14.5 corners totales,0.1195
