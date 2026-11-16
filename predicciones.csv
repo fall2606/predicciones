@@ -4896,3 +4896,86 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560645,2026-11-22,Liverpool,Man United,,,,Más de 12.5 corners totales,0.2434
 560645,2026-11-22,Liverpool,Man United,,,,Más de 13.5 corners totales,0.1735
 560645,2026-11-22,Liverpool,Man United,,,,Más de 14.5 corners totales,0.1195
+560649,2026-11-23,Brentford,Everton,,,,Gana local,0.4737
+560649,2026-11-23,Brentford,Everton,,,,Empate,0.2584
+560649,2026-11-23,Brentford,Everton,,,,Gana visita,0.2679
+560649,2026-11-23,Brentford,Everton,,,,Ambos marcan,0.5086
+560649,2026-11-23,Brentford,Everton,,,,Local gana por más de 1.5,0.2378
+560649,2026-11-23,Brentford,Everton,,,,Visita gana por más de 1.5,0.1011
+560649,2026-11-23,Brentford,Everton,,,,Local gana por más de 2.5,0.0945
+560649,2026-11-23,Brentford,Everton,,,,Visita gana por más de 2.5,0.0295
+560649,2026-11-23,Brentford,Everton,,,,Local gana por más de 3.5,0.0306
+560649,2026-11-23,Brentford,Everton,,,,Visita gana por más de 3.5,0.0069
+560649,2026-11-23,Brentford,Everton,,,,Más de 1.5 goles,0.7257
+560649,2026-11-23,Brentford,Everton,,,,Más de 2.5 goles,0.4726
+560649,2026-11-23,Brentford,Everton,,,,Más de 3.5 goles,0.2563
+560649,2026-11-23,Brentford,Everton,,,,Más de 4.5 goles,0.1176
+560649,2026-11-23,Brentford,Everton,,,,Más de 5.5 goles,0.0465
+560649,2026-11-23,Brentford,Everton,,,,Local más de 0.5 goles,0.7774
+560649,2026-11-23,Brentford,Everton,,,,Visita más de 0.5 goles,0.6543
+560649,2026-11-23,Brentford,Everton,,,,Local más de 1.5 goles,0.4429
+560649,2026-11-23,Brentford,Everton,,,,Visita más de 1.5 goles,0.2871
+560649,2026-11-23,Brentford,Everton,,,,Local más de 2.5 goles,0.1917
+560649,2026-11-23,Brentford,Everton,,,,Visita más de 2.5 goles,0.0921
+560649,2026-11-23,Brentford,Everton,,,,Local más de 3.5 goles,0.0659
+560649,2026-11-23,Brentford,Everton,,,,Visita más de 3.5 goles,0.023
+560649,2026-11-23,Brentford,Everton,,,,Marcador 0-0,0.077
+560649,2026-11-23,Brentford,Everton,,,,Marcador 0-1,0.0817
+560649,2026-11-23,Brentford,Everton,,,,Marcador 0-2,0.0434
+560649,2026-11-23,Brentford,Everton,,,,Marcador 0-3,0.0154
+560649,2026-11-23,Brentford,Everton,,,,Marcador 0-4,0.0041
+560649,2026-11-23,Brentford,Everton,,,,Marcador 1-0,0.1156
+560649,2026-11-23,Brentford,Everton,,,,Marcador 1-1,0.1228
+560649,2026-11-23,Brentford,Everton,,,,Marcador 1-2,0.0652
+560649,2026-11-23,Brentford,Everton,,,,Marcador 1-3,0.0231
+560649,2026-11-23,Brentford,Everton,,,,Marcador 1-4,0.0061
+560649,2026-11-23,Brentford,Everton,,,,Marcador 2-0,0.0869
+560649,2026-11-23,Brentford,Everton,,,,Marcador 2-1,0.0922
+560649,2026-11-23,Brentford,Everton,,,,Marcador 2-2,0.049
+560649,2026-11-23,Brentford,Everton,,,,Marcador 2-3,0.0173
+560649,2026-11-23,Brentford,Everton,,,,Marcador 2-4,0.0046
+560649,2026-11-23,Brentford,Everton,,,,Marcador 3-0,0.0435
+560649,2026-11-23,Brentford,Everton,,,,Marcador 3-1,0.0462
+560649,2026-11-23,Brentford,Everton,,,,Marcador 3-2,0.0245
+560649,2026-11-23,Brentford,Everton,,,,Marcador 3-3,0.0087
+560649,2026-11-23,Brentford,Everton,,,,Marcador 3-4,0.0023
+560649,2026-11-23,Brentford,Everton,,,,Marcador 4-0,0.0163
+560649,2026-11-23,Brentford,Everton,,,,Marcador 4-1,0.0173
+560649,2026-11-23,Brentford,Everton,,,,Marcador 4-2,0.0092
+560649,2026-11-23,Brentford,Everton,,,,Marcador 4-3,0.0033
+560649,2026-11-23,Brentford,Everton,,,,Marcador 4-4,0.0009
+560649,2026-11-23,Brentford,Everton,,,,Primer gol: local,0.5407
+560649,2026-11-23,Brentford,Everton,,,,Primer gol: visita,0.3823
+560649,2026-11-23,Brentford,Everton,,,,Primer gol: ninguno,0.077
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 1+,0.9888
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 1+,0.9792
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 2+,0.9448
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 2+,0.9076
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 3+,0.8534
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 3+,0.7768
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 4+,0.7192
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 4+,0.6081
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 5+,0.5633
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 5+,0.4359
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 6+,0.4107
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 6+,0.2878
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 7+,0.28
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 7+,0.1764
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 8+,0.1795
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 8+,0.1012
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 9+,0.1089
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 9+,0.0547
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 10+,0.0628
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 10+,0.028
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 11+,0.0346
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 11+,0.0137
+560649,2026-11-23,Brentford,Everton,,,,Corners local: 12+,0.0183
+560649,2026-11-23,Brentford,Everton,,,,Corners visita: 12+,0.0064
+560649,2026-11-23,Brentford,Everton,,,,Más de 7.5 corners totales,0.7036
+560649,2026-11-23,Brentford,Everton,,,,Más de 8.5 corners totales,0.5913
+560649,2026-11-23,Brentford,Everton,,,,Más de 9.5 corners totales,0.4766
+560649,2026-11-23,Brentford,Everton,,,,Más de 10.5 corners totales,0.3684
+560649,2026-11-23,Brentford,Everton,,,,Más de 11.5 corners totales,0.2733
+560649,2026-11-23,Brentford,Everton,,,,Más de 12.5 corners totales,0.1949
+560649,2026-11-23,Brentford,Everton,,,,Más de 13.5 corners totales,0.1338
+560649,2026-11-23,Brentford,Everton,,,,Más de 14.5 corners totales,0.0886
