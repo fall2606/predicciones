@@ -3,7 +3,7 @@ Champions,LIQUIDADA,NO,resultado registrado: LOSS,87
 Champions,LIQUIDADA,NO,resultado registrado: WIN,122
 LaLiga,LIQUIDADA,NO,resultado registrado: LOSS,245
 LaLiga,LIQUIDADA,NO,resultado registrado: WIN,277
-LaLiga,NO_FINALIZADA,NO,partido no finalizado,4
+LaLiga,NO_FINALIZADA,NO,partido no finalizado,5
 LaLiga,PENDIENTE_ACTIVA,SI,estado desconocido: captura sin selección YES/NO; no se puede liquidar con seguridad,1
 LaLiga,SIN_DATOS_PARA_LIQUIDAR,NO,partido finalizado; captura sin ticker/contrato ejecutable y sin resultado verificable del mercado,12
 MLB,HISTORICO_NO_PARTIDO,NO,partido no encontrado,3650
@@ -13,7 +13,6 @@ MLB,LIQUIDADA,NO,resultado registrado: WIN,47
 NFL,HISTORICO_NO_EVALUABLE,NO,Captura de la primera versión no validada; excluida de resultados y calibración,312
 NFL,HISTORICO_NO_EVALUABLE,NO,Captura histórica asociada a una serie de periodo; excluida por el modelo inicial incorrecto,702
 NFL,HISTORICO_NO_EVALUABLE,NO,Contrato de periodo/cuarto no cubierto por el modelo NFL,426
-NFL,LIQUIDADA,NO,resultado registrado: LOSS,6219
-NFL,LIQUIDADA,NO,resultado registrado: WIN,6175
+NFL,LIQUIDADA,NO,resultado registrado: LOSS,6285
+NFL,LIQUIDADA,NO,resultado registrado: WIN,6240
 NFL,NO_FINALIZADA,NO,partido no finalizado,1626
-NFL,PENDIENTE_ACTIVA,SI,resultado de Kalshi disponible pero no registrado,131
