@@ -5311,3 +5311,501 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560653,2026-11-28,Ipswich Town,Aston Villa,,,,Más de 12.5 corners totales,0.1151
 560653,2026-11-28,Ipswich Town,Aston Villa,,,,Más de 13.5 corners totales,0.0729
 560653,2026-11-28,Ipswich Town,Aston Villa,,,,Más de 14.5 corners totales,0.0445
+560656,2026-11-29,Everton,Liverpool,,,,Gana local,0.3781
+560656,2026-11-29,Everton,Liverpool,,,,Empate,0.2627
+560656,2026-11-29,Everton,Liverpool,,,,Gana visita,0.3592
+560656,2026-11-29,Everton,Liverpool,,,,Ambos marcan,0.5329
+560656,2026-11-29,Everton,Liverpool,,,,Local gana por más de 1.5,0.1707
+560656,2026-11-29,Everton,Liverpool,,,,Visita gana por más de 1.5,0.1581
+560656,2026-11-29,Everton,Liverpool,,,,Local gana por más de 2.5,0.0606
+560656,2026-11-29,Everton,Liverpool,,,,Visita gana por más de 2.5,0.0546
+560656,2026-11-29,Everton,Liverpool,,,,Local gana por más de 3.5,0.0175
+560656,2026-11-29,Everton,Liverpool,,,,Visita gana por más de 3.5,0.0153
+560656,2026-11-29,Everton,Liverpool,,,,Más de 1.5 goles,0.7363
+560656,2026-11-29,Everton,Liverpool,,,,Más de 2.5 goles,0.4864
+560656,2026-11-29,Everton,Liverpool,,,,Más de 3.5 goles,0.2682
+560656,2026-11-29,Everton,Liverpool,,,,Más de 4.5 goles,0.1253
+560656,2026-11-29,Everton,Liverpool,,,,Más de 5.5 goles,0.0505
+560656,2026-11-29,Everton,Liverpool,,,,Local más de 0.5 goles,0.7355
+560656,2026-11-29,Everton,Liverpool,,,,Visita más de 0.5 goles,0.7246
+560656,2026-11-29,Everton,Liverpool,,,,Local más de 1.5 goles,0.3838
+560656,2026-11-29,Everton,Liverpool,,,,Visita más de 1.5 goles,0.3694
+560656,2026-11-29,Everton,Liverpool,,,,Local más de 2.5 goles,0.1498
+560656,2026-11-29,Everton,Liverpool,,,,Visita más de 2.5 goles,0.1405
+560656,2026-11-29,Everton,Liverpool,,,,Local más de 3.5 goles,0.0461
+560656,2026-11-29,Everton,Liverpool,,,,Visita más de 3.5 goles,0.042
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 0-0,0.0728
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 0-1,0.0939
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 0-2,0.0606
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 0-3,0.026
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 0-4,0.0084
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 1-0,0.0969
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 1-1,0.1249
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 1-2,0.0805
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 1-3,0.0346
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 1-4,0.0112
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 2-0,0.0644
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 2-1,0.0831
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 2-2,0.0536
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 2-3,0.023
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 2-4,0.0074
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 3-0,0.0286
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 3-1,0.0368
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 3-2,0.0237
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 3-3,0.0102
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 3-4,0.0033
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 4-0,0.0095
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 4-1,0.0122
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 4-2,0.0079
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 4-3,0.0034
+560656,2026-11-29,Everton,Liverpool,,,,Marcador 4-4,0.0011
+560656,2026-11-29,Everton,Liverpool,,,,Primer gol: local,0.4708
+560656,2026-11-29,Everton,Liverpool,,,,Primer gol: visita,0.4564
+560656,2026-11-29,Everton,Liverpool,,,,Primer gol: ninguno,0.0728
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 1+,0.9764
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 1+,0.9918
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 2+,0.8977
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 2+,0.9576
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 3+,0.7579
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 3+,0.8824
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 4+,0.5828
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 4+,0.7654
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 5+,0.409
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 5+,0.6214
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 6+,0.2639
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 6+,0.4722
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 7+,0.1578
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 7+,0.3368
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 8+,0.0882
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 8+,0.2266
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 9+,0.0464
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 9+,0.1444
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 10+,0.0232
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 10+,0.0877
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 11+,0.011
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 11+,0.0509
+560656,2026-11-29,Everton,Liverpool,,,,Corners local: 12+,0.005
+560656,2026-11-29,Everton,Liverpool,,,,Corners visita: 12+,0.0284
+560656,2026-11-29,Everton,Liverpool,,,,Más de 7.5 corners totales,0.7266
+560656,2026-11-29,Everton,Liverpool,,,,Más de 8.5 corners totales,0.6182
+560656,2026-11-29,Everton,Liverpool,,,,Más de 9.5 corners totales,0.5052
+560656,2026-11-29,Everton,Liverpool,,,,Más de 10.5 corners totales,0.3964
+560656,2026-11-29,Everton,Liverpool,,,,Más de 11.5 corners totales,0.2989
+560656,2026-11-29,Everton,Liverpool,,,,Más de 12.5 corners totales,0.2169
+560656,2026-11-29,Everton,Liverpool,,,,Más de 13.5 corners totales,0.1516
+560656,2026-11-29,Everton,Liverpool,,,,Más de 14.5 corners totales,0.1023
+560657,2026-11-29,Fulham,Bournemouth,,,,Gana local,0.3815
+560657,2026-11-29,Fulham,Bournemouth,,,,Empate,0.2608
+560657,2026-11-29,Fulham,Bournemouth,,,,Gana visita,0.3577
+560657,2026-11-29,Fulham,Bournemouth,,,,Ambos marcan,0.5393
+560657,2026-11-29,Fulham,Bournemouth,,,,Local gana por más de 1.5,0.174
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita gana por más de 1.5,0.158
+560657,2026-11-29,Fulham,Bournemouth,,,,Local gana por más de 2.5,0.0625
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita gana por más de 2.5,0.0549
+560657,2026-11-29,Fulham,Bournemouth,,,,Local gana por más de 3.5,0.0183
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita gana por más de 3.5,0.0155
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 1.5 goles,0.7425
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 2.5 goles,0.4945
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 3.5 goles,0.2753
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 4.5 goles,0.13
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 5.5 goles,0.053
+560657,2026-11-29,Fulham,Bournemouth,,,,Local más de 0.5 goles,0.7412
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita más de 0.5 goles,0.7276
+560657,2026-11-29,Fulham,Bournemouth,,,,Local más de 1.5 goles,0.3914
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita más de 1.5 goles,0.3733
+560657,2026-11-29,Fulham,Bournemouth,,,,Local más de 2.5 goles,0.1549
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita más de 2.5 goles,0.143
+560657,2026-11-29,Fulham,Bournemouth,,,,Local más de 3.5 goles,0.0484
+560657,2026-11-29,Fulham,Bournemouth,,,,Visita más de 3.5 goles,0.0431
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 0-0,0.0705
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 0-1,0.0917
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 0-2,0.0596
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 0-3,0.0258
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 0-4,0.0084
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 1-0,0.0953
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 1-1,0.1239
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 1-2,0.0806
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 1-3,0.0349
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 1-4,0.0114
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 2-0,0.0644
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 2-1,0.0838
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 2-2,0.0545
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 2-3,0.0236
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 2-4,0.0077
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 3-0,0.029
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 3-1,0.0377
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 3-2,0.0245
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 3-3,0.0106
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 3-4,0.0035
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 4-0,0.0098
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 4-1,0.0128
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 4-2,0.0083
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 4-3,0.0036
+560657,2026-11-29,Fulham,Bournemouth,,,,Marcador 4-4,0.0012
+560657,2026-11-29,Fulham,Bournemouth,,,,Primer gol: local,0.4737
+560657,2026-11-29,Fulham,Bournemouth,,,,Primer gol: visita,0.4558
+560657,2026-11-29,Fulham,Bournemouth,,,,Primer gol: ninguno,0.0705
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 1+,0.9915
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 1+,0.9896
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 2+,0.9565
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 2+,0.9481
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 3+,0.8797
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 3+,0.8608
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 4+,0.7611
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 4+,0.7307
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 5+,0.6158
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 5+,0.5775
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 6+,0.4661
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 6+,0.4254
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 7+,0.3311
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 7+,0.2933
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 8+,0.2217
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 8+,0.1903
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 9+,0.1407
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 9+,0.1168
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 10+,0.085
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 10+,0.0682
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 11+,0.0491
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 11+,0.0381
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners local: 12+,0.0272
+560657,2026-11-29,Fulham,Bournemouth,,,,Corners visita: 12+,0.0204
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 7.5 corners totales,0.806
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 8.5 corners totales,0.7147
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 9.5 corners totales,0.6121
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 10.5 corners totales,0.5056
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 11.5 corners totales,0.4028
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 12.5 corners totales,0.3096
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 13.5 corners totales,0.2298
+560657,2026-11-29,Fulham,Bournemouth,,,,Más de 14.5 corners totales,0.165
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Gana local,0.5824
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Empate,0.2204
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Gana visita,0.1972
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Ambos marcan,0.5435
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local gana por más de 1.5,0.3427
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita gana por más de 1.5,0.0697
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local gana por más de 2.5,0.1642
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita gana por más de 2.5,0.0192
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local gana por más de 3.5,0.0652
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita gana por más de 3.5,0.0043
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 1.5 goles,0.7895
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 2.5 goles,0.56
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 3.5 goles,0.3362
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 4.5 goles,0.1725
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 5.5 goles,0.0766
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local más de 0.5 goles,0.8519
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita más de 0.5 goles,0.638
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local más de 1.5 goles,0.569
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita más de 1.5 goles,0.2702
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local más de 2.5 goles,0.2989
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita más de 2.5 goles,0.0833
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Local más de 3.5 goles,0.127
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Visita más de 3.5 goles,0.02
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 0-0,0.0536
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 0-1,0.0545
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 0-2,0.0277
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 0-3,0.0094
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 0-4,0.0024
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 1-0,0.1024
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 1-1,0.104
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 1-2,0.0529
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 1-3,0.0179
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 1-4,0.0045
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 2-0,0.0978
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 2-1,0.0994
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 2-2,0.0505
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 2-3,0.0171
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 2-4,0.0043
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 3-0,0.0622
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 3-1,0.0632
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 3-2,0.0321
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 3-3,0.0109
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 3-4,0.0028
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 4-0,0.0297
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 4-1,0.0302
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 4-2,0.0153
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 4-3,0.0052
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Marcador 4-4,0.0013
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Primer gol: local,0.6177
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Primer gol: visita,0.3287
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Primer gol: ninguno,0.0536
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 1+,0.9898
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 1+,0.9883
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 2+,0.9493
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 2+,0.9428
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 3+,0.8633
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 3+,0.8489
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 4+,0.7347
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 4+,0.7123
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 5+,0.5824
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 5+,0.5548
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 6+,0.4305
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 6+,0.402
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 7+,0.298
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 7+,0.2723
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 8+,0.1941
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 8+,0.1734
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 9+,0.1197
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 9+,0.1044
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 10+,0.0702
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 10+,0.0597
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 11+,0.0394
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 11+,0.0327
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners local: 12+,0.0212
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Corners visita: 12+,0.0171
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 7.5 corners totales,0.7779
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 8.5 corners totales,0.6796
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 9.5 corners totales,0.5721
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 10.5 corners totales,0.4638
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 11.5 corners totales,0.362
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 12.5 corners totales,0.2723
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 13.5 corners totales,0.1976
+560659,2026-11-29,Brighton Hove,Newcastle,,,,Más de 14.5 corners totales,0.1385
+560660,2026-11-29,Sunderland,Tottenham,,,,Gana local,0.3868
+560660,2026-11-29,Sunderland,Tottenham,,,,Empate,0.2863
+560660,2026-11-29,Sunderland,Tottenham,,,,Gana visita,0.3269
+560660,2026-11-29,Sunderland,Tottenham,,,,Ambos marcan,0.4563
+560660,2026-11-29,Sunderland,Tottenham,,,,Local gana por más de 1.5,0.1648
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita gana por más de 1.5,0.1274
+560660,2026-11-29,Sunderland,Tottenham,,,,Local gana por más de 2.5,0.0542
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita gana por más de 2.5,0.038
+560660,2026-11-29,Sunderland,Tottenham,,,,Local gana por más de 3.5,0.0143
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita gana por más de 3.5,0.0091
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 1.5 goles,0.659
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 2.5 goles,0.3924
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 3.5 goles,0.1918
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 4.5 goles,0.0787
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 5.5 goles,0.0277
+560660,2026-11-29,Sunderland,Tottenham,,,,Local más de 0.5 goles,0.6953
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita más de 0.5 goles,0.6563
+560660,2026-11-29,Sunderland,Tottenham,,,,Local más de 1.5 goles,0.3332
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita más de 1.5 goles,0.2892
+560660,2026-11-29,Sunderland,Tottenham,,,,Local más de 2.5 goles,0.118
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita más de 2.5 goles,0.0932
+560660,2026-11-29,Sunderland,Tottenham,,,,Local más de 3.5 goles,0.0328
+560660,2026-11-29,Sunderland,Tottenham,,,,Visita más de 3.5 goles,0.0234
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 0-0,0.1047
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 0-1,0.1118
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 0-2,0.0597
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 0-3,0.0213
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 0-4,0.0057
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 1-0,0.1245
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 1-1,0.1329
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 1-2,0.071
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 1-3,0.0253
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 1-4,0.0067
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 2-0,0.074
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 2-1,0.079
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 2-2,0.0422
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 2-3,0.015
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 2-4,0.004
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 3-0,0.0293
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 3-1,0.0313
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 3-2,0.0167
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 3-3,0.0059
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 3-4,0.0016
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 4-0,0.0087
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 4-1,0.0093
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 4-2,0.005
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 4-3,0.0018
+560660,2026-11-29,Sunderland,Tottenham,,,,Marcador 4-4,0.0005
+560660,2026-11-29,Sunderland,Tottenham,,,,Primer gol: local,0.4715
+560660,2026-11-29,Sunderland,Tottenham,,,,Primer gol: visita,0.4237
+560660,2026-11-29,Sunderland,Tottenham,,,,Primer gol: ninguno,0.1047
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 1+,0.9695
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 1+,0.9907
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 2+,0.8739
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 2+,0.9531
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 3+,0.7146
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 3+,0.872
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 4+,0.5273
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 4+,0.7486
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 5+,0.3529
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 5+,0.5998
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 6+,0.2162
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 6+,0.4489
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 7+,0.1224
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 7+,0.315
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 8+,0.0647
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 8+,0.2082
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 9+,0.0321
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 9+,0.1303
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 10+,0.0151
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 10+,0.0776
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 11+,0.0068
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 11+,0.0442
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners local: 12+,0.0029
+560660,2026-11-29,Sunderland,Tottenham,,,,Corners visita: 12+,0.0242
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 7.5 corners totales,0.6813
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 8.5 corners totales,0.5663
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 9.5 corners totales,0.4508
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 10.5 corners totales,0.3439
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 11.5 corners totales,0.2517
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 12.5 corners totales,0.177
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 13.5 corners totales,0.1198
+560660,2026-11-29,Sunderland,Tottenham,,,,Más de 14.5 corners totales,0.0782
+560661,2026-11-29,Crystal Palace,Hull City,,,,Gana local,0.3254
+560661,2026-11-29,Crystal Palace,Hull City,,,,Empate,0.2826
+560661,2026-11-29,Crystal Palace,Hull City,,,,Gana visita,0.3919
+560661,2026-11-29,Crystal Palace,Hull City,,,,Ambos marcan,0.4662
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local gana por más de 1.5,0.1278
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita gana por más de 1.5,0.1698
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local gana por más de 2.5,0.0386
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita gana por más de 2.5,0.0569
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local gana por más de 3.5,0.0093
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita gana por más de 3.5,0.0153
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 1.5 goles,0.6698
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 2.5 goles,0.4048
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 3.5 goles,0.2013
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 4.5 goles,0.0841
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 5.5 goles,0.0301
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local más de 0.5 goles,0.6618
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita más de 0.5 goles,0.7044
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local más de 1.5 goles,0.2952
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita más de 1.5 goles,0.3442
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local más de 2.5 goles,0.0964
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita más de 2.5 goles,0.1246
+560661,2026-11-29,Crystal Palace,Hull City,,,,Local más de 3.5 goles,0.0246
+560661,2026-11-29,Crystal Palace,Hull City,,,,Visita más de 3.5 goles,0.0354
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 0-0,0.1
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 0-1,0.1218
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 0-2,0.0743
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 0-3,0.0302
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 0-4,0.0092
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 1-0,0.1084
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 1-1,0.1321
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 1-2,0.0805
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 1-3,0.0327
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 1-4,0.01
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 2-0,0.0587
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 2-1,0.0716
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 2-2,0.0436
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 2-3,0.0177
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 2-4,0.0054
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 3-0,0.0212
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 3-1,0.0259
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 3-2,0.0158
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 3-3,0.0064
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 3-4,0.002
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 4-0,0.0058
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 4-1,0.007
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 4-2,0.0043
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 4-3,0.0017
+560661,2026-11-29,Crystal Palace,Hull City,,,,Marcador 4-4,0.0005
+560661,2026-11-29,Crystal Palace,Hull City,,,,Primer gol: local,0.4237
+560661,2026-11-29,Crystal Palace,Hull City,,,,Primer gol: visita,0.4764
+560661,2026-11-29,Crystal Palace,Hull City,,,,Primer gol: ninguno,0.1
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 1+,0.9883
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 1+,0.9821
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 2+,0.9429
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 2+,0.9186
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 3+,0.8492
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 3+,0.7984
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 4+,0.7127
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 4+,0.6381
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 5+,0.5554
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 5+,0.4687
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 6+,0.4026
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 6+,0.3179
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 7+,0.2728
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 7+,0.2006
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 8+,0.1738
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 8+,0.1185
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 9+,0.1047
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 9+,0.066
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 10+,0.0599
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 10+,0.0349
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 11+,0.0328
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 11+,0.0176
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners local: 12+,0.0172
+560661,2026-11-29,Crystal Palace,Hull City,,,,Corners visita: 12+,0.0085
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 7.5 corners totales,0.7169
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 8.5 corners totales,0.6067
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 9.5 corners totales,0.4928
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 10.5 corners totales,0.384
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 11.5 corners totales,0.2874
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 12.5 corners totales,0.2068
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 13.5 corners totales,0.1434
+560661,2026-11-29,Crystal Palace,Hull City,,,,Más de 14.5 corners totales,0.0959
+560654,2026-11-29,Arsenal,Man City,,,,Gana local,0.489
+560654,2026-11-29,Arsenal,Man City,,,,Empate,0.263
+560654,2026-11-29,Arsenal,Man City,,,,Gana visita,0.2479
+560654,2026-11-29,Arsenal,Man City,,,,Ambos marcan,0.4782
+560654,2026-11-29,Arsenal,Man City,,,,Local gana por más de 1.5,0.2448
+560654,2026-11-29,Arsenal,Man City,,,,Visita gana por más de 1.5,0.0876
+560654,2026-11-29,Arsenal,Man City,,,,Local gana por más de 2.5,0.0965
+560654,2026-11-29,Arsenal,Man City,,,,Visita gana por más de 2.5,0.0237
+560654,2026-11-29,Arsenal,Man City,,,,Local gana por más de 3.5,0.0309
+560654,2026-11-29,Arsenal,Man City,,,,Visita gana por más de 3.5,0.0051
+560654,2026-11-29,Arsenal,Man City,,,,Más de 1.5 goles,0.7007
+560654,2026-11-29,Arsenal,Man City,,,,Más de 2.5 goles,0.4413
+560654,2026-11-29,Arsenal,Man City,,,,Más de 3.5 goles,0.2302
+560654,2026-11-29,Arsenal,Man City,,,,Más de 4.5 goles,0.1013
+560654,2026-11-29,Arsenal,Man City,,,,Más de 5.5 goles,0.0383
+560654,2026-11-29,Arsenal,Man City,,,,Local más de 0.5 goles,0.7711
+560654,2026-11-29,Arsenal,Man City,,,,Visita más de 0.5 goles,0.6201
+560654,2026-11-29,Arsenal,Man City,,,,Local más de 1.5 goles,0.4336
+560654,2026-11-29,Arsenal,Man City,,,,Visita más de 1.5 goles,0.2525
+560654,2026-11-29,Arsenal,Man City,,,,Local más de 2.5 goles,0.1847
+560654,2026-11-29,Arsenal,Man City,,,,Visita más de 2.5 goles,0.0745
+560654,2026-11-29,Arsenal,Man City,,,,Local más de 3.5 goles,0.0625
+560654,2026-11-29,Arsenal,Man City,,,,Visita más de 3.5 goles,0.0171
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 0-0,0.087
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 0-1,0.0842
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 0-2,0.0407
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 0-3,0.0131
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 0-4,0.0032
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 1-0,0.1282
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 1-1,0.1241
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 1-2,0.0601
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 1-3,0.0194
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 1-4,0.0047
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 2-0,0.0945
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 2-1,0.0915
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 2-2,0.0443
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 2-3,0.0143
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 2-4,0.0035
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 3-0,0.0464
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 3-1,0.045
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 3-2,0.0218
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 3-3,0.007
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 3-4,0.0017
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 4-0,0.0171
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 4-1,0.0166
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 4-2,0.008
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 4-3,0.0026
+560654,2026-11-29,Arsenal,Man City,,,,Marcador 4-4,0.0006
+560654,2026-11-29,Arsenal,Man City,,,,Primer gol: local,0.5512
+560654,2026-11-29,Arsenal,Man City,,,,Primer gol: visita,0.3619
+560654,2026-11-29,Arsenal,Man City,,,,Primer gol: ninguno,0.087
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 1+,0.9847
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 1+,0.9784
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 2+,0.9284
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 2+,0.9046
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 3+,0.8184
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 3+,0.7711
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 4+,0.6667
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 4+,0.6004
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 5+,0.501
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 5+,0.4277
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 6+,0.3486
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 6+,0.2804
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 7+,0.226
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 7+,0.1706
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 8+,0.1374
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 8+,0.0971
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 9+,0.0789
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 9+,0.052
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 10+,0.043
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 10+,0.0264
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 11+,0.0224
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 11+,0.0128
+560654,2026-11-29,Arsenal,Man City,,,,Corners local: 12+,0.0112
+560654,2026-11-29,Arsenal,Man City,,,,Corners visita: 12+,0.0059
+560654,2026-11-29,Arsenal,Man City,,,,Más de 7.5 corners totales,0.6588
+560654,2026-11-29,Arsenal,Man City,,,,Más de 8.5 corners totales,0.5408
+560654,2026-11-29,Arsenal,Man City,,,,Más de 9.5 corners totales,0.4245
+560654,2026-11-29,Arsenal,Man City,,,,Más de 10.5 corners totales,0.3189
+560654,2026-11-29,Arsenal,Man City,,,,Más de 11.5 corners totales,0.2296
+560654,2026-11-29,Arsenal,Man City,,,,Más de 12.5 corners totales,0.1586
+560654,2026-11-29,Arsenal,Man City,,,,Más de 13.5 corners totales,0.1054
+560654,2026-11-29,Arsenal,Man City,,,,Más de 14.5 corners totales,0.0675
