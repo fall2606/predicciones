@@ -5809,3 +5809,86 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560654,2026-11-29,Arsenal,Man City,,,,Más de 12.5 corners totales,0.1586
 560654,2026-11-29,Arsenal,Man City,,,,Más de 13.5 corners totales,0.1054
 560654,2026-11-29,Arsenal,Man City,,,,Más de 14.5 corners totales,0.0675
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Gana local,0.4496
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Empate,0.227
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Gana visita,0.3234
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Ambos marcan,0.6512
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local gana por más de 1.5,0.2433
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita gana por más de 1.5,0.1514
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local gana por más de 2.5,0.1078
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita gana por más de 2.5,0.0573
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local gana por más de 3.5,0.0398
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita gana por más de 3.5,0.0179
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 1.5 goles,0.8435
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 2.5 goles,0.6441
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 3.5 goles,0.4235
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 4.5 goles,0.2406
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 5.5 goles,0.1192
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local más de 0.5 goles,0.8363
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita más de 0.5 goles,0.7787
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local más de 1.5 goles,0.54
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita más de 1.5 goles,0.4449
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local más de 2.5 goles,0.2719
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita más de 2.5 goles,0.1932
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Local más de 3.5 goles,0.1102
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Visita más de 3.5 goles,0.0667
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 0-0,0.0362
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 0-1,0.0547
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 0-2,0.0412
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 0-3,0.0207
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 0-4,0.0078
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 1-0,0.0656
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 1-1,0.0989
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 1-2,0.0746
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 1-3,0.0375
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 1-4,0.0141
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 2-0,0.0593
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 2-1,0.0895
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 2-2,0.0675
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 2-3,0.0339
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 2-4,0.0128
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 3-0,0.0358
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 3-1,0.054
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 3-2,0.0407
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 3-3,0.0205
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 3-4,0.0077
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 4-0,0.0162
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 4-1,0.0244
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 4-2,0.0184
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 4-3,0.0093
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Marcador 4-4,0.0035
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Primer gol: local,0.5257
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Primer gol: visita,0.4381
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Primer gol: ninguno,0.0362
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 1+,0.9832
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 1+,0.9509
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 2+,0.9225
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 2+,0.816
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 3+,0.8064
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 3+,0.6191
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 4+,0.6493
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 4+,0.4164
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 5+,0.4813
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 5+,0.251
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 6+,0.3298
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 6+,0.1374
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 7+,0.2103
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 7+,0.0692
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 8+,0.1257
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 8+,0.0324
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 9+,0.0708
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 9+,0.0142
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 10+,0.0379
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 10+,0.0059
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 11+,0.0194
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 11+,0.0023
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners local: 12+,0.0095
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Corners visita: 12+,0.0009
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 7.5 corners totales,0.5275
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 8.5 corners totales,0.4031
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 9.5 corners totales,0.2928
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 10.5 corners totales,0.2026
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 11.5 corners totales,0.1339
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 12.5 corners totales,0.0847
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 13.5 corners totales,0.0514
+560668,2026-12-01,Coventry City,Ipswich Town,,,,Más de 14.5 corners totales,0.0301
