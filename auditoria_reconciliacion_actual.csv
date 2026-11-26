@@ -14,4 +14,5 @@ NFL,HISTORICO_NO_EVALUABLE,NO,Captura histórica asociada a una serie de periodo
 NFL,HISTORICO_NO_EVALUABLE,NO,Contrato de periodo/cuarto no cubierto por el modelo NFL,426
 NFL,LIQUIDADA,NO,resultado registrado: LOSS,7282
 NFL,LIQUIDADA,NO,resultado registrado: WIN,7199
-NFL,NO_FINALIZADA,NO,partido no finalizado,1258
+NFL,NO_FINALIZADA,NO,partido no finalizado,1128
+NFL,PENDIENTE_ACTIVA,SI,resultado de Kalshi disponible pero no registrado,130
