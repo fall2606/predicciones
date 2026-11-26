@@ -6556,3 +6556,86 @@ id,fecha,local,visita,gano,goles_local,goles_visita,mercado,p
 560671,2026-12-02,Bournemouth,Brighton Hove,,,,Más de 12.5 corners totales,0.2501
 560671,2026-12-02,Bournemouth,Brighton Hove,,,,Más de 13.5 corners totales,0.179
 560671,2026-12-02,Bournemouth,Brighton Hove,,,,Más de 14.5 corners totales,0.1237
+560662,2026-12-03,Tottenham,Fulham,,,,Gana local,0.4249
+560662,2026-12-03,Tottenham,Fulham,,,,Empate,0.2741
+560662,2026-12-03,Tottenham,Fulham,,,,Gana visita,0.3011
+560662,2026-12-03,Tottenham,Fulham,,,,Ambos marcan,0.4825
+560662,2026-12-03,Tottenham,Fulham,,,,Local gana por más de 1.5,0.1956
+560662,2026-12-03,Tottenham,Fulham,,,,Visita gana por más de 1.5,0.116
+560662,2026-12-03,Tottenham,Fulham,,,,Local gana por más de 2.5,0.0703
+560662,2026-12-03,Tottenham,Fulham,,,,Visita gana por más de 2.5,0.0344
+560662,2026-12-03,Tottenham,Fulham,,,,Local gana por más de 3.5,0.0204
+560662,2026-12-03,Tottenham,Fulham,,,,Visita gana por más de 3.5,0.0082
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 1.5 goles,0.6907
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 2.5 goles,0.4292
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 3.5 goles,0.2204
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 4.5 goles,0.0954
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 5.5 goles,0.0354
+560662,2026-12-03,Tottenham,Fulham,,,,Local más de 0.5 goles,0.7344
+560662,2026-12-03,Tottenham,Fulham,,,,Visita más de 0.5 goles,0.657
+560662,2026-12-03,Tottenham,Fulham,,,,Local más de 1.5 goles,0.3823
+560662,2026-12-03,Tottenham,Fulham,,,,Visita más de 1.5 goles,0.29
+560662,2026-12-03,Tottenham,Fulham,,,,Local más de 2.5 goles,0.1489
+560662,2026-12-03,Tottenham,Fulham,,,,Visita más de 2.5 goles,0.0936
+560662,2026-12-03,Tottenham,Fulham,,,,Local más de 3.5 goles,0.0457
+560662,2026-12-03,Tottenham,Fulham,,,,Visita más de 3.5 goles,0.0236
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 0-0,0.0911
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 0-1,0.0975
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 0-2,0.0521
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 0-3,0.0186
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 0-4,0.005
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 1-0,0.1208
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 1-1,0.1292
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 1-2,0.0691
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 1-3,0.0247
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 1-4,0.0066
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 2-0,0.0801
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 2-1,0.0857
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 2-2,0.0458
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 2-3,0.0163
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 2-4,0.0044
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 3-0,0.0354
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 3-1,0.0379
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 3-2,0.0203
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 3-3,0.0072
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 3-4,0.0019
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 4-0,0.0117
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 4-1,0.0126
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 4-2,0.0067
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 4-3,0.0024
+560662,2026-12-03,Tottenham,Fulham,,,,Marcador 4-4,0.0006
+560662,2026-12-03,Tottenham,Fulham,,,,Primer gol: local,0.503
+560662,2026-12-03,Tottenham,Fulham,,,,Primer gol: visita,0.4059
+560662,2026-12-03,Tottenham,Fulham,,,,Primer gol: ninguno,0.0911
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 1+,0.9964
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 1+,0.9801
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 2+,0.9791
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 2+,0.9108
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 3+,0.9357
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 3+,0.7831
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 4+,0.8586
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 4+,0.6167
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 5+,0.7502
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 5+,0.4452
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 6+,0.6219
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 6+,0.2963
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 7+,0.489
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 7+,0.1831
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 8+,0.3654
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 8+,0.1059
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 9+,0.2603
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 9+,0.0577
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 10+,0.1773
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 10+,0.0298
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 11+,0.1159
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 11+,0.0147
+560662,2026-12-03,Tottenham,Fulham,,,,Corners local: 12+,0.0729
+560662,2026-12-03,Tottenham,Fulham,,,,Corners visita: 12+,0.007
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 7.5 corners totales,0.8256
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 8.5 corners totales,0.7402
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 9.5 corners totales,0.6422
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 10.5 corners totales,0.5385
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 11.5 corners totales,0.4362
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 12.5 corners totales,0.3414
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 13.5 corners totales,0.2585
+560662,2026-12-03,Tottenham,Fulham,,,,Más de 14.5 corners totales,0.1894
